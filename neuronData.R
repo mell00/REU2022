@@ -24,6 +24,19 @@ lines(neuron[,1], mod3$fitted.values, col="red", lwd=2)
 lines(neuron[,1], mod9$fitted.values, col="darkgreen", lwd=2)
 lines(neuron[,1], mod110$fitted.values, col="blue", lwd=1)
 
+library("strucchange")
+?breakpoints
+
+#Bai-Perron Method
+dif_means_neuron<-ts(neuron[,2], start=1, end=110) #create time series data on only the first data 
+breakpoints(dif_means_neuron ~ 1, breaks = 5) #no break points 
+plot(dif_means_neuron)
+points(43,neuron[43,2], col="purple", pch= 18)
+points(60,neuron[60,2], col="purple", pch= 18)
+points(90,neuron[90,2], col="purple", pch= 18)
+
+
+
 
 
 
