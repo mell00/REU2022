@@ -24,6 +24,7 @@ breakpoints(dif_means_ts_1 ~ 1, breaks = 2) #one break
 
 dif_means_ts_2<-ts(dif_means_2, start=1, end=90) #create time series data with first second and third data
 breakpoints(dif_means_ts_2 ~ 1, breaks=3) #two breaks 
+#hi peeps
 
 
 
