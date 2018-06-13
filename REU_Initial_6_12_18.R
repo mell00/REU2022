@@ -45,11 +45,11 @@ ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SEE_old)
 u = runif(1) #random number from 0 to 1 taken from a normal distrabution 
 
 #our temporary L
-if(ratio > 1) {
+if(ratio > 1) { 
   #take new
 } else if(ratio > u) {
-  #take new w. probability ratio
+  #keep new
 } else {
-  #go back to the old 
+  #keep old
 }
 
