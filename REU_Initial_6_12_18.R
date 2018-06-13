@@ -38,8 +38,8 @@ points(60, dif_means_ts_2[60], col="purple", pch= 18)
 #short cutting with MLE and Metropolis Hastings 
 sigma_new = sd()      #need this 
 sigma_old = sd()      #need this 
-SSE_new =             #need this 
-SEE_old =             #need this 
+SSE_new =             #sse(b, dataset)
+SEE_old =             #sse(b, dataset)
 
 ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SEE_old)
 u = runif(1) #random number from 0 to 1 taken from a normal distrabution 
