@@ -29,13 +29,13 @@ library("strucchange")
 
 #Bai-Perron Method
 dif_means_neuron<-ts(neuron[,2], start=1, end=110) #create time series data on only the first data 
-breakpoints(dif_means_neuron ~ 1, breaks = 5) #no break points 
+breakpoints(dif_means_neuron ~ 1, breaks = 5, h=.05) #no break points 
 plot(dif_means_neuron)
 points(43,neuron[43,2], col="purple", pch= 18)
-points(60,neuron[60,2], col="purple", pch= 18)
-points(90,neuron[90,2], col="purple", pch= 18)
-
-
+points(48,neuron[48,2], col="purple", pch= 18)
+points(56,neuron[56,2], col="purple", pch= 18)
+points(72,neuron[72,2], col="purple", pch= 18)
+points(98,neuron[98,2], col="purple", pch= 18)
 
 
 
