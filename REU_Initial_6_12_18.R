@@ -32,11 +32,15 @@ points(30, dif_means_ts_2[30], col="purple", pch= 18)
 points(60, dif_means_ts_2[60], col="purple", pch= 18)
 
 #-----------------------------------------------------------------
+
+#diff 
+
 #short cutting with MLE and Metropolis Hastings 
-sigma_new = sd()
-sigma_old = sd()
-SSE_new = 
-SEE_old = 
+sigma_new = sd()      #need this 
+sigma_old = sd()      #need this 
+SSE_new =             #need this 
+SEE_old =             #need this 
+
 ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SEE_old)
 u = runif(1) #random number from 0 to 1 taken from a normal distrabution 
 
@@ -48,3 +52,4 @@ if(ratio > 1) {
 } else {
   #go back to the old 
 }
+
