@@ -1,4 +1,5 @@
 #addition attempt 
+library("strucchange")
 
 #setting up data 
 first = rnorm(30, mean = 5, sd = 1) #30 random data points from a normal distribution with means 5
@@ -6,6 +7,7 @@ second = rnorm(30, mean = 15, sd = 1)
 dif_means_ts_1<-ts(dif_means, start=1, end=60) #create time series data with first and second data
 bkpts_1<-breakpoints(dif_means_ts_1 ~ 1, breaks = 2 , h=0.1) #one break
 bkpts_1_ends<-c(1, bkpts_1$breakpoints, length(dif_means_ts_1)) #breakpoint set with end points
+
 
 barBirth2<-function(currentSet){
 
@@ -21,7 +23,7 @@ barBirth2<-function(currentSet){
 
 }
 
-barBirth2(bkpts_1_ends)
+barBirth2(bkpts_1_ends) 
 barBirth2(c(1,50,60))
 
 plot(test_data) #plotting the original data 
