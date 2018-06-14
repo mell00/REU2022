@@ -1,63 +1,66 @@
 #creating our data 
-first = rnorm(30, mean = 5, sd = 1) #30 random data points from a normal distribution with means 5
-second = rnorm(30, mean = 15, sd = 1) #30 random data points from a normal distribution with means 15
-third = rnorm(30, mean = 30, sd = 1)
+first = rnorm(30, mean = 5, sd = 1) #30 random data points from a normal distribution with mean of 5
+second = rnorm(30, mean = 15, sd = 1) #30 random data points from a normal distribution with mean of 15
+third = rnorm(30, mean = 30, sd = 1) #30 random data points from a normal distribution with mean of 30
 
-dif_means = c(first, second) #adding the two sets of data points together 
-dif_means_2 = c(first, second, third)
-time = c(1:60) #making time 
+dif_means_0 = c(first) #setting up null set
+dif_means_1 = c(first, second) #adding two sets of data points together 
+dif_means_2 = c(first, second, third) #adding three sets of data points together
 
-test_data = data.frame(time, dif_means) #our data with x = time and y = two sets of data with two means 
-plot(test_data, main="Initial Data with Means Equal to 5 and 15") 
+time_0 = 1:30
+time_1 = 1:60
+time_2 = 1:90
+
+test_data_0 = data.frame(time_0, dif_means_0) #our data with x = time and y = data from 1 set
+test_data_1 = data.frame(time_1, dif_means_1) #our data with x = time and y = data from 2 sets
+test_data_2 = data.frame(time_2, dif_means_2) #our data with x = time and y = data from 3 sets
 
 #downloading the strucchange package
 #install.packages("strucchange")
 library("strucchange")
-?breakpoints
 
 #Bai-Perron Method
-dif_means_ts_0<-ts(first, start=1,end=30) #create time series data on only the first data 
-bkpts_0<-breakpoints(dif_means_ts_0 ~ 1, breaks = 2 ) #no break points 
-plot(dif_means_ts_0)
+bkpts_0 = breakpoints(test_data_0$dif_means_0 ~ test_data_0$time_0, breaks = 5, h = 0.1) #no break points 
 bkpts_0$breakpoints #list of x-values (time) for breakpoints
 
-dif_means_ts_1<-ts(dif_means, start=1, end=60) #create time series data with first and second data
-bkpts_1<-breakpoints(dif_means_ts_1 ~ 1, breaks = 2 , h=0.1) #one break
-plot(dif_means_ts_1)
-points(30, dif_means_ts_1[30], col="purple", pch= 18)
+bkpts_1 = breakpoints(test_data_1$dif_means_1 ~ test_data_1$time_1, breaks = 5, h = 0.1) #no break points 
 bkpts_1$breakpoints #list of x-values (time) for breakpoints
 
-dif_means_ts_2<-ts(dif_means_2, start=1, end=90) #create time series data with first second and third data
-bpts_2<-breakpoints(dif_means_ts_2 ~ 1, breaks=3, h=0.1) #two breaks 
-plot(dif_means_ts_2)
-points(30, dif_means_ts_2[30], col="purple", pch= 18)
-points(60, dif_means_ts_2[60], col="purple", pch= 18)
+bkpts_2 = breakpoints(test_data_2$dif_means_2 ~ test_data_2$time_2, breaks = 5, h = 0.1) #no break points 
 bkpts_2$breakpoints #list of x-values (time) for breakpoints
 
 #-----------------------------------------------------------------
 
-k <- c(1,30,60)
+test_k <- c(1,30,60)
 
-#install.packages("apricom")
-library("apricom") #if this is not working install the package above
+fitMetrics<-function(k_ends, test_data){
 
-#sd and sse
-sum_sd = 0
-sum_SSE = 0
-for(i in 1:length(k)) {
-  if(k[i] != 1){
-	min = k[i-1]
-	x_values = test_data[c(min:i),1] #getting the x values in the interval
-	y_values = test_data[c(min:i),2] #getting the y values in the interval
-	data = data.frame(x_values, y_values) #re-making this into a dataframe 
-	sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
-	model = lm(y_values~x_values)
-	SSE = sum(model$residuals**2)
-	sum_SSE = sum_sse + SSE #finding the SSE 
-  }
+	#create sum objects
+	sum_sd = 0
+	sum_SSE = 0
+
+	#get and sum standard deviation and SSE for regressions of all intervals
+	for(i in 1:length(k_ends)) {
+  		if(k_ends[i] != 1){
+		min = k_ends[i-1]
+		x_values = test_data[c(min:i),1] #getting the x values in the interval
+		y_values = test_data[c(min:i),2] #getting the y values in the interval
+		data = data.frame(x_values, y_values) #re-making this into a dataframe 
+		sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
+		model = lm(y_values~x_values)
+		SSE = sum(model$residuals^2)
+		sum_SSE = sum_SSE + SSE #adding up all the SSEs 
+		}
+	}
+
+	sigma_new = sum_sd / length(k_ends)-1   
+	SSE_new = sum_SSE / length(k_ends)-1
+	print(sigma_new)
+	print(SSE_new)
+
 }
-sigma_new = sum_sd / length(k)-1   
-SSE_new = sum_sse / length(k)-1 
+
+fitMetrics(test_k, test_data_1)
 
 sigma_old = sd()      #need this 
 SEE_old =
