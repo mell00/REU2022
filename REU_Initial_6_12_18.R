@@ -32,6 +32,7 @@ bkpts_2$breakpoints #list of x-values (time) for breakpoints
 #-----------------------------------------------------------------
 
 test_k <- c(1,30,60)
+test_k_2 <- c(1,30,50,60)
 
 fitMetrics<-function(k_ends, test_data){
 
@@ -52,15 +53,12 @@ fitMetrics<-function(k_ends, test_data){
 		sum_SSE = sum_SSE + SSE #adding up all the SSEs 
 		}
 	}
-
-	sigma = sum_sd / length(k_ends)-1   
-	SSE  = sum_SSE / length(k_ends)-1
-	print(c(sigma,SSE))
+	print(c(sum_sd,sum_SSE))
 
 }
 
 new_metrics = fitMetrics(test_k, test_data_1)
-old_metrics = fitMetrics(test_k, test_data_1)
+old_metrics = fitMetrics(test_k_2, test_data_1)
 
 sigma_new = new_metrics[1]
 sigma_old = old_metrics[1]
