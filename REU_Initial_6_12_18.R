@@ -53,27 +53,29 @@ fitMetrics<-function(k_ends, test_data){
 		}
 	}
 
-	sigma_new = sum_sd / length(k_ends)-1   
-	SSE_new = sum_SSE / length(k_ends)-1
-	print(sigma_new)
-	print(SSE_new)
+	sigma = sum_sd / length(k_ends)-1   
+	SSE  = sum_SSE / length(k_ends)-1
+	print(c(sigma,SSE))
 
 }
 
-fitMetrics(test_k, test_data_1)
+new_metrics = fitMetrics(test_k, test_data_1)
+old_metrics = fitMetrics(test_k, test_data_1)
 
-sigma_old = sd()      #need this 
-SEE_old =
+sigma_new = new_metrics[1]
+sigma_old = old_metrics[1]
+SSE_new = new_metrics[2]
+SSE_old = old_metrics[2]
 
-ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SEE_old)
+ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SSE_old)
 u = runif(1) #random number from 0 to 1 taken from a normal distrabution 
 
 #our temporary L
 if(ratio > 1) { 
-  #take new
+  print("new")
 } else if(ratio > u) {
-  #keep new
+  print("new")
 } else {
-  #keep old
+  print("old")
 }
 
