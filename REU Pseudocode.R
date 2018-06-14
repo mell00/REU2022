@@ -8,7 +8,7 @@ AR
 library(strucchange)
 breakpoints() for Bai-Perron breakpoints #/location, needs max breakpoints (w/ 1 or 15% or log)
 
-barBirth<-function(current knot set){
+barMake<-function(current knot set){
 OPTION 0 (null model)
 random
 OPTION 1
@@ -21,7 +21,7 @@ OPTION 2
 only put in largest gap between existing knots
 }
 
-barDeath<-function(current knot set){
+barMurder<-function(current knot set){
 OPTION 0
 random
 OPTION 1
@@ -33,6 +33,13 @@ OPTION 1B
 minimize distances on either size
 OPTION 2
 pick 2 randomly, compare scores
+}
+
+barMove{
+OPTION 1
+murder and make
+OPTION 2
+jiggle
 }
 
 bar<-function(# of iterations, initial breakpoint set, probability of birth/death/move){
