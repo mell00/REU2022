@@ -17,19 +17,22 @@ library("strucchange")
 
 #Bai-Perron Method
 dif_means_ts_0<-ts(first, start=1,end=30) #create time series data on only the first data 
-breakpoints(dif_means_ts_0 ~ 1, breaks = 2 ) #no break points 
+bkpts_0<-breakpoints(dif_means_ts_0 ~ 1, breaks = 2 ) #no break points 
 plot(dif_means_ts_0)
+bkpts_0$breakpoints #list of x-values (time) for breakpoints
 
 dif_means_ts_1<-ts(dif_means, start=1, end=60) #create time series data with first and second data
-breakpoints(dif_means_ts_1 ~ 1, breaks = 2 , h=0.1) #one break
+bkpts_1<-breakpoints(dif_means_ts_1 ~ 1, breaks = 2 , h=0.1) #one break
 plot(dif_means_ts_1)
 points(30, dif_means_ts_1[30], col="purple", pch= 18)
+bkpts_1$breakpoints #list of x-values (time) for breakpoints
 
 dif_means_ts_2<-ts(dif_means_2, start=1, end=90) #create time series data with first second and third data
-breakpoints(dif_means_ts_2 ~ 1, breaks=3, h=0.1) #two breaks 
+bpts_2<-breakpoints(dif_means_ts_2 ~ 1, breaks=3, h=0.1) #two breaks 
 plot(dif_means_ts_2)
 points(30, dif_means_ts_2[30], col="purple", pch= 18)
 points(60, dif_means_ts_2[60], col="purple", pch= 18)
+bkpts_2$breakpoints #list of x-values (time) for breakpoints
 
 #-----------------------------------------------------------------
 
