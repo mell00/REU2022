@@ -4,61 +4,61 @@ k_ends_test = c(1,50,60)
 
 barMake2<-function(k_ends){
 
-#random number generator 
-proposed = sample(1:max(k_ends), 2)
-proposed = sort(proposed) #sorting the 2 chosen numbers 
+  #random number generator 
+  proposed = sample(1:max(k_ends), 2)
+  proposed = sort(proposed) #sorting the 2 chosen numbers 
 
-#setting up initial values 
-small_1 = list()
-big_1 = list()
-small_2 = list()
-big_2 = list()
+  #setting up initial values 
+  small_1 = list()
+  big_1 = list()
+  small_2 = list()
+  big_2 = list()
 
-#finding which points are closest to the propsed break points 
-for(i in 1:length(k_ends)) {
-  if(proposed[1] > k_ends[i] ) {
-    small_1 = c(small_1, k_ends[i])
-  } else {
-    big_1 = c(big_1, k_ends[i])
+  #finding which points are closest to the propsed break points 
+  for(i in 1:length(k_ends)) {
+    if(proposed[1] > k_ends[i] ) {
+      small_1 = c(small_1, k_ends[i])
+    } else {
+      big_1 = c(big_1, k_ends[i])
+    }
+    if(proposed[2] > k_ends[i]) {
+      small_2 = c(small_2, k_ends[i])
+    } else {
+      big_2 = c(big_2, k_ends[i])
+    }
   }
-  if(proposed[2] > k_ends[i]) {
-    small_2 = c(small_2, k_ends[i])
-  } else {
-    big_2 = c(big_2, k_ends[i])
-  }
-}
 
-#this is extremely convaluted and not the best way 
-one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
-two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
+  #this is extremely convaluted and not the best way 
+  one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
+  two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
 
-#finding the distance between the points 
-d_one = diff(one)
-d_two = diff(two)
+  #finding the distance between the points 
+  d_one = diff(one)
+  d_two = diff(two)
 
-#sorting the distance 
-d_one_sort = sort(d_one)
-d_two_sort = sort(d_two)
+  #sorting the distance 
+  d_one_sort = sort(d_one)
+  d_two_sort = sort(d_two)
 
-new_bp = 0 
-if(d_one_sort[1] == d_two_sort[1]) { #comparing the mins, if equal, look at max 
-  if(d_one_sort[2] == d_two_sort[2]) {  #if both the min length and the max length are equal, randomize 
-    r = runif(1) #generating a random number 
-    if(r > 0.5) {
+  new_bp = 0 
+  if(d_one_sort[1] == d_two_sort[1]) { #comparing the mins, if equal, look at max 
+    if(d_one_sort[2] == d_two_sort[2]) {  #if both the min length and the max length are equal, randomize 
+      r = runif(1) #generating a random number 
+      if(r > 0.5) {
+        new_bp = proposed[2]
+      } else {
+        new_bp = proposed[1]
+      }
+    } else if(d_one_sort[2] < d_two_sort[2]) { #comparing the max to determine new point 
       new_bp = proposed[2]
     } else {
       new_bp = proposed[1]
     }
-  } else if(d_one_sort[2] < d_two_sort[2]) { #comparing the max to determine new point 
+  } else if(d_one_sort[1] < d_two_sort[1]) { #comparing the min to see the new break point 
     new_bp = proposed[2]
   } else {
     new_bp = proposed[1]
   }
-} else if(d_one_sort[1] < d_two_sort[1]) { #comparing the min to see the new break point 
-  new_bp = proposed[2]
-} else {
-  new_bp = proposed[1]
-}
   newSet = sort(c(k_ends, new_bp))
   newSet
 }
