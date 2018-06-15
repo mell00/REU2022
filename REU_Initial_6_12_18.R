@@ -87,9 +87,9 @@ bar = function(k, data, time, iterations, prob_mmm){
 
 }
 
-full_data = cbind(test_data_2$time_2, test_data_2$dif_means_2)
+full_data = cbind(as.numeric(rownames(neuron)), as.numeric(neuron$V2))
 
-k_ends = c(min(full_data[,1]), bkpts_2$breakpoints, max(test_data_2[,1]))
+k_ends = c(min(full_data[,1]), bkpts_neuron$breakpoints, max(full_data[,1]))
 
 fitMetrics<-function(k_ends, test_data){
 
@@ -142,7 +142,7 @@ barMove0<-function(k_ends){
 all_k_new = matrix(NA, ncol=15);
 all_k_best = matrix(NA, ncol=15);
 
-for(i in 1:100){
+for(i in 1:1000){
 
 old_metrics = fitMetrics(k_ends, full_data)
 sigma_old = old_metrics[1]
@@ -172,8 +172,10 @@ SSE_new = new_metrics[2]
 
 all_k_new = rbind(all_k_new, k_ends_new)
 
-ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SSE_old)
+ratio = exp(((-1)/(2 * sigma_new^2)) * SSE_new + ((-1)/(2 * sigma_old^2)) * SSE_old)
 u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
+
+print(ratio)
 
 if(ratio > 1) { 
 choice = "new"
@@ -193,5 +195,5 @@ all_k_best = rbind(all_k_best, k_ends)
 
 }
 
-print(all_k_new)
-print(all_k_best)
+summary(all_k_new)
+summary(all_k_best)
