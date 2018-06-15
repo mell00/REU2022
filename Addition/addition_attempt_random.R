@@ -6,7 +6,13 @@ barMake0<-function(k_ends){
 
 	rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1)
 	k_ends_final = sort(c(k_ends, rand_spot))
-	k_ends_final
+	d = diff(k_ends_final)
+	if(min(d) < 3) {
+	  barMake0(k_ends)
+	} else {
+	  return(k_ends_final)
+	}
+	
 
 }
 
