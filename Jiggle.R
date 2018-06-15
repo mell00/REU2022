@@ -5,7 +5,10 @@ jiggle<-function(percent, data_length, k_ends){
   #determines how much the knot shoud jiggle
   jiggle_range = ceiling(percent*data_length)
   jiggle_neighborhood = c(1:jiggle_range)
-  jiggle_spot = sample(1:jiggle_neighborhood, 1)
+  jiggle_spot = sample(1:jiggle_neighborhood,1)
+  
+  #"boolean" variable to make sure that we can jiggle 
+  can_jiggle = "good" #default is good and we can jiggle
   
   #determines randomly if knot is jiggling to left or right
   direction = "right" #default direction is right
@@ -19,8 +22,6 @@ jiggle<-function(percent, data_length, k_ends){
   k = k_ends[c(-1, -length(k_ends))] #removes end points
   rando_knot = sample(1:length(k),1) #chooses random knot 
   
-  #"boolean" variable to make sure that we can jiggle 
-  can_jiggle = "good" #default is good and we can jiggle
   
   #check if we can jiggle towards an endpoint
   if(direction = right){
@@ -44,12 +45,12 @@ jiggle<-function(percent, data_length, k_ends){
   }
   
   #check if we can jiggle, then jiggle!!!
-  if(can_jiggle == bad){
+  if(can_jiggle == "bad"){
     return()
   }else{
-    print(rando_knot)
+    #print(rando_knot)
     middle_set = k_ends[-(rando_knot)]
-    print(possible_knot)
+    #print(possible_knot)
     final_set = sort(c(middle_set,possible_knot))
     final_set
   }
