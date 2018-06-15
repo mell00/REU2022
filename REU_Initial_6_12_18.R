@@ -226,4 +226,4 @@ print(all_k_best)
 
 }
 
-bar0(c(20,40,60), rownames(neuron), neuron$V2, 10, 0.33, 0.33)
+bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 100, 0.6, 0.2)
