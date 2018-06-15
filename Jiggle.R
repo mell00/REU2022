@@ -1,4 +1,4 @@
-k_ends_test = c(5,10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60)
+k_ends_test = c(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60)
 
 jiggle<-function(percent, data_length, k_ends){
   
@@ -24,7 +24,7 @@ jiggle<-function(percent, data_length, k_ends){
   
   
   #check if we can jiggle towards an endpoint
-  if(direction = right){
+  if(direction == "right"){
     right_end = k_ends[length(k_ends)]
     if(right_end < rando_knot+jiggle_spot){
       can_jiggle = "bad"
