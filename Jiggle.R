@@ -4,23 +4,35 @@ jiggle<-function(percent, data_length, k_ends){
   
   #determines how much the knot shoud jiggle
   jiggle_range = ceiling(percent*data_length)
+  # print(jiggle_range ) #1
   jiggle_neighborhood = c(1:jiggle_range)
+  #print(jiggle_neighborhood) #1
   jiggle_spot = sample(1:jiggle_neighborhood,1)
+  # print(jiggle_spot) #1
   
   #"boolean" variable to make sure that we can jiggle 
   can_jiggle = "good" #default is good and we can jiggle
+  #print(can_jiggle)
   
   #determines randomly if knot is jiggling to left or right
   direction = "right" #default direction is right
+  #print(direction)
   u = runif(1) #random number from 0-1 from uniform distribution
+  print(u)
   if(u < 0.5){
     direction = "left"
+    # print(direction)
     jiggle_spot = (-1)*jiggle_spot
+    # print(jiggle_spot)
   }
+  print(direction)
   
   #determines randomly which knot is jiggling (code related to murders)
   k = k_ends[c(-1, -length(k_ends))] #removes end points
-  rando_knot = sample(1:length(k),1) #chooses random knot 
+  rando_location = sample(1:length(k),1) #chooses random knot 
+  print(rando_location)
+  rando_knot = k[rando_location]
+  print(rando_knot)
   
   
   #check if we can jiggle towards an endpoint
@@ -57,3 +69,4 @@ jiggle<-function(percent, data_length, k_ends){
 }
 
 jiggle(.01,100,k_ends_test)
+
