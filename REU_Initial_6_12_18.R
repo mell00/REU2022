@@ -88,17 +88,15 @@ if(ratio > 1) {
 
 #complete BAR - Variation 0 (Random/Random/Random)
 
-bar = function(k, data, time, iterations, make, murder){
+bar0 = function(k, time, data, iterations, make, murder){
 
-}
+prob_mmm = c(make, murder)
 
-prob_mmm = c(0.4,0.4)
-
-full_data = cbind(as.numeric(rownames(neuron)), as.numeric(neuron$V2))
+full_data = cbind(as.numeric(time), as.numeric(data))
 
 n = max(full_data[,1])
 
-k_ends = c(min(full_data[,1]), bkpts_neuron$breakpoints, max(full_data[,1]))
+k_ends = c(min(full_data[,1]), k, max(full_data[,1]))
 
 fitMetrics<-function(k_ends, test_data){
 
@@ -161,10 +159,11 @@ barMove0<-function(k_ends){
 
 }
 
+ratio_data = matrix(NA, nrow=1, ncol=6)
 all_k_new = matrix(NA, nrow=1, ncol=(n/3))
 all_k_best = matrix(NA, nrow=1, ncol=(n/3))
 
-for(i in 1:100){
+for(i in 1:iterations){
 
   old_metrics = fitMetrics(k_ends, full_data)
   sigma_old = old_metrics[1]
@@ -207,16 +206,24 @@ if(ratio > u_ratio) {
     k_ends = k_ends
   }
 
+ratio_data_print = c(ratio, u_ratio, sigma_new, SSE_new, sigma_old, SSE_old)
 k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
 k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
 
+ratio_data = rbind(ratio_data, ratio_data_print)
 all_k_new = rbind(all_k_new, k_ends_new_print)
 all_k_best = rbind(all_k_best, k_ends_best_print)
 
 }
 
+ratio_data = ratio_data[-1,]
 all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
 all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
 
-all_k_new
-all_k_best
+print(ratio_data)
+print(all_k_new)
+print(all_k_best)
+
+}
+
+bar0(c(20,40,60), rownames(neuron), neuron$V2, 10, 0.33, 0.33)
