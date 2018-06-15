@@ -5,7 +5,8 @@ k_ends_test = c(1,20,30,44,50,60)
 barMurder2 <- function(k_ends){
   
   #removing the end points 
-  k = substr(k_ends, 2, length(k_ends)-1)
+  k<-k_ends[-c(1,length(k_ends))] 
+  
   #random number generator 
   proposed = sample(1:length(k), 2, replace = FALSE) #looking at length of k 
   proposed = sort(proposed) #sorting the 2 chosen numbers 
