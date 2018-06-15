@@ -144,54 +144,54 @@ all_k_best = matrix(NA, ncol=15);
 
 for(i in 1:1000){
 
-old_metrics = fitMetrics(k_ends, full_data)
-sigma_old = old_metrics[1]
-SSE_old = old_metrics[2]
+  old_metrics = fitMetrics(k_ends, full_data)
+  sigma_old = old_metrics[1]
+  SSE_old = old_metrics[2]
 
-u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
+  u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
 
-if(u_step < prob_mmm[1]){
-c_step = "make"
-} else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
-c_step = "murder"
-} else{
-c_step = "move"
-}
+  if(u_step < prob_mmm[1]){
+    c_step = "make"
+  } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
+    c_step = "murder"
+  } else{
+    c_step = "move"
+  }
 
-if(c_step == "make"){
-k_ends_new = barMake0(k_ends)
-} else if (c_step == "murder"){
-k_ends_new = barMurder0(k_ends)
-} else{
-k_ends_new = barMove0(k_ends)
-}
+  if(c_step == "make"){
+    k_ends_new = barMake0(k_ends)
+  } else if (c_step == "murder"){
+    k_ends_new = barMurder0(k_ends)
+  } else{
+    k_ends_new = barMove0(k_ends)
+  }
 
-new_metrics = fitMetrics(k_ends_new, full_data)
-sigma_new = new_metrics[1]
-SSE_new = new_metrics[2]
+  new_metrics = fitMetrics(k_ends_new, full_data)
+  sigma_new = new_metrics[1]
+  SSE_new = new_metrics[2]
 
-all_k_new = rbind(all_k_new, k_ends_new)
+  all_k_new = rbind(all_k_new, k_ends_new)
 
-ratio = exp(((-1)/(2 * sigma_new^2)) * SSE_new + ((-1)/(2 * sigma_old^2)) * SSE_old)
-u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
+  ratio = exp(((-1)/(2 * sigma_new^2)) * SSE_new + ((-1)/(2 * sigma_old^2)) * SSE_old)
+  u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
-print(ratio)
+  print(ratio)
 
-if(ratio > 1) { 
-choice = "new"
-} else if(ratio > u_ratio) {
-choice = "new"
-} else {
-choice = "old"
-}
+  if(ratio > 1) { 
+    choice = "new"
+  } else if(ratio > u_ratio) {
+    choice = "new"
+  } else {
+    choice = "old"
+  }
 
-if(choice == "new"){
-k_ends = k_ends_new
-}else{
-k_ends = k_ends
-}
+  if(choice == "new"){
+    k_ends = k_ends_new
+  }else{
+    k_ends = k_ends
+  }
 
-all_k_best = rbind(all_k_best, k_ends)
+  all_k_best = rbind(all_k_best, k_ends)
 
 }
 
