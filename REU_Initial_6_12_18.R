@@ -88,13 +88,15 @@ if(ratio > 1) {
 
 #complete BAR - Variation 0 (Random/Random/Random)
 
-prob_mmm = c(0.4,0.4) #first probability is make, second is murder, move is calculated from leftover
-
-bar = function(k, data, time, iterations, prob_mmm){
+bar = function(k, data, time, iterations, make, murder){
 
 }
 
+prob_mmm = c(0.4,0.4)
+
 full_data = cbind(as.numeric(rownames(neuron)), as.numeric(neuron$V2))
+
+n = max(full_data[,1])
 
 k_ends = c(min(full_data[,1]), bkpts_neuron$breakpoints, max(full_data[,1]))
 
@@ -132,13 +134,19 @@ barMake0<-function(k_ends){
 
 	rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1)
 	k_ends_final = sort(c(k_ends, rand_spot))
-	k_ends_final
+	d = diff(k_ends_final)
+	if(min(d) < 3) {
+		barMake0(k_ends)
+	} else {
+		return(k_ends_final)
+	}
+	
 
 }
 
 barMurder0<-function(k_ends){
 
-	k = k_ends_test[c(-1,-length(k_ends_test))]
+	k = k_ends[c(-1,-length(k_ends))]
 	random_num = sample(1:length(k), 1)
 	k_ends_final = k_ends[-(random_num+1)]
 	k_ends_final
@@ -164,7 +172,7 @@ for(i in 1:1000){
 
   u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
 
-  if(length(k_ends) == 2 | u_step < prob_mmm[1]){
+  if(length(k_ends) < 3 | u_step < prob_mmm[1]){
     c_step = "make"
   } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
     c_step = "murder"
@@ -186,7 +194,7 @@ for(i in 1:1000){
 
   all_k_new = rbind(all_k_new, k_ends_new)
 
-  ratio = exp(((-1)/(2 * log(sigma_new+0.0001)^2)) * log(SSE_new+0.0001) + ((-1)/(2 * log(sigma_old+0.0001)^2)) * log(SSE_old+0.0001))
+  ratio = exp((-1*n*log((sqrt(2*pi)*sigma_new)+0.00001)-(1/(2*sigma_new^2+0.00001))*SSE_new)+((n*log(sqrt(2*pi)*sigma_old)+0.00001)-(1/(2*sigma_old^2+0.00001))*SSE_old))
   u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
   print(c(ratio, sigma_new, SSE_new, sigma_old, SSE_old, k_ends_new, k_ends))
