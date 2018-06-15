@@ -41,16 +41,23 @@ fitMetrics<-function(k_ends, test_data){
 	sum_SSE = 0
 
 	#get and sum standard deviation and SSE for regressions of all intervals
-	for(i in 1:length(k_ends)) {
-  		if(k_ends[i] != 1){
-		min = k_ends[i-1]
-		x_values = test_data[c(min:i),1] #getting the x values in the interval
-		y_values = test_data[c(min:i),2] #getting the y values in the interval
-		data = data.frame(x_values, y_values) #re-making this into a dataframe 
-		sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
-		model = lm(y_values~x_values)
+	if(length(k_ends) < 3 ){
+		sum_sd = sd(test_data[,2])
+		model = lm(test_data[,2]~test_data[,1])
 		SSE = sum(model$residuals^2)
-		sum_SSE = sum_SSE + SSE #adding up all the SSEs 
+		sum_SSE = SSE
+	}else{
+		for(i in 1:length(k_ends)) {
+  			if(k_ends[i] != 1){
+			min = k_ends[i-1]
+			x_values = test_data[c(min:i),1] #getting the x values in the interval
+			y_values = test_data[c(min:i),2] #getting the y values in the interval
+			data = data.frame(x_values, y_values) #re-making this into a dataframe 
+			sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
+			model = lm(y_values~x_values)
+			SSE = sum(model$residuals^2)
+			sum_SSE = sum_SSE + SSE #adding up all the SSEs 
+			}
 		}
 	}
 	c(sum_sd,sum_SSE)
@@ -98,16 +105,23 @@ fitMetrics<-function(k_ends, test_data){
 	sum_SSE = 0
 
 	#get and sum standard deviation and SSE for regressions of all intervals
-	for(i in 1:length(k_ends)) {
-  		if(k_ends[i] != 1){
-		min = k_ends[i-1]
-		x_values = test_data[c(min:i),1] #getting the x values in the interval
-		y_values = test_data[c(min:i),2] #getting the y values in the interval
-		data = data.frame(x_values, y_values) #re-making this into a dataframe 
-		sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
-		model = lm(y_values~x_values)
+	if(length(k_ends) < 3 ){
+		sum_sd = sd(test_data[,2])
+		model = lm(test_data[,2]~test_data[,1])
 		SSE = sum(model$residuals^2)
-		sum_SSE = sum_SSE + SSE #adding up all the SSEs 
+		sum_SSE = SSE
+	}else{
+		for(i in 1:length(k_ends)) {
+  			if(k_ends[i] != 1){
+			min = k_ends[i-1]
+			x_values = test_data[c(min:i),1] #getting the x values in the interval
+			y_values = test_data[c(min:i),2] #getting the y values in the interval
+			data = data.frame(x_values, y_values) #re-making this into a dataframe 
+			sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
+			model = lm(y_values~x_values)
+			SSE = sum(model$residuals^2)
+			sum_SSE = sum_SSE + SSE #adding up all the SSEs 
+			}
 		}
 	}
 	c(sum_sd,sum_SSE)
@@ -150,7 +164,7 @@ for(i in 1:1000){
 
   u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
 
-  if(u_step < prob_mmm[1]){
+  if(length(k_ends) == 2 | u_step < prob_mmm[1]){
     c_step = "make"
   } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
     c_step = "murder"
@@ -172,10 +186,10 @@ for(i in 1:1000){
 
   all_k_new = rbind(all_k_new, k_ends_new)
 
-  ratio = exp(((-1)/(2 * sigma_new^2)) * SSE_new + ((-1)/(2 * sigma_old^2)) * SSE_old)
+  ratio = exp(((-1)/(2 * log(sigma_new+0.0001)^2)) * log(SSE_new+0.0001) + ((-1)/(2 * log(sigma_old+0.0001)^2)) * log(SSE_old+0.0001))
   u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
-  print(ratio)
+  print(c(ratio, sigma_new, SSE_new, sigma_old, SSE_old, k_ends_new, k_ends))
 
   if(ratio > 1) { 
     choice = "new"
