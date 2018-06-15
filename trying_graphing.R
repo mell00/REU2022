@@ -304,8 +304,8 @@ bar0 = function(k, time, data, iterations, make, murder){
   plot(neuron_time, main = 1, xlab = "Time (ms)", ylab = "Number of Neurons Firing")
   points(all_k_new[1,],neuron_time[all_k_new[1,],2], col="blue", pch= 16, cex = 2)
   points(all_k_best[1,],neuron_time[all_k_best[1,],2], col="red", pch= 16, cex=2)
-  for(i in 1:9) {
-    n = i * 10
+  for(i in 1:20) {
+    n = i * 5
     plot(neuron_time, main = n, xlab = "Time (ms)", ylab = "Number of Neurons Firing")
     points(all_k_new[n,],neuron_time[all_k_new[n,],2], col="blue", pch= 16, cex = 2)
     points(all_k_best[n,],neuron_time[all_k_best[n,],2], col="red", pch= 16, cex = 2)
