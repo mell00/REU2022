@@ -161,10 +161,10 @@ barMove0<-function(k_ends){
 
 }
 
-all_k_new = matrix(NA, ncol=15);
-all_k_best = matrix(NA, ncol=15);
+all_k_new = matrix(NA, nrow=1, ncol=(n/3))
+all_k_best = matrix(NA, nrow=1, ncol=(n/3))
 
-for(i in 1:1000){
+for(i in 1:100){
 
   old_metrics = fitMetrics(k_ends, full_data)
   sigma_old = old_metrics[1]
@@ -192,16 +192,10 @@ for(i in 1:1000){
   sigma_new = new_metrics[1]
   SSE_new = new_metrics[2]
 
-  all_k_new = rbind(all_k_new, k_ends_new)
-
   ratio = exp((-1*n*log((sqrt(2*pi)*sigma_new)+0.00001)-(1/(2*sigma_new^2+0.00001))*SSE_new)+((n*log(sqrt(2*pi)*sigma_old)+0.00001)-(1/(2*sigma_old^2+0.00001))*SSE_old))
   u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
-  print(c(ratio, sigma_new, SSE_new, sigma_old, SSE_old, k_ends_new, k_ends))
-
-  if(ratio > 1) { 
-    choice = "new"
-  } else if(ratio > u_ratio) {
+if(ratio > u_ratio) {
     choice = "new"
   } else {
     choice = "old"
@@ -213,9 +207,16 @@ for(i in 1:1000){
     k_ends = k_ends
   }
 
-  all_k_best = rbind(all_k_best, k_ends)
+k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
+k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
+
+all_k_new = rbind(all_k_new, k_ends_new_print)
+all_k_best = rbind(all_k_best, k_ends_best_print)
 
 }
 
-summary(all_k_new)
-summary(all_k_best)
+all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
+all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
+
+all_k_new
+all_k_best
