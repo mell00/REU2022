@@ -53,7 +53,7 @@ fitMetrics<-function(k_ends, test_data){
 		sum_SSE = sum_SSE + SSE #adding up all the SSEs 
 		}
 	}
-	print(c(sum_sd,sum_SSE))
+	c(sum_sd,sum_SSE)
 
 }
 
@@ -110,7 +110,7 @@ fitMetrics<-function(k_ends, test_data){
 		sum_SSE = sum_SSE + SSE #adding up all the SSEs 
 		}
 	}
-	print(c(sum_sd,sum_SSE))
+	c(sum_sd,sum_SSE)
 
 }
 
@@ -131,49 +131,67 @@ barMurder0<-function(k_ends){
 
 }
 
-# define a Make, Murder, and Move here
+barMove0<-function(k_ends){
 
-# iteration begins here
+	k_ends_less = barMurder0(k_ends)
+	k_ends_final = barMake0(k_ends_less)
+	k_ends_final
+
+}
+
+all_k_new = matrix(NA, ncol=15);
+all_k_best = matrix(NA, ncol=15);
+
+for(i in 1:100){
 
 old_metrics = fitMetrics(k_ends, full_data)
 sigma_old = old_metrics[1]
 SSE_old = old_metrics[2]
 
-u_step = runif(1) #random number from 0 to 1 taken from a normal distribution for selecting step
+u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
 
 if(u_step < prob_mmm[1]){
-step = "make"
+c_step = "make"
 } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
-step = "murder"
+c_step = "murder"
 } else{
-step = "move"
+c_step = "move"
 }
 
-if(step = "make"){
-k_ends_new = barMake(k_ends)
-} else if (step = "murder"){
-k_ends_new = barMurder(k_ends)
+if(c_step == "make"){
+k_ends_new = barMake0(k_ends)
+} else if (c_step == "murder"){
+k_ends_new = barMurder0(k_ends)
 } else{
-k_ends_new = barMove (k_ends)
+k_ends_new = barMove0(k_ends)
 }
 
 new_metrics = fitMetrics(k_ends_new, full_data)
 sigma_new = new_metrics[1]
 SSE_new = new_metrics[2]
 
+all_k_new = rbind(all_k_new, k_ends_new)
+
 ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SSE_old)
-u_ratio = runif(1) #random number from 0 to 1 taken from a normal distribution 
+u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
 if(ratio > 1) { 
-choice = "new")
+choice = "new"
 } else if(ratio > u_ratio) {
 choice = "new"
 } else {
 choice = "old"
 }
 
-if(choice = "new"){
+if(choice == "new"){
 k_ends = k_ends_new
 }else{
 k_ends = k_ends
 }
+
+all_k_best = rbind(all_k_best, k_ends)
+
+}
+
+print(all_k_new)
+print(all_k_best)
