@@ -114,6 +114,23 @@ fitMetrics<-function(k_ends, test_data){
 
 }
 
+barMake0<-function(k_ends){
+
+	rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1)
+	k_ends_final = sort(c(k_ends, rand_spot))
+	k_ends_final
+
+}
+
+barMurder0<-function(k_ends){
+
+	k = k_ends_test[c(-1,-length(k_ends_test))]
+	random_num = sample(1:length(k), 1)
+	k_ends_final = k_ends[-(random_num+1)]
+	k_ends_final
+
+}
+
 # define a Make, Murder, and Move here
 
 # iteration begins here

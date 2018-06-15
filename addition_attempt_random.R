@@ -1,10 +1,14 @@
-#random murder 
-k=c(1, 30, 60)
-random_num = sample(1:length(k), 1)
-k[random_num]
+#addition attempt zero - random make
 
+k_ends_test = c(1,20,40,60)
 
-#random make
-random_spot = sample(1:length(test_data_1), 1)
-test_data_1[random_spot,]
+barMake0<-function(k_ends){
+
+	rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1)
+	k_ends_final = sort(c(k_ends, rand_spot))
+	k_ends_final
+
+}
+
+barMake0(k_ends_test)
 
