@@ -29,8 +29,26 @@ barMake2<-function(k_ends){
   }
 
   #this is extremely convaluted and not the best way 
-  one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
-  two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
+  one = 0
+  two = 0 
+  #looking at first point 
+  if(length(small_1) == 0) {
+    one = c(1, proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
+  } else if(length(big_1) == 0) {
+    one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], max(k_ends))
+  } else {
+    one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
+  }
+  #looking at second point 
+  if(length(small_2) == 0) {
+    two = c(1, proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
+  } else if(length(big_2) == 0) {
+    two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], max(k_ends))
+  } else {
+    two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
+  }
+  
+  
 
   #finding the distance between the points 
   d_one = diff(one)
