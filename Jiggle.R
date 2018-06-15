@@ -1,4 +1,4 @@
-k_ends_test = c(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60)
+k_ends_test = c(1, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60)
 
 jiggle<-function(percent, data_length, k_ends){
   
@@ -61,12 +61,12 @@ jiggle<-function(percent, data_length, k_ends){
     return()
   }else{
     #print(rando_knot)
-    middle_set = k_ends[-(rando_knot)]
+    middle_set = k_ends[-(rando_location+1)]
     #print(possible_knot)
     final_set = sort(c(middle_set,possible_knot))
     final_set
   }
 }
 
-jiggle(.01,100,k_ends_test)
+jiggle(.01,60,k_ends_test)
 
