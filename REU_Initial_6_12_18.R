@@ -88,15 +88,23 @@ if(ratio > 1) {
 
 #complete BAR - Variation 0 (Random/Random/Random)
 
-bar0 = function(k, time, data, iterations, make, murder){
 
-  prob_mmm = c(make, murder)
+#-------Key:
+# k           = breakpoint's x-axis values 
+# time        = integer x-values of the entire data set 
+# interations = number of runs through Metropolis hastings 
+# make        = the proportion (decimal) of the make step to occuring
+# murder      = the proportion (decimal) of the murder step to occuring
+  #note: the make and murder need to add to less then one 
+bar0 = function(k, time, data, iterations, make, murder){ 
 
-  full_data = cbind(as.numeric(time), as.numeric(data))
+  prob_mmm = c(make, murder) #combining the two probabilties of make and murder that the user specifies 
 
-  n = max(full_data[,1])
+  full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
 
-  k_ends = c(min(full_data[,1]), k, max(full_data[,1]))
+  n = max(full_data[,1]) #finding max value
+
+  k_ends = c(min(full_data[,1]), k, max(full_data[,1])) #adding in end points to k values 
 
   fitMetrics<-function(k_ends, test_data){
 
@@ -126,7 +134,8 @@ bar0 = function(k, time, data, iterations, make, murder){
 	  }
 	  c(sum_sd,sum_SSE)
   }
-
+  
+  #random make function, this makes a random point 
   barMake0<-function(k_ends){
 
 	  rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1)
@@ -139,7 +148,8 @@ bar0 = function(k, time, data, iterations, make, murder){
 	  }
 	  
   }
-
+  
+  #this function kills one breakpoint randomly 
   barMurder0<-function(k_ends){
 
 	  k = k_ends[c(-1,-length(k_ends))]
@@ -149,6 +159,7 @@ bar0 = function(k, time, data, iterations, make, murder){
 
   }
 
+  #kills a point randomly and then adds a point randomly 
   barMove0<-function(k_ends){
 
 	  k_ends_less = barMurder0(k_ends)
@@ -157,10 +168,12 @@ bar0 = function(k, time, data, iterations, make, murder){
 
   }
 
+  #initializing matrixes 
   ratio_data = matrix(NA, nrow=1, ncol=6)
   all_k_new = matrix(NA, nrow=1, ncol=(n/3))
   all_k_best = matrix(NA, nrow=1, ncol=(n/3))
 
+  #Metroplis Hastings 
   for(i in 1:iterations){
 
     old_metrics = fitMetrics(k_ends, full_data)
@@ -213,15 +226,18 @@ bar0 = function(k, time, data, iterations, make, murder){
     all_k_best = rbind(all_k_best, k_ends_best_print)
 
   }
-
+  
+  #cleaning up the matrixs 
   ratio_data = ratio_data[-1,]
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
 
+  #prints the results
   print(ratio_data)
   print(all_k_new)
   print(all_k_best)
 
 }
 
+#calling the function
 bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 100, 0.6, 0.2)
