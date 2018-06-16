@@ -232,12 +232,25 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
 
+  #plotting 
+  plot(full_data, main = 1, xlab = "Time (ms)", ylab = "Number of Neurons Firing")
+  points(all_k_new[1,],full_data[all_k_new[1,],2], col="blue", pch= 16, cex = 2)
+  points(all_k_best[1,],full_data[all_k_best[1,],2], col="red", pch= 16, cex=2)
+  for(i in 1:20) {
+    n = i * 5
+    plot(full_data, main = n, xlab = "Time (ms)", ylab = "Number of Neurons Firing")
+    points(all_k_new[n,],full_data[all_k_new[n,],2], col="blue", pch= 16, cex = 2)
+    points(all_k_best[n,],full_data[all_k_best[n,],2], col="red", pch= 16, cex = 2)
+  }
+  
   #prints the results
   print(ratio_data)
   print(all_k_new)
   print(all_k_best)
-
+  
 }
 
 #calling the function
 bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 100, 0.6, 0.2)
+
+bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 20, 0.6, 0.2)
