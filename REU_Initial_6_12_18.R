@@ -251,6 +251,6 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 100, 0.6, 0.2)
+bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 100, 0.1, 0.1)
 
 bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 20, 0.6, 0.2)
