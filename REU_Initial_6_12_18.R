@@ -136,18 +136,23 @@ bar0 = function(k, time, data, iterations, make, murder){
   }
   
   #random make function, this makes a random point 
+  count = 0 
   barMake0<-function(k_ends){
-
-	  rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1)
-	  k_ends_final = sort(c(k_ends, rand_spot))
-	  d = diff(k_ends_final)
-	  if(min(d) < 3) {
-		  barMake0(k_ends)
-	  } else {
-		  return(k_ends_final)
-	  }
-	  
+    
+    count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
+    if(count > 15 ) {
+      rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
+      k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
+      d = diff(k_ends_final) #finds the difference between all the spots 
+      if(min(d) < 3) { #this make sure an additional point is not to close to a point already in existance 
+        barMake0(k_ends)
+      } else {
+        return(k_ends_final) #the old breakpoints + the new breakpoints 
+      }
+    }
+    
   }
+  
   
   #this function kills one breakpoint randomly 
   barMurder0<-function(k_ends){
