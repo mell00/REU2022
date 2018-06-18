@@ -254,7 +254,9 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     num = iterations / 5
     for(i in 1:n) {
       n = i * 5
-      if(!is.na(all_k_new[n,]) ) {
+      if(is.na(all_k_new[n,]) ) {
+        plot(full_data, main = n, xlab = "Time")
+      } else {
         plot(full_data, main = n, xlab = "Time")
         points(all_k_new[n,],full_data[all_k_new[n,],2], col="blue", pch= 16, cex = 2)
         points(all_k_best[n,],full_data[all_k_best[n,],2], col="red", pch= 16, cex = 2)
@@ -270,4 +272,4 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "no")
 
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "yes")
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 100, 0.4, 0.4, "yes")
