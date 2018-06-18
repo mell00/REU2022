@@ -236,26 +236,18 @@ bar0 = function(k, time, data, iterations, make, murder){
   
   #cleaning up the matrixs 
   ratio_data = ratio_data[-1,]
+  all_k_new = all_k_new[,-1]
+  all_k_best = all_k_best[,-1]
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
-
-  #plotting 
-  plot(full_data, main = 1, xlab = "Time (ms)", ylab = "Number of Neurons Firing")
-  points(all_k_new[1,],full_data[all_k_new[1,],2], col="blue", pch= 16, cex = 2)
-  points(all_k_best[1,],full_data[all_k_best[1,],2], col="red", pch= 16, cex=2)
-  for(i in 1:20) {
-    n = i * 5
-    plot(full_data, main = n, xlab = "Time (ms)", ylab = "Number of Neurons Firing")
-    points(all_k_new[n,],full_data[all_k_new[n,],2], col="blue", pch= 16, cex = 2)
-    points(all_k_best[n,],full_data[all_k_best[n,],2], col="red", pch= 16, cex = 2)
-  }
+  clean_max = max(all_k_new[1,], na.rm=TRUE)
+  all_k_new = ifelse(all_k_new == clean_max,NA,all_k_new)
+  all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
   
   #prints the results
-  print(ratio_data)
-  print(all_k_new)
-  print(all_k_best)
+  return(list(ratio_data, all_k_new, all_k_best))
   
 }
 
 #calling the function
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,1], 1000, 0.4, 0.4)
+bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,1], 10, 0.4, 0.4)
