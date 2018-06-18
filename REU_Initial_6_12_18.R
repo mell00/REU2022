@@ -140,7 +140,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   barMake0<-function(k_ends){
     
     count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
-    if(count < 15 ) {
+    if(count < 10 ) {
       rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
       k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
       d = diff(k_ends_final) #finds the difference between all the spots 
@@ -149,6 +149,8 @@ bar0 = function(k, time, data, iterations, make, murder){
       } else {
         return(k_ends_final) #the old breakpoints + the new breakpoints 
       }
+    }else {
+      return(k_ends)
     }
     
   }
@@ -256,4 +258,4 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,1], 100, 0.4, 0.4)
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,1], 1000, 0.4, 0.4)
