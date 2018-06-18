@@ -140,7 +140,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   barMake0<-function(k_ends){
     
     count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
-    if(count > 15 ) {
+    if(count < 15 ) {
       rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
       k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
       d = diff(k_ends_final) #finds the difference between all the spots 
