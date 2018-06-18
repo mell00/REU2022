@@ -31,61 +31,6 @@ bkpts_2$breakpoints #list of x-values (time) for breakpoints
 
 #-----------------------------------------------------------------
 
-test_k <- c(1,30,60)
-test_k_2 <- c(1,30,50,60)
-
-fitMetrics<-function(k_ends, test_data){
-
-	#create sum objects
-	sum_sd = 0
-	sum_SSE = 0
-
-	#get and sum standard deviation and SSE for regressions of all intervals
-	if(length(k_ends) < 3 ){
-		sum_sd = sd(test_data[,2])
-		model = lm(test_data[,2]~test_data[,1])
-		SSE = sum(model$residuals^2)
-		sum_SSE = SSE
-	}else{
-		for(i in 1:length(k_ends)) {
-  			if(k_ends[i] != 1){
-			min = k_ends[i-1]
-			x_values = test_data[c(min:i),1] #getting the x values in the interval
-			y_values = test_data[c(min:i),2] #getting the y values in the interval
-			data = data.frame(x_values, y_values) #re-making this into a dataframe 
-			sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
-			model = lm(y_values~x_values)
-			SSE = sum(model$residuals^2)
-			sum_SSE = sum_SSE + SSE #adding up all the SSEs 
-			}
-		}
-	}
-	c(sum_sd,sum_SSE)
-
-}
-
-new_metrics = fitMetrics(test_k, test_data_1)
-old_metrics = fitMetrics(test_k_2, test_data_1)
-
-sigma_new = new_metrics[1]
-sigma_old = old_metrics[1]
-SSE_new = new_metrics[2]
-SSE_old = old_metrics[2]
-
-ratio = exp(-1/(2 * sigma_new) * SSE_new) + exp(-1/(2 * sigma_old) * SSE_old)
-u = runif(1) #random number from 0 to 1 taken from a normal distribution 
-
-#our temporary L
-if(ratio > 1) { 
-  print("new")
-} else if(ratio > u) {
-  print("new")
-} else {
-  print("old")
-}
-
-#-----------------------------------------------------------------
-
 #complete BAR - Variation 0 (Random/Random/Random)
 
 
@@ -97,7 +42,9 @@ if(ratio > 1) {
 # murder      = the proportion (decimal) of the murder step to occuring
   #note: the make and murder need to add to less then one 
 #graph        = yes or no to graphing the function 
-bar0 = function(k, time, data, iterations, make, murder, graph){ 
+bar0 = function(k, time, data, iterations, make, murder, graph){
+
+  library(MASS)
 
   prob_mmm = c(make, murder) #combining the two probabilties of make and murder that the user specifies 
 
@@ -109,32 +56,33 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 
   fitMetrics<-function(k_ends, test_data){
 
-	  #create sum objects
-	  sum_sd = 0
-	  sum_SSE = 0
+	#create sum objects
+	sum_loglik = 0
 
-	  #get and sum standard deviation and SSE for regressions of all intervals
-	  if(length(k_ends) < 3 ){
-		  sum_sd = sd(test_data[,2])
-		  model = lm(test_data[,2]~test_data[,1])
-		  SSE = sum(model$residuals^2)
-		  sum_SSE = SSE
-	  }else{
-		  for(i in 1:length(k_ends)) {
+	#get and sum log likelihood for regressions of all intervals
+	if(length(k_ends) < 3 ){
+		model = lm(test_data[,2]~test_data[,1])
+		sum_loglik = logLik(model)[1]
+	}else{
+		for(i in 1:length(k_ends)) {
   			if(k_ends[i] != 1){
-			    min = k_ends[i-1]
-			    x_values = test_data[c(min:i),1] #getting the x values in the interval
-			    y_values = test_data[c(min:i),2] #getting the y values in the interval
-			    data = data.frame(x_values, y_values) #re-making this into a dataframe 
-			    sum_sd = sum_sd + sd(y_values) #adding up all the standard deviations
-			    model = lm(y_values~x_values)
-			    SSE = sum(model$residuals^2)
-			    sum_SSE = sum_SSE + SSE #adding up all the SSEs 
-			  }
-		  }
-	  }
-	  c(sum_sd,sum_SSE)
+			min = k_ends[i-1]
+			x_values = test_data[c(min:i),1] #getting the x values in the interval
+			y_values = test_data[c(min:i),2] #getting the y values in the interval
+			data = data.frame(x_values, y_values) #re-making this into a dataframe 
+			print(data)
+			model = lm(y_values~x_values)
+			print(model)
+			print(logLik(model))
+			}
+		}
+	}
+	return(sum_loglik)
+
   }
+
+fitMetrics(c(1,18,42,60),test_data_2)
+
   
   #random make function, this makes a random point 
   count = 0 
@@ -184,9 +132,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   #Metroplis Hastings 
   for(i in 1:iterations){
 
-    old_metrics = fitMetrics(k_ends, full_data)
-    sigma_old = old_metrics[1]
-    SSE_old = old_metrics[2]
+    old_loglik = fitMetrics(k_ends, full_data)
 
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
 
@@ -206,11 +152,9 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
       k_ends_new = barMove0(k_ends)
     }
 
-    new_metrics = fitMetrics(k_ends_new, full_data)
-    sigma_new = new_metrics[1]
-    SSE_new = new_metrics[2]
+    new_loglik = fitMetrics(k_ends_new, full_data)
 
-    ratio = exp((-1*n*log((sqrt(2*pi)*sigma_new)+0.00001)-(1/(2*sigma_new^2+0.00001))*SSE_new)+((n*log(sqrt(2*pi)*sigma_old)+0.00001)+(1/(2*sigma_old^2+0.00001))*SSE_old))
+    ratio = new_loglik / old_loglik
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio > u_ratio) {
