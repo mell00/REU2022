@@ -1,10 +1,10 @@
-k_ends_test = c(1, 20, 23, 60)
-
+k_ends_test = c(1, 4, 23, 60)
 
 count = 0
 
-barJiggle<-function(percent, k_ends){
-  
+barJiggle<-function(percent, k_ends, count){
+
+  count = count + 1
   data_length = max(k_ends)
 
   #determines how much the knot shoud jiggle
@@ -53,11 +53,10 @@ barJiggle<-function(percent, k_ends){
   }
 
   #check if we can jiggle, then jiggle!!!
-  count = count + 1
   if(can_jiggle == "bad" & count < 10){
-    barJiggle(percent, k_ends)
+    barJiggle(percent, k_ends, count)
   }else if(can_jiggle == "bad"){
-    return()
+    return(count)
   }else{
     middle_set = k_ends[-(rando_location+1)]
     final_set = sort(c(middle_set,possible_knot))
@@ -66,5 +65,5 @@ barJiggle<-function(percent, k_ends){
   }
 }
 
-barJiggle(.01, k_ends_test)
+barJiggle(.01, k_ends_test, count)
 
