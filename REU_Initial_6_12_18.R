@@ -160,7 +160,7 @@ bar0 = function(k, time, data, iterations, make, murder){
 	  k = k_ends[c(-1,-length(k_ends))]
 	  random_num = sample(1:length(k), 1)
 	  k_ends_final = k_ends[-(random_num+1)]
-	  k_ends_final
+	  return(k_ends_final)
 
   }
 
@@ -169,7 +169,7 @@ bar0 = function(k, time, data, iterations, make, murder){
 
 	  k_ends_less = barMurder0(k_ends)
 	  k_ends_final = barMake0(k_ends_less)
-	  k_ends_final
+	  return(k_ends_final)
 
   }
 
@@ -207,7 +207,7 @@ bar0 = function(k, time, data, iterations, make, murder){
     sigma_new = new_metrics[1]
     SSE_new = new_metrics[2]
 
-    ratio = exp((-1*n*log((sqrt(2*pi)*sigma_new)+0.00001)-(1/(2*sigma_new^2+0.00001))*SSE_new)+((n*log(sqrt(2*pi)*sigma_old)+0.00001)-(1/(2*sigma_old^2+0.00001))*SSE_old))
+    ratio = exp((-1*n*log((sqrt(2*pi)*sigma_new)+0.00001)-(1/(2*sigma_new^2+0.00001))*SSE_new)+((n*log(sqrt(2*pi)*sigma_old)+0.00001)+(1/(2*sigma_old^2+0.00001))*SSE_old))
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio > u_ratio) {
@@ -256,6 +256,4 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 100, 0.1, 0.1)
-
-bar0(bkpts_neuron$breakpoints, rownames(neuron), neuron$V2, 20, 0.6, 0.2)
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,1], 100, 0.4, 0.4)

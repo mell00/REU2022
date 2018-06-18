@@ -56,12 +56,11 @@ barJiggle<-function(percent, k_ends, count){
   if(can_jiggle == "bad" & count < 10){
     barJiggle(percent, k_ends, count)
   }else if(can_jiggle == "bad"){
-    return(count)
+    return()
   }else{
     middle_set = k_ends[-(rando_location+1)]
     final_set = sort(c(middle_set,possible_knot))
-    print(final_set)
-    print(count)
+    return(final_set)
   }
 }
 
