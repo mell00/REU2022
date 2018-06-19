@@ -60,27 +60,26 @@ bar0 = function(k, time, data, iterations, make, murder){
 
   fitMetrics<-function(k_ends, full_data){
 
-	#create sum objects
-	sum_loglik = 0
+	  #create sum objects
+	  sum_loglik = 0
 
-	#get and sum log likelihood for regressions of all intervals
-	if(length(k_ends) < 3 ){
-		model = lm(full_data[,2]~full_data[,1])
-		sum_loglik = logLik(model)[1]
-	}else{
-		for(i in 1:length(k_ends)) {
-  			if(k_ends[i] != 1){
-			min = k_ends[i-1]
-			x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
-			y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-			data = data.frame(x_values, y_values) #re-making this into a dataframe 
-			model = lm(y_values~x_values)
-			sum_loglik = sum_loglik + logLik(model)[1]
-			}
-		}
-	}
-	return(sum_loglik)
-
+	  #get and sum log likelihood for regressions of all intervals
+	  if(length(k_ends) < 3 ){
+		  model = lm(full_data[,2]~full_data[,1])
+		  sum_loglik = logLik(model)[1]
+	  }else{
+		  for(i in 1:length(k_ends)) {
+  		  if(k_ends[i] != 1){
+			    min = k_ends[i-1]
+			    x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
+			    y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
+			    data = data.frame(x_values, y_values) #re-making this into a dataframe 
+			    model = lm(y_values~x_values)
+			    sum_loglik = sum_loglik + logLik(model)[1]
+			  }
+		  }
+	  }
+	  return(sum_loglik)
   }
 
   
@@ -101,7 +100,6 @@ bar0 = function(k, time, data, iterations, make, murder){
     }else {
       return(k_ends)
     }
-    
   }
   
   

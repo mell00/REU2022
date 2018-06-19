@@ -178,10 +178,12 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     
     new_loglik = fitMetrics(k_ends_new, full_data, "no")
     
-    ratio = new_loglik - old_loglik
-    u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
+    ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
+    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
     
-    if(ratio > u_ratio) {
+    if(ratio == Inf){
+      choice = "old"
+    } else if(ratio > u_ratio) {
       choice = "new"
     } else {
       choice = "old"
@@ -241,7 +243,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4, "no")
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
 
 
