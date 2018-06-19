@@ -161,8 +161,6 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
       choice = "old"
     }
 
-choice = "old"
-
     if(choice == "new"){
       k_ends = k_ends_new
     }else{
