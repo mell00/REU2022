@@ -54,14 +54,15 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   
   k_ends = c(min(full_data[,1]), k, max(full_data[,1])) #adding in end points to k values 
   
-  
-  fitMetrics<-function(k_ends, test_data, graph, count ){
+  fitMetrics<-function(k_ends, test_data, graph, count ){ #added graph and count 
     
     #create sum objects
     sum_loglik = 0
     
+    #this is new!!!
     f = NULL
     x = NULL
+    
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
       model = lm(test_data[,2]~test_data[,1])
@@ -76,12 +77,14 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
           model = lm(y_values~x_values)
           sum_loglik = sum_loglik + logLik(model)[1]
           
+          #this is new!!!
           f = c(f,model$fitted.values, "here")
           x = c(x, x_values)
           
         }
       }
     }
+    #this is new!!!
     if(graph == "yes") {
       graphing(x, f, k_ends, count )
     }
@@ -89,6 +92,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   }
   
   
+  #this is new!!!
   graphing <- function(x, f, k_ends , count) {
     k = k_ends[-c(1, which.max(k_ends))]
     plot(full_data, xlab="Time", ylab="Data", main = count)
@@ -161,19 +165,11 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step < prob_mmm[1]){
-      c_step = "make"
+      k_ends_new = barMake0(k_ends) #make
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
-      c_step = "murder"
+      k_ends_new = barMurder0(k_ends) #murder
     } else{
-      c_step = "move"
-    }
-    
-    if(c_step == "make"){
-      k_ends_new = barMake0(k_ends)
-    } else if (c_step == "murder"){
-      k_ends_new = barMurder0(k_ends)
-    } else{
-      k_ends_new = barMove0(k_ends)
+      k_ends_new = barMove0(k_ends) #move
     }
     
     new_loglik = fitMetrics(k_ends_new, full_data, "no")
@@ -181,18 +177,12 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
     
-    if(ratio == Inf){
-      choice = "old"
+    if(ratio == Inf){ #safe gaurd against random models creating infinite ratios
+      k_ends = k_ends #old
     } else if(ratio > u_ratio) {
-      choice = "new"
+      k_ends = k_ends_new #new
     } else {
-      choice = "old"
-    }
-    
-    if(choice == "new"){
-      k_ends = k_ends_new
-    }else{
-      k_ends = k_ends
+      k_ends = k_ends #old
     }
     
     ratio_data_print = c(ratio, u_ratio, old_loglik, new_loglik)
@@ -244,85 +234,4 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
 bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
-
-
-
-#----------------------------------------------------------------------------
-#plotting 
-x=c(1:100)
-y=c(1:100)
-x.1 = c(1:20)
-x.2 = c(21:40)
-x.3 = c(41:100)
-y.1 = c(1:20)
-y.2 = c(21:40)
-y.3 = c(41:100)
-fit.1 = lm(y.1~x.1)
-fit.2 = lm(y.2~x.2)
-fit.3 = lm(y.3~x.3)
-
-
-f = c( fit.1$fitted.values, 100000)
-f = c(f,   fit.2$fitted.values ,100000)
-f = c(f, fit.3$fitted.values, 100000 )
-
-
-why = c( y.1)
-why = c(why, y.2)
-why = c(why, y.3)
-
-plot(x,y)
-yy = 0
-fit = 0 
-for(i in 1:length(f) ) {
-  if(f[i] == 100000) {
-    lines(yy, fit, col=i)
-    yy = NULL
-    fit = NULL 
-  } else {
-    yy = c(yy , why[i])
-    fit = c(fit, f[i])
-  }
-}
-
-
-#plotting try two 
-#plotting 
-k_ends= c(1,bkpts_2$breakpoints,90)
-k = bkpts_2$breakpoints
-test_data = test_data_2
-
-f = NULL
-why = NULL
-for(i in 1:length(k_ends)) {
-  if(k_ends[i] != 1){
-    min = k_ends[i-1]
-    x_values = test_data[c(min:k_ends[i]),1] #getting the x values in the interval
-    y_values = test_data[c(min:k_ends[i]),2] #getting the y values in the interval
-    data = data.frame(x_values, y_values) #re-making this into a dataframe 
-    model = lm(y_values~x_values)
-    
-    f = c(f,model$fitted.values, "here")
-    why = c(why, x_values)
-    
-  }
-}
-
-plot(test_data)
-points(k,test_data[k,2], col="blue", pch= 16, cex = 2)
-xx = NULL
-fit = NULL
-for(i in 1:length(f) ) {
-  if(f[i] == "here") {
-    print(fit)
-    lines(xx, fit, col="purple",lwd=3)
-    print(fit)
-    xx = NULL
-    fit = NULL 
-  } else {
-    xx = c(xx , why[i])
-    fit = c(fit, f[i])
-  }
-}
-
 
