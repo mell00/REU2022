@@ -1,8 +1,8 @@
-bai_perron<-function(formula, parameters, model_type){
-
-#how to subset formula? maybe have ys and xs inputed, then also provide formula form
+bai_perron<-function(y_values, x_values, parameters, model_type){
 
 #check if percent works with max breakpoints
+
+formula = ts(y_values, start=min(x_values), end=max(x_values))
 
 spec_function = match.fun(model_type)
 
@@ -40,4 +40,4 @@ return(model)
 
 test_ts = ts(dif_means_1, start=1, end=60)
 
-bai_perron(test_ts, "order=c(1,0,0); seasonal = list(order = c(0L, 0L, 0L), period = NA)", arima)
+bai_perron(dif_means_1, seq(1:60), "order=c(1,0,0); seasonal = list(order = c(0L, 0L, 0L), period = NA)", arima)
