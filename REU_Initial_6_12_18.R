@@ -67,21 +67,17 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 		for(i in 1:length(k_ends)) {
   			if(k_ends[i] != 1){
 			min = k_ends[i-1]
-			x_values = test_data[c(min:i),1] #getting the x values in the interval
-			y_values = test_data[c(min:i),2] #getting the y values in the interval
+			x_values = test_data[c(min:k_ends[i]),1] #getting the x values in the interval
+			y_values = test_data[c(min:k_ends[i]),2] #getting the y values in the interval
 			data = data.frame(x_values, y_values) #re-making this into a dataframe 
-			print(data)
 			model = lm(y_values~x_values)
-			print(model)
-			print(logLik(model))
+			sum_loglik = sum_loglik + logLik(model)[1]
 			}
 		}
 	}
 	return(sum_loglik)
 
   }
-
-fitMetrics(c(1,18,42,60),test_data_2)
 
   
   #random make function, this makes a random point 
@@ -154,7 +150,7 @@ fitMetrics(c(1,18,42,60),test_data_2)
 
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    ratio = new_loglik / old_loglik
+    ratio = new_loglik + old_loglik
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio > u_ratio) {
@@ -169,7 +165,7 @@ fitMetrics(c(1,18,42,60),test_data_2)
       k_ends = k_ends
     }
 
-    ratio_data_print = c(ratio, u_ratio, sigma_new, SSE_new, sigma_old, SSE_old)
+    ratio_data_print = c(ratio, u_ratio, old_loglik, new_loglik)
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
 
