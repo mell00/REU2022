@@ -44,7 +44,8 @@ bkpts_2$breakpoints #list of x-values (time) for breakpoints
 #graph        = yes or no to graphing the function 
 bar0 = function(k, time, data, iterations, make, murder, graph){
 
-  library(MASS)
+  library(MAS
+S)
 
   prob_mmm = c(make, murder) #combining the two probabilties of make and murder that the user specifies 
 
