@@ -91,13 +91,13 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   
   graphing <- function(x, f, k_ends , count) {
     k = k_ends[-c(1, which.max(k_ends))]
-    plot(test_data, xlab="Time", ylab="Data", main = count)
-    points(k,test_data[k,2], col="blue", pch= 16, cex = 2)
+    plot(full_data, xlab="Time", ylab="Data", main = count)
+    points(k,full_data[k,2], col="red", pch= 16, cex = 2)
     xx = NULL
     fit = NULL
     for(i in 1:length(f) ) {
       if(f[i] == "here") {
-        lines(xx, fit, col="purple",lwd=3)
+        lines(xx, fit, col="blue",lwd=3)
         xx = NULL
         fit = NULL 
       } else {
@@ -241,7 +241,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4, "no")
 
 
 
