@@ -1,47 +1,56 @@
-bai_perron<-function(y_values, x_values, data_type, parameters, model_type){
+#Generic Bai-Perron Test - currently works for ar, arima, lm, and glm
 
-#check if percent works with max breakpoints
+bai_perron<-function(x_values, y_values, parameters, model_type, percent, breaks){
 
-if(data_type == "time series" | data_type == "ts"){
+	#Checking to make sure max breaks works with specified percent inerval
+	if(max(x_values) * percent > max(x_values) / breaks){
+		return("Max breaks is too high. Try with a lower value.")
+	}
 
-formula = ts(y_values, start=min(x_values), end=max(x_values))
 
-}
+	#Setting up data in correct form for model type
+	if(model_type == "lm" | model_type == "glm"){
+		formula = formula(y_values ~ x_values)
+	}else if(model_type == "arima" | model_type == "ar"){
+		formula = ts(y_values, start=min(x_values), end=max(x_values))
+	}
 
-spec_function = match.fun(model_type)
+	#Get specified model type as a function
+	spec_function = match.fun(model_type)
 
-parameters = gsub(" ","",unlist(strsplit(parameters, ";")))
+	#Function for getting correct model
+	getModel = function(spec_function, formula, parameters){
 
-length = length(parameters)
+		model = spec_function(formula)
 
-param = list()
+		if(parameters != ""){
+			parameters = gsub(" ","",unlist(strsplit(parameters, ";")))
+			length = length(parameters)
+			param = list()
+			for(i in 1:length){
+				param[[i]] = eval(parse(text=parameters[[i]]))
+			}
+			param_fill = function(param){
+				for(i in 1:length(param)){
+					return(param[[i]])
+				}
+			}
+			model = spec_function(formula, param_fill(param))
+		}
 
-for(i in 1:length){
+		return(model)
+	}
 
-param[[i]] = eval(parse(text=parameters[[i]]))
+final_model = getModel(spec_function, formula, parameters)
 
-}
+return(final_model)
 
 #generate fit for all possible segments
 
 #test all possible combinations up to max breakpoints
 
-model = NULL
-
-if(length(param) == 1){
-
-model = spec_function(formula, param[[1]])
-
-}else if(length(param) == 2){
-
-model = spec_function(formula, param[[1]], param[[2]])
-
-}
-
-return(model)
-
 }
 
 test_ts = ts(dif_means_1, start=1, end=60)
 
-bai_perron(dif_means_1, seq(1:60), "time series", "order=c(1,0,0); seasonal = list(order = c(0L, 0L, 0L), period = NA)", arima)
+bai_perron(seq(1:60), dif_means_1, "order=c(1,0,0)", "arima", 0.15, 5)
