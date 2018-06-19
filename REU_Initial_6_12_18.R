@@ -121,7 +121,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   }
 
   #initializing matrixes 
-  ratio_data = matrix(NA, nrow=1, ncol=6)
+  ratio_data = matrix(NA, nrow=1, ncol=4)
   all_k_new = matrix(NA, nrow=1, ncol=(n/3))
   all_k_best = matrix(NA, nrow=1, ncol=(n/3))
 
