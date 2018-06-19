@@ -54,21 +54,21 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 
   k_ends = c(min(full_data[,1]), k, max(full_data[,1])) #adding in end points to k values 
 
-  fitMetrics<-function(k_ends, test_data){
+  fitMetrics<-function(k_ends, full_data){
 
 	#create sum objects
 	sum_loglik = 0
 
 	#get and sum log likelihood for regressions of all intervals
 	if(length(k_ends) < 3 ){
-		model = lm(test_data[,2]~test_data[,1])
+		model = lm(full_data[,2]~full_data[,1])
 		sum_loglik = logLik(model)[1]
 	}else{
 		for(i in 1:length(k_ends)) {
   			if(k_ends[i] != 1){
 			min = k_ends[i-1]
-			x_values = test_data[c(min:k_ends[i]),1] #getting the x values in the interval
-			y_values = test_data[c(min:k_ends[i]),2] #getting the y values in the interval
+			x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
+			y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
 			data = data.frame(x_values, y_values) #re-making this into a dataframe 
 			model = lm(y_values~x_values)
 			sum_loglik = sum_loglik + logLik(model)[1]
@@ -153,11 +153,15 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
 
-    if(ratio > u_ratio) {
+    if(ratio == Inf){
+      choice = "old"
+    } else if(ratio > u_ratio) {
       choice = "new"
     } else {
       choice = "old"
     }
+
+choice = "old"
 
     if(choice == "new"){
       k_ends = k_ends_new
@@ -212,5 +216,6 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4, "no")
+neuron_result = bar0(bkpts_neuron$breakpoints, seq(1:110), neuron[,2], 50, 0.4, 0.4, "no")
 
 bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "yes")
