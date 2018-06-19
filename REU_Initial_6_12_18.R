@@ -150,7 +150,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    ratio = new_loglik + old_loglik
+    ratio = new_loglik / old_loglik
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio > u_ratio) {
@@ -211,6 +211,6 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 }
 
 #calling the function
-bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "no")
+bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
 bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "yes")
