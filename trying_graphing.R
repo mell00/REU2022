@@ -58,7 +58,6 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     
     #create sum objects
     sum_loglik = 0
-    
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
       model = lm(test_data[,2]~test_data[,1])
@@ -72,6 +71,8 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
           data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values)
           sum_loglik = sum_loglik + logLik(model)[1]
+          
+          
         }
       }
     }
@@ -193,7 +194,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     
     num = iterations / 5
     for(i in 1:n) {
-      n = i * 5
+      n = i  
       if(is.na(all_k_new[n,]) ) {
         plot(full_data, main = n, xlab = "Time")
         points(all_k_best[n,],full_data[all_k_best[n,],2], col="red", pch= 16, cex = 2)
@@ -213,4 +214,86 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 100, 0.4, 0.4, "yes")
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "yes")
+
+
+
+#----------------------------------------------------------------------------
+#plotting 
+x=c(1:100)
+y=c(1:100)
+x.1 = c(1:20)
+x.2 = c(21:40)
+x.3 = c(41:100)
+y.1 = c(1:20)
+y.2 = c(21:40)
+y.3 = c(41:100)
+fit.1 = lm(y.1~x.1)
+fit.2 = lm(y.2~x.2)
+fit.3 = lm(y.3~x.3)
+
+
+f = c( fit.1$fitted.values, 100000)
+f = c(f,   fit.2$fitted.values ,100000)
+f = c(f, fit.3$fitted.values, 100000 )
+
+
+why = c( y.1)
+why = c(why, y.2)
+why = c(why, y.3)
+
+plot(x,y)
+yy = 0
+fit = 0 
+for(i in 1:length(f) ) {
+  if(f[i] == 100000) {
+    lines(yy, fit, col=i)
+    yy = NULL
+    fit = NULL 
+  } else {
+    yy = c(yy , why[i])
+    fit = c(fit, f[i])
+  }
+}
+
+
+#plotting try two 
+#plotting 
+k_ends= c(1,bkpts_2$breakpoints,90)
+k = bkpts_2$breakpoints
+test_data = test_data_2
+
+f = NULL
+why = NULL
+for(i in 1:length(k_ends)) {
+  if(k_ends[i] != 1){
+    min = k_ends[i-1]
+    x_values = test_data[c(min:k_ends[i]),1] #getting the x values in the interval
+    y_values = test_data[c(min:k_ends[i]),2] #getting the y values in the interval
+    data = data.frame(x_values, y_values) #re-making this into a dataframe 
+    model = lm(y_values~x_values)
+    
+    f = c(f,model$fitted.values, "here")
+    why = c(why, x_values)
+    
+  }
+}
+
+plot(test_data)
+points(k,test_data[k,2], col="blue", pch= 16, cex = 2)
+xx = NULL
+fit = NULL
+for(i in 1:length(f) ) {
+  if(f[i] == "here") {
+    print(fit)
+    lines(xx, fit, col="purple",lwd=3)
+    print(fit)
+    xx = NULL
+    fit = NULL 
+  } else {
+    xx = c(xx , why[i])
+    fit = c(fit, f[i])
+  }
+}
+
+
