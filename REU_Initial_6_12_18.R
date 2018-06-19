@@ -211,6 +211,6 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 }
 
 #calling the function
-bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
+bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4, "no")
 
 bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "yes")
