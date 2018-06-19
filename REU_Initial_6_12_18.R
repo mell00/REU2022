@@ -177,13 +177,13 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   
   #cleaning up the matrixs 
   ratio_data = ratio_data[-1,]
-  all_k_new = all_k_new[,-1]
-  all_k_best = all_k_best[,-1]
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
   clean_max = max(all_k_new[1,], na.rm=TRUE)
   all_k_new = ifelse(all_k_new == clean_max,NA,all_k_new)
   all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
+  all_k_new = all_k_new[,c(-1,-ncol(all_k_new))]
+  all_k_best = all_k_best[,c(-1,-ncol(all_k_best))]
   
   if(graph == "yes") {
     #plotting 
