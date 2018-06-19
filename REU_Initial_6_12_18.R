@@ -150,7 +150,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    ratio = new_loglik / old_loglik
+    ratio = new_loglik - old_loglik
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio > u_ratio) {
