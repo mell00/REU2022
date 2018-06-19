@@ -45,11 +45,13 @@ final_model = getModel(spec_function, formula, parameters)
 
 return(final_model)
 
-for(i in min(x_values):max(x_values))
+for(i in 1:length(x_values)){
+
+}
 
 #generate fit for all possible segments, only need segmenets that fit percent interval+
 
-#run through all data points, get fits for all segments starting percent away from i data points
+#run through all observations, get fits for all segments starting percent away from i observatiions
 
 #test all possible combinations up to max breakpoints
 
