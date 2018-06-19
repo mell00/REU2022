@@ -44,8 +44,7 @@ bkpts_2$breakpoints #list of x-values (time) for breakpoints
 #graph        = yes or no to graphing the function 
 bar0 = function(k, time, data, iterations, make, murder, graph){
 
-  library(MAS
-S)
+  library(MASS)
 
   prob_mmm = c(make, murder) #combining the two probabilties of make and murder that the user specifies 
 
@@ -151,8 +150,8 @@ S)
 
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    ratio = new_loglik - old_loglik
-    u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
+    ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
+    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio > u_ratio) {
       choice = "new"

@@ -1,8 +1,12 @@
-bai_perron<-function(y_values, x_values, parameters, model_type){
+bai_perron<-function(y_values, x_values, data_type, parameters, model_type){
 
 #check if percent works with max breakpoints
 
+if(data_type == "time series" | data_type == "ts"){
+
 formula = ts(y_values, start=min(x_values), end=max(x_values))
+
+}
 
 spec_function = match.fun(model_type)
 
@@ -40,4 +44,4 @@ return(model)
 
 test_ts = ts(dif_means_1, start=1, end=60)
 
-bai_perron(dif_means_1, seq(1:60), "order=c(1,0,0); seasonal = list(order = c(0L, 0L, 0L), period = NA)", arima)
+bai_perron(dif_means_1, seq(1:60), "time series", "order=c(1,0,0); seasonal = list(order = c(0L, 0L, 0L), period = NA)", arima)
