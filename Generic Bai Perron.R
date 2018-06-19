@@ -1,5 +1,9 @@
 bai_perron<-function(formula, parameters, model_type){
 
+#how to subset formula? maybe have ys and xs inputed, then also provide formula form
+
+#check if percent works with max breakpoints
+
 spec_function = match.fun(model_type)
 
 parameters = gsub(" ","",unlist(strsplit(parameters, ";")))
@@ -13,6 +17,10 @@ for(i in 1:length){
 param[[i]] = eval(parse(text=parameters[[i]]))
 
 }
+
+#generate fit for all possible segments
+
+#test all possible combinations up to max breakpoints
 
 model = NULL
 
@@ -29,10 +37,6 @@ model = spec_function(formula, param[[1]], param[[2]])
 return(model)
 
 }
-
-#check if percent works with max breakpoints
-
-#generate fit for all possible segments
 
 test_ts = ts(dif_means_1, start=1, end=60)
 
