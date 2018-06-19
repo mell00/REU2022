@@ -1,4 +1,6 @@
-#creating our data 
+#creating our data
+cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be')
+
 first = rnorm(30, mean = 5, sd = 1) #30 random data points from a normal distribution with mean of 5
 second = rnorm(30, mean = 15, sd = 1) #30 random data points from a normal distribution with mean of 15
 third = rnorm(30, mean = 30, sd = 1) #30 random data points from a normal distribution with mean of 30
