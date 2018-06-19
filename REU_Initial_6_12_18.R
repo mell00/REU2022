@@ -74,15 +74,14 @@ bar0 = function(k, time, data, iterations, make, murder){
 			    x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
 			    y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
 			    data = data.frame(x_values, y_values) #re-making this into a dataframe 
-			    model = lm(y_values~x_values)
-			    sum_loglik = sum_loglik + logLik(model)[1]
+			    model = lm(y_values~x_values) #running a lm on the selected interval 
+			    sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
 			  }
 		  }
 	  }
 	  return(sum_loglik)
   }
 
-  
   #random make function, this makes a random point 
   count = 0 
   barMake0<-function(k_ends){
@@ -106,9 +105,9 @@ bar0 = function(k, time, data, iterations, make, murder){
   #this function kills one breakpoint randomly 
   barMurder0<-function(k_ends){
 
-	  k = k_ends[c(-1,-length(k_ends))]
-	  random_num = sample(1:length(k), 1)
-	  k_ends_final = k_ends[-(random_num+1)]
+	  k = k_ends[c(-1,-length(k_ends))] #removes the end points 
+	  random_num = sample(1:length(k), 1) #selects a random breakpoint
+	  k_ends_final = k_ends[-(random_num+1)] #removes that selected breakpoint
 	  return(k_ends_final)
 
   }
@@ -116,8 +115,8 @@ bar0 = function(k, time, data, iterations, make, murder){
   #kills a point randomly and then adds a point randomly 
   barMove0<-function(k_ends){
 
-	  k_ends_less = barMurder0(k_ends)
-	  k_ends_final = barMake0(k_ends_less)
+	  k_ends_less = barMurder0(k_ends) #kills a point
+	  k_ends_final = barMake0(k_ends_less) #remakes a point
 	  return(k_ends_final)
 
   }
@@ -130,24 +129,16 @@ bar0 = function(k, time, data, iterations, make, murder){
   #Metroplis Hastings 
   for(i in 1:iterations){
 
-    old_loglik = fitMetrics(k_ends, full_data)
+    old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
 
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
 
     if(length(k_ends) < 3 | u_step < prob_mmm[1]){
-      c_step = "make"
+      k_ends_new = barMake0(k_ends) #make
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
-      c_step = "murder"
+      k_ends_new = barMurder0(k_ends) #murder
     } else{
-      c_step = "move"
-    }
-
-    if(c_step == "make"){
-      k_ends_new = barMake0(k_ends)
-    } else if (c_step == "murder"){
-      k_ends_new = barMurder0(k_ends)
-    } else{
-      k_ends_new = barMove0(k_ends)
+      k_ends_new = barMove0(k_ends) #move
     }
 
     new_loglik = fitMetrics(k_ends_new, full_data)
@@ -155,20 +146,15 @@ bar0 = function(k, time, data, iterations, make, murder){
     ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
 
-    if(ratio == Inf){
-      choice = "old"
+    if(ratio == Inf){ #safe gaurd against random models creating infinite ratios
+      k_ends = k_ends #old
     } else if(ratio > u_ratio) {
-      choice = "new"
+      k_ends = k_ends_new #new
     } else {
-      choice = "old"
+      k_ends = k_ends #old
     }
 
-    if(choice == "new"){
-      k_ends = k_ends_new
-    }else{
-      k_ends = k_ends
-    }
-
+    #condensing the data
     ratio_data_print = c(ratio, u_ratio, old_loglik, new_loglik)
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
