@@ -58,6 +58,9 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     
     #create sum objects
     sum_loglik = 0
+    
+    f = NULL
+    why = NULL
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
       model = lm(test_data[,2]~test_data[,1])
@@ -72,11 +75,30 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
           model = lm(y_values~x_values)
           sum_loglik = sum_loglik + logLik(model)[1]
           
+          f = c(f,model$fitted.values, "here")
+          why = c(why, x_values)
           
         }
       }
     }
+    plot(test_data)
+    xx = NULL
+    fit = NULL
+    for(i in 1:length(f) ) {
+      if(f[i] == "here") {
+        print(fit)
+        lines(xx, fit, col="purple",lwd=3)
+        print(fit)
+        xx = NULL
+        fit = NULL 
+      } else {
+        xx = c(xx , why[i])
+        fit = c(fit, f[i])
+      }
+    }
+    
     return(sum_loglik)
+    
     
   }
   
@@ -214,7 +236,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "yes")
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "no")
 
 
 
