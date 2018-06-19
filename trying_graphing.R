@@ -54,13 +54,14 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   
   k_ends = c(min(full_data[,1]), k, max(full_data[,1])) #adding in end points to k values 
   
-  fitMetrics<-function(k_ends, test_data){
+  
+  fitMetrics<-function(k_ends, test_data, graph, count ){
     
     #create sum objects
     sum_loglik = 0
     
     f = NULL
-    why = NULL
+    x = NULL
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
       model = lm(test_data[,2]~test_data[,1])
@@ -76,32 +77,36 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
           sum_loglik = sum_loglik + logLik(model)[1]
           
           f = c(f,model$fitted.values, "here")
-          why = c(why, x_values)
+          x = c(x, x_values)
           
         }
       }
     }
-    plot(test_data)
+    if(graph == "yes") {
+      graphing(x, f, k_ends, count )
+    }
+    return(sum_loglik)
+  }
+  
+  
+  graphing <- function(x, f, k_ends , count) {
+    k = k_ends[-c(1, which.max(k_ends))]
+    plot(test_data, xlab="Time", ylab="Data", main = count)
+    points(k,test_data[k,2], col="blue", pch= 16, cex = 2)
     xx = NULL
     fit = NULL
     for(i in 1:length(f) ) {
       if(f[i] == "here") {
-        print(fit)
         lines(xx, fit, col="purple",lwd=3)
-        print(fit)
         xx = NULL
         fit = NULL 
       } else {
-        xx = c(xx , why[i])
+        xx = c(xx , x[i])
         fit = c(fit, f[i])
       }
     }
     
-    return(sum_loglik)
-    
-    
   }
-  
   
   #random make function, this makes a random point 
   count = 0 
@@ -151,7 +156,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
   #Metroplis Hastings 
   for(i in 1:iterations){
     
-    old_loglik = fitMetrics(k_ends, full_data)
+    old_loglik = fitMetrics(k_ends, full_data, "yes", i )
     
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
@@ -171,7 +176,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
       k_ends_new = barMove0(k_ends)
     }
     
-    new_loglik = fitMetrics(k_ends_new, full_data)
+    new_loglik = fitMetrics(k_ends_new, full_data, "no")
     
     ratio = new_loglik - old_loglik
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution 
@@ -215,8 +220,8 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
     points(all_k_best[1,],full_data[all_k_best[1,],2], col="red", pch= 16, cex=2)
     
     num = iterations / 5
-    for(i in 1:n) {
-      n = i  
+    for(i in 1:num) {
+      n = i * 5 
       if(is.na(all_k_new[n,]) ) {
         plot(full_data, main = n, xlab = "Time")
         points(all_k_best[n,],full_data[all_k_best[n,],2], col="red", pch= 16, cex = 2)
@@ -236,7 +241,7 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 #calling the function
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
-bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10, 0.4, 0.4, "no")
+bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
 
 
