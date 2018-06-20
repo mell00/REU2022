@@ -1,4 +1,4 @@
-#Generic Bai-Perron Test - currently known to work for arima (glm, lm, and ar need to be tested)
+#Generic Bai-Perron Test - currently known to work for arima, ar, glm, and lm
 
 bai_perron<-function(x_values, y_values, parameters, model_type, interval, max_breaks){
 
@@ -31,30 +31,29 @@ bai_perron<-function(x_values, y_values, parameters, model_type, interval, max_b
 	spec_function = match.fun(model_type)
 
 	#Function for getting correct model
-	getModel = function(spec_function, formula, parameters){
+	getModel = function(m_spec_function, m_formula, m_parameters){
 
-		model = spec_function(formula)
+		m_model = m_spec_function(m_formula)
 
-		if(parameters != ""){
-			parameters = gsub(" ","",unlist(strsplit(parameters, ";")))
-			length = length(parameters)
-			param = list()
-			for(i in 1:length){
-				param[[i]] = eval(parse(text=parameters[[i]]))
+		if(m_parameters != ""){
+			m_parameters = gsub(" ","",unlist(strsplit(m_parameters, ";")))
+			m_length = length(m_parameters)
+			m_param = list()
+			for(i in 1:m_length){
+				m_param[[i]] = eval(parse(text=m_parameters[[i]]))
 			}
-			param_fill = function(param){
-				for(i in 1:length(param)){
-					return(param[[i]])
+			param_fill = function(m_param){
+				for(i in 1:length(m_param)){
+					return(m_param[[i]])
 				}
 			}
-			model = spec_function(formula, param_fill(param))
+			m_model = m_spec_function(m_formula, param_fill(m_param))
 		}
 
-		return(model)
+		return(m_model)
 	}
 
-	final_form = getForm(x_values, y_values, model_type)
-	final_model = getModel(spec_function, final_form, parameters)
+	all_SSRs = data.frame()
 
 	for(i in 1:(n-n*interval)){#select starting observation of each subsect (constrained by minimum subsect size)
 
@@ -64,8 +63,9 @@ bai_perron<-function(x_values, y_values, parameters, model_type, interval, max_b
 			subsect_y = y_values[i:j]
 			subsect_form = getForm(subsect_x, subsect_y, model_type)
 			subsect_mod = getModel(spec_function, subsect_form, parameters)
-			subsect_SSR = sum(resid(subsect_mod)^2)
-			print(c(subsect_x[1], max(subsect_x), subsect_SSR))
+			subsect_SSR = sum((subsect_mod$resid[!is.na(subsect_mod$resid)])^2)
+			subsect_info = cbind(subsect_x[1], max(subsect_x), subsect_SSR)
+			all_SSRs = rbind(all_SSRs, subsect_info)
 
 		}
 
@@ -77,10 +77,10 @@ bai_perron<-function(x_values, y_values, parameters, model_type, interval, max_b
 
 	}
 
-	return(final_model)
+	return(all_SSRs)
 
 #test all possible combinations up to max breakpoints, lowest BIC
 
 }
 
-bp_test = bai_perron(seq(1:30), dif_means_0, "", "lm", 0.15, 3)
+bp_test = bai_perron(seq(1:60), dif_means_1, "", "lm", 0.15, 3)
