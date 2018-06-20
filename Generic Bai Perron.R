@@ -13,21 +13,21 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 	n = length(x_values) #Number of observations
 
 	#Checking to make sure interval is larger than 3 points
-	if(n*interval < 3){
+	if(floor((n-1)*interval) < 3){
 		print(paste("Interval is too small. Try with ", 3/n, ".", sep=""))
 		return()
 	}
 
 	#Checking to make sure max breaks works with interval
-	if(n*interval > n/max_breaks){
-		print(paste("Max breaks is too high. Try with ",floor(n/(n*interval)),".", sep=""))
+	if(floor((n-1)*interval) > n/(max_breaks+1)){
+		print(paste("Max breaks is too high. Try with ",floor((n/floor((n-1)*interval)))-1,".", sep=""))
 		return()
 	}
 
 	#Function to set up data in correct form for model type (default is formula, can also do time series)
 	getForm = function(f_x_values, f_y_values, f_model_type){
 		if(f_model_type == "arima" | f_model_type == "ar" | f_model_type == "arma"){
-			f_formula = ts(f_y_values, start=min(f_x_values), end=max(f_x_values))
+			f_formula = ts(f_y_values, start=1, end=n)
 		} else{
 			f_formula = formula(f_y_values ~ f_x_values)
 		}
@@ -63,9 +63,9 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 	#Initializing data frame to store fit information for each subsection
 	all_SSRs = data.frame()
 
-	for(i in 1:(n-n*interval)){#Select starting observation of each subsection (constrained by interval size)
+	for(i in 1:(n-floor((n-1)*interval))){#Select starting observation of each subsection (constrained by interval size)
 
-		for(j in (i+n*interval):n){#Select end observation of each subsection (constrained by interval size)
+		for(j in (i+floor((n-1)*interval)):n){#Select end observation of each subsection (constrained by interval size)
 
 			subsect_x = x_values[i:j]
 			subsect_y = y_values[i:j]
@@ -79,39 +79,44 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 	}
 
-	recurseSSR = function(r_max, r_interval, r_max_breaks, r_n, r_all_SSRs){
+	recurseSSR = function(r_interval, r_max_breaks, r_n, r_all_SSRs, r_offset){
 
-		for(y in 1:r_max_breaks){
+			SSR_one = data.frame()
+			SSR_two = data.frame()
 
-			SSR = data.frame()
-
-			for(z in ((r_n*r_interval)+1):(r_n-(r_n*r_interval*y)-1)){
+			for(z in (floor((r_n-1)*r_interval)+r_offset):(r_n-floor((r_n-1)*r_interval)-1)){
 			
-				first_subsect = which(r_all_SSRs[,1] == 1 & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
-				second_subsect = which(r_all_SSRs[,1] == z+1 & r_all_SSRs[,2] == r_max) #Location of subsect that starts with s and goes to end
+				first_subsect = which(r_all_SSRs[,1] == r_offset & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
+				second_subsect = which(r_all_SSRs[,1] == z+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
 				option = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
-				SSR = rbind(SSR, option)
-				print(r_all_SSRs[second_subsect,1])
-				print(r_all_SSRs[second_subsect,2])
-				if(y > 1){
-
-					recurseSSR(r_max, r_interval, (r_max_breaks - 1), r_n, r_all_SSRs)
-
-				}
+				SSR_one = rbind(SSR_one, option)
 
 			}
-		}
 
-	return(SSR)
+			if(r_max_breaks >= 2){
+
+				new_offset = SSR_one[1,3]
+
+			for(y in (floor((r_n-1)*r_interval)+new_offset):(r_n-floor((r_n-1)*r_interval)-1)){
+			
+				first_subsect = which(r_all_SSRs[,1] == new_offset & r_all_SSRs[,2] == y) #Location of subsect that starts with 1 and goes to s
+				second_subsect = which(r_all_SSRs[,1] == y+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
+				option = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
+				SSR_two = rbind(SSR_two, option)
+
+			}
+			}
+
+	return(rbind(SSR_one, SSR_two))
 
 	}
 
-	SSR_one = recurseSSR(max(x_values), interval, max_breaks, n, all_SSRs)
+	SSR_final = recurseSSR(interval, max_breaks, n, all_SSRs, 1)
 
-	return(SSR_one[which.min(SSR_one[,5]),])
+	return(SSR_final)
 
 #compare BICs of all optimal knot sets and null
 
 }
 
-bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.25, 1)
+bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.25, 3)
