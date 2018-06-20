@@ -1,23 +1,30 @@
-#Generic Bai-Perron Test - currently works for ar, arima, lm, and glm
+#Generic Bai-Perron Test - currently known to work for arima (glm, lm, and ar need to be tested)
 
-bai_perron<-function(x_values, y_values, parameters, model_type, percent_int, max_breaks){
+bai_perron<-function(x_values, y_values, parameters, model_type, interval, max_breaks){
 
-	#Checking to make sure percent is larger than 3 points
-	if(length(x_values) * percent_int < 3){
-		return("Percent interval too small.")
+	n = length(x_values)
+
+	#Checking to make sure interval is larger than 3 points
+	if(n*interval < 3){
+		print(paste("Interval is too small. Try with ", 3/n, ".", sep=""))
+		return()
 	}
 
-	#Checking to make sure max breaks works with specified percent interval
-	if(length(x_values) * percent_int > length(x_values) / max_breaks){
-		return("Max breaks is too high. Try with a lower value.")
+	#Checking to make sure max breaks works with specified interval
+	if(n*interval > n/max_breaks){
+		print(paste("Max breaks is too high. Try with ",floor(n/(n*interval)),".", sep=""))
+		return()
 	}
-
 
 	#Setting up data in correct form for model type
-	if(model_type == "lm" | model_type == "glm"){
-		formula = formula(y_values ~ x_values)
-	}else if(model_type == "arima"){
-		formula = ts(y_values, start=min(x_values), end=max(x_values))
+	getForm = function(f_x_values, f_y_values, f_model_type){
+		if(f_model_type == "lm" | f_model_type == "glm"){
+			f_formula = formula(f_y_values ~ f_x_values)
+			return(f_formula)
+		}else if(f_model_type == "arima" | f_model_type == "ar"){
+			f_formula = ts(f_y_values, start=min(f_x_values), end=max(f_x_values))
+			return(f_formula)
+		}
 	}
 
 	#Get specified model type as a function
@@ -46,26 +53,34 @@ bai_perron<-function(x_values, y_values, parameters, model_type, percent_int, ma
 		return(model)
 	}
 
-	final_model = getModel(spec_function, formula, parameters)
+	final_form = getForm(x_values, y_values, model_type)
+	final_model = getModel(spec_function, final_form, parameters)
 
-	for(i in 1:(length(x_values)-length(x_values)*percent_int)){
+	for(i in 1:(n-n*interval)){#select starting observation of each subsect (constrained by minimum subsect size)
 
-		for(j in (i+length(x_values)*percent_int):length(x_values)){
+		for(j in (i+n*interval):n){#select end observation of each subsect (constrained by minimum subsect size)
 
-			subset = x_values[i]:x_values[j]
+			subsect_x = x_values[i:j]
+			subsect_y = y_values[i:j]
+			subsect_form = getForm(subsect_x, subsect_y, model_type)
+			subsect_mod = getModel(spec_function, subsect_form, parameters)
+			subsect_SSR = sum(resid(subsect_mod)^2)
+			print(c(subsect_x[1], max(subsect_x), subsect_SSR))
 
 		}
 
 	}
 
-	return(AIC(final_model))
+	for(l in 1:max_breaks){
+
+		#need optimal knot set for each number of breaks
+
+	}
+
+	return(final_model)
 
 #test all possible combinations up to max breakpoints, lowest BIC
 
 }
 
-test_ts = ts(dif_means_1, start=1, end=60)
-
-bp_test = bai_perron(seq(1:60), dif_means_1, "order=c(1,0,0)", "arima", 0.15, 5)
-
-#ar or arma does not work with aic
+bp_test = bai_perron(seq(1:30), dif_means_0, "", "lm", 0.15, 3)
