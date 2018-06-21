@@ -7,8 +7,9 @@
 #arguments = any arguments you want applied to the moddle, wrapped in quotes and seperated by semicolons (i.e. "order = c(1,0,0); method='ML'")
 #interval = minimum proportion of observations in each subsection (i.e. 0.15)
 #max_breaks = maximum number of breaks to be considered
+#p = number of parameters per regime added (i.e. 3 for linear)
 
-bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_breaks){
+bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max_breaks){
 
 	n = length(x_values) #Number of observations
 	x_values = 1:n #Turn x values into observations
@@ -155,10 +156,19 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 	}
 
-	return(SSR_final)
+	BICs = list()
 
-	#compare BICs of all optimal knot sets and null
+	for(v in 1:length(SSR_final)){
+
+		BIC = n + n*log(2*pi) + n*log(as.numeric(SSR_final[[v]][,3+v*2])/n) + log(n)*p*(v+1)
+		BICs = c(BICs, BIC)
+
+	}
+
+	return(list(SSR_final, BICs))
+
+	#do null
 
 }
 
-bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.15, 5)
+bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 3, 0.20, 3)
