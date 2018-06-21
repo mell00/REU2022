@@ -11,8 +11,8 @@
 bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_breaks){
 
 	n = length(x_values) #Number of observations
-	x_values = 1:n
-	int = floor(n*interval)
+	x_values = 1:n #Turn x values into observations
+	int = floor(n*interval) #Set minimum interval between breaks
 
 	#Checking to make sure interval is larger than 3 points
 	if(int < 3){
@@ -81,77 +81,84 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 	}
 
+
 	recurseSSR = function(r_int, r_max_breaks, r_n, r_all_SSRs){
 
-			SSR_one = data.frame()
-			SSR_two = data.frame()
-			SSR_three = data.frame()
-			SSR_four = data.frame()
+		SSR <<- list()
+
+		for(w in 1:r_max_breaks){
+
+			SSR[[w]] <<- data.frame()
+
+		}
+
+		subRecurse = function(current_breaks, offset, current_position, previous_subsect){
+
+			if(offset < (r_n-2*r_int)+1){
+
+				for(y in (offset+r_int):(r_n-r_int)){
+
+					first_subsect_2 = which(r_all_SSRs[,1] == offset & r_all_SSRs[,2] == y-1)
+					second_subsect_2 = which(r_all_SSRs[,1] == y & r_all_SSRs[,2] == r_n)
+
+					starting_subsect = list()
+					starting_score = 0
+
+					for(w in 1:length(previous_subsect)){
+
+						starting_subsect = cbind(starting_subsect, r_all_SSRs[previous_subsect[w],1], r_all_SSRs[previous_subsect[w],2])
+						starting_score = starting_score+r_all_SSRs[previous_subsect[w],3]
+
+					}
+
+					option_two = cbind(starting_subsect, r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2], r_all_SSRs[second_subsect_2,1], r_all_SSRs[second_subsect_2,2], starting_score+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[second_subsect_2,3])
+
+					SSR[[current_breaks]] <<- rbind(SSR[[current_breaks]], option_two)
+
+					new_subsect = c(previous_subsect, first_subsect_2)
+
+					new_position = current_position+2
+
+					if(current_breaks + 1 <= r_max_breaks){
+						SSR[[current_breaks+1]] <<- subRecurse(current_breaks+1, option_two[,new_position][[1]], new_position, new_subsect)
+					}
+
+				}
+			}
+
+		return(SSR[[current_breaks]])
+
+		}
 
 			for(z in r_int:(r_n-r_int)){
 			
 				first_subsect = which(r_all_SSRs[,1] == 1 & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
 				second_subsect = which(r_all_SSRs[,1] == z+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
-				option_one = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
+				option = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
+				SSR[[1]] <<- rbind(SSR[[1]], option)
 
-				SSR_one = rbind(SSR_one, option_one)
-
-				if(r_max_breaks >= 2 & option_one[,3] < (r_n-2*r_int)+1){
-
-					for(y in (option_one[,3]+r_int):(r_n-r_int)){
-
-						first_subsect_2 = which(r_all_SSRs[,1] == option_one[,3] & r_all_SSRs[,2] == y-1)
-						second_subsect_2 = which(r_all_SSRs[,1] == y & r_all_SSRs[,2] == r_n)
-						option_two = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2],r_all_SSRs[second_subsect_2,1], r_all_SSRs[second_subsect_2,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[second_subsect_2,3])
-
-						SSR_two = rbind(SSR_two, option_two)
-
-						if(r_max_breaks >= 3 & option_two[,5] < (r_n-2*r_int)+1){
-
-							for(x in (option_two[,5]+r_int):(r_n-r_int)){
-
-								first_subsect_3 = which(r_all_SSRs[,1] == option_two[,5] & r_all_SSRs[,2] == x-1)
-								second_subsect_3 = which(r_all_SSRs[,1] == x & r_all_SSRs[,2] == r_n)
-								option_three = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2],r_all_SSRs[first_subsect_3,1], r_all_SSRs[first_subsect_3,2], r_all_SSRs[second_subsect_3,1], r_all_SSRs[second_subsect_3,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[first_subsect_3,3]+r_all_SSRs[second_subsect_3,3])
-
-								SSR_three = rbind(SSR_three, option_three)
-
-								if(r_max_breaks >= 4 & option_three[,7] < (r_n-2*r_int)+1){
-
-									for(w in (option_three[,7]+r_int):(r_n-r_int)){
-
-										first_subsect_4 = which(r_all_SSRs[,1] == option_three[,7] & r_all_SSRs[,2] == w-1)
-										second_subsect_4 = which(r_all_SSRs[,1] == w & r_all_SSRs[,2] == r_n)
-										option_four = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2],r_all_SSRs[first_subsect_3,1], r_all_SSRs[first_subsect_3,2], r_all_SSRs[first_subsect_4,1], r_all_SSRs[first_subsect_4,2], r_all_SSRs[second_subsect_4,1], r_all_SSRs[second_subsect_4,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[first_subsect_3,3]+r_all_SSRs[first_subsect_4,3]+r_all_SSRs[second_subsect_4,3])
-
-										SSR_four = rbind(SSR_four, option_four)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
+				if(r_max_breaks >= 2){
+					subRecurse(2, option[,3], 3, first_subsect)
 				}
 
 			}
 
-	return(list(SSR_one[which.min(SSR_one[,5]),], SSR_two[which.min(SSR_two[,7]),], SSR_three[which.min(SSR_three[,9]),], SSR_four[which.min(SSR_four[,11]),]))
+	return(SSR)
 
 	}
 
 	SSR_final = recurseSSR(int, max_breaks, n, all_SSRs)
 
+	for(x in 1:length(SSR_final)){
+
+		SSR_final[[x]] = SSR_final[[x]][which.min(SSR_final[[x]][,3+x*2]),]
+
+	}
+
 	return(SSR_final)
 
-#compare BICs of all optimal knot sets and null
+	#compare BICs of all optimal knot sets and null
 
 }
 
-bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.15, 4)
-
-#best for third should be 12, 30, 40
+bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.15, 5)
