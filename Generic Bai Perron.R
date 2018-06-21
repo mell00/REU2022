@@ -11,6 +11,7 @@
 bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_breaks){
 
 	n = length(x_values) #Number of observations
+	x_values = 1:n
 	int = floor(n*interval)
 
 	#Checking to make sure interval is larger than 3 points
@@ -28,7 +29,7 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 	#Function to set up data in correct form for model type (default is formula, can also do time series)
 	getForm = function(f_x_values, f_y_values, f_model_type){
 		if(f_model_type == "arima" | f_model_type == "ar" | f_model_type == "arma"){
-			f_formula = ts(f_y_values, start=1, end=n)
+			f_formula = ts(f_y_values, start=min(f_x_values), end=max(f_x_values))
 		} else{
 			f_formula = formula(f_y_values ~ f_x_values)
 		}
@@ -64,9 +65,9 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 	#Initializing data frame to store fit information for each subsection
 	all_SSRs = data.frame()
 
-	for(i in 1:(n-int)){#Select starting observation of each subsection (constrained by interval size)
+	for(i in 1:(n-int+1)){#Select starting observation of each subsection (constrained by interval size)
 
-		for(j in int:n){#Select end observation of each subsection (constrained by interval size)
+		for(j in (i+int-1):n){#Select end observation of each subsection (constrained by interval size)
 
 			subsect_x = x_values[i:j]
 			subsect_y = y_values[i:j]
@@ -84,8 +85,10 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 			SSR_one = data.frame()
 			SSR_two = data.frame()
+			SSR_three = data.frame()
+			SSR_four = data.frame()
 
-			for(z in r_int:(r_n-r_int-1)){
+			for(z in r_int:(r_n-r_int)){
 			
 				first_subsect = which(r_all_SSRs[,1] == 1 & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
 				second_subsect = which(r_all_SSRs[,1] == z+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
@@ -103,13 +106,41 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 						SSR_two = rbind(SSR_two, option_two)
 
+						if(r_max_breaks >= 3 & option_two[,5] < (r_n-2*r_int)+1){
+
+							for(x in (option_two[,5]+r_int):(r_n-r_int)){
+
+								first_subsect_3 = which(r_all_SSRs[,1] == option_two[,5] & r_all_SSRs[,2] == x-1)
+								second_subsect_3 = which(r_all_SSRs[,1] == x & r_all_SSRs[,2] == r_n)
+								option_three = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2],r_all_SSRs[first_subsect_3,1], r_all_SSRs[first_subsect_3,2], r_all_SSRs[second_subsect_3,1], r_all_SSRs[second_subsect_3,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[first_subsect_3,3]+r_all_SSRs[second_subsect_3,3])
+
+								SSR_three = rbind(SSR_three, option_three)
+
+								if(r_max_breaks >= 4 & option_three[,7] < (r_n-2*r_int)+1){
+
+									for(w in (option_three[,7]+r_int):(r_n-r_int)){
+
+										first_subsect_4 = which(r_all_SSRs[,1] == option_three[,7] & r_all_SSRs[,2] == w-1)
+										second_subsect_4 = which(r_all_SSRs[,1] == w & r_all_SSRs[,2] == r_n)
+										option_four = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2],r_all_SSRs[first_subsect_3,1], r_all_SSRs[first_subsect_3,2], r_all_SSRs[first_subsect_4,1], r_all_SSRs[first_subsect_4,2], r_all_SSRs[second_subsect_4,1], r_all_SSRs[second_subsect_4,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[first_subsect_3,3]+r_all_SSRs[first_subsect_4,3]+r_all_SSRs[second_subsect_4,3])
+
+										SSR_four = rbind(SSR_four, option_four)
+
+									}
+
+								}
+
+							}
+
+						}
+
 					}
 
 				}
 
 			}
 
-	return(list(SSR_one, SSR_two))
+	return(list(SSR_one[which.min(SSR_one[,5]),], SSR_two[which.min(SSR_two[,7]),], SSR_three[which.min(SSR_three[,9]),], SSR_four[which.min(SSR_four[,11]),]))
 
 	}
 
@@ -121,4 +152,6 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 }
 
-bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.25, 2)
+bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.15, 4)
+
+#best for third should be 12, 30, 40
