@@ -11,16 +11,17 @@
 bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_breaks){
 
 	n = length(x_values) #Number of observations
+	int = floor(n*interval)
 
 	#Checking to make sure interval is larger than 3 points
-	if(floor((n-1)*interval) < 3){
-		print(paste("Interval is too small. Try with ", 3/n, ".", sep=""))
+	if(int < 3){
+		print(paste("Interval is too small. Try with ", round(3/n, 2), ".", sep=""))
 		return()
 	}
 
 	#Checking to make sure max breaks works with interval
-	if(floor((n-1)*interval) > n/(max_breaks+1)){
-		print(paste("Max breaks is too high. Try with ",floor((n/floor((n-1)*interval)))-1,".", sep=""))
+	if(int > (n-1)/(max_breaks+1)){
+		print(paste("Max breaks is too high. Try with ",floor((n-1)/int)-1,".", sep=""))
 		return()
 	}
 
@@ -63,9 +64,9 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 	#Initializing data frame to store fit information for each subsection
 	all_SSRs = data.frame()
 
-	for(i in 1:(n-floor((n-1)*interval))){#Select starting observation of each subsection (constrained by interval size)
+	for(i in 1:(n-int)){#Select starting observation of each subsection (constrained by interval size)
 
-		for(j in (i+floor((n-1)*interval)):n){#Select end observation of each subsection (constrained by interval size)
+		for(j in int:n){#Select end observation of each subsection (constrained by interval size)
 
 			subsect_x = x_values[i:j]
 			subsect_y = y_values[i:j]
@@ -79,39 +80,40 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 	}
 
-	recurseSSR = function(r_interval, r_max_breaks, r_n, r_all_SSRs, r_offset){
+	recurseSSR = function(r_int, r_max_breaks, r_n, r_all_SSRs){
 
 			SSR_one = data.frame()
 			SSR_two = data.frame()
 
-			for(z in (floor((r_n-1)*r_interval)+r_offset):(r_n-floor((r_n-1)*r_interval)-1)){
+			for(z in r_int:(r_n-r_int-1)){
 			
-				first_subsect = which(r_all_SSRs[,1] == r_offset & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
+				first_subsect = which(r_all_SSRs[,1] == 1 & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
 				second_subsect = which(r_all_SSRs[,1] == z+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
-				option = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
-				SSR_one = rbind(SSR_one, option)
+				option_one = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
+
+				SSR_one = rbind(SSR_one, option_one)
+
+				if(r_max_breaks >= 2 & option_one[,3] < (r_n-2*r_int)+1){
+
+					for(y in (option_one[,3]+r_int):(r_n-r_int)){
+
+						first_subsect_2 = which(r_all_SSRs[,1] == option_one[,3] & r_all_SSRs[,2] == y-1)
+						second_subsect_2 = which(r_all_SSRs[,1] == y & r_all_SSRs[,2] == r_n)
+						option_two = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2],r_all_SSRs[second_subsect_2,1], r_all_SSRs[second_subsect_2,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[second_subsect_2,3])
+
+						SSR_two = rbind(SSR_two, option_two)
+
+					}
+
+				}
 
 			}
 
-			if(r_max_breaks >= 2){
-
-				new_offset = SSR_one[1,3]
-
-			for(y in (floor((r_n-1)*r_interval)+new_offset):(r_n-floor((r_n-1)*r_interval)-1)){
-			
-				first_subsect = which(r_all_SSRs[,1] == new_offset & r_all_SSRs[,2] == y) #Location of subsect that starts with 1 and goes to s
-				second_subsect = which(r_all_SSRs[,1] == y+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
-				option = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
-				SSR_two = rbind(SSR_two, option)
-
-			}
-			}
-
-	return(rbind(SSR_one, SSR_two))
+	return(list(SSR_one, SSR_two))
 
 	}
 
-	SSR_final = recurseSSR(interval, max_breaks, n, all_SSRs, 1)
+	SSR_final = recurseSSR(int, max_breaks, n, all_SSRs)
 
 	return(SSR_final)
 
@@ -119,4 +121,4 @@ bai_perron<-function(x_values, y_values, model_type, arguments, interval, max_br
 
 }
 
-bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.25, 3)
+bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 0.25, 2)
