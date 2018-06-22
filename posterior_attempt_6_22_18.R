@@ -215,7 +215,8 @@ bar0 = function(k, time, data, iterations, make, murder){
   
   #prints the results
   #return(list(ratio_data, all_k_new, all_k_best))
-  return(matrix_of_fits)
+  return(matrix_of_fits[-1])
+  #return(all_k_best)
 }
 
 #calling the function
