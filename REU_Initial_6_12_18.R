@@ -155,7 +155,7 @@ bar0 = function(k, time, data, iterations, make, murder){
     }
 
     #condensing the data
-    ratio_data_print = c(ratio, u_ratio, old_loglik, new_loglik)
+    ratio_data_print = c(ratio, u_ratio, (old_loglik - log(n)*(4*(length(k_ends)-2)+3)), (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)))
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
 
