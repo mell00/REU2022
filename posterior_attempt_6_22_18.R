@@ -128,6 +128,8 @@ bar0 = function(k, time, data, iterations, make, murder){
   
   bar_v = 0
   bar_beta = 0
+  fit = 0
+  matrix_of_fits = matrix(rep(0, each=length(full_data[,1])), nrow=1, ncol = length(full_data[,1]))
   
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -172,7 +174,8 @@ bar0 = function(k, time, data, iterations, make, murder){
     
     ##loop through the k_ends to find the intervals 
     for(i in 1:length(k_ends)) {
-      if(k_ends[i] != 1){
+      if(k_ends[i] != 1) {
+        len = length(k_ends)
         min = k_ends[i-1]
         x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
         x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
@@ -183,6 +186,9 @@ bar0 = function(k, time, data, iterations, make, murder){
         v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
         #bar_beta 
         beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
+        
+        predicted_x = x_j %*% beta
+        fit = c(fit, predicted_x)
           
         #drawing a random variable from a multivariate normal pdf 
         post_beta = mvrnorm(1, beta, v)
@@ -190,9 +196,11 @@ bar0 = function(k, time, data, iterations, make, murder){
         bar_v = c(bar_v, v)
         bar_beta = c(bar_beta, beta)
         
+        if(i == len ) {
+          matrix_of_fits = rbind(matrix_of_fits, fit)
+        }
       }
     }
- 
   }
   
   #cleaning up the matrixs 
@@ -207,7 +215,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   
   #prints the results
   #return(list(ratio_data, all_k_new, all_k_best))
-  return(bar_beta[-1])
+  return(matrix_of_fits)
 }
 
 #calling the function
