@@ -7,7 +7,7 @@
 #arguments = any arguments you want applied to the moddle, wrapped in quotes and seperated by semicolons (i.e. "order = c(1,0,0); method='ML'")
 #interval = minimum proportion of observations in each subsection (i.e. 0.15)
 #max_breaks = maximum number of breaks to be considered
-#p = number of parameters per regime added (i.e. 3 for linear)
+#p = number of parameters per regime/subsection added (i.e. 3 for linear)
 
 bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max_breaks){
 
@@ -171,4 +171,4 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 
 }
 
-bp_test = bai_perron(seq(1:60), dif_means_1, "lm", "", 3, 0.20, 3)
+bp_test = bai_perron(seq(1:90), dif_means_2, "ar", "", 3, 0.25, 2)
