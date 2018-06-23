@@ -21,14 +21,14 @@ second = rnorm(30, mean = 15, sd = 1)
 third = rnorm(30, mean = 30, sd = 1) 
 data_2 = c(first, second, third) 
 test_data_2 = data.frame(time, data_2) 
-bkpts_2 = breakpoints(test_data_0$data_2 ~ test_data_2$time, breaks = 5, h = 0.1) 
+bkpts_2 = breakpoints(test_data_2$data_2 ~ test_data_2$time, breaks = 5, h = 0.1) 
 
 #----------------THREE---------------- (messy sd 1 break)
 first = rnorm(45, mean = 10, sd = 5) 
 second = rnorm(45, mean = 20, sd = 5) 
 data_3 = c(first, second) 
 test_data_3 = data.frame(time, data_3) 
-bkpts_3 = breakpoints(test_data_0$data_3 ~ test_data_3$time, breaks = 5, h = 0.1) 
+bkpts_3 = breakpoints(test_data_3$data_3 ~ test_data_3$time, breaks = 5, h = 0.1) 
 
 #----------------FOUR---------------- (messy sd 2 breaks)
 first = rnorm(30, mean = 5, sd = 6) 
@@ -69,7 +69,7 @@ test_data_8 = data.frame(time, data_8)
 bkpts_8 = breakpoints(test_data_8$data_8 ~ test_data_8$time, breaks = 5, h = 0.1)
 
 
-#plots 
+#----------------plots---------------- 
 par(mfrow=c(3,3))
 plot(test_data_0, main = "No Breaks")
 plot(test_data_1, main = "One Break, Small Variance")
@@ -81,4 +81,7 @@ plot(test_data_6, main = "Two Breaks and Big Slopes ")
 plot(test_data_7, main = "One Break and Small Slopes")
 plot(test_data_8, main = "Two Breaks and Small Slopes")
 par(mfrow=c(1,1))
+
+
+
 
