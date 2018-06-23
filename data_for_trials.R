@@ -64,10 +64,10 @@ test_data_7 = data.frame(time, data_7)
 bkpts_7 = breakpoints(test_data_7$data_7 ~ test_data_7$time, breaks = 5, h = 0.1)
 
 #----------------EIGHT----------------
-
-
-
-
-
-
+first = c(seq(1,8.25, by = .25))
+second = c(seq(8.5,23, by = .5))
+third = c(seq(24, 46, by = .75))
+data_8 = c(first, second, third)
+test_data_8 = data.frame(time, data_8)
+bkpts_8 = breakpoints(test_data_8$data_8 ~ test_data_8$time, breaks = 5, h = 0.1)
 
