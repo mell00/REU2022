@@ -11,7 +11,6 @@ barMurder2 <- function(k_ends){
   proposed = sample(1:length(k), 2, replace = FALSE) #looking at length of k 
   proposed = sort(proposed) #sorting the 2 chosen numbers 
   
-  
   #setting up initial values 
   small_1 = list()
   big_1 = list()
@@ -51,7 +50,6 @@ barMurder2 <- function(k_ends){
     two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
   }
  
-  
   #finding the distance between the points 
   d_one = diff(one)
   d_two = diff(two)
