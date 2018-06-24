@@ -7,7 +7,7 @@ barMurder0<-function(k_ends){
 	k = k_ends[c(-1,-length(k_ends))] #removing first and last value 
 	random_num = sample(1:length(k), 1) #chooses random number 
 	k_ends_final = k_ends[-(random_num+1)] #removes random number 
-	k_ends_final #returns it 
+	return(k_ends_final) #returns it 
 
 }
 

@@ -25,9 +25,9 @@ barMurder1 <- function(k_ends){
 	}
   
 	#find and delete correct break 
-	new_set = k_ends[-(min_intv_loc+1)]
+	k_ends_final = k_ends[-(min_intv_loc+1)]
 
-	return(new_set)
+	return(k_ends_final)
   
 }
 

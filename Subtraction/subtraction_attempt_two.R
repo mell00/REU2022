@@ -81,8 +81,8 @@ barMurder2 <- function(k_ends){
   }
   
   #deleting the selecting knot 
-  newSet <- k_ends[-new_bp]
-  newSet
+  k_ends_final <- k_ends[-new_bp]
+  return(k_ends_final)
 }
 
 barMurder2(k_ends_test)

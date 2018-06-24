@@ -77,8 +77,8 @@ barMake2<-function(k_ends){
   } else {
     new_bp = proposed[1]
   }
-  newSet = sort(c(k_ends, new_bp))
-  newSet
+  k_ends_final = sort(c(k_ends, new_bp))
+  return(k_ends_final)
 }
 
 barMake2(k_ends_test)
