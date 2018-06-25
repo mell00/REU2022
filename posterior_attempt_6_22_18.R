@@ -56,7 +56,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   
   n = max(full_data[,1]) #finding max value
   
-  k_ends = c(min(full_data[,1]), k, max(full_data[,1])) #adding in end points to k values 
+  k_ends = c(min(full_data[,1]), k, n) #adding in end points to k values 
   
   fitMetrics<-function(k_ends, full_data){
     
@@ -122,14 +122,16 @@ bar0 = function(k, time, data, iterations, make, murder){
   }
   
   #initializing matrixes 
-  ratio_data = matrix(NA, nrow=1, ncol=4)
+  ratio_data = data.frame()
   all_k_new = matrix(NA, nrow=1, ncol=(n/3))
   all_k_best = matrix(NA, nrow=1, ncol=(n/3))
   
   bar_v = 0
   bar_beta = 0
   fit = 0
-  matrix_of_fits = matrix(rep(0, each=length(full_data[,1])), nrow=1, ncol = length(full_data[,1]))
+  #matrix_of_fits = data.frame()
+  all_MSE = data.frame()
+  accept_count = 0
   
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -148,19 +150,20 @@ bar0 = function(k, time, data, iterations, make, murder){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     
-    ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
+    ratio = (new_loglik - log(n)*(length(k_ends_new)-1)*(2+1)) - (old_loglik - log(n)*(length(k_ends)-1)*(2+1))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
     
     if(ratio == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
     } else if(ratio > u_ratio) {
       k_ends = k_ends_new #new
+	accept_count = accept_count+1
     } else {
       k_ends = k_ends #old
     }
     
     #condensing the data
-    ratio_data_print = c(ratio, u_ratio, (old_loglik - log(n)*(4*(length(k_ends)-2)+3)), (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)))
+    ratio_data_print = c(ratio, u_ratio, old_loglik, -1 * log(n)*(length(k_ends)-1)*(2+1), new_loglik, -1* log(n)*(length(k_ends_new)-1)*(2+1))
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
     
@@ -173,13 +176,17 @@ bar0 = function(k, time, data, iterations, make, murder){
     B_0 = matrix(c(1000,0,0,1000),2,2)
     
     ##loop through the k_ends to find the intervals 
-    for(i in 1:length(k_ends)) {
-      if(k_ends[i] != 1) {
+    fit = NULL
+    for(m in 2:length(k_ends)) {
         len = length(k_ends)
-        min = k_ends[i-1]
-        x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
+	  if(m > 2){
+        	min = k_ends[m-1]+1
+	  }else{
+	  	min = k_ends[m-1]
+	  }
+        x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
         x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
-        y_j = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
+        y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
         sigma = sd(y_j)
           
         #bar_v
@@ -196,15 +203,15 @@ bar0 = function(k, time, data, iterations, make, murder){
         bar_v = c(bar_v, v)
         bar_beta = c(bar_beta, beta)
         
-        if(i == len ) {
-          matrix_of_fits = rbind(matrix_of_fits, fit)
+        if(m == len ) {
+		MSE = mean((full_data[,2]-fit)^2)
+		all_MSE = rbind(all_MSE, c(i, MSE))
+		#matrix_of_fits = rbind(matrix_of_fits, fit)
         }
-      }
     }
   }
   
-  #cleaning up the matrixs 
-  ratio_data = ratio_data[-1,]
+  #cleaning up the matrices 
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
   clean_max = max(all_k_new[1,], na.rm=TRUE)
@@ -212,13 +219,18 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
   all_k_new = all_k_new[,c(-1,-ncol(all_k_new))]
   all_k_best = all_k_best[,c(-1,-ncol(all_k_best))]
-  
+  #colnames(matrix_of_fits) = seq(1:length(full_data[,1]))
+  colnames(ratio_data) = c("Ratio", "Random", "OldLogLik", "OldPenalty", "NewLogLik", "NewPenalty")
+  colnames(all_MSE) = c("Iteration", "MSE")
+ 
   #prints the results
   #return(list(ratio_data, all_k_new, all_k_best))
-  return(matrix_of_fits[-1])
   #return(all_k_best)
+  #return(matrix_of_fits)
+  print(ratio_data)
+  return(list(accept_count, all_MSE, all_k_best))
 }
 
 #calling the function
-bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4)
+bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
 
