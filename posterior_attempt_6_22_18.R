@@ -121,7 +121,7 @@ bar0 = function(k, time, data, iterations, make, murder){
     
   }
   
-  #initializing matrixes 
+  #initializing matrices 
   ratio_data = data.frame()
   all_k_new = matrix(NA, nrow=1, ncol=(n/3))
   all_k_best = matrix(NA, nrow=1, ncol=(n/3))
@@ -151,7 +151,7 @@ bar0 = function(k, time, data, iterations, make, murder){
     new_loglik = fitMetrics(k_ends_new, full_data)
     
     ratio = (new_loglik - log(n)*(length(k_ends_new)-1)*(2+1)) - (old_loglik - log(n)*(length(k_ends)-1)*(2+1))
-    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
+    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed 
     
     if(ratio == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
@@ -217,20 +217,23 @@ bar0 = function(k, time, data, iterations, make, murder){
   clean_max = max(all_k_new[1,], na.rm=TRUE)
   all_k_new = ifelse(all_k_new == clean_max,NA,all_k_new)
   all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
-  all_k_new = all_k_new[,c(-1,-ncol(all_k_new))]
-  all_k_best = all_k_best[,c(-1,-ncol(all_k_best))]
+  all_k_new = data.frame(all_k_new[,c(-1,-ncol(all_k_new))], row.names=NULL)
+  all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
   #colnames(matrix_of_fits) = seq(1:length(full_data[,1]))
   colnames(ratio_data) = c("Ratio", "Random", "OldLogLik", "OldPenalty", "NewLogLik", "NewPenalty")
   colnames(all_MSE) = c("Iteration", "MSE")
+  final_list = list(accept_count / iterations, all_MSE, all_k_best)
+  names(final_list) = c("AcceptRate", "MSE", "Breakpoints")
+
  
   #prints the results
   #return(list(ratio_data, all_k_new, all_k_best))
   #return(all_k_best)
   #return(matrix_of_fits)
-  print(ratio_data)
-  return(list(accept_count, all_MSE, all_k_best))
+  #print(ratio_data)
+  return(final_list)
 }
 
 #calling the function
-bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
-
+bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 100, 0.4, 0.4)
+plot(bar_result$MSE$Iteration, bar_result$MSE$MSE)
