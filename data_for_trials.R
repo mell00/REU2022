@@ -3,10 +3,15 @@ library("strucchange")
 time = 1:90
 
 
-#----------------ZERO---------------- (no breaks)
-data_0 = rnorm(90, mean = 10, sd = 1)
-test_data_0 = data.frame(time, data_0)
-bkpts_0 = breakpoints(test_data_0$data_0 ~ test_data_0$time, breaks = 5, h = 0.1) 
+#----------------ZERO A---------------- (no breaks)
+data_0_a = rnorm(90, mean = 10, sd = 1)
+test_data_0_a = data.frame(time, data_0_a)
+bkpts_0_a = breakpoints(test_data_0_a$data_0_a ~ test_data_0_a$time, breaks = 5, h = 0.1) 
+
+#----------------ZERO B---------------- (no breaks)
+data_0_b = rnorm(90, mean = 10, sd = 5)
+test_data_0_b = data.frame(time, data_0_b)
+bkpts_0_b = breakpoints(test_data_0_b$data_0_b ~ test_data_0_b$time, breaks = 5, h = 0.1) 
 
 #----------------ONE---------------- (clean sd 1 break)
 first = rnorm(45, mean = 10, sd = 1) 
@@ -78,16 +83,32 @@ data_8 = c(first, second, third)
 test_data_8 = data.frame(time, data_8)
 bkpts_8 = breakpoints(test_data_8$data_8 ~ test_data_8$time, breaks = 5, h = 0.1)
 
+#----------------Nine----------------
+first = rnorm(45, mean = 10, sd = 1)
+second = rnorm(45, mean = 10, sd = 5)
+data_9 = c(first, second)
+test_data_9 = data.frame(time, data_9)
+
+#----------------Ten----------------
+first = rnorm(30, mean = 10, sd = 1)
+second = rnorm(30, mean = 10, sd = 5)
+third = rnorm(30, mean = 10, sd = 1)
+data_10 = c(first, second, third)
+test_data_10 = data.frame(time, data_10)
 
 #----------------plots---------------- 
-par(mfrow=c(3,3))
-plot(test_data_0, main = "0 Breaks", xlab="Time", ylab="Dependent Variable")
-plot(test_data_1, main = "1 Break, Small Variance", xlab="Time", ylab="Dependent Variable")
-plot(test_data_2, main = "2 Breaks, Small Variance", xlab="Time", ylab="Dependent Variable")
-plot(test_data_3, main = "1 Break, Big Variance", xlab="Time", ylab="Dependent Variable")
-plot(test_data_4, main = "2 Breaks, Big Variance", xlab="Time", ylab="Dependent Variable")
+par(mfrow=c(3,4))
+plot(test_data_0_a, main = "0 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_0_b, main = "0 Breaks, High Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_1, main = "1 Break, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_2, main = "2 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_3, main = "1 Break, High Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_4, main = "2 Breaks, High Variance", xlab="Time", ylab="Dependent Variable")
 plot(test_data_5, main = "1 Break, Big Slopes", xlab="Time", ylab="Dependent Variable")
 plot(test_data_6, main = "2 Breaks, Big Slopes", xlab="Time", ylab="Dependent Variable")
 plot(test_data_7, main = "1 Break, Small Slopes", xlab="Time", ylab="Dependent Variable")
 plot(test_data_8, main = "2 Breaks, Small Slopes", xlab="Time", ylab="Dependent Variable")
+plot(test_data_9, main = "1 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
+plot(test_data_10, main = "2 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
 par(mfrow=c(1,1))
+
