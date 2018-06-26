@@ -83,8 +83,8 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
           
         }else if(k_ends[i] > 2){
           min = k_ends[i-1]
-          x_values = test_data[c(min+1:k_ends[i]),1] #getting the x values in the interval
-          y_values = test_data[c(min+1:k_ends[i]),2] #getting the y values in the interval
+          x_values = test_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
+          y_values = test_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
           data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values)
           sum_loglik = sum_loglik + logLik(model)[1]
@@ -246,4 +246,8 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
 bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "no")
 
 bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "yes")
+
+present_2 = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4, "yes")
+
+
 
