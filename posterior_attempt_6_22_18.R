@@ -150,12 +150,14 @@ bar0 = function(k, time, data, iterations, make, murder){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     
-    ratio = (new_loglik - log(n)*(length(k_ends_new)-1)*(2+1)) - (old_loglik - log(n)*(length(k_ends)-1)*(2+1))
-    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed 
+    ratio = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+    u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution and then log transformed
+
+    ratio_data_print = c(ratio, u_ratio, -2*old_loglik + log(n)*(length(k_ends)-1)*(2+1), -2*old_loglik, log(n)*(length(k_ends)-1)*(2+1), -2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1), -2*new_loglik, log(n)*(length(k_ends_new)-1)*(2+1))
     
     if(ratio == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
-    } else if(ratio > u_ratio) {
+    } else if(ratio < u_ratio) {
       k_ends = k_ends_new #new
 	accept_count = accept_count+1
     } else {
@@ -163,7 +165,6 @@ bar0 = function(k, time, data, iterations, make, murder){
     }
     
     #condensing the data
-    ratio_data_print = c(ratio, u_ratio, old_loglik, -1 * log(n)*(length(k_ends)-1)*(2+1), new_loglik, -1* log(n)*(length(k_ends_new)-1)*(2+1))
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
     
@@ -220,7 +221,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_k_new = data.frame(all_k_new[,c(-1,-ncol(all_k_new))], row.names=NULL)
   all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
   #colnames(matrix_of_fits) = seq(1:length(full_data[,1]))
-  colnames(ratio_data) = c("Ratio", "Random", "OldLogLik", "OldPenalty", "NewLogLik", "NewPenalty")
+  colnames(ratio_data) = c("Ratio", "Random", "OldBIC", "OldLogLik", "OldPenalty", "NewBIC", "NewLogLik", "NewPenalty")
   colnames(all_MSE) = c("Iteration", "MSE")
   final_list = list(accept_count / iterations, all_MSE, all_k_best)
   names(final_list) = c("AcceptRate", "MSE", "Breakpoints")
@@ -235,5 +236,5 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 100, 0.4, 0.4)
+bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4)
 plot(bar_result$MSE$Iteration, bar_result$MSE$MSE)
