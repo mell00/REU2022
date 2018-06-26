@@ -69,10 +69,22 @@ bar0 = function(k, time, data, iterations, make, murder, graph){
       sum_loglik = logLik(model)[1]
     }else{
       for(i in 1:length(k_ends)) {
-        if(k_ends[i] != 1){
+        if(k_ends[i] == 2){
           min = k_ends[i-1]
           x_values = test_data[c(min:k_ends[i]),1] #getting the x values in the interval
           y_values = test_data[c(min:k_ends[i]),2] #getting the y values in the interval
+          data = data.frame(x_values, y_values) #re-making this into a dataframe 
+          model = lm(y_values~x_values)
+          sum_loglik = sum_loglik + logLik(model)[1]
+          
+          #this is new!!!
+          f = c(f,model$fitted.values, "here")
+          x = c(x, x_values)
+          
+        }else if(k_ends[i] > 2){
+          min = k_ends[i-1]
+          x_values = test_data[c(min+1:k_ends[i]),1] #getting the x values in the interval
+          y_values = test_data[c(min+1:k_ends[i]),2] #getting the y values in the interval
           data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values)
           sum_loglik = sum_loglik + logLik(model)[1]

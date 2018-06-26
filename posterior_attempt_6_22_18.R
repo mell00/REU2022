@@ -69,10 +69,17 @@ bar0 = function(k, time, data, iterations, make, murder){
       sum_loglik = logLik(model)[1]
     }else{
       for(i in 1:length(k_ends)) {
-        if(k_ends[i] != 1){
+        if(k_ends[i] == 2){
           min = k_ends[i-1]
           x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
           y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
+          data = data.frame(x_values, y_values) #re-making this into a dataframe 
+          model = lm(y_values~x_values) #running a lm on the selected interval 
+          sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
+        }else if(k_ends[i] > 2){
+          min = k_ends[i-1]
+          x_values = full_data[c(min+1:k_ends[i]),1] #getting the x values in the interval
+          y_values = full_data[c(min+1:k_ends[i]),2] #getting the y values in the interval
           data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
