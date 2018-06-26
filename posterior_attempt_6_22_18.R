@@ -206,7 +206,7 @@ bar0 = function(k, time, data, iterations, make, murder){
         
         if(m == len ) {
 		MSE = mean((full_data[,2]-fit)^2)
-		all_MSE = rbind(all_MSE, c(i, MSE))
+		all_MSE = rbind(all_MSE, MSE)
 		#matrix_of_fits = rbind(matrix_of_fits, fit)
         }
     }
@@ -222,7 +222,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
   #colnames(matrix_of_fits) = seq(1:length(full_data[,1]))
   colnames(ratio_data) = c("Ratio", "Random", "OldBIC", "OldLogLik", "OldPenalty", "NewBIC", "NewLogLik", "NewPenalty")
-  colnames(all_MSE) = c("Iteration", "MSE")
+  colnames(all_MSE) = c("MSE")
   final_list = list(accept_count / iterations, all_MSE, all_k_best)
   names(final_list) = c("AcceptRate", "MSE", "Breakpoints")
 
@@ -236,5 +236,4 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-bar_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 20, 0.4, 0.4)
-plot(bar_result$MSE$Iteration, bar_result$MSE$MSE)
+current_result = current_bar(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
