@@ -4,8 +4,8 @@
 
 #Step 4 - set up for simulation
 time = 1:90
-data = test_data_2[,2] #edit here !!!
-title = "test_data_2"
+data = test_data_1[,2] #edit here !!!
+title = "test_data_1"
 runs = 5
 iterations = 100
 current_bar = bar0 #edit here !!!
@@ -20,7 +20,9 @@ simulation = function(time, data, runs, iterations, current_bar, make, murder){
   current_list[[1]] = list()
   current_list[[2]] = data.frame(matrix(ncol=0, nrow=iterations)) 
   current_list[[3]] = data.frame(matrix(ncol=0, nrow=iterations))
-  names(current_list) = c("AcceptRate", "MSE", "Breakpoints")
+  current_list[[4]] = list()
+  current_list[[5]] = list()
+  names(current_list) = c("AcceptRate", "MSE", "Breakpoints", "Proosed", "AcceptedType")
  
    #getting the initial points using the bai-perron test 
   library("strucchange")
@@ -33,13 +35,17 @@ simulation = function(time, data, runs, iterations, current_bar, make, murder){
     current_list[[1]] = c(current_list[[1]], current_result$AcceptRate[[1]], recursive = TRUE)
     current_list[[2]] = cbind(current_list[[2]], current_result$MSE[,1])
     current_list[[3]] = cbind(current_list[[3]], current_result$Breakpoints)
+    current_list[[4]] = c(current_list[[4]], current_result$PropsedSteps[[1]], recursive = TRUE)
+    current_list[[5]] = c(current_list[[5]], current_result$AcceptedSteps[[1]], recursive = TRUE)
     
   }
   return(current_list)
 }
 
-sim_list = simulation(time, data, runs, iterations, current_bar, make, murder)
 
+
+sim_list = simulation(time, data, runs, iterations, current_bar, make, murder)
+sim_list
 #Step 5 - clean up and save list object
 split_num = NULL
 
@@ -76,7 +82,7 @@ if(dim(final_list[[5]])[2] == 1) {
   hist(final_list[[5]], xlab = x.label, main = title)
   
 } else if(dim(final_list[[5]])[2] == 2) {
-  hist(c(final_list[[5]]$X1,final_list[[5]]$X2 ), xlab = x.label, main = title)
+  hist(c(sim_list$Breakpoints[[5]]$X1,sim_list$Breakpoints[[5]]$X2 ), xlab = x.label, main = title)
   
 } else if(dim(final_list[[5]])[2] == 3) {
   hist(c(final_list[[5]]$X1,final_list[[5]]$X2, final_list[[5]]$X3 ), xlab = x.label, main = title)

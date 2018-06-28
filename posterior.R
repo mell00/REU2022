@@ -105,6 +105,15 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_MSE = data.frame()
   accept_count = 0
   
+  #setting up counters (these will tell us how many type it does a certain step and how many time it accept each step)
+  type = "0"
+  a.count = 0
+  s.count = 0 
+  m.count = 0
+  add.accept.count = 0
+  sub.accept.count = 0
+  move.accept.count = 0
+  
   #Metroplis Hastings 
   for(i in 1:iterations){
     
@@ -112,16 +121,17 @@ bar0 = function(k, time, data, iterations, make, murder){
     
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
-    #setting up counters
-    type = "0"
-    a.count = 0
-    s.count = 0 
-    
     if(length(k_ends) < 3 | u_step < prob_mmm[1]){
+      type = "add"
+      a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
+      type = "sub"
+      s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
     } else{
+      type = "move"
+      m.count = m.count + 1 
       k_ends_new = barMove0(k_ends) #move
     }
     
@@ -136,7 +146,15 @@ bar0 = function(k, time, data, iterations, make, murder){
       k_ends = k_ends #old
     } else if(ratio < u_ratio) {
       k_ends = k_ends_new #new
-      accept_count = accept_count+1
+      accept_count = accept_count + 1
+      #looking at what type of step is done and accepted
+      if(type == "add") {
+        add.accept.count = add.accept.count + 1
+      } else if(type == "sub") {
+        sub.accept.count = sub.accept.count + 1
+      } else if(type == "move") {
+        move.accept.count = move.accept.count + 1
+      }
     } else {
       k_ends = k_ends #old
     }
@@ -200,8 +218,13 @@ bar0 = function(k, time, data, iterations, make, murder){
   #colnames(matrix_of_fits) = seq(1:length(full_data[,1]))
   colnames(ratio_data) = c("Ratio", "Random", "OldBIC", "OldLogLik", "OldPenalty", "NewBIC", "NewLogLik", "NewPenalty")
   colnames(all_MSE) = c("MSE")
-  final_list = list(accept_count / iterations, all_MSE, all_k_best)
-  names(final_list) = c("AcceptRate", "MSE", "Breakpoints")
+  
+  final.propose = c(a.count, s.count, m.count)
+  final.accept = c(add.accept.count, sub.accept.count, move.accept.count)
+  
+  
+  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_k_best)
+  names(final_list) = c("AcceptRate", "PropsedSteps","AcceptedSteps", "MSE", "Breakpoints")
   
   
   #prints the results
