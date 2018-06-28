@@ -3,8 +3,8 @@
 
 #Step 3 - set up for simulation
 time = 1:90
-data = test_data_1[,2] #edit here !!!
-title = "test_data_1" #edit here !!!
+data = test_data_2[,2] #edit here !!!
+title = "test_data_2" #edit here !!!
 runs = 5
 iterations = 50
 current_bar = bar0 #edit here !!!
@@ -88,15 +88,7 @@ which_run = 1 #which run you want to plot
 
 #frequency of breakpoints 
 if(is.atomic(sim_list$Breakpoints[[which_run]]) == TRUE) {
-	hist(sim_list$Breakpoints[[which_run]], xlab = x.label, main = title) 
+	hist(sim_list$Breakpoints[[which_run]], xlab = x.label, main = title, col="red", breaks=max(time), xlim=c(0,max(time))) 
 }else if(dim(sim_list$Breakpoints[[which_run]])[2] >= 2) {
-	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title) 
-}else if(dim(sim_list$Breakpoints[[1]])[2] == 3) {
-	hist(cc(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-}else if(dim(sim_list$Breakpoints[[1]])[2] == 4) {
-	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-}else if(dim(sim_list$Breakpoints[[1]])[2] == 5) {
-	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-}else if(dim(sim_list$Breakpoints[[1]])[2] == 6) {
-	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title) 
+	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title, col="red", breaks=max(time), xlim=c(0,max(time))) 
 }
