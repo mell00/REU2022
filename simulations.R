@@ -6,14 +6,13 @@ data_fun = test_data_1 #edit here !!! (defines function for generating draws)
 title = "Current Test Data" #edit here !!! (title for graphing)
 runs = 5
 iterations = 50
-current_bar = bar1 #edit here !!! (which version of bars is being run)
+current_bar = bar0 #edit here !!! (which version of bars is being run)
 save_name = "TestList.RData" #edit here !!! (format: "bar#_data#.RData")
 make = 0.4
-murder = 0.4
 
 #Step 4 - run simulation
 
-simulation = function(data_fun, runs, iterations, current_bar, make, murder){
+simulation = function(data_fun, runs, iterations, current_bar, make){
 
 	#initializing storage for returns from all BAR runs
 	current_list = list()
@@ -33,7 +32,7 @@ simulation = function(data_fun, runs, iterations, current_bar, make, murder){
 		current_data = data_fun() 
 		break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 5, h = 0.1) 
 		starting_breakpoints = break_p$breakpoints
-		current_result = current_bar(starting_breakpoints, current_data[,1], current_data[,2], iterations, make, murder)
+		current_result = current_bar(starting_breakpoints, current_data[,1], current_data[,2], iterations, make)
 		current_list[[1]] = c(current_list[[1]], current_result$AcceptRate[[1]], recursive = TRUE)
 		current_list[[2]] = cbind(current_list[[2]], current_result$MSE[,1])
 		current_list[[3]] = cbind(current_list[[3]], current_result$Breakpoints)
@@ -46,7 +45,7 @@ simulation = function(data_fun, runs, iterations, current_bar, make, murder){
 	return(current_list)
 }
 
-sim_list = simulation(data_fun, runs, iterations, current_bar, make, murder)
+sim_list = simulation(data_fun, runs, iterations, current_bar, make)
 
 #Step 5 - clean up and define final version of $Breakpoints from simulation results
 
