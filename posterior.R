@@ -224,7 +224,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   
   
   final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_k_best)
-  names(final_list) = c("AcceptRate", "PropsedSteps","AcceptedSteps", "MSE", "Breakpoints")
+  names(final_list) = c("AcceptRate", "ProposedSteps","AcceptedSteps", "MSE", "Breakpoints")
   
   
   #prints the results

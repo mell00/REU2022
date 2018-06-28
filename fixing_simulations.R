@@ -1,100 +1,107 @@
-#Step 1 - define simulation function (if not previously defined in workspace)
-#Step 2 - define current bar function (if not previously defined in workspace)
-#Step 3 - generate data
+#Step 1 - define current bar function (if not previously defined in workspace)
+#Step 2 - generate data
 
-#Step 4 - set up for simulation
+#Step 3 - set up for simulation
 time = 1:90
 data = test_data_1[,2] #edit here !!!
-title = "test_data_1"
+title = "test_data_1" #edit here !!!
 runs = 5
 iterations = 50
 current_bar = bar0 #edit here !!!
 make = 0.4
 murder = 0.4
 
-#Step 5 - run simulation
+#Step 4 - run simulation
 
 simulation = function(time, data, runs, iterations, current_bar, make, murder){
-  
-  current_list = list()
-  current_list[[1]] = list()
-  current_list[[2]] = data.frame(matrix(ncol=0, nrow=iterations)) 
-  current_list[[3]] = data.frame(matrix(ncol=0, nrow=iterations))
-  current_list[[4]] = data.frame(matrix(ncol=3, nrow=0))
-  current_list[[5]] = data.frame(matrix(ncol=3, nrow=0))
-  names(current_list) = c("AcceptRate", "MSE", "Breakpoints", "PropsedSteps", "AcceptedSteps")
+
+	#initializing storage for returns from all BAR runs
+	current_list = list()
+	current_list[[1]] = list() #AcceptRate
+	current_list[[2]] = data.frame(matrix(ncol=0, nrow=iterations)) #MSE
+	current_list[[3]] = data.frame(matrix(ncol=0, nrow=iterations)) #Breakpoints
+	current_list[[4]] = data.frame(matrix(ncol=3, nrow=0)) #ProposedSteps
+	current_list[[5]] = data.frame(matrix(ncol=3, nrow=0)) #AcceptedSteps
+	names(current_list) = c("AcceptRate", "MSE", "Breakpoints", "ProposedSteps", "AcceptedSteps")
  
-   #getting the initial points using the bai-perron test 
-  library("strucchange")
-  break_p = breakpoints(data ~ time, breaks = 5, h = 0.1) 
-  starting_breakpoints = break_p$breakpoints
-  
-  for(i in 1:runs){
+	#getting the initial points using the Bai-Perron test 
+	library("strucchange")
+	break_p = breakpoints(data ~ time, breaks = 5, h = 0.1) 
+	starting_breakpoints = break_p$breakpoints
+
+	#running BAR the specified number of times and storing the results
+	for(i in 1:runs){
     
-    current_result = current_bar(starting_breakpoints, time, data, iterations, make, murder)
-    current_list[[1]] = c(current_list[[1]], current_result$AcceptRate[[1]], recursive = TRUE)
-    current_list[[2]] = cbind(current_list[[2]], current_result$MSE[,1])
-    current_list[[3]] = cbind(current_list[[3]], current_result$Breakpoints)
-    current_list[[4]] = rbind(current_list[[4]], current_result$PropsedSteps)
-    current_list[[5]] = rbind(current_list[[4]], current_result$AcceptedSteps)
-    
-  }
-  return(current_list)
+		current_result = current_bar(starting_breakpoints, time, data, iterations, make, murder)
+		current_list[[1]] = c(current_list[[1]], current_result$AcceptRate[[1]], recursive = TRUE)
+		current_list[[2]] = cbind(current_list[[2]], current_result$MSE[,1])
+		current_list[[3]] = cbind(current_list[[3]], current_result$Breakpoints)
+		current_list[[4]] = rbind(current_list[[4]], current_result$ProposedSteps)
+		current_list[[5]] = rbind(current_list[[5]], current_result$AcceptedSteps)
+
+	}
+
+	#returning results of all BAR runs
+	return(current_list)
 }
-
-
 
 sim_list = simulation(time, data, runs, iterations, current_bar, make, murder)
-sim_list
-#Step 5 - clean up and save list object
-split_num = NULL
 
-for(i in 2:ncol(sim_list[[3]])){
-  
-  if(endsWith(colnames(sim_list[[3]])[i], "1") == TRUE){
-    split_num = c(split_num, i)
-  }
-  
-}
+#Step 5 - clean up and save final version of $Breakpoints from simulation results
 
-final_list = list()
+split_num = NULL #initializing
 
-for(i in 1:length(split_num)){
+colnames(sim_list[[3]]) <- gsub(x = colnames(sim_list[[3]]), pattern = "all_k_best...c..1...ncol.all_k_best...", replacement = "X1")  
+
+for(i in 2:ncol(sim_list[[3]])){ #detecting where to split up columns in $Breakpoint object
   
-  if(i < length(split_num)){
-    final_list[[i]] = sim_list[[3]][,1:(split_num[i]-1)]
-  }else{
-    final_list[[i]] = sim_list[[3]][,split_num[i-1]:(split_num[i]-1)]
-    final_list[[i+1]] = sim_list[[3]][,split_num[i]:ncol(sim_list[[3]])]
-  }
+	if(endsWith(colnames(sim_list[[3]])[i], "1") == TRUE){
+		split_num = c(split_num, i)
+	}
   
 }
 
+final_list = list() #initializing
+
+for(i in 1:length(split_num)){ #splitting up columns in $Breakpoint object
+
+	if(i == 1){ #breakpoints from first run
+		final_list[[i]] = sim_list[[3]][,1:(split_num[i]-1)]
+	}else if(i < length(split_num)){# breakpoints from middle runs
+		final_list[[i]] = sim_list[[3]][,split_num[i-1]:(split_num[i]-1)]
+	}else{ #breakpoints from penultimate and final runs
+		final_list[[i]] = sim_list[[3]][,split_num[i-1]:(split_num[i]-1)]
+		final_list[[i+1]] = sim_list[[3]][,split_num[i]:ncol(sim_list[[3]])]
+	}
+  
+}
+
+sim_list[[3]] = final_list #saving final version of $Breakpoint object
 
 
-#plot of the MSE 
+#plotting the MSE
 plot(sim_list$MSE[,1], ylab = "MSE" , xlab = "time", main = title)
 
-#label set up 
-x.label = "Location of Breakpoint"
+#setup for plotting histograms 
+x.label = "Location of Breakpoint" #label setup
+which_run = 1 #which run you want to plot
 #frequency of breakpoints 
-if(dim(final_list[[5]])[2] == 1) {
-  hist(final_list[[5]], xlab = x.label, main = title)
+if(is.atomic(sim_list$Breakpoints[[which_run]]) == TRUE) {
+  hist(sim_list$Breakpoints[[which_run]], xlab = x.label, main = title)
   
-} else if(dim(final_list[[5]])[2] == 2) {
-  hist(c(sim_list$Breakpoints[[5]]$X1,sim_list$Breakpoints[[5]]$X2 ), xlab = x.label, main = title)
+}else if(dim(sim_list$Breakpoints[[which_run]])[2] == 2) {
+  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
   
-} else if(dim(final_list[[5]])[2] == 3) {
-  hist(c(final_list[[5]]$X1,final_list[[5]]$X2, final_list[[5]]$X3 ), xlab = x.label, main = title)
+}else if(dim(sim_list$Breakpoints[[1]])[2] == 3) {
+  hist(cc(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
   
-} else if(dim(final_list[[5]])[2] == 4) {
-  hist(c(final_list[[5]]$X1,final_list[[5]]$X2, final_list[[5]]$X3, final_list[[5]]$X4 ), xlab = x.label, main = title)
+}else if(dim(sim_list$Breakpoints[[1]])[2] == 4) {
+  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
   
-} else if(dim(final_list[[5]])[2] == 5) {
-  hist(c(final_list[[5]]$X1,final_list[[5]]$X2, final_list[[5]]$X3, final_list[[5]]$X4, final_list[[5]]$X5 ), xlab = x.label, main = title)
+}else if(dim(sim_list$Breakpoints[[1]])[2] == 5) {
+  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
   
-} else if(dim(final_list[[5]])[2] == 6) {
-  hist(c(final_list[[5]]$X1,final_list[[5]]$X2, final_list[[5]]$X3, final_list[[5]]$X4, final_list[[5]]$X5, final_list[[5]]$X6 ), xlab = x.label, main = title)
+}else if(dim(sim_list$Breakpoints[[1]])[2] == 6) {
+  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
   
-} 
-
+}
