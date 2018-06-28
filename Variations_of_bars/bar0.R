@@ -5,15 +5,14 @@
 # time        = integer x-values of the entire data set 
 # interations = number of runs through Metropolis hastings 
 # make        = the proportion (decimal) of the make step to occuring
-# murder      = the proportion (decimal) of the murder step to occuring
-  #note: the make and murder need to add to less then one 
+  #note: murder is set to same as make, move is calculated subtracting 2*make from 1 
 
 
-bar0 = function(k, time, data, iterations, make, murder){
+bar0 = function(k, time, data, iterations, make){
   
   library(MASS)
   
-  prob_mmm = c(make, murder) #combining the two probabilties of make and murder that the user specifies 
+  prob_mmm = c(make, make) #combining the two probabilties of make and murder that the user specifies 
   
   full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
   
@@ -123,20 +122,20 @@ bar0 = function(k, time, data, iterations, make, murder){
       type = "add"
       a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
-	q1 = 1/(length(k_ends_new)-2)
+	q1 = make/(length(k_ends_new)-2)
 	full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2)
 	overlap = sum(table(full_set))-length(table(full_set))
-	n_free = n - 5*(k_ends-2) - 6 + overlap
-	q2 = 1/n_free
+	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	q2 = make/n_free
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
 	full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2)
 	overlap = sum(table(full_set))-length(table(full_set))
-	n_free = n - 5*(k_ends-2) - 6 + overlap
-	q1 = 1/n_free
-	q2 = 1/(length(k_ends)-2)
+	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	q1 = make/n_free
+	q2 = make/(length(k_ends)-2)
     } else{
       type = "move"
       m.count = m.count + 1
@@ -149,13 +148,13 @@ bar0 = function(k, time, data, iterations, make, murder){
 
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     ratio = (-delta_bic/2) + log(q1) - log(q2)
-    u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution and then log transformed
-    
-    ratio_data_print = c(ratio, u_ratio, -2*old_loglik + log(n)*(length(k_ends)-1)*(2+1), -2*old_loglik, log(n)*(length(k_ends)-1)*(2+1), -2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1), -2*new_loglik, log(n)*(length(k_ends_new)-1)*(2+1))
+    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
+
+    ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
     
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
-    } else if(ratio < u_ratio) {
+    } else if(ratio > u_ratio) {
       k_ends = k_ends_new #new
       accept_count = accept_count + 1
       #looking at what type of step is done and accepted
@@ -226,7 +225,7 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_k_new = data.frame(all_k_new[,c(-1,-ncol(all_k_new))], row.names=NULL)
   all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
   
-  colnames(ratio_data) = c("Ratio", "Random", "OldBIC", "OldLogLik", "OldPenalty", "NewBIC", "NewLogLik", "NewPenalty")
+  colnames(ratio_data) = c("Ratio", "Random", "DeltaBIC", "LikeApprox", "LogQOldNew", "LogQNewOld")
   colnames(all_MSE) = c("MSE")
   
   final.propose = c(a.count, s.count, m.count)
@@ -239,4 +238,4 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4)
