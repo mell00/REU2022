@@ -135,7 +135,6 @@ bar1 = function(k, time, data, iterations, make, murder){
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, -2*old_loglik + log(n)*(length(k_ends)-1)*(2+1), -2*old_loglik, log(n)*(length(k_ends)-1)*(2+1), -2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1), -2*new_loglik, log(n)*(length(k_ends_new)-1)*(2+1))
-    print(ratio_data_print)
 
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
@@ -156,7 +155,6 @@ bar1 = function(k, time, data, iterations, make, murder){
     
     #condensing the data
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
-    print(k_ends_new_print)
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
     
     ratio_data = rbind(ratio_data, ratio_data_print)
@@ -224,4 +222,4 @@ bar1 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-current_result = bar1(break_p$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
+#current_result = bar1(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)

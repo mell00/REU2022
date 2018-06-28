@@ -32,7 +32,6 @@ bar0 = function(k, time, data, iterations, make, murder){
       sum_loglik = logLik(model)[1]
     }else{
       for(i in 1:length(k_ends)) {
-	  print(k_ends)
         if(k_ends[i] == 2){
           min = k_ends[i-1]
           x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
@@ -227,4 +226,4 @@ bar0 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-current_result = bar0(break_p$breakpoints, test_data_0_a[,1], test_data_0_a[,2], 50, 0.4, 0.4)
+#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
