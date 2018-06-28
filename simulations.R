@@ -47,7 +47,7 @@ simulation = function(time, data, runs, iterations, current_bar, make, murder){
 
 sim_list = simulation(time, data, runs, iterations, current_bar, make, murder)
 
-#Step 5 - clean up and save final version of $Breakpoints from simulation results
+#Step 5 - clean up and define final version of $Breakpoints from simulation results
 
 split_num = NULL #initializing
 
@@ -86,12 +86,13 @@ saveRDS(sim_list, file="TestList.RData") #edit name here !!!
 
 #Step 7 - graphing
 
+which_run = 3 #which run you want to plot
+
 #plotting the MSE
-plot(sim_list$MSE[,1], ylab = "MSE" , xlab = "time", main = title)
+plot(sim_list$MSE[,which_run], ylab = "MSE" , xlab = "time", main = title)
 
 #setup for plotting histograms 
 x.label = "Location of Breakpoint" #label setup
-which_run = 3 #which run you want to plot
 
 #frequency of breakpoints 
 if(is.atomic(sim_list$Breakpoints[[which_run]]) == TRUE) {
