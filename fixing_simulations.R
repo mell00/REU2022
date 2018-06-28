@@ -3,11 +3,11 @@
 
 #Step 3 - set up for simulation
 time = 1:90
-data = test_data_10[,2] #edit here !!!
+data = test_data_1[,2] #edit here !!!
 title = "Current Test Data" #edit here !!!
 runs = 5
 iterations = 50
-current_bar = bar0 #edit here !!!
+current_bar = bar1 #edit here !!!
 make = 0.4
 murder = 0.4
 
@@ -84,7 +84,7 @@ plot(sim_list$MSE[,1], ylab = "MSE" , xlab = "time", main = title)
 
 #setup for plotting histograms 
 x.label = "Location of Breakpoint" #label setup
-which_run = 1 #which run you want to plot
+which_run = 3 #which run you want to plot
 
 #frequency of breakpoints 
 if(is.atomic(sim_list$Breakpoints[[which_run]]) == TRUE) {

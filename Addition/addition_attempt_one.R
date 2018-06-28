@@ -10,7 +10,7 @@ barMake1<-function(k_ends){
   location = sample(locations, 1) #randomly select location in case of equal max distances
   min = k_ends[location] #lower bound 
   max = k_ends[location + 1] #upper bound
-  new_bp = sample((min+1):(max-1), 1) #selecting a random number in the correct interval
+  new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
   k_ends_final = sort(c(k_ends, new_bp))
   return(k_ends_final)
 

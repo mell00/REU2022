@@ -53,7 +53,7 @@ bar1 = function(k, time, data, iterations, make, murder){
     return(sum_loglik)
   }
   
-  #random make function, this makes a random point 
+  #makes random point in largest interval
   barMake1<-function(k_ends){
     
     d = diff(k_ends) #finding the distance between all those breakpoints
