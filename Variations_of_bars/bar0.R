@@ -123,19 +123,32 @@ bar0 = function(k, time, data, iterations, make, murder){
       type = "add"
       a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
+	q1 = 1/(length(k_ends_new)-2)
+	full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2)
+	overlap = sum(table(full_set))-length(table(full_set))
+	n_free = n - 5*(k_ends-2) - 6 + overlap
+	q2 = 1/n_free
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
+	full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2)
+	overlap = sum(table(full_set))-length(table(full_set))
+	n_free = n - 5*(k_ends-2) - 6 + overlap
+	q1 = 1/n_free
+	q2 = 1/(length(k_ends)-2)
     } else{
       type = "move"
-      m.count = m.count + 1 
+      m.count = m.count + 1
       k_ends_new = barMove0(k_ends) #move
+	q1 = 1
+	q2 = 1
     }
     
     new_loglik = fitMetrics(k_ends_new, full_data)
-    
-    ratio = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+
+    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+    ratio = (-delta_bic/2) + log(q1) - log(q2)
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, -2*old_loglik + log(n)*(length(k_ends)-1)*(2+1), -2*old_loglik, log(n)*(length(k_ends)-1)*(2+1), -2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1), -2*new_loglik, log(n)*(length(k_ends_new)-1)*(2+1))
