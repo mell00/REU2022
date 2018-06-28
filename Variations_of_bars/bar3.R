@@ -1,16 +1,7 @@
-#complete BAR - Variation 0 (Random/Random/Random)
-
-#-------Key:
-# k           = breakpoint's x-axis values 
-# time        = integer x-values of the entire data set 
-# interations = number of runs through Metropolis hastings 
-# make        = the proportion (decimal) of the make step to occuring
-# murder      = the proportion (decimal) of the murder step to occuring
-#note: the make and murder need to add to less then one 
-#graph        = yes or no to graphing the function 
+#complete BAR - Variation 3 (Random/1/Random)
 
 
-bar2 = function(k, time, data, iterations, make, murder){
+bar3 = function(k, time, data, iterations, make, murder){
   
   library(MASS)
   
@@ -33,6 +24,7 @@ bar2 = function(k, time, data, iterations, make, murder){
       sum_loglik = logLik(model)[1]
     }else{
       for(i in 1:length(k_ends)) {
+        print(k_ends)
         if(k_ends[i] == 2){
           min = k_ends[i-1]
           x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
@@ -53,93 +45,52 @@ bar2 = function(k, time, data, iterations, make, murder){
     return(sum_loglik)
   }
   
-  #new addition step that is based more inteligently 
-  barMake2<-function(k_ends){
+  #random make function, this makes a random point 
+  count = 0 
+  barMake0<-function(k_ends){
     
-    #random number generator 
-    proposed = sample(1:max(k_ends), 2)
-    proposed = sort(proposed) #sorting the 2 chosen numbers 
-    
-    #setting up initial values 
-    small_1 = list()
-    big_1 = list()
-    small_2 = list()
-    big_2 = list()
-    
-    #finding which points are closest to the propsed break points 
-    for(i in 1:length(k_ends)) {
-      if(proposed[1] > k_ends[i] ) {
-        small_1 = c(small_1, k_ends[i])
+    count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
+    if(count < 10 ) {
+      rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
+      k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
+      d = diff(k_ends_final) #finds the difference between all the spots 
+      if(min(d) < 3) { #this make sure an additional point is not to close to a point already in existance 
+        barMake0(k_ends)
       } else {
-        big_1 = c(big_1, k_ends[i])
+        return(k_ends_final) #the old breakpoints + the new breakpoints 
       }
-      if(proposed[2] > k_ends[i]) {
-        small_2 = c(small_2, k_ends[i])
-      } else {
-        big_2 = c(big_2, k_ends[i])
-      }
+    }else {
+      return(k_ends)
     }
-    
-    #this is extremely convaluted and not the best way 
-    one = 0
-    two = 0 
-    #looking at first point 
-    if(length(small_1) == 0) {
-      one = c(1, proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
-    } else if(length(big_1) == 0) {
-      one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], max(k_ends))
-    } else {
-      one = c(small_1[which.max(small_1)][[1]][1], proposed[[1]][1], big_1[which.min(big_1)][[1]][1]) 
-    }
-    #looking at second point 
-    if(length(small_2) == 0) {
-      two = c(1, proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
-    } else if(length(big_2) == 0) {
-      two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], max(k_ends))
-    } else {
-      two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
-    }
-    
-    
-    
-    #finding the distance between the points 
-    d_one = diff(one)
-    d_two = diff(two)
-    
-    #sorting the distance 
-    d_one_sort = sort(d_one)
-    d_two_sort = sort(d_two)
-    
-    new_bp = 0 
-    if(d_one_sort[1] == d_two_sort[1]) { #comparing the mins, if equal, look at max 
-      if(d_one_sort[2] == d_two_sort[2]) {  #if both the min length and the max length are equal, randomize 
-        r = runif(1) #generating a random number 
-        if(r > 0.5) {
-          new_bp = proposed[2]
-        } else {
-          new_bp = proposed[1]
-        }
-      } else if(d_one_sort[2] < d_two_sort[2]) { #comparing the max to determine new point 
-        new_bp = proposed[2]
-      } else {
-        new_bp = proposed[1]
-      }
-    } else if(d_one_sort[1] < d_two_sort[1]) { #comparing the min to see the new break point 
-      new_bp = proposed[2]
-    } else {
-      new_bp = proposed[1]
-    }
-    k_ends_final = sort(c(k_ends, new_bp))
-    return(k_ends_final)
   }
   
   
-  #this function kills one breakpoint randomly 
-  barMurder0<-function(k_ends){
+  #this function kills one based on interval 
+  barMurder1 <- function(k_ends){
     
-    k = k_ends[c(-1,-length(k_ends))] #removes the end points 
-    random_num = sample(1:length(k), 1) #selects a random breakpoint
-    k_ends_final = k_ends[-(random_num+1)] #removes that selected breakpoint
+    all_intv = diff(k_ends) #finds all of the intervals
+    sum_intv = diff(cumsum(all_intv)) #finds the sums of the adjacent intervals
+    small_intv_loc = which(sum_intv == min(sum_intv)) #stores indexes of smallest sum_intv
+    
+    min_intv_loc = 0 #sets the minimum sum_intv index to 0 
+    
+    #if there's only one small sum_intv
+    #{the location in sum_intv is equal to the single value in small_intv_loc}
+    if(length(small_intv_loc) == 1){
+      min_intv_loc = small_intv_loc[1]
+    }
+    
+    #if there are multiple small sum_intv
+    #{pick a random number from 1-length of small_intv_loc
+    #location od the smallest interval in sum_intv is equal to the value in small_intv_loc[random#]}
+    else{
+      num = sample(1:length(small_intv_loc), 1)
+      min_intv_loc = small_intv_loc[num]
+    }
+    
+    #find and delete correct break 
+    k_ends_final = k_ends[-(min_intv_loc+1)]
+    
     return(k_ends_final)
     
   }
@@ -147,8 +98,8 @@ bar2 = function(k, time, data, iterations, make, murder){
   #kills a point randomly and then adds a point randomly 
   barMove0<-function(k_ends){
     
-    k_ends_less = barMurder0(k_ends) #kills a point
-    k_ends_final = barMake2(k_ends_less) #remakes a point
+    k_ends_less = barMurder1(k_ends) #kills a point
+    k_ends_final = barMake0(k_ends_less) #remakes a point
     return(k_ends_final)
     
   }
@@ -184,11 +135,11 @@ bar2 = function(k, time, data, iterations, make, murder){
     if(length(k_ends) < 3 | u_step < prob_mmm[1]){
       type = "add"
       a.count = a.count + 1
-      k_ends_new = barMake2(k_ends) #make
+      k_ends_new = barMake0(k_ends) #make
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
       type = "sub"
       s.count = s.count + 1
-      k_ends_new = barMurder0(k_ends) #murder
+      k_ends_new = barMurder1(k_ends) #murder
     } else{
       type = "move"
       m.count = m.count + 1 
@@ -288,4 +239,4 @@ bar2 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.4)
+current_result = bar3(break_p$breakpoints, test_data_0_a[,1], test_data_0_a[,2], 50, 0.4, 0.4)
