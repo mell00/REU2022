@@ -239,4 +239,4 @@ bar3 = function(k, time, data, iterations, make, murder){
 }
 
 #calling the function
-current_result = bar3(break_p$breakpoints, test_data_0_a[,1], test_data_0_a[,2], 50, 0.4, 0.4)
+current_result = bar3(bkpts_2$breakpoints, test_data_0_a[,1], test_data_0_a[,2], 50, 0.4, 0.4)
