@@ -17,7 +17,7 @@ simulation = function(time, data, runs, iterations, current_bar, make, murder){
 
 	current_list = list()
 	current_list[[1]] = list()
-	current_list[[2]] = data.frame(matrix(ncol=0, nrow=iteration_n))
+	current_list[[2]] = data.frame(matrix(ncol=0, nrow=iteration_n)) #why iteration_n???
 	current_list[[3]] = data.frame(matrix(ncol=0, nrow=iteration_n))
 	names(current_list) = c("AcceptRate", "MSE", "Breakpoints")
 	starting_breakpoints = c("30,60")
