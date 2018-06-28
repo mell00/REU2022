@@ -1,6 +1,5 @@
 #complete BAR - Variation 0 (Random/Random/Random)
 
-
 #-------Key:
 # k           = breakpoint's x-axis values 
 # time        = integer x-values of the entire data set 
@@ -202,7 +201,6 @@ bar0 = function(k, time, data, iterations, make, murder){
       if(m == len ) {
         MSE = mean((full_data[,2]-fit)^2)
         all_MSE = rbind(all_MSE, MSE)
-        #matrix_of_fits = rbind(matrix_of_fits, fit)
       }
     }
   }
@@ -215,23 +213,16 @@ bar0 = function(k, time, data, iterations, make, murder){
   all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
   all_k_new = data.frame(all_k_new[,c(-1,-ncol(all_k_new))], row.names=NULL)
   all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
-  #colnames(matrix_of_fits) = seq(1:length(full_data[,1]))
+  
   colnames(ratio_data) = c("Ratio", "Random", "OldBIC", "OldLogLik", "OldPenalty", "NewBIC", "NewLogLik", "NewPenalty")
   colnames(all_MSE) = c("MSE")
   
   final.propose = c(a.count, s.count, m.count)
   final.accept = c(add.accept.count, sub.accept.count, move.accept.count)
   
-  
   final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_k_best)
   names(final_list) = c("AcceptRate", "ProposedSteps","AcceptedSteps", "MSE", "Breakpoints")
   
-  
-  #prints the results
-  #return(list(ratio_data, all_k_new, all_k_best))
-  #return(all_k_best)
-  #return(matrix_of_fits)
-  #print(ratio_data)
   return(final_list)
 }
 
