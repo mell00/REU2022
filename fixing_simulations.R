@@ -85,23 +85,18 @@ plot(sim_list$MSE[,1], ylab = "MSE" , xlab = "time", main = title)
 #setup for plotting histograms 
 x.label = "Location of Breakpoint" #label setup
 which_run = 1 #which run you want to plot
+
 #frequency of breakpoints 
 if(is.atomic(sim_list$Breakpoints[[which_run]]) == TRUE) {
-  hist(sim_list$Breakpoints[[which_run]], xlab = x.label, main = title)
-  
-}else if(dim(sim_list$Breakpoints[[which_run]])[2] == 2) {
-  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-  
+	hist(sim_list$Breakpoints[[which_run]], xlab = x.label, main = title) 
+}else if(dim(sim_list$Breakpoints[[which_run]])[2] >= 2) {
+	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title) 
 }else if(dim(sim_list$Breakpoints[[1]])[2] == 3) {
-  hist(cc(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-  
+	hist(cc(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
 }else if(dim(sim_list$Breakpoints[[1]])[2] == 4) {
-  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-  
+	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
 }else if(dim(sim_list$Breakpoints[[1]])[2] == 5) {
-  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-  
+	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
 }else if(dim(sim_list$Breakpoints[[1]])[2] == 6) {
-  hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title)
-  
+	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title) 
 }
