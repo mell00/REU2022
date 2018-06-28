@@ -78,7 +78,7 @@ for(i in 1:length(split_num)){ #splitting up columns in $Breakpoint object
 
 sim_list[[3]] = final_list #saving final version of $Breakpoint object
 
-#Step 6 - saving the final list
+#Step 6 - saving the final list, make sure working directory goes to correct folder
 
 saveRDS(sim_list, file="TestList.RData") #edit name here !!!
 
