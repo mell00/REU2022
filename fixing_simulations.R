@@ -3,8 +3,8 @@
 
 #Step 3 - set up for simulation
 time = 1:90
-data = test_data_2[,2] #edit here !!!
-title = "test_data_2" #edit here !!!
+data = test_data_10[,2] #edit here !!!
+title = "Current Test Data" #edit here !!!
 runs = 5
 iterations = 50
 current_bar = bar0 #edit here !!!
@@ -90,5 +90,9 @@ which_run = 1 #which run you want to plot
 if(is.atomic(sim_list$Breakpoints[[which_run]]) == TRUE) {
 	hist(sim_list$Breakpoints[[which_run]], xlab = x.label, main = title, col="red", breaks=max(time), xlim=c(0,max(time))) 
 }else if(dim(sim_list$Breakpoints[[which_run]])[2] >= 2) {
-	hist(c(sim_list$Breakpoints[[which_run]][,1], sim_list$Breakpoints[[which_run]][,2]), xlab = x.label, main = title, col="red", breaks=max(time), xlim=c(0,max(time))) 
+	column_list = NULL
+	for(i in 1:dim(sim_list$Breakpoints[[which_run]])[2]){
+		column_list = c(column_list, sim_list$Breakpoints[[which_run]][,i], recursive=TRUE)
+	}
+	hist(column_list, xlab = x.label, main = title, col="red", breaks=max(time), xlim=c(0,max(time))) 
 }
