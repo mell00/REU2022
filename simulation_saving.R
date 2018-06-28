@@ -30,19 +30,18 @@ simulation = function(time, data, runs, iterations, current_bar, make, murder){
 		current_list[[3]] = cbind(current_list[[3]], current_result$Breakpoints)
 
 	}
-
+  
 }
+
 
 #Step 5 - clean up and save list object
 split_num = NULL
 
 for(i in 2:ncol(current_list[[3]])){
 
-if(endsWith(colnames(current_list[[3]])[i], "1") == TRUE){
-
-split_num = c(split_num, i)
-
-}
+  if(endsWith(colnames(current_list[[3]])[i], "1") == TRUE){
+    split_num = c(split_num, i)
+  }
 
 }
 
@@ -50,12 +49,12 @@ final_list = list()
 
 for(i in 1:length(split_num)){
 
-if(i < length(split_num)){
-final_list[[i]] = current_list[[3]][,1:(split_num[i]-1)]
-}else{
-final_list[[i]] = current_list[[3]][,split_num[i-1]:(split_num[i]-1)]
-final_list[[i+1]] = current_list[[3]][,split_num[i]:ncol(current_list[[3]])]
-}
+  if(i < length(split_num)){
+    final_list[[i]] = current_list[[3]][,1:(split_num[i]-1)]
+  }else{
+    final_list[[i]] = current_list[[3]][,split_num[i-1]:(split_num[i]-1)]
+    final_list[[i+1]] = current_list[[3]][,split_num[i]:ncol(current_list[[3]])]
+  }
 
 }
 
