@@ -135,8 +135,8 @@ bar1 = function(k, time, data, iterations, make, murder){
     u_ratio = runif(1) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, -2*old_loglik + log(n)*(length(k_ends)-1)*(2+1), -2*old_loglik, log(n)*(length(k_ends)-1)*(2+1), -2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1), -2*new_loglik, log(n)*(length(k_ends_new)-1)*(2+1))
-    
-    if(ratio == Inf){ #safe guard against random models creating infinite ratios
+
+    if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
     } else if(ratio < u_ratio) {
       k_ends = k_ends_new #new
