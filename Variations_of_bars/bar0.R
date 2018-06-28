@@ -122,30 +122,40 @@ bar0 = function(k, time, data, iterations, make){
       type = "add"
       a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
+
+	#setting up qs for ratio - CHECK MY MATH HERE
 	q1 = make/(length(k_ends_new)-2)
-	full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2)
-	overlap = sum(table(full_set))-length(table(full_set))
+	full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+	overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
 	q2 = make/n_free
+
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
-	full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2)
-	overlap = sum(table(full_set))-length(table(full_set))
+
+	#setting up qs for ratio - CHECK MY MATH HERE
+	full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
+	overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
 	q1 = make/n_free
 	q2 = make/(length(k_ends)-2)
+
     } else{
       type = "move"
       m.count = m.count + 1
       k_ends_new = barMove0(k_ends) #move
+
+	#fake qs because they cancel
 	q1 = 1
 	q2 = 1
+
     }
     
     new_loglik = fitMetrics(k_ends_new, full_data)
 
+    #CHECK MY MATH HERE
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     ratio = (-delta_bic/2) + log(q1) - log(q2)
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
