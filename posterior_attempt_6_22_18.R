@@ -1,38 +1,3 @@
-#creating our data
-cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be')
-
-first = rnorm(30, mean = 5, sd = 1) #30 random data points from a normal distribution with mean of 5
-second = rnorm(30, mean = 15, sd = 1) #30 random data points from a normal distribution with mean of 15
-third = rnorm(30, mean = 30, sd = 1) #30 random data points from a normal distribution with mean of 30
-
-dif_means_0 = c(first) #setting up null set
-dif_means_1 = c(first, second) #adding two sets of data points together 
-dif_means_2 = c(first, second, third) #adding three sets of data points together
-
-time_0 = 1:30
-time_1 = 1:60
-time_2 = 1:90
-
-test_data_0 = data.frame(time_0, dif_means_0) #our data with x = time and y = data from 1 set
-test_data_1 = data.frame(time_1, dif_means_1) #our data with x = time and y = data from 2 sets
-test_data_2 = data.frame(time_2, dif_means_2) #our data with x = time and y = data from 3 sets
-
-#downloading the strucchange package
-#install.packages("strucchange")
-library("strucchange")
-
-#Bai-Perron Method
-bkpts_0 = breakpoints(test_data_0$dif_means_0 ~ test_data_0$time_0, breaks = 5, h = 0.1) #no break points 
-bkpts_0$breakpoints #list of x-values (time) for breakpoints
-
-bkpts_1 = breakpoints(test_data_1$dif_means_1 ~ test_data_1$time_1, breaks = 3, h = 0.2) #no break points 
-bkpts_1$breakpoints #list of x-values (time) for breakpoints
-
-bkpts_2 = breakpoints(test_data_2$dif_means_2 ~ test_data_2$time_2, breaks = 5, h = 0.1) #no break points 
-bkpts_2$breakpoints #list of x-values (time) for breakpoints
-
-#-----------------------------------------------------------------
-
 #complete BAR - Variation 0 (Random/Random/Random)
 
 
@@ -78,8 +43,8 @@ bar0 = function(k, time, data, iterations, make, murder){
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }else if(k_ends[i] > 2){
           min = k_ends[i-1]
-          x_values = full_data[c(min+1:k_ends[i]),1] #getting the x values in the interval
-          y_values = full_data[c(min+1:k_ends[i]),2] #getting the y values in the interval
+          x_values = full_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
+          y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
           data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
