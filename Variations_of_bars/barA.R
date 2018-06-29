@@ -5,10 +5,11 @@
 # time        = integer x-values of the entire data set 
 # interations = number of runs through Metropolis hastings 
 # make        = the proportion (decimal) of the make step to occuring
-#note: murder is set to same as make, move is calculated subtracting 2*make from 1 
+    #note: murder is set to same as make, move is calculated subtracting 2*make from 1 
+#percent      = how much can the point jiggle
 
 
-barA = function(k, time, data, iterations, make){
+barA = function(k, time, data, iterations, make, percent){
   
   library(MASS)
   
@@ -82,7 +83,6 @@ barA = function(k, time, data, iterations, make){
   }
   
   #jiggle jiggle jiggle 
-  count = 0
   barJiggle<-function(percent, k_ends, count){
     
     count = count + 1
@@ -226,7 +226,8 @@ barA = function(k, time, data, iterations, make){
     } else{
       type = "move"
       m.count = m.count + 1
-      k_ends_new = barJiggle(k_ends) #jiggle
+      count = 0 #for the jiggle function
+      k_ends_new = barJiggle(percent, k_ends, count) #jiggle
       
       #fake qs because they cancel
       q1 = 1
