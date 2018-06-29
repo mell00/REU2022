@@ -252,6 +252,10 @@ barB = function(k, time, data, iterations, make, percent){
     		if(k_ends_new[[1]] == "jiggle failure"){ #checking for jiggle failure
 			k_ends_new = k_ends
     		}
+
+		#fake qs because they cancel
+		q1 = 1
+		q2 = 1
 	}
     }
     
