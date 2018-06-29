@@ -348,4 +348,4 @@ barB = function(k, time, data, iterations, make, percent){
 }
 
 #calling the function
-current_result = barB(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.01)
+#current_result = barB(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.01)

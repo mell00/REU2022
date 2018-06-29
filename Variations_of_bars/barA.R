@@ -328,7 +328,5 @@ barA = function(k, time, data, iterations, make, percent){
 }
 
 #calling the function
-bkpts_2 = breakpoints(test_data_2$data_2 ~ test_data_2$time, breaks = 5, h = 0.1) 
-current_result = barA(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.1)
-current_result
+#current_result = barA(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.01)
 

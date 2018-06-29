@@ -271,4 +271,4 @@ bar0 = function(k, time, data, iterations, make){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4)
+#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4)
