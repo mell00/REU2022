@@ -1,0 +1,3 @@
+load("/Users/Amy/REU2018/Move_simulation_data/barB_data0a.RData")
+load("/Users/Amy/REU2018/Move_simulation_data/barA_data8.RData")
+load("/Users/Amy/REU2018/Move_simulation_data/barA_data5.RData")
