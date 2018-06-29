@@ -113,7 +113,7 @@ return(test_data_9)
 }
 
 #----------------Ten----------------
-test_data_10_fun = function(){
+test_data_10 = function(){
 first = rnorm(30, mean = 10, sd = 1)
 second = rnorm(30, mean = 10, sd = 5)
 third = rnorm(30, mean = 10, sd = 1)
