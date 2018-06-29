@@ -91,20 +91,20 @@ barB = function(k, time, data, iterations, make, percent){
     
   }
 
-  #moves a current breakpoint slightly left or right
+  #jiggle jiggle jiggle 
   barJiggle<-function(percent, k_ends, count){
-
+    
     count = count + 1
     data_length = max(k_ends)
-
+    
     #determines how much the knot shoud jiggle
     jiggle_range = ceiling(percent*data_length)
     jiggle_neighborhood = c(1:jiggle_range)
     jiggle_spot = sample(jiggle_neighborhood,1)
-  
+    
     #"boolean" variable to make sure that we can jiggle 
     can_jiggle = "good" #default is good and we can jiggle
-  
+    
     #determines randomly if knot is jiggling to left or right
     direction = "right" #default direction is right
     u = runif(1) #random number from 0-1 from uniform distribution
@@ -112,12 +112,12 @@ barB = function(k, time, data, iterations, make, percent){
       direction = "left"
       jiggle_spot = (-1)*jiggle_spot
     }
-  
+    
     #determines randomly which knot is jiggling (code related to murders)
     k = k_ends[c(-1, -length(k_ends))] #removes end points
     rando_location = sample(1:length(k),1) #chooses random knot 
     rando_knot = k[rando_location]
-  
+    
     #check if we can jiggle towards an endpoint
     possible_knot = rando_knot+jiggle_spot
     if(direction == "right"){
@@ -133,7 +133,7 @@ barB = function(k, time, data, iterations, make, percent){
         can_jiggle = "bad"
       }
     }
-  
+    
     #check if new knot location already has a knot there 
     for(i in 1:length(k)){
       possible_diff = (abs(possible_knot - k[i]) < 3)
@@ -141,19 +141,18 @@ barB = function(k, time, data, iterations, make, percent){
         can_jiggle = "bad"
       }
     }
-
+    
     #check if we can jiggle, then jiggle!!!
     if(can_jiggle == "bad" & count < 10){
       barJiggle(percent, k_ends, count)
     }else if(can_jiggle == "bad"){
-      return()
+      return("jiggle failure")
     }else{
       middle_set = k_ends[-(rando_location+1)]
       final_set = sort(c(middle_set,possible_knot))
       return(final_set)
     }
   }
-
   
   #initializing matrices 
   ratio_data = data.frame()
@@ -231,7 +230,7 @@ barB = function(k, time, data, iterations, make, percent){
 	   #setting up qs for ratio
 	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	    n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
 	    q1 = make/n_free
 	    q2 = make/(length(k_ends)-2)
 
@@ -250,6 +249,9 @@ barB = function(k, time, data, iterations, make, percent){
 		j.count = j.count + 1
 		count = 0 #resetting count for failed jiggles
 		k_ends_new = barJiggle(percent, k_ends, count) #jiggle
+    		if(k_ends_new[[1]] == "jiggle failure"){ #checking for jiggle failure
+			k_ends_new = k_ends
+    		}
 	}
     }
     
@@ -348,4 +350,4 @@ barB = function(k, time, data, iterations, make, percent){
 }
 
 #calling the function
-#current_result = barB(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.01)
+current_result = barB(bkpts_0$breakpoints, test_data_0[,1], test_data_0[,2], 2000, 0.3, 0.01)

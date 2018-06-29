@@ -135,7 +135,7 @@ bar0 = function(k, time, data, iterations, make){
   smiley = n * solve(fisher) #smiley face is total number of observations times the inverse of Fisher information
 
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
-  B_0 = smiley #variance-covariance matrix for posterior draw - IS THIS ILLEGAL?
+  B_0 = smiley #variance-covariance matrix for posterior draw
 
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -164,7 +164,7 @@ bar0 = function(k, time, data, iterations, make){
 	   #setting up qs for ratio
 	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	    n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
 	    q1 = make/n_free
 	    q2 = make/(length(k_ends)-2)
 

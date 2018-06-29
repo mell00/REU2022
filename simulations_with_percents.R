@@ -4,12 +4,13 @@
 #Step 3 - set up for simulation
 data_fun = test_data_0_a #edit here !!! (defines function for generating draws)
 title = "Current Test Data" #edit here !!! (title for graphing)
-runs = 10
+runs = 4
 iterations = 2000
-current_bar = barA #edit here !!! (which version of bars is being run)
+current_bar = barB #edit here !!! (which version of bars is being run)
 save_name = "TestList.RData" #edit here !!! (format: "bar#_data#.RData")
 make = 0.3
 percent = 0.03
+col_num = 4 #number of columns needed for Proposed/AcceptedSteps (either 3 or 4)
 
 #Step 4 - run simulation
 
@@ -20,8 +21,8 @@ simulation = function(data_fun, runs, iterations, current_bar, make, percent){
 	current_list[[1]] = list() #AcceptRate
 	current_list[[2]] = data.frame(matrix(ncol=0, nrow=iterations)) #MSE
 	current_list[[3]] = data.frame(matrix(ncol=0, nrow=iterations)) #Breakpoints
-	current_list[[4]] = data.frame(matrix(ncol=3, nrow=0)) #ProposedSteps
-	current_list[[5]] = data.frame(matrix(ncol=3, nrow=0)) #AcceptedSteps
+	current_list[[4]] = data.frame(matrix(ncol=col_num, nrow=0)) #ProposedSteps
+	current_list[[5]] = data.frame(matrix(ncol=col_num, nrow=0)) #AcceptedSteps
 	names(current_list) = c("AcceptRate", "MSE", "Breakpoints", "ProposedSteps", "AcceptedSteps")
  
 	#getting the initial points using the Bai-Perron test 

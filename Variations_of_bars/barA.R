@@ -6,7 +6,7 @@
 # interations = number of runs through Metropolis hastings 
 # make        = the proportion (decimal) of the make step to occuring
     #note: murder is set to same as make, move is calculated subtracting 2*make from 1 
-#percent      = how much can the point jiggle
+#percent      = the proportion (decimal) a point can jiggle at one time
 
 
 barA = function(k, time, data, iterations, make, percent){
@@ -83,7 +83,6 @@ barA = function(k, time, data, iterations, make, percent){
   }
   
   #jiggle jiggle jiggle 
-  count = 0
   barJiggle<-function(percent, k_ends, count){
     
     count = count + 1
@@ -138,7 +137,7 @@ barA = function(k, time, data, iterations, make, percent){
     if(can_jiggle == "bad" & count < 10){
       barJiggle(percent, k_ends, count)
     }else if(can_jiggle == "bad"){
-      return()
+      return("jiggle failure")
     }else{
       middle_set = k_ends[-(rando_location+1)]
       final_set = sort(c(middle_set,possible_knot))
@@ -220,20 +219,22 @@ barA = function(k, time, data, iterations, make, percent){
       #setting up qs for ratio
       full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+      n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       q1 = make/n_free
       q2 = make/(length(k_ends)-2)
-      
     } else{
       type = "move"
       m.count = m.count + 1
-      count = 0 #for the jiggle function
-      k_ends_new = barJiggle(percent, k_ends, count) #jiggle
+		count = 0 #resetting count for failed jiggles
+		k_ends_new = barJiggle(percent, k_ends, count) #jiggle
       
       #fake qs because they cancel
       q1 = 1
       q2 = 1
-      
+
+      if(k_ends_new[[1]] == "jiggle failure"){ #checking for jiggle failure
+		k_ends_new = k_ends
+    	} 
     }
     
     new_loglik = fitMetrics(k_ends_new, full_data)
@@ -243,7 +244,7 @@ barA = function(k, time, data, iterations, make, percent){
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
-    
+
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
     } else if(ratio > u_ratio) {
@@ -328,5 +329,5 @@ barA = function(k, time, data, iterations, make, percent){
 }
 
 #calling the function
-#current_result = barA(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.01)
+current_result = barA(bkpts_0$breakpoints, test_data_0[,1], test_data_0[,2], 2000, 0.3, 0.03)
 
