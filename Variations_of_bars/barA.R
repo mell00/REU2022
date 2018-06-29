@@ -149,10 +149,10 @@ barA = function(k, time, data, iterations, make, percent){
   ratio_data = data.frame()
   all_k_new = matrix(NA, nrow=1, ncol=(n/3))
   all_k_best = matrix(NA, nrow=1, ncol=(n/3))
-  
   bar_v = 0
   bar_beta = 0
   fit = 0
+  
   #matrix_of_fits = data.frame()
   all_MSE = data.frame()
   accept_count = 0
