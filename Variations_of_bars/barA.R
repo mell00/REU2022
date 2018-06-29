@@ -83,6 +83,7 @@ barA = function(k, time, data, iterations, make, percent){
   }
   
   #jiggle jiggle jiggle 
+  count = 0
   barJiggle<-function(percent, k_ends, count){
     
     count = count + 1
@@ -327,4 +328,7 @@ barA = function(k, time, data, iterations, make, percent){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4)
+bkpts_2 = breakpoints(test_data_2$data_2 ~ test_data_2$time, breaks = 5, h = 0.1) 
+current_result = barA(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4, 0.1)
+current_result
+
