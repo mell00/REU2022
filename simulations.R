@@ -56,7 +56,7 @@ colnames(sim_list[[3]]) <- gsub(x = colnames(sim_list[[3]]), pattern = "all_k_be
 
 for(i in 2:ncol(sim_list[[3]])){ #detecting where to split up columns in $Breakpoint object
   
-	if(endsWith(colnames(sim_list[[3]])[i], "1") == TRUE){
+	if(endsWith(colnames(sim_list[[3]])[i], "X1") == TRUE){
 		split_num = c(split_num, i)
 	}
   
