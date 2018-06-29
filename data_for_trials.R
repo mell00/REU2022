@@ -14,7 +14,7 @@ return(test_data_0_a)
 test_data_0_b = function(){
 data_0_b = rnorm(90, mean = 10, sd = 5)
 test_data_0_b = data.frame(time, data_0_b)
-return(test_data_0b)
+return(test_data_0_b)
 }
 
 #----------------ONE---------------- (clean sd 1 break)
