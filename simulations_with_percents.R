@@ -2,11 +2,11 @@
 #Step 2 - generate time and data functions (see data_for_trials)
 
 #Step 3 - set up for simulation
-data_fun = test_data_1 #edit here !!! (defines function for generating draws)
+data_fun = test_data_0_a #edit here !!! (defines function for generating draws)
 title = "Current Test Data" #edit here !!! (title for graphing)
 runs = 10
 iterations = 2000
-current_bar = bar0 #edit here !!! (which version of bars is being run)
+current_bar = barA #edit here !!! (which version of bars is being run)
 save_name = "TestList.RData" #edit here !!! (format: "bar#_data#.RData")
 make = 0.3
 percent = 0.03
@@ -81,7 +81,7 @@ sim_list[[3]] = final_list #saving final version of $Breakpoint object
 
 #Step 6 - saving the final list, make sure working directory goes to correct folder
 
-saveRDS(sim_list, file=save_name) #edit name here !!!
+#saveRDS(sim_list, file=save_name) #edit name here !!!
 
 #sim_list = readRDS() #to load an existing RDS
 

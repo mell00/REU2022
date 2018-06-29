@@ -10,7 +10,7 @@ barJiggle<-function(percent, k_ends, count){
   #determines how much the knot shoud jiggle
   jiggle_range = ceiling(percent*data_length)
   jiggle_neighborhood = c(1:jiggle_range)
-  jiggle_spot = sample(1:jiggle_neighborhood,1)
+  jiggle_spot = sample(jiggle_neighborhood,1)
   
   #"boolean" variable to make sure that we can jiggle 
   can_jiggle = "good" #default is good and we can jiggle
