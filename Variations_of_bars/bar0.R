@@ -123,33 +123,33 @@ bar0 = function(k, time, data, iterations, make){
       a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
 
-	#setting up qs for ratio - CHECK MY MATH HERE
-	q1 = make/(length(k_ends_new)-2)
-	full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-	overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-	q2 = make/n_free
+	    #setting up qs for ratio - CHECK MY MATH HERE
+	    q1 = make/(length(k_ends_new)-2)
+	    full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	    q2 = make/n_free
 
     } else if(u_step > prob_mmm[1] & u_step < sum(prob_mmm)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
 
-	#setting up qs for ratio - CHECK MY MATH HERE
-	full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-	overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-	q1 = make/n_free
-	q2 = make/(length(k_ends)-2)
+	   #setting up qs for ratio - CHECK MY MATH HERE
+	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
+	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	    q1 = make/n_free
+	    q2 = make/(length(k_ends)-2)
 
     } else{
       type = "move"
       m.count = m.count + 1
       k_ends_new = barMove0(k_ends) #move
 
-	#fake qs because they cancel
-	q1 = 1
-	q2 = 1
+	    #fake qs because they cancel
+	    q1 = 1
+	    q2 = 1
 
     }
     
