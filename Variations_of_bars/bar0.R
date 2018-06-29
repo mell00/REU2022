@@ -111,6 +111,32 @@ bar0 = function(k, time, data, iterations, make){
   sub.accept.count = 0
   move.accept.count = 0
   
+  #setting up priors for drawing from betas
+
+  beta_lm = function(par) {#function to minimize to get MLE of betas
+
+	beta0 = par[1]  #current intercept
+	beta1 = par[2]  #current slope
+	sigma = sd(full_data[,2]) #standard deviation
+  
+	#calculated likelihoods
+	lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
+
+	#convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
+	log_lik = log(lik) #log likelihood of each data point
+	deviance = -2 * sum(log_lik) #calculate deviance
+
+	return(deviance)
+
+  }
+
+  beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
+  fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
+  smiley = n * solve(fisher) #smiley face is total number of observations times the inverse of Fisher information
+
+  b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
+  B_0 = smiley #variance-covariance matrix for posterior draw - IS THIS ILLEGAL?
+
   #Metroplis Hastings 
   for(i in 1:iterations){
     
@@ -123,7 +149,7 @@ bar0 = function(k, time, data, iterations, make){
       a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
 
-	    #setting up qs for ratio - CHECK MY MATH HERE
+	    #setting up qs for ratio
 	    q1 = make/(length(k_ends_new)-2)
 	    full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
@@ -135,7 +161,7 @@ bar0 = function(k, time, data, iterations, make){
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
 
-	   #setting up qs for ratio - CHECK MY MATH HERE
+	   #setting up qs for ratio
 	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
@@ -155,7 +181,6 @@ bar0 = function(k, time, data, iterations, make){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    #CHECK MY MATH HERE
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     ratio = (-delta_bic/2) + log(q1) - log(q2)
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
@@ -188,8 +213,6 @@ bar0 = function(k, time, data, iterations, make){
     all_k_best = rbind(all_k_best, k_ends_best_print)
     
     #setting up the posterior
-    b_0 = matrix(c(0,0),2,1)
-    B_0 = matrix(c(1000,0,0,1000),2,2)
     
     ##loop through the k_ends to find the intervals 
     fit = NULL
