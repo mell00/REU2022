@@ -182,14 +182,14 @@ bar0 = function(k, time, data, iterations, make){
     new_loglik = fitMetrics(k_ends_new, full_data)
 
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
-    ratio = (-delta_bic/2) + log(q1) - log(q2)
+    ratio = (-delta_bic/2) - (log(q1) + log(q2))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
     
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
-    } else if(ratio < u_ratio) {
+    } else if(ratio > u_ratio) {
       k_ends = k_ends_new #new
       accept_count = accept_count + 1
       #looking at what type of step is done and accepted
