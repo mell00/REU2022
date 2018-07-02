@@ -8,15 +8,22 @@
   #note: murder is set to same as make, move is calculated subtracting 2*make from 1 
 
 
-bar0 = function(k, time, data, iterations, make){
+bar0 = function(k, time, data, iterations){
   
   library(MASS)
-  
-  prob_mmm = c(make, make) #combining the two probabilties of make and murder that the user specifies 
   
   full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
   
   n = length(full_data[,1]) #finding max value
+
+  if(length(na.omit(k)) >= 1){
+	bai_perron_length = length(na.omit(k))
+  }else{
+  	bai_perron_length = 1
+  }
+
+  make = (n-bai_perron_length)/n
+  murder = bai_perron_length/n
   
   k_ends = c(min(full_data[,1]), na.omit(k), n) #adding in end points to k values 
   
@@ -52,8 +59,7 @@ bar0 = function(k, time, data, iterations, make){
   }
   
   #random make function, this makes a random point 
-  count = 0 
-  barMake0<-function(k_ends){
+  barMake0<-function(k_ends, count){
     
     count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
     if(count < 10 ) {
@@ -61,7 +67,7 @@ bar0 = function(k, time, data, iterations, make){
       k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
       d = diff(k_ends_final) #finds the difference between all the spots 
       if(min(d) < 3) { #this make sure an additional point is not to close to a point already in existance 
-        barMake0(k_ends)
+        barMake0(k_ends, count)
       } else {
         return(k_ends_final) #the old breakpoints + the new breakpoints 
       }
@@ -85,7 +91,8 @@ bar0 = function(k, time, data, iterations, make){
   barMove0<-function(k_ends){
     
     k_ends_less = barMurder0(k_ends) #kills a point
-    k_ends_final = barMake0(k_ends_less) #remakes a point
+    count = 0 #reset count for failed makes 
+    k_ends_final = barMake0(k_ends_less, count) #remakes a point
     return(k_ends_final)
     
   }
@@ -144,21 +151,22 @@ bar0 = function(k, time, data, iterations, make){
 
     #getting constants for qs (b_k and d_k in papers)
     make_k = make * min(1,dpois(length(k_ends)-1,0.1)/dpois(length(k_ends)-2,0.1))
-    murder_k =  make * min(1,dpois(length(k_ends)-2,0.1)/dpois(length(k_ends)-1,0.1))
+    murder_k =  murder * min(1,dpois(length(k_ends)-2,0.1)/dpois(length(k_ends)-1,0.1))
     
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-      k_ends_new = barMake0(k_ends) #make
+	count = 0 #reset count for failed makes 
+      k_ends_new = barMake0(k_ends, count) #make
 
 	    #setting up qs for ratio
-	    q1 = murder_k
+	    q1 = murder_k/(length(k_ends_new)-2)
 	    full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-	    q2 = make_k
+	    q2 = make_k/n_free
 
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -169,8 +177,8 @@ bar0 = function(k, time, data, iterations, make){
 	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	    n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
-	    q1 = make_k
-	    q2 = murder_k
+	    q1 = make_k/n_free
+	    q2 = murder_k/(length(k_ends)-2)
 
     } else{
       type = "move"
@@ -289,5 +297,5 @@ bar0 = function(k, time, data, iterations, make){
 }
 
 #calling the function
-#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 1000, 0.5)
-#hist(current_result$NumBkpts)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2000)
+hist(current_result$NumBkpts)
