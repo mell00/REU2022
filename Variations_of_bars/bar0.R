@@ -189,7 +189,7 @@ bar0 = function(k, time, data, iterations, make){
     
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
-    } else if(ratio > u_ratio) {
+    } else if(ratio < u_ratio) {
       k_ends = k_ends_new #new
       accept_count = accept_count + 1
       #looking at what type of step is done and accepted
@@ -271,4 +271,4 @@ bar0 = function(k, time, data, iterations, make){
 }
 
 #calling the function
-#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 50, 0.4)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2000, 0.3)
