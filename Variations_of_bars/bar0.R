@@ -22,8 +22,8 @@ bar0 = function(k, time, data, iterations){
   	bai_perron_length = 1
   }
 
-  make = (n-bai_perron_length)/n
-  murder = bai_perron_length/n
+  make = (n-bai_perron_length*0.05)/n
+  murder = (bai_perron_length*0.05)/n
   
   k_ends = c(min(full_data[,1]), na.omit(k), n) #adding in end points to k values 
   
