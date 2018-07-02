@@ -182,7 +182,7 @@ bar0 = function(k, time, data, iterations, make){
     new_loglik = fitMetrics(k_ends_new, full_data)
 
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
-    ratio = (-delta_bic/2) - (log(q1) + log(q2))
+    ratio = (-delta_bic/2) + (log(q1) - log(q2))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
