@@ -151,7 +151,7 @@ bar0 = function(k, time, data, iterations, make){
 
 	    #setting up qs for ratio
 	    q1 = make/(length(k_ends_new)-2)
-	    full_set = c(k_ends, k_ends[1:length(k_ends-1)]+1, k_ends[1:length(k_ends-1)]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+	    full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
 	    q2 = make/n_free
@@ -162,7 +162,7 @@ bar0 = function(k, time, data, iterations, make){
       k_ends_new = barMurder0(k_ends) #murder
 
 	   #setting up qs for ratio
-	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new-1)]+1, k_ends_new[1:length(k_ends_new-1)]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
+	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
 	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	    n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
 	    q1 = make/n_free
