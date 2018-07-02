@@ -2,10 +2,10 @@
 #Step 2 - generate time and data functions (see data_for_trials)
 
 #Step 3 - set up for simulation
-data_fun = test_data_2 #edit here !!! (defines function for generating draws)
+data_fun = test_data_0_a #edit here !!! (defines function for generating draws)
 title = "Current Test Data" #edit here !!! (title for graphing)
-runs = 10
-iterations = 50
+runs = 9
+iterations = 2000
 current_bar = bar0 #edit here !!! (which version of bars is being run)
 save_name = "TestList.RData" #edit here !!! (format: "bar#_data#.RData")
 make = 0.3
@@ -91,7 +91,7 @@ sim_list[[6]] = final_list #saving final version of $Breakpoint object
 
 #Step 7 - graphing
 
-#which_run = 3 #which run you want to plot
+which_run = 4 #which run you want to plot
 
 #plotting the MSE
 #plot(sim_list$MSE[,which_run], ylab = "MSE" , xlab = "time", main = title)
