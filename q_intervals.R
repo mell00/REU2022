@@ -13,3 +13,5 @@ i = which(k_ends == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of t
 q2 = (1/sum_intv[i-1] ) / (sum(sum_intv))
 
 
+log(0.000496537) - log(0.000140056)
+log(3.925862e-06) - log(8.334722e-08)
