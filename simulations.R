@@ -85,7 +85,7 @@ sim_list[[6]] = final_list #saving final version of $Breakpoint object
 
 #Step 6 - saving the final list, make sure working directory goes to correct folder
 
-#saveRDS(sim_list, file=save_name) #edit name here !!!
+saveRDS(sim_list, file=save_name) #edit name here !!!
 
 #sim_list = readRDS() #to load an existing RDS
 

@@ -86,13 +86,13 @@ sim_list[[6]] = final_list #saving final version of $Breakpoint object
 
 #Step 6 - saving the final list, make sure working directory goes to correct folder
 
-#saveRDS(sim_list, file=save_name) #edit name here !!!
+saveRDS(sim_list, file=save_name) #edit name here !!!
 
 #sim_list = readRDS() #to load an existing RDS
 
 #Step 7 - graphing
 
-which_run = 4 #which run you want to plot
+#which_run = 1 #which run you want to plot
 
 #plotting the MSE
 #plot(sim_list$MSE[,which_run], ylab = "MSE" , xlab = "time", main = title)
