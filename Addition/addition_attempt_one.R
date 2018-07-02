@@ -7,8 +7,6 @@ barMake1<-function(k_ends){
 
   d = diff(k_ends) #finding the distance between all those breakpoints
   location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
-  #locations = which(d == max(d) ) #finding the location(s) of the farthest distance 
-  #locations = sample(d[location], 1) #randomly select location in case of equal max distances
   min = k_ends[which.max(location)] #lower bound 
   max = k_ends[(which.max(location) + 1)] #upper bound
   new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
