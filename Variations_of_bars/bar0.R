@@ -142,8 +142,10 @@ bar0 = function(k, time, data, iterations, make){
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
 
-    make_k = make * min(c(1,dpois(length(k_ends)-1,0.5)/dpois(length(k_ends)-2,0.5)))
-    murder_k =  make * min(c(1,dpois(length(k_ends)-2,0.5)/dpois(length(k_ends)-1,0.5)))
+    make_k = make * min(c(1,dpois(length(k_ends)-1,0.1)/dpois(length(k_ends)-2,0.1)))
+    murder_k =  make * min(c(1,dpois(length(k_ends)-2,0.1)/dpois(length(k_ends)-1,0.1)))
+	print(make_k)
+	print(murder_k)
     
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
@@ -159,7 +161,7 @@ bar0 = function(k, time, data, iterations, make){
 	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
 	    q2 = make_k/n_free
 
-    } else if(make_k > prob_mmm[1] & u_step < (make_k + murder_k)){
+    } else if(u_step > make_k & u_step < (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
@@ -274,6 +276,6 @@ bar0 = function(k, time, data, iterations, make){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2000, 0.3)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2000, 0.5)
 current_dist = k_dist(current_result$Breakpoints)
 hist(current_dist)
