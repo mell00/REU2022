@@ -120,7 +120,7 @@ k_dist = function(breakpoints){
 }
 
 #specify which simulation you want to look at right now
-current_sim = barB_data2$Breakpoints
+current_sim = bar0_data3$Breakpoints
 #specify correct number of breakpoints for this training set
 current_true = 2
 

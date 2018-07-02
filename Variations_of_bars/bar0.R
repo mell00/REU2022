@@ -16,7 +16,7 @@ bar0 = function(k, time, data, iterations, make){
   
   full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
   
-  n = max(full_data[,1]) #finding max value
+  n = length(full_data[,1]) #finding max value
   
   k_ends = c(min(full_data[,1]), na.omit(k), n) #adding in end points to k values 
   
@@ -98,8 +98,8 @@ bar0 = function(k, time, data, iterations, make){
   bar_v = 0
   bar_beta = 0
   fit = 0
-  #matrix_of_fits = data.frame()
   all_MSE = data.frame()
+  all_BIC = data.frame()
   accept_count = 0
   
   #setting up counters (these will tell us how many type it does a certain step and how many time it accept each step)
@@ -142,6 +142,7 @@ bar0 = function(k, time, data, iterations, make){
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
 
+    #getting constants for qs (b_k and d_k in papers)
     make_k = make * min(1,dpois(length(k_ends)-1,0.1)/dpois(length(k_ends)-2,0.1))
     murder_k =  make * min(1,dpois(length(k_ends)-2,0.1)/dpois(length(k_ends)-1,0.1))
     
@@ -152,33 +153,33 @@ bar0 = function(k, time, data, iterations, make){
       a.count = a.count + 1
       k_ends_new = barMake0(k_ends) #make
 
-	    #setting up qs for ratio
-          q1 = murder_k
-	    full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-	    q2 = make_k
+	#setting up qs for ratio
+	q1 = murder_k
+	full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+	overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+	n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	q2 = make_k
 
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
 
-	   #setting up qs for ratio
-	   full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-	   overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	   n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
-	   q1 = make_k
-	   q2 = murder_k
+	#setting up qs for ratio
+	full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
+	overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+	n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
+	q1 = make_k
+	q2 = murder_k
 
     } else{
       type = "move"
       m.count = m.count + 1
       k_ends_new = barMove0(k_ends) #move
 
-	    #fake qs because they cancel
-	    q1 = 1
-	    q2 = 1
+	#fake qs because they cancel
+	q1 = 1
+	q2 = 1
 
     }
     
@@ -192,8 +193,10 @@ bar0 = function(k, time, data, iterations, make){
     
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
+	bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     } else if(ratio > u_ratio) {
       k_ends = k_ends_new #new
+      bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1))
       accept_count = accept_count + 1
       #looking at what type of step is done and accepted
       if(type == "add") {
@@ -205,6 +208,7 @@ bar0 = function(k, time, data, iterations, make){
       }
     } else {
       k_ends = k_ends #old
+	bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     }
     
     #condensing the data
@@ -214,6 +218,8 @@ bar0 = function(k, time, data, iterations, make){
     ratio_data = rbind(ratio_data, ratio_data_print)
     all_k_new = rbind(all_k_new, k_ends_new_print)
     all_k_best = rbind(all_k_best, k_ends_best_print)
+
+    all_BIC = rbind(all_BIC, bic)
     
     #setting up the posterior
     
@@ -251,7 +257,8 @@ bar0 = function(k, time, data, iterations, make){
       }
     }
   }
-  
+
+ 
   #cleaning up the matrices 
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
@@ -262,18 +269,25 @@ bar0 = function(k, time, data, iterations, make){
   all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
   
   colnames(ratio_data) = c("Ratio", "Random", "DeltaBIC", "LikeApprox", "LogQOldNew", "LogQNewOld")
-  colnames(all_MSE) = c("MSE")
+  colnames(all_MSE) = "MSE"
+  colnames(all_BIC) = "BIC"
   
   final.propose = c(a.count, s.count, m.count)
   final.accept = c(add.accept.count, sub.accept.count, move.accept.count)
+
+  #getting distribution of k (number of breakpoints)
+  num_bkpts = list()
+  for(i in 1:iterations){
+  	current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
+  	num_bkpts = c(num_bkpts, current_k, recursive=T)
+  }
   
-  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_k_best)
-  names(final_list) = c("AcceptRate", "ProposedSteps","AcceptedSteps", "MSE", "Breakpoints")
+  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts)
+  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts")
   
   return(final_list)
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 1000, 0.5)
-current_dist = k_dist(current_result$Breakpoints)
-hist(current_dist)
+#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 1000, 0.5)
+#hist(current_result$NumBkpts)
