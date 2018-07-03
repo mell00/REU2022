@@ -2,7 +2,13 @@
 
 k_ends_test = c(1,20,30,44,50,60)
 
-barMurder2 <- function(k_ends){
+barMurder2 <- function(k_ends, prob_of_doing_random){
+  
+  #allowing for the option of doing a random addition 
+  u = runif(1) #random number from 0-1 from uniform distribution
+  if(u < prob_of_doing_random){
+    barMurder0(k_ends)
+  }else{
   
   #removing the end points 
   k<-k_ends[-c(1,length(k_ends))] 
@@ -81,6 +87,7 @@ barMurder2 <- function(k_ends){
   #deleting the selecting knot 
   k_ends_final <- k_ends[-new_bp]
   return(k_ends_final)
+  }
 }
 
 barMurder2(k_ends_test)

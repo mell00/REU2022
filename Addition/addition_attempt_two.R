@@ -2,7 +2,15 @@
 
 k_ends_test = c(1,50,60)
 
-barMake2<-function(k_ends){
+barMake2<-function(k_ends, prob_of_doing_random){
+  
+  #allowing for the option of doing a random addition 
+  u = runif(1) #random number from 0-1 from uniform distribution
+  if(u < prob_of_doing_random){
+    barMake0(k_ends)
+  }else{
+  
+  
 
   #random number generator 
   proposed = sample(1:max(k_ends), 2)
@@ -79,6 +87,7 @@ barMake2<-function(k_ends){
   }
   k_ends_final = sort(c(k_ends, new_bp))
   return(k_ends_final)
+  }
 }
 
 barMake2(k_ends_test)
