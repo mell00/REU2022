@@ -491,3 +491,89 @@ plot(x, barB_data10$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.
 plot(x, barB_data10$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
 plot(x, barB_data10$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
 par(mfrow=c(1,1))
+
+
+
+#-----------------------------------------BIC---------------------------------#
+y.low = 200
+y.high = 370
+#bar0 Data 1
+par(mfrow=c(3,3))
+plot(x, bar0_data1$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data1$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+par(mfrow=c(1,1))
+
+#barA Data 1
+par(mfrow=c(3,3))
+plot(x, barA_data1$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data1$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+par(mfrow=c(1,1))
+
+#barB Data 1
+par(mfrow=c(3,3))
+plot(x, barB_data1$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data1$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+par(mfrow=c(1,1))
+
+
+y.low = 330
+y.high = 470
+#bar0 Data 10
+par(mfrow=c(3,3))
+plot(x, bar0_data10$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar0_data10$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+par(mfrow=c(1,1))
+
+#barA Data 10
+par(mfrow=c(3,3))
+plot(x, barA_data10$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barA_data10$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+par(mfrow=c(1,1))
+
+#barB Data 10
+par(mfrow=c(3,3))
+plot(x, barB_data10$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+plot(x, barB_data10$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
+par(mfrow=c(1,1))
