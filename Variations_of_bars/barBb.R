@@ -260,7 +260,7 @@ barJiggle<-function(percent, k_ends, count){
       j.count = j.count + 1
 	count <<- 0 #resetting failed jiggle attempts
       k_ends_new = barJiggle(percent, k_ends, count) #move
-	if(k_ends_new == "jiggle failure"){
+	if(k_ends_new[[1]] == "jiggle failure"){
 		k_ends_new = k_ends
 	}
 
