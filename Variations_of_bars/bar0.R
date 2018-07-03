@@ -134,8 +134,11 @@ bar0 = function(k, time, data, iterations, make){
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
 
-  make = make#*74*0.01
-  murder = make#*2*0.01
+  starting_bkpts = length(na.omit(k))+1
+  starting_nfree = n - 5 * length(na.omit(k)) - 6
+  starting_ttl = starting_bkpts + starting_nfree
+  make = make*(starting_nfree/starting_ttl)
+  murder = make*(starting_bkpts/starting_ttl)
 
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -186,8 +189,8 @@ bar0 = function(k, time, data, iterations, make){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
-    ratio = (-1*delta_bic/2) #+ (log(q1) - log(q2))
+    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(4+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(4+1))
+    ratio = (-1*delta_bic/2) + (log(q1) - log(q2))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
