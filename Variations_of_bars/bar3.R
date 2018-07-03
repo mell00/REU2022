@@ -221,8 +221,8 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
   starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
+  make = make_murder_p/2 #*(starting_nfree/starting_ttl) #proportion for make
+  murder = make_murder_p/2 #*(starting_bkpts/starting_ttl) #proportion for murder
   make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
   murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
   
@@ -245,7 +245,7 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
       intv_2 = all_intv[-length(all_intv)] #takes the last number off
       sum_intv = intv_1 + intv_2 #finds the sums of the adjacent intervals
       i = which(k_ends_new == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of the point that was deleted
-      q2 = (1/sum_intv[i-1] ) / (sum(sum_intv))
+      q2 = make_k*(1/sum_intv[i-1] ) / (sum(sum_intv))
       q1 = murder_k/(length(k_ends_new)-2)
       full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
@@ -267,7 +267,7 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
       intv_2 = all_intv[-length(all_intv)] #takes the last number off
       sum_intv = intv_1 + intv_2 #finds the sums of the adjacent intervals
       i = which(k_ends == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of the point that was deleted
-      q1 = (1/sum_intv[i-1] ) / (sum(sum_intv))
+      q1 = make_k*(1/sum_intv[i-1] ) / (sum(sum_intv))
       q2 = murder_k/(length(k_ends)-2)
       
     } else{
@@ -404,7 +404,7 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = bar3(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
-#hist(current_result$NumBkpts)
-#current_result$ProposedSteps
-#current_result$AcceptedSteps
+current_result = bar3(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps
