@@ -260,7 +260,10 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       q1 = make_k/n_free
       
-      i = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+      print(k_ends_new)
+      print(k_ends)
+      i = which(k_ends == sum(k_ends) - sum(k_ends_new) )
+      print(i)
       d = diff(k_ends)
       q2 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
       #q2 = murder_k/(length(k_ends)-2)
