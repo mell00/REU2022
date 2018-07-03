@@ -1,10 +1,17 @@
-#q for the interval based addition
+#--------q for the interval based addition---------
+#for add 
 i = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
 d = diff(k_ends)
 q1 = ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
 
+#for sub
+i = which(k_ends == sum(k_ends) - sum(k_ends_new) )
+print(i)
+d = diff(k_ends)
+q2 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
 
-#q for interval based subtraction
+
+#--------q for interval based subtraction-------------
 all_intv = diff(k_ends) #finds all of the intervals
 intv_1 = all_intv[-1] #takes the first number off
 intv_2 = all_intv[-length(all_intv)] #takes the last number off
