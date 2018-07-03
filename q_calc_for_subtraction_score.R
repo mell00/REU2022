@@ -131,7 +131,7 @@ breakpoint_win_count <- function(k_ends_old, k_ends_new){
 #calculates the second part of the q algorithm for sub
 #inputs: k_ends_old, k_ends_new, 
 #rhow --- probability of choosing a random subtraction instead of our created subtraction 
-part_two_q_sub_score <- function(k_ends_old, K_ends_new, rhow){
+part_two_q_sub_score <- function(k_ends_old, k_ends_new, rhow){
   numerator = breakpoint_win_count(k_ends_old, k_ends_new) 
   denomenator = choose(length(k_ends_old)-2, 2)
   part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/length(k_ends_old)-2)
