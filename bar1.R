@@ -220,8 +220,8 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
   starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
+  make = make_murder_p/2 #*(starting_nfree/starting_ttl) #proportion for make
+  murder = make_murder_p/2 #*(starting_bkpts/starting_ttl) #proportion for murder
   make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
   murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
   
@@ -240,9 +240,9 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       
       #setting up qs for ratio
       #q for the interval based addition
-      i = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+      i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
       d = diff(k_ends)
-      q1 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
+      q1 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
       #q1 = murder_k/(length(k_ends_new)-2)
       full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
@@ -259,13 +259,10 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       q1 = make_k/n_free
-      
-      print(k_ends_new)
-      print(k_ends)
-      i = which(k_ends == sum(k_ends) - sum(k_ends_new) )
-      print(i)
+   
+      i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends)
-      q2 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
+      q2 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
       #q2 = murder_k/(length(k_ends)-2)
       
     } else{
@@ -301,7 +298,9 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
-    
+
+    print(type)
+    print(q2)    
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
@@ -402,7 +401,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
-#hist(current_result$NumBkpts)
-#current_result$ProposedSteps
-#current_result$AcceptedSteps
+current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps

@@ -5,10 +5,10 @@
 list_of_scores <- function(k_ends){  
   
   #takes the ends off of k_ends so just looking at the breakpoints will be easier
-  k_no_ends = k_ends[-1, -length(k_ends)]
+  k_no_ends = k_ends[-c(1,length(k_ends))]
   
-  #establishes the list of scores globally, will remove 0 later in code
-  scores_list = c(0)
+  #establishes the list of scores globally
+  scores_list = list()
   
   #goes through each breakpoint and finds distances between it and neighbors
   #concatenates mins and maxes, in order, to scores_list
@@ -16,16 +16,16 @@ list_of_scores <- function(k_ends){
     
     #sets up the variables 
     l = 0 
-    r= 0 
+    r = 0 
     min = 0 
     max = 0 
     
-    if(i = 1){ #first breakpoint has an endpoint as a neighbor
+    if(i == 1){ #first breakpoint has an endpoint as a neighbor
       l = k_no_ends[i] - k_ends[i] #distance between breakpoint and left endpoint
       r = k_no_ends[i+1] - k_no_ends[i] #distance between breakpoint and right neighbor
     }
     
-    else if (i = length(k_no_ends)){#last breakpoint has an endpoint as a neighbor
+    else if (i == length(k_no_ends)){#last breakpoint has an endpoint as a neighbor
       l = k_no_ends[i] - k_no_ends[i-1]#distance between breakpoint and left neighbor
       r = k_ends[length(k_ends)] - k_no_ends[i]#distance between breakpoint and right endpoint
     }
@@ -45,11 +45,8 @@ list_of_scores <- function(k_ends){
     }
     
     #adds the mins and the maxes to the score_list 
-    scores_list = c(scores_list, min, max)
+    scores_list = c(scores_list, min, max, recursive=T)
   }
-  
-  #takes out that first zero 
-  scores_list = scores_list[-1]
   
   return(scores_list) 
 }
