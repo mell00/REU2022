@@ -7,7 +7,7 @@ q1 = ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
 #for sub
 i = which(k_ends == sum(k_ends) - sum(k_ends_new) )
 print(i)
-d = diff(k_ends)
+d = diff(k_ends_new)
 q2 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
 
 
