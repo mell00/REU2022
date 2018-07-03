@@ -34,6 +34,18 @@ list_of_scores <- function(k_ends){
       l = k_no_ends[i]-k_no_ends[i-1] #distance between breakpoint and left neighbor
       r = k_no_ends[i+1]-k_no_ends[i] #distance between breakpoint and right neighbor
     }
+    
+    #gives the min and maxes the correct values
+    if(r>l){
+      max = r
+      min = l
+    }else{
+      max = l
+      min = r
+    }
+    
+    #adds the mins and the maxes to the score_list 
+    scores_list = c(scores_list, min, max)
   }
   
   #takes out that first zero 
@@ -59,15 +71,22 @@ breakpoint_win_count(k_ends_old, k_ends_new){
   
   #finds location of deleted break point in the original k_ends
   dead_bkpt_grave = 0
-  for(i in 1:lenght(k_ends_old)){
+  for(i in 1:length(k_ends_old)){
     if (k_ends_old[i] == dead_bkpt){
       dead_bkpt_grave = i
     }
   }
   
   #sets the min and max scores for the deleted breakpoint 
-  min_bkpt = k_ends_old[dead_bkpt_grave]-k_ends_old[dead_bkpt_grave-1]
-  max_bkpt = k_ends_old[dead_bkpt_grave+1]-k_ends_old[dead_bkpt_grave]
+  right = k_ends_old[dead_bkpt_grave]-k_ends_old[dead_bkpt_grave-1]
+  left = k_ends_old[dead_bkpt_grave+1]-k_ends_old[dead_bkpt_grave]
+  if(right > left){
+    max_bkpt = right
+    min_bkpt = left
+  }else{
+    max_bkpt = left
+    min_bkpt = right
+  }
   
   scoring_list = list_of_scores(k_ends_old)  #calculates a scoring list for k_ends_old
   
@@ -115,7 +134,7 @@ breakpoint_win_count(k_ends_old, k_ends_new){
 #calculates the second part of the q algorithm for sub
 #inputs: k_ends_old, k_ends_new, 
 #rhow --- probability of choosing a random subtraction instead of our created subtraction 
-part_two_q <- function(k_ends_old, K_ends_new, rhow){
+part_two_q_sub_score <- function(k_ends_old, K_ends_new, rhow){
   numerator = breakpoint_win_count(k_ends_old, k_ends_new) 
   denomenator = choose(length(k_ends_old)-2, 2)
   part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/length(k_ends_old)-2)
