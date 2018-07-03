@@ -134,8 +134,8 @@ bar0 = function(k, time, data, iterations, make){
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
 
-  make = make
-  murder = make#/n
+  make = make#*74*0.01
+  murder = make#*2*0.01
 
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -187,7 +187,7 @@ bar0 = function(k, time, data, iterations, make){
     new_loglik = fitMetrics(k_ends_new, full_data)
 
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
-    ratio = (-1*delta_bic/2) #+ ((log(q1) - log(q2)))
+    ratio = (-1*delta_bic/2) #+ (log(q1) - log(q2))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
@@ -290,7 +290,7 @@ bar0 = function(k, time, data, iterations, make){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2000, 0.3)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10000, 0.3)
 hist(current_result$NumBkpts)
 current_result$ProposedSteps
 current_result$AcceptedSteps
