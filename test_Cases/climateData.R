@@ -5,7 +5,8 @@ temp_data[,2] = as.numeric(as.character(temp_data[,2]))
 
 temp_bkpts = breakpoints(temp_data[,2]~temp_data[,1], h=0.05, breaks=10)
 
-temp_results = barA(temp_bkpts$breakpoints, temp_data[,1], temp_data[,2], 2000, 0.3, 0.02)
+temp_results = bar0(temp_bkpts$breakpoints, temp_data[,1], temp_data[,2], 10000, 0.5)
+hist(temp_results$NumBkpts)
 
 if(is.atomic(temp_results$Breakpoints) == TRUE) {
 	hist(temp_results$Breakpoints, col="red", breaks=138) 
@@ -14,5 +15,5 @@ if(is.atomic(temp_results$Breakpoints) == TRUE) {
 	for(i in 1:dim(temp_results$Breakpoints)[2]){
 		column_list = c(column_list, temp_results$Breakpoints[,i], recursive=TRUE)
 	}
-	hist(column_list, col="red", breaks=138) 
+	hist(column_list, col="red", breaks=138, xlim=c(0,138)) 
 }
