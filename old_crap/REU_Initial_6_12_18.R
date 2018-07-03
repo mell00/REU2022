@@ -5,16 +5,16 @@ first = rnorm(30, mean = 5, sd = 1) #30 random data points from a normal distrib
 second = rnorm(30, mean = 15, sd = 1) #30 random data points from a normal distribution with mean of 15
 third = rnorm(30, mean = 30, sd = 1) #30 random data points from a normal distribution with mean of 30
 
-dif_means_0 = c(first) #setting up null set
-dif_means_1 = c(first, second) #adding two sets of data points together 
+#dif_means_0 = c(first) #setting up null set
+#dif_means_1 = c(first, second) #adding two sets of data points together 
 dif_means_2 = c(first, second, third) #adding three sets of data points together
 
-time_0 = 1:30
-time_1 = 1:60
+#time_0 = 1:30
+#time_1 = 1:60
 time_2 = 1:90
 
-test_data_0 = data.frame(time_0, dif_means_0) #our data with x = time and y = data from 1 set
-test_data_1 = data.frame(time_1, dif_means_1) #our data with x = time and y = data from 2 sets
+#test_data_0 = data.frame(time_0, dif_means_0) #our data with x = time and y = data from 1 set
+#test_data_1 = data.frame(time_1, dif_means_1) #our data with x = time and y = data from 2 sets
 test_data_2 = data.frame(time_2, dif_means_2) #our data with x = time and y = data from 3 sets
 
 #downloading the strucchange package
@@ -22,11 +22,11 @@ test_data_2 = data.frame(time_2, dif_means_2) #our data with x = time and y = da
 library("strucchange")
 
 #Bai-Perron Method
-bkpts_0 = breakpoints(test_data_0$dif_means_0 ~ test_data_0$time_0, breaks = 5, h = 0.1) #no break points 
-bkpts_0$breakpoints #list of x-values (time) for breakpoints
+#bkpts_0 = breakpoints(test_data_0$dif_means_0 ~ test_data_0$time_0, breaks = 5, h = 0.1) #no break points 
+#bkpts_0$breakpoints #list of x-values (time) for breakpoints
 
-bkpts_1 = breakpoints(test_data_1$dif_means_1 ~ test_data_1$time_1, breaks = 3, h = 0.2) #no break points 
-bkpts_1$breakpoints #list of x-values (time) for breakpoints
+#bkpts_1 = breakpoints(test_data_1$dif_means_1 ~ test_data_1$time_1, breaks = 3, h = 0.2) #no break points 
+#bkpts_1$breakpoints #list of x-values (time) for breakpoints
 
 bkpts_2 = breakpoints(test_data_2$dif_means_2 ~ test_data_2$time_2, breaks = 5, h = 0.1) #no break points 
 bkpts_2$breakpoints #list of x-values (time) for breakpoints
@@ -144,7 +144,7 @@ bar0 = function(k, time, data, iterations, make, murder){
     new_loglik = fitMetrics(k_ends_new, full_data)
 
     ratio = (new_loglik - log(n)*(4*(length(k_ends_new)-2)+3)) - (old_loglik - log(n)*(4*(length(k_ends)-2)+3))
-    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution 
+    u_ratio = log(runif(1,0.25,1)) #random number from 0 to 1 taken from a uniform distribution 
 
     if(ratio == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old

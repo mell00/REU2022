@@ -5,25 +5,15 @@
 # time        = integer x-values of the entire data set 
 # interations = number of runs through Metropolis hastings 
 # make        = the proportion (decimal) of the make step to occuring
-  #note: murder is set to same as make, move is calculated subtracting 2*make from 1 
+  #note: murder porportion is make/n, move is leftover
 
-
-bar0 = function(k, time, data, iterations){
+bar0 = function(k, time, data, iterations, make){
   
   library(MASS)
   
   full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
   
   n = length(full_data[,1]) #finding max value
-
-  if(length(na.omit(k)) >= 1){
-	bai_perron_length = length(na.omit(k))
-  }else{
-  	bai_perron_length = 1
-  }
-
-  make = (n-bai_perron_length*(bai_perron_length/n))/n
-  murder = (bai_perron_length*(bai_perron_length/n))/n
   
   k_ends = c(min(full_data[,1]), na.omit(k), n) #adding in end points to k values 
   
@@ -37,19 +27,19 @@ bar0 = function(k, time, data, iterations){
       model = lm(full_data[,2]~full_data[,1])
       sum_loglik = logLik(model)[1]
     }else{
-      for(i in 1:length(k_ends)) {
-        if(k_ends[i] == 2){
+      for(i in 2:length(k_ends)) {
+        if(i == 2){
           min = k_ends[i-1]
-          x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
-          y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-          data = data.frame(x_values, y_values) #re-making this into a dataframe 
+	    max = k_ends[i]
+          x_values = full_data[c(min:max),1] #getting the x values in the interval
+          y_values = full_data[c(min:max),2] #getting the y values in the interval
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
-        }else if(k_ends[i] > 2){
+        }else if(i > 2){
           min = k_ends[i-1]
-          x_values = full_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
-          y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
-          data = data.frame(x_values, y_values) #re-making this into a dataframe 
+	    max = k_ends[i]
+          x_values = full_data[c((min+1):max),1] #getting the x values in the interval
+          y_values = full_data[c((min+1):max),2] #getting the y values in the interval
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }
@@ -61,7 +51,7 @@ bar0 = function(k, time, data, iterations){
   #random make function, this makes a random point 
   barMake0<-function(k_ends, count){
     
-    count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
+    count <<- count + 1 #this check to make sure we do not get stuck in an infinite loop 
     if(count < 10 ) {
       rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
       k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
@@ -144,21 +134,24 @@ bar0 = function(k, time, data, iterations){
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
 
+  make = make
+  murder = make/n
+
   #Metroplis Hastings 
   for(i in 1:iterations){
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
 
     #getting constants for qs (b_k and d_k in papers)
-    make_k = make * min(1,dpois(length(k_ends)-1,0.1)/dpois(length(k_ends)-2,0.1))
-    murder_k =  murder * min(1,dpois(length(k_ends)-2,0.1)/dpois(length(k_ends)-1,0.1))
-    
+    make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, 0.1))
+    murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, 0.1))
+
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-	count = 0 #reset count for failed makes 
+	count <<- 0 #reset count for failed makes 
       k_ends_new = barMake0(k_ends, count) #make
 
 	    #setting up qs for ratio
@@ -193,8 +186,8 @@ bar0 = function(k, time, data, iterations){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
-    ratio = (-delta_bic/2) + ((log(q1) - log(q2)))
+    delta_bic = (-2*new_loglik + (log(n)*(length(k_ends_new)-1)*(2+1))) - (-2*old_loglik + (log(n)*(length(k_ends)-1)*(2+1)))
+    ratio = (-1*delta_bic/2) + ((log(q1) - log(q2)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
@@ -297,5 +290,7 @@ bar0 = function(k, time, data, iterations){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2000)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 1000, 0.3)
 hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps
