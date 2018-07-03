@@ -30,16 +30,16 @@ bar0 = function(k, time, data, iterations, make){
       for(i in 2:length(k_ends)) {
         if(i == 2){
           min = k_ends[i-1]
-	    max = k_ends[i]
-          x_values = full_data[c(min:max),1] #getting the x values in the interval
-          y_values = full_data[c(min:max),2] #getting the y values in the interval
+          x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
+          y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
+          data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }else if(i > 2){
           min = k_ends[i-1]
-	    max = k_ends[i]
-          x_values = full_data[c((min+1):max),1] #getting the x values in the interval
-          y_values = full_data[c((min+1):max),2] #getting the y values in the interval
+          x_values = full_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
+          y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
+          data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }
@@ -135,7 +135,7 @@ bar0 = function(k, time, data, iterations, make){
   B_0 = smiley #variance-covariance matrix for posterior draw
 
   make = make
-  murder = make/n
+  murder = make#/n
 
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -186,8 +186,8 @@ bar0 = function(k, time, data, iterations, make){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
 
-    delta_bic = (-2*new_loglik + (log(n)*(length(k_ends_new)-1)*(2+1))) - (-2*old_loglik + (log(n)*(length(k_ends)-1)*(2+1)))
-    ratio = (-1*delta_bic/2) + ((log(q1) - log(q2)))
+    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+    ratio = (-1*delta_bic/2) #+ ((log(q1) - log(q2)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
