@@ -6,10 +6,10 @@
 # data		= y-values of entire data set
 # interations	= number of runs for sampling with Metropolis-Hastings 
 # make_murder_p	= the combine proportion (decimal) for make and murder steps
-  #note: move proportion is 1 - make_murder_p
+#note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
 
-barB = function(k, time, data, iterations, make_murder_p, percent){
+bar1 = function(k, time, data, iterations, make_murder_p, percent){
   
   library(MASS)
   
@@ -50,6 +50,18 @@ barB = function(k, time, data, iterations, make_murder_p, percent){
     return(sum_loglik)
   }
   
+  #interval addition
+  barMake1<-function(k_ends){
+    
+    d = diff(k_ends) #finding the distance between all those breakpoints
+    location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
+    min = k_ends[which.max(location)] #lower bound 
+    max = k_ends[(which.max(location) + 1)] #upper bound
+    new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
+    k_ends_final = sort(c(k_ends, new_bp))
+    return(k_ends_final)
+    
+  }
   #random make function, this makes a random point 
   barMake0<-function(k_ends, count){
     
@@ -88,71 +100,71 @@ barB = function(k, time, data, iterations, make_murder_p, percent){
     return(k_ends_final)
     
   }
-
+  
   #jiggles an existing breakpoint
-barJiggle<-function(percent, k_ends, count){
-
-  count <<- count + 1
-  data_length = max(k_ends)
-
-  #determines how much the knot shoud jiggle
-  jiggle_range = ceiling(percent*data_length)
-  jiggle_neighborhood = c(1:jiggle_range)
-  jiggle_spot = sample(jiggle_neighborhood,1)
-  
-  #"boolean" variable to make sure that we can jiggle 
-  can_jiggle = "good" #default is good and we can jiggle
-  
-  #determines randomly if knot is jiggling to left or right
-  direction = "right" #default direction is right
-  u = runif(1) #random number from 0-1 from uniform distribution
-  if(u < 0.5){
-    direction = "left"
-    jiggle_spot = (-1)*jiggle_spot
-  }
-  
-  #determines randomly which knot is jiggling (code related to murders)
-  k = k_ends[c(-1, -length(k_ends))] #removes end points
-  rando_location = sample(1:length(k),1) #chooses random knot 
-  rando_knot = k[rando_location]
-  
-  #check if we can jiggle towards an endpoint
-  possible_knot = rando_knot+jiggle_spot
-  if(direction == "right"){
-    right_end = k_ends[length(k_ends)]
-    possible_diff = (abs(possible_knot - right_end) < 3)
-    if(possible_diff == TRUE){
-      can_jiggle = "bad"
+  barJiggle<-function(percent, k_ends, count){
+    
+    count <<- count + 1
+    data_length = max(k_ends)
+    
+    #determines how much the knot shoud jiggle
+    jiggle_range = ceiling(percent*data_length)
+    jiggle_neighborhood = c(1:jiggle_range)
+    jiggle_spot = sample(jiggle_neighborhood,1)
+    
+    #"boolean" variable to make sure that we can jiggle 
+    can_jiggle = "good" #default is good and we can jiggle
+    
+    #determines randomly if knot is jiggling to left or right
+    direction = "right" #default direction is right
+    u = runif(1) #random number from 0-1 from uniform distribution
+    if(u < 0.5){
+      direction = "left"
+      jiggle_spot = (-1)*jiggle_spot
     }
-  }else{
-    left_end = k_ends[1]
-    possible_diff = (abs(possible_knot - left_end) < 3)
-    if(possible_diff == TRUE){
-      can_jiggle = "bad"
+    
+    #determines randomly which knot is jiggling (code related to murders)
+    k = k_ends[c(-1, -length(k_ends))] #removes end points
+    rando_location = sample(1:length(k),1) #chooses random knot 
+    rando_knot = k[rando_location]
+    
+    #check if we can jiggle towards an endpoint
+    possible_knot = rando_knot+jiggle_spot
+    if(direction == "right"){
+      right_end = k_ends[length(k_ends)]
+      possible_diff = (abs(possible_knot - right_end) < 3)
+      if(possible_diff == TRUE){
+        can_jiggle = "bad"
+      }
+    }else{
+      left_end = k_ends[1]
+      possible_diff = (abs(possible_knot - left_end) < 3)
+      if(possible_diff == TRUE){
+        can_jiggle = "bad"
+      }
+    }
+    
+    #check if new knot location already has a knot there 
+    for(i in 1:length(k)){
+      possible_diff = (abs(possible_knot - k[i]) < 3)
+      if(rando_knot != k[i] & possible_diff == TRUE){
+        can_jiggle = "bad"
+      }
+    }
+    
+    #check if we can jiggle, then jiggle!!!
+    if(can_jiggle == "bad" & count < 10){
+      barJiggle(percent, k_ends, count)
+    }else if(can_jiggle == "bad"){
+      return("jiggle failure")
+    }else{
+      middle_set = k_ends[-(rando_location+1)]
+      final_set = sort(c(middle_set,possible_knot))
+      return(final_set)
     }
   }
   
-  #check if new knot location already has a knot there 
-  for(i in 1:length(k)){
-    possible_diff = (abs(possible_knot - k[i]) < 3)
-    if(rando_knot != k[i] & possible_diff == TRUE){
-      can_jiggle = "bad"
-    }
-  }
-
-  #check if we can jiggle, then jiggle!!!
-  if(can_jiggle == "bad" & count < 10){
-    barJiggle(percent, k_ends, count)
-  }else if(can_jiggle == "bad"){
-    return("jiggle failure")
-  }else{
-    middle_set = k_ends[-(rando_location+1)]
-    final_set = sort(c(middle_set,possible_knot))
-    return(final_set)
-  }
-}
   
-
   #initializing matrices 
   ratio_data = data.frame()
   all_k_new = matrix(NA, nrow=1, ncol=(n/3))
@@ -177,31 +189,31 @@ barJiggle<-function(percent, k_ends, count){
   jiggle.accept.count = 0
   
   #setting up priors for drawing from betas
-
-  beta_lm = function(par) {#function to minimize to get MLE of betas
-
-	beta0 = par[1]  #current intercept
-	beta1 = par[2]  #current slope
-	sigma = sd(full_data[,2]) #standard deviation
   
-	#calculated likelihoods
-	lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
-
-	#convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
-	log_lik = log(lik) #log likelihood of each data point
-	deviance = -2 * sum(log_lik) #calculate deviance
-
-	return(deviance)
-
+  beta_lm = function(par) {#function to minimize to get MLE of betas
+    
+    beta0 = par[1]  #current intercept
+    beta1 = par[2]  #current slope
+    sigma = sd(full_data[,2]) #standard deviation
+    
+    #calculated likelihoods
+    lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
+    
+    #convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
+    log_lik = log(lik) #log likelihood of each data point
+    deviance = -2 * sum(log_lik) #calculate deviance
+    
+    return(deviance)
+    
   }
-
+  
   beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
   fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
   smiley = n * solve(fisher) #smiley face is total number of observations times the inverse of Fisher information
-
+  
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
-
+  
   #getting constants for qs (b_k and d_k in papers)
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
   full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
@@ -212,76 +224,84 @@ barJiggle<-function(percent, k_ends, count){
   murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
   make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
   murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
-
+  
   #Metroplis Hastings 
   for(i in 1:iterations){
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
-
+    
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-	count <<- 0 #reset count for failed makes 
-      k_ends_new = barMake0(k_ends, count) #make
-
-	    #setting up qs for ratio
-	    q1 = murder_k/(length(k_ends_new)-2)
-	    full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-	    q2 = make_k/n_free
-
+      count <<- 0 #reset count for failed makes 
+      k_ends_new = barMake1(k_ends) #make
+      
+      #setting up qs for ratio
+      #q for the interval based addition
+      i = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+      d = diff(k_ends)
+      q1 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
+      #q1 = murder_k/(length(k_ends_new)-2)
+      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+      q2 = make_k/n_free
+      
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
       k_ends_new = barMurder0(k_ends) #murder
-
-	    #setting up qs for ratio
-	    full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	    n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
-	    q1 = make_k/n_free
-	    q2 = murder_k/(length(k_ends)-2)
-
+      
+      #setting up qs for ratio
+      full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
+      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+      n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
+      q1 = make_k/n_free
+      
+      i = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+      d = diff(k_ends)
+      q2 = murder_k * ( ( ( (d[i-1])^4  / sum(d)^4) ) * ( 1 / ( d[i-1] - 4 ) ) )
+      #q2 = murder_k/(length(k_ends)-2)
+      
     } else{
-	move_u = runif(1)
-	if(move_u > 0.75){
-      type = "move"
-      m.count = m.count + 1
-      k_ends_new = barMove0(k_ends) #move
-
-	    #fake qs because they cancel
-	    q1 = 1
-	    q2 = 1
-	}else{
-      type = "jiggle"
-      j.count = j.count + 1
-	count <<- 0 #resetting failed jiggle attempts
-      k_ends_new = barJiggle(percent, k_ends, count) #move
-	if(k_ends_new[[1]] == "jiggle failure"){
-		k_ends_new = k_ends
-	}
-
-	    #fake qs because they cancel
-	    q1 = 1
-	    q2 = 1
-	}
-
+      move_u = runif(1)
+      if(move_u > 0.75){
+        type = "move"
+        m.count = m.count + 1
+        k_ends_new = barMove0(k_ends) #move
+        
+        #fake qs because they cancel
+        q1 = 1
+        q2 = 1
+      }else{
+        type = "jiggle"
+        j.count = j.count + 1
+        count <<- 0 #resetting failed jiggle attempts
+        k_ends_new = barJiggle(percent, k_ends, count) #move
+        if(k_ends_new[[1]] == "jiggle failure"){
+          k_ends_new = k_ends
+        }
+        
+        #fake qs because they cancel
+        q1 = 1
+        q2 = 1
+      }
+      
     }
     
     new_loglik = fitMetrics(k_ends_new, full_data)
-
+    
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
     ratio = (-1*delta_bic/2) + (log(q1) - log(q2))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
-
+    
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
     
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
-	    bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     } else if(ratio > u_ratio) {
       k_ends = k_ends_new #new
       bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1))
@@ -298,7 +318,7 @@ barJiggle<-function(percent, k_ends, count){
       }
     } else {
       k_ends = k_ends #old
-	    bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     }
     
     #condensing the data
@@ -308,7 +328,7 @@ barJiggle<-function(percent, k_ends, count){
     ratio_data = rbind(ratio_data, ratio_data_print)
     all_k_new = rbind(all_k_new, k_ends_new_print)
     all_k_best = rbind(all_k_best, k_ends_best_print)
-
+    
     all_BIC = rbind(all_BIC, bic)
     
     #setting up the posterior
@@ -347,8 +367,8 @@ barJiggle<-function(percent, k_ends, count){
       }
     }
   }
-
- 
+  
+  
   #cleaning up the matrices 
   all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
@@ -364,12 +384,12 @@ barJiggle<-function(percent, k_ends, count){
   
   final.propose = c(a.count, s.count, m.count, j.count)
   final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
-
+  
   #getting distribution of k (number of breakpoints)
   num_bkpts = list()
   for(i in 1:iterations){
-  	current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
-  	num_bkpts = c(num_bkpts, current_k, recursive=T)
+    current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
+    num_bkpts = c(num_bkpts, current_k, recursive=T)
   }
   
   final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts)
@@ -379,7 +399,7 @@ barJiggle<-function(percent, k_ends, count){
 }
 
 #calling the function
-#current_result = barB(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.6, 0.03)
+#current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps
