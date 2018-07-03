@@ -103,58 +103,106 @@ rownames(acceptrate) = c(datanames, "Total", recursive=T)
 colnames(acceptrate) = c("Rand. Mean", "Rand. SD", "Jig. Mean", "Jig. SD", "M+J Mean", "M+J SD")
 round(acceptrate, 5)
 
-#function for finding number of accepted breakpoints in each row
-k_dist = function(breakpoints){
+#looking at distribution of number of breakpoints (k)
 
-	all_k = list()
+#specify which simulation you want to look at right now
+current_sim = barB_data2$NumBkpts
+current_title = "barB - Data 2"
+#specify correct number of breakpoints for this training set
+current_true = 2
 
-	for(i in 1:nrow(breakpoints)){
+#set graphical parameters
+x_label = "Number of Breakpoints"
+y_label = "Number of Iterations"
+n_breaks = c(0:10)
+x_limits = c(0,10)
+y_lower = 0
+y_upper = 2500
+line_type = 1
+line_width = 2
 
-		current_k = length(breakpoints[i,][!is.na(breakpoints[i,])])
-		all_k = c(all_k, current_k, recursive=T)
+#plot distributions of number of breakpoints
+par(mfrow=c(3,3))
+hist(current_sim[[1]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[2]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[3]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[4]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[5]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[6]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[7]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[8]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
+hist(current_sim[[9]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
 
+#looking at distribution of breakpoint locations (tau)
+
+#function to plot frequency of breakpoints
+plot_tau_hist <- function(breakpoints, title, x_axis_lab, y_axis_lab, color, num_breaks, x_axis_limits, y_axis_limits){
+ 
+	if(is.atomic(breakpoints) == TRUE) {
+		hist(breakpoints, main=title, xlab=x_axis_lab, ylab=y_axis_lab, col=color, breaks=num_breaks, xlim=x_axis_limits, ylim=y_axis_limits) 
+	}else if(dim(breakpoints)[2] >= 2) {
+		column_list = NULL
+		for(i in 1:dim(breakpoints)[2]){
+			column_list = c(column_list, breakpoints[,i], recursive=TRUE)
+		}
+		hist(column_list, main=title, xlab=x_axis_lab, ylab=y_axis_lab, col=color, breaks=num_breaks, xlim=x_axis_limits, ylim=y_axis_limits) 
 	}
-
-	return(all_k)
 
 }
 
 #specify which simulation you want to look at right now
-current_sim = bar0_data3$Breakpoints
-#specify correct number of breakpoints for this training set
-current_true = 2
+current_sim = barB_data4$Breakpoints
+current_title = "barB - Data 4"
+#specify correct locations of breakpoints for this training set
+current_true = c(30,60)
 
-#get distributions for number of breakpoints
-k_dist_1 = k_dist(current_sim[[1]])
-k_dist_2 = k_dist(current_sim[[2]])
-k_dist_3 = k_dist(current_sim[[3]])
-k_dist_4 = k_dist(current_sim[[4]])
-k_dist_5 = k_dist(current_sim[[5]])
-k_dist_6 = k_dist(current_sim[[6]])
-k_dist_7 = k_dist(current_sim[[7]])
-k_dist_8 = k_dist(current_sim[[8]])
-k_dist_9 = k_dist(current_sim[[9]])
-k_dist_10 = k_dist(current_sim[[10]])
+#set graphical parameters
+x_label = "Location of Breakpoints"
+y_label = "Number of Iterations"
+n_breaks = c(1:90)
+x_limits = c(1,90)
+y_lower = 0
+y_upper = 2500
+bar_color = "yellow2"
+line_color = "red1"
+line_type = 2
+line_width = 1
 
-#plot distributions of number of breakpoints
-par(mfrow=c(4,3))
-hist(k_dist_1, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_2, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_3, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_4, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_5, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_6, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_7, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_8, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_9, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
-hist(k_dist_10, breaks=10, xlim=c(0,10), ylim=c(0,2000))
-lines(c(current_true+0.5,current_true+0.5), c(current_true+0.5,2000), col="red", lty=1, lwd=2)
+#plot distributions of breakpoint locations
+par(mfrow=c(3,3))
+plot_tau_hist(current_sim[[1]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[2]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[3]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[4]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[5]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[6]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[7]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[8]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+plot_tau_hist(current_sim[[9]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
+if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}

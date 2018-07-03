@@ -358,5 +358,5 @@ barA = function(k, time, data, iterations, make_murder_p, percent){
 
 
 #calling the function
-current_result = barA(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
+#current_result = barA(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
 

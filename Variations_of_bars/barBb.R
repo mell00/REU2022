@@ -247,7 +247,7 @@ barJiggle<-function(percent, k_ends, count){
 
     } else{
 	move_u = runif(1)
-	if(move_u > 0.5){
+	if(move_u > 0.9){
       type = "move"
       m.count = m.count + 1
       k_ends_new = barMove0(k_ends) #move
