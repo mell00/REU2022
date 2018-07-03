@@ -257,6 +257,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends)-2) - 6 + overlap
       q2 = make_k/n_free
+    print(d[i_q-1])
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -270,7 +271,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       q1 = make_k/n_free
    
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
-      d = diff(k_ends)
+      d = diff(k_ends_new)
       q2 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
       #q2 = murder_k/(length(k_ends)-2)
       
@@ -308,8 +309,6 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
 
-    print(type)
-    print(q2)    
     if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
@@ -410,7 +409,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.5, 0.02)
+#current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps
