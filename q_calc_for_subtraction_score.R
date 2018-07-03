@@ -55,7 +55,7 @@ list_of_scores <- function(k_ends){
 #calculates the number of wins and ties for a given breakpoint that might be subtracted 
 #inputs: 
 
-breakpoint_win_count(k_ends_old, k_ends_new){
+breakpoint_win_count <- function(k_ends_old, k_ends_new){
   #setting up global variables to use later 
   win_counter = 0
   tie_counter = 0
