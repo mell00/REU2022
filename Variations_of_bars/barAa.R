@@ -9,11 +9,9 @@
 #percent      = the proportion (decimal) a point can jiggle at one time
 
 
-barA = function(k, time, data, iterations, make, percent){
+barA = function(k, time, data, iterations, make_murder_p, percent){
   
   library(MASS)
-  
-  prob_mmm = c(make, make) #combining the two probabilties of make and murder that the user specifies 
   
   full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
   
@@ -31,15 +29,15 @@ barA = function(k, time, data, iterations, make, percent){
       model = lm(full_data[,2]~full_data[,1])
       sum_loglik = logLik(model)[1]
     }else{
-      for(i in 1:length(k_ends)) {
-        if(k_ends[i] == 2){
+      for(i in 2:length(k_ends)) {
+        if(i == 2){
           min = k_ends[i-1]
           x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
           y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
           data = data.frame(x_values, y_values) #re-making this into a dataframe 
           model = lm(y_values~x_values) #running a lm on the selected interval 
           sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
-        }else if(k_ends[i] > 2){
+        }else if(i > 2){
           min = k_ends[i-1]
           x_values = full_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
           y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
@@ -52,17 +50,16 @@ barA = function(k, time, data, iterations, make, percent){
     return(sum_loglik)
   }
   
-  
-  count = 0 
-  barMake0<-function(k_ends){
+  #random make function, this makes a random point 
+  barMake0<-function(k_ends, count){
     
-    count = count + 1 #this check to make sure we do not get stuck in an infinite loop 
+    count <<- count + 1 #this check to make sure we do not get stuck in an infinite loop 
     if(count < 10 ) {
       rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
       k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
       d = diff(k_ends_final) #finds the difference between all the spots 
       if(min(d) < 3) { #this make sure an additional point is not to close to a point already in existance 
-        barMake0(k_ends)
+        barMake0(k_ends, count)
       } else {
         return(k_ends_final) #the old breakpoints + the new breakpoints 
       }
@@ -81,6 +78,7 @@ barA = function(k, time, data, iterations, make, percent){
     return(k_ends_final)
     
   }
+  
   
   #jiggle jiggle jiggle 
   barJiggle<-function(percent, k_ends, count){
@@ -192,22 +190,30 @@ barA = function(k, time, data, iterations, make, percent){
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
   
+  #getting constants for qs (b_k and d_k in papers)
+  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
+  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
+  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_ttl = starting_bkpts + starting_nfree #total to get percentages
+  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
+  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
+  make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
+  murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
+  
   
   #Metroplis Hastings 
   for(i in 1:iterations){
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
     
-    #getting constants for qs (b_k and d_k in papers)
-    make_k = make * min(1,dpois(length(k_ends)-1,0.1)/dpois(length(k_ends)-2,0.1))
-    murder_k =  make * min(1,dpois(length(k_ends)-2,0.1)/dpois(length(k_ends)-1,0.1))
-    
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-      k_ends_new = barMake0(k_ends) #make
+      count <<- 0 #reset count for failed makes 
+      k_ends_new = barMake0(k_ends, count) #make
       
       #setting up qs for ratio
       q1 = murder_k/(length(k_ends_new)-2)
@@ -215,6 +221,7 @@ barA = function(k, time, data, iterations, make, percent){
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends)-2) - 6 + overlap
       q2 = make_k/n_free
+      
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -227,6 +234,7 @@ barA = function(k, time, data, iterations, make, percent){
       n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       q1 = make_k/n_free
       q2 = murder_k/(length(k_ends)-2)
+      
       
     } else{
       type = "move"
@@ -245,8 +253,8 @@ barA = function(k, time, data, iterations, make, percent){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
-    ratio = (-delta_bic/2) + ((log(q1) - log(q2)))
+    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+    ratio = (-1*delta_bic/2) + (log(q1) - log(q2))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
@@ -270,6 +278,7 @@ barA = function(k, time, data, iterations, make, percent){
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     }
+    
     #condensing the data
     k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
     k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
@@ -347,6 +356,7 @@ barA = function(k, time, data, iterations, make, percent){
   return(final_list)
 }
 
+
 #calling the function
-current_result = barA(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.3, 0.03)
+current_result = barA(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
 
