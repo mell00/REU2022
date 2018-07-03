@@ -1,3 +1,15 @@
+#let's test it 
+DATA_SET = c(1:30)
+K_ENDS_OLD = c(1,15,27,30)
+K_ENDS_NEW =c(1,15,21,27,30)
+N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,67,28,29,30)
+RHOW = .5
+
+answer <- part_two_q_add_score(DATA_SET, K_ENDS_OLD, K_ENDS_NEW, N_UNFREE, RHOW)
+
+print(answer)
+
+
 #FUNCTION 1
 #creates list of all of the n_frees woohoo
 #inputs: data set, list of data points that are either breakpoints, endpoints, or in that unacceptable window
@@ -127,7 +139,7 @@ n_free_win_count <- function(score_list, k_end_old, k_ends_new){
 #calculates the second part of the q algorithm for sub
 #inputs: n_free_list, k_ends_new, k_ends_old
 #rhow --- probability of choosing a random addition instead of our created addition 
-part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new){
+part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   
   #creates the list of n_free points 
   list_of_n_frees = create_n_free_list(data, n_unfree)
@@ -142,3 +154,5 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new){
   
   return(part_2)
 }
+
+
