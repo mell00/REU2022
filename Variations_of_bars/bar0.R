@@ -1,13 +1,14 @@
 #complete BAR - Variation 0 (Random/Random/Random)
 
 #-------Key:
-# k           = breakpoint's x-axis values 
-# time        = integer x-values of the entire data set 
-# interations = number of runs through Metropolis hastings 
-# make        = the proportion (decimal) of the make step to occuring
-  #note: murder porportion is make/n, move is leftover
+# k			= x-axis values of starting breakpoints
+# time		= integer x-values of the entire data set
+# data		= y-values of entire data set
+# interations	= number of runs for sampling with Metropolis-Hastings 
+# make_murder_p	= the combine proportion (decimal) for make and murder steps
+  #note: move proportion is 1 - make_murder_p
 
-bar0 = function(k, time, data, iterations, make){
+bar0 = function(k, time, data, iterations, make_murder_p){
   
   library(MASS)
   
@@ -134,20 +135,21 @@ bar0 = function(k, time, data, iterations, make){
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
 
-  starting_bkpts = length(na.omit(k))+1
-  starting_nfree = n - 5 * length(na.omit(k)) - 6
-  starting_ttl = starting_bkpts + starting_nfree
-  make = make*(starting_nfree/starting_ttl)
-  murder = make*(starting_bkpts/starting_ttl)
+  #getting constants for qs (b_k and d_k in papers)
+  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
+  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
+  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_ttl = starting_bkpts + starting_nfree #total to get percentages
+  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
+  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
+  make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, 0.1))
+  murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, 0.1))
 
   #Metroplis Hastings 
   for(i in 1:iterations){
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
-
-    #getting constants for qs (b_k and d_k in papers)
-    make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, 0.1))
-    murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, 0.1))
 
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
@@ -293,7 +295,7 @@ bar0 = function(k, time, data, iterations, make){
 }
 
 #calling the function
-current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10000, 0.3)
+current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 10000, 0.6)
 hist(current_result$NumBkpts)
 current_result$ProposedSteps
 current_result$AcceptedSteps
