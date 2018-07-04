@@ -1,15 +1,3 @@
-#let's test it 
-DATA_SET = c(1:30)
-K_ENDS_OLD = c(1,15,27,30)
-K_ENDS_NEW =c(1,15,21,27,30)
-N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,67,28,29,30)
-RHOW = .5
-
-answer <- part_two_q_add_score(DATA_SET, K_ENDS_OLD, K_ENDS_NEW, N_UNFREE, RHOW)
-
-answer
-
-
 #FUNCTION 1
 #creates list of all of the n_frees woohoo
 #inputs: data set, list of data points that are either breakpoints, endpoints, or in that unacceptable window
@@ -155,5 +143,16 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   
   return(part_2)
 }
+
+#let's test it 
+DATA_SET = c(1:30)
+K_ENDS_OLD = c(1,15,27,30)
+K_ENDS_NEW =c(1,15,21,27,30)
+N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,67,28,29,30)
+RHOW = .5
+
+answer <- part_two_q_add_score(DATA_SET, K_ENDS_OLD, K_ENDS_NEW, N_UNFREE, RHOW)
+
+answer
 
 
