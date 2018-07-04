@@ -42,7 +42,7 @@ n_free_scores <- function(n_free_list, k_ends_old){
       r = k_ends_old[k_ends_ix]-n_free_list[i] #distance between breakpoint and right neighbor
     }
     else{#if the current element of the k_ends is not the upper bound, move the upper bound up 
-      k_ends_ix = k_ends_ix+1 #I ADDED X TO THESE VARIABLES AND I AM NOT SURE IF THAT WAS RIGHT, IT JUST COULD NOT FIND K_ENDS_I 
+      k_ends_ix = k_ends_ix+1 
     }
     #gives the min and maxes the correct values
     if(r>l){
@@ -63,7 +63,7 @@ n_free_scores <- function(n_free_list, k_ends_old){
 
 #FUNCTION 3
 #calculates the numbers of wins and ties for the added point
-n_free_win_count <- function(score_list, k_end_old, k_ends_new){
+n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
   
   #setting up global variables to use later 
   win_counter = 0
@@ -73,7 +73,7 @@ n_free_win_count <- function(score_list, k_end_old, k_ends_new){
   max_bkpt = 0
   
   #finds what exactly what the added breakpoint is 
-  added_bkpt = setdiff(k_end_old, k_ends_new)
+  added_bkpt = setdiff(k_ends_new, k_ends_old)
   
   #finds location of added break point in the original k_ends
   add_bkpt_birthplace = 0
@@ -119,7 +119,7 @@ n_free_win_count <- function(score_list, k_end_old, k_ends_new){
         tie_counter = tie_counter+0.5 #increase the tie counter by .5 
       }
       else{#the breakpoint loss =( so increaste the loss counter 
-        losses_counter = losses_+1 #im so sorry for your loss 
+        losses_counter = losses_counter +1 #im so sorry for your loss 
       }
     }
   }
@@ -150,8 +150,8 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   
   
   numerator = n_free_win_count(n_free_score_list, k_ends_old, k_ends_new)
-  denomenator = choose(length(n_free_list), 2)
-  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/length(n_free_list)-2)
+  denomenator = choose(length(list_of_n_frees), 2)
+  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)-2))
   
   return(part_2)
 }
