@@ -134,9 +134,10 @@ breakpoint_win_count <- function(k_ends_old, k_ends_new){
 part_two_q_sub_score <- function(k_ends_old, k_ends_new, rhow){
   numerator = breakpoint_win_count(k_ends_old, k_ends_new) 
   denomenator = choose(length(k_ends_old)-2, 2)
-  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/length(k_ends_old)-2)
+  part_2 = (numerator/denomenator)*(1-rhow) + ((rhow)*(1/(length(k_ends_old)-2)))
   return(part_2)
   
 }
 
-part_two_q_sub_score(c(1,30,60,90), c(1,30,90), .3)
+part_two_q_sub_score(c(1,30,44,60,90), c(1,30,60,90), .3)
+
