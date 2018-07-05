@@ -63,20 +63,23 @@ n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
   max_bkpt = 0
   
   #finds what exactly what the added breakpoint is 
-  added_bkpt = setdiff(k_ends_new, k_ends_old)
-  
+  added_bkpt = setdiff(k_ends_old, k_ends_new)
+  print(added_bkpt)
   #finds location of added break point in the original k_ends
   add_bkpt_birthplace = 0
   for(i in 1:length(k_ends_new)){
-    if (k_ends_new[i] == added_bkpt){
+    print(k_ends_new[i])
+    if (k_ends_new[i] == k_ends_new[added_bkpt]){
       add_bkpt_birthplace = i
     }
   }
+  print(add_bkpt_birthplace)
   
   #sets the min and max scores for the added breakpoint 
   left = k_ends_new[add_bkpt_birthplace]-k_ends_new[add_bkpt_birthplace-1]
   right = k_ends_new[add_bkpt_birthplace+1]-k_ends_new[add_bkpt_birthplace]
-  
+  print(left)
+  print(right)
   if(right > left){
     max_bkpt = right
     min_bkpt = left
