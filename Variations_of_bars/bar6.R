@@ -320,16 +320,14 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
   B_0 = smiley #variance-covariance matrix for posterior draw
   
   #getting constants for qs (b_k and d_k in papers)
-  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+  starting_bkpts = ceiling((length(k_ends) - 1)/2) #most probable number of breakpoints based on starting info 
   full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_nfree = ceiling((n - 5 * (length(k_ends)-2) - 6 + overlap)/2) #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
-  make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
-  murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
-  
+  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
+
   #functions for q
   #makes a list of mins and maxes for all of the breakpoints; input is the list of breakpoints and endpoints 
   list_of_scores_sub <- function(k_ends){  

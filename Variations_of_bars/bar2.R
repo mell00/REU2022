@@ -304,11 +304,9 @@ bar2 = function(k, time, data, iterations, make_murder_p, percent){
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
   starting_nfree = ceiling((n - 5 * (length(k_ends)-2) - 6 + overlap)/2) #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
-  make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
-  murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
-  
+  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
+
   #setting up q calcualtion functions
   #creates list of all of the n_frees woohoo
   create_n_free_list_add <- function (data_set, n_not_free_old){
