@@ -53,7 +53,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
   barMake1<-function(k_ends, count){
     
     d = diff(k_ends) #finding the distance between all those breakpoints
-    location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
+    location = rmultinom(1, size = 1, prob = ((d^4)/sum(d^4))^(1/4))
     if( d[location] > 5) {
       min = k_ends[which.max(location)] #lower bound 
       max = k_ends[(which.max(location) + 1)] #upper bound
@@ -233,14 +233,13 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
   
   #getting constants for qs (b_k and d_k in papers)
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  starting_i_q = which(k_ends_new == sum(k_ends) + - sum(k_ends))
-  starting_d = diff(k_ends)
-  starting_nfree = ( ( ( (starting_d[starting_i_q-1])^4  / sum(starting_d)^4) ) * ( 1 / ( starting_d[starting_i_q-1] - 4 ) ) ) #most probable n_free based on starting info
+  starting_d = diff(k_ends) #interval sizes between starting breakpoints
+  starting_nfree = max(starting_d) - 4 #number of free spaces in largest starting interval
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p/2 #*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p/2 #*(starting_bkpts/starting_ttl) #proportion for murder
-  make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
-  murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
+  make = make_murder_p * starting_nfree/starting_ttl #proportion for make
+  murder = make_murder_p * starting_bkpts/starting_ttl #proportion for murder
+  make_k = make
+  murder_k = murder
   
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -250,20 +249,18 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step <= make_k){
-      type = "add" 
+      type = "add"
       a.count = a.count + 1
       count <<- 0 #reset count for failed makes 
       k_ends_new = barMake1(k_ends, 0) #make
       
       #setting up qs for ratio
 	if(k_ends_new[1] != "make failure"){
-      	q1 = murder_k/(length(k_ends_new)-2) #q1 for the add (going to old given new)
+      	q1 = murder_k/(length(k_ends_new)-2)
 
-		i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends)) #index of where old and new sets differ 
-      	d = diff(k_ends) #intervals between breakpoints of old sets 
-      	#going to new given old 
-      	#constant times [(the chosen interval)^4/((sum of all intervals)^4 )][1/(interval-4)]
-      	q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+		i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
+      	d = diff(k_ends)
+      	q2 = make_k * (( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) ))^(1/4)
 	}else{
 		k_ends_new = k_ends
 		q1 = 1
@@ -278,9 +275,9 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       #setting up qs for ratio
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends_new)
-      q1 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+      q1 = make_k * (( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) ))^(1/4)
    
-	    q2 = murder_k/(length(k_ends)-2)
+	q2 = murder_k/(length(k_ends)-2)
       
     } else{
       move_u = runif(1)
@@ -316,21 +313,6 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
 
-    if(is.nan(log(q2)) == TRUE){
-      print(type)
-      print(new_loglik)
-      print(k_ends_new)
-      print(sum(k_ends_new))
-      print(old_loglik)
-      print(k_ends)
-      print(sum(k_ends))
-      print(i_q)
-      print(d)
-      print(-1*delta_bic/2)
-      print(q1)
-      print(q2)
-      print(ratio)
-    }
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
@@ -431,7 +413,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+current_result = bar1(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
 hist(current_result$NumBkpts)
 current_result$ProposedSteps
 current_result$AcceptedSteps
