@@ -250,17 +250,19 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
     if(length(k_ends) < 3 | u_step <= make_k){
-      type = "add"
+      type = "add" 
       a.count = a.count + 1
       count <<- 0 #reset count for failed makes 
       k_ends_new = barMake1(k_ends, 0) #make
       
       #setting up qs for ratio
 	if(k_ends_new[1] != "make failure"){
-      	q1 = murder_k/(length(k_ends_new)-2)
+      	q1 = murder_k/(length(k_ends_new)-2) #q1 for the add (going to old given new)
 
-		i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
-      	d = diff(k_ends)
+		i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends)) #index of where old and new sets differ 
+      	d = diff(k_ends) #intervals between breakpoints of old sets 
+      	#going to new given old 
+      	#constant times [(the chosen interval)^4/((sum of all intervals)^4 )][1/(interval-4)]
       	q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
 	}else{
 		k_ends_new = k_ends
