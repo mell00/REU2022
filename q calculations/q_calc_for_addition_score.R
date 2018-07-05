@@ -31,6 +31,8 @@ n_free_scores <- function(n_free_list, k_ends_old){
     }
     else{#if the current element of the k_ends is not the upper bound, move the upper bound up 
       k_ends_ix = k_ends_ix+1 
+      l = n_free_list[i]-k_ends_old[k_ends_ix-1] #distance between breakpoint and left neighbor
+      r = k_ends_old[k_ends_ix]-n_free_list[i] #distance between breakpoint and right neighbor
     }
     #gives the min and maxes the correct values
     if(r>l){
