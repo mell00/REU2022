@@ -50,27 +50,36 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     return(sum_loglik)
   }
   
-  #interval addition
-barMake1<-function(k_ends, count ){
-
-  d = diff(k_ends) #finding the distance between all those breakpoints
-  location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
-  if( d[location] > 4) {
-    min = k_ends[which.max(location)] #lower bound 
-    max = k_ends[(which.max(location) + 1)] #upper bound
-    new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
-    k_ends_final = sort(c(k_ends, new_bp))
-    return(k_ends_final)
-  } else {
-    if(count < 10) {
-      count = count + 1
-      barMake1(k_ends, count)
+  barMake1<-function(k_ends, count){
+    
+    d = diff(k_ends) #finding the distance between all those breakpoints
+    location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
+    if( d[location] > 5) {
+      min = k_ends[which.max(location)] #lower bound 
+      max = k_ends[(which.max(location) + 1)] #upper bound
+      print(min)
+      print(max)
+      new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
+      k_ends_final = sort(c(k_ends, new_bp))
+      d = k_ends_final 
+      if(min(d) > 5) {
+        return(k_ends_final)
+      } else if (count < 10) {
+        count = count + 1
+        barMake1(k_ends, count)
+      } else {
+        return("make failure")
+      }
     } else {
-      return("make failure")
+      if(count < 10) {
+        count = count + 1
+        barMake1(k_ends, count)
+      } else {
+        return("make failure")
+      }
     }
+    
   }
-
-}
 
   #random make function, this makes a random point 
   barMake0<-function(k_ends, count){
