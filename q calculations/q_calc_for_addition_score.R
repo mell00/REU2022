@@ -138,7 +138,7 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   
   numerator = n_free_win_count(n_free_score_list, k_ends_old, k_ends_new)
   denomenator = choose(length(list_of_n_frees), 2)
-  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)-2))
+  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)))
   
   return(part_2)
 }
