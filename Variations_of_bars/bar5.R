@@ -269,13 +269,12 @@ bar5 = function(k, time, data, iterations, make_murder_p, percent){
 
       #setting up qs for ratio
       if(k_ends_new[1] != "make failure"){
-        
         all_intv = diff(k_ends_new) #finds all of the intervals
         intv_1 = all_intv[-1] #takes the first number off
         intv_2 = all_intv[-length(all_intv)] #takes the last number off
         sum_intv = intv_1 + intv_2 #finds the sums of the adjacent intervals
         i = which(k_ends_new == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of the point that was deleted
-        q1 = make_k*(1/sum_intv[i-1] ) / (sum(sum_intv))
+        q1 = murder*(1/sum_intv[i-1] ) / (sum(sum_intv))
         
         i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
         d = diff(k_ends)
@@ -297,7 +296,7 @@ bar5 = function(k, time, data, iterations, make_murder_p, percent){
       intv_2 = all_intv[-length(all_intv)] #takes the last number off
       sum_intv = intv_1 + intv_2 #finds the sums of the adjacent intervals
       i = which(k_ends == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of the point that was deleted
-      q2 = make_k*(1/sum_intv[i-1] ) / (sum(sum_intv))
+      q2 = murder_k*(1/sum_intv[i-1] ) / (sum(sum_intv))
 
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends_new)

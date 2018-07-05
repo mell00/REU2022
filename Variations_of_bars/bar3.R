@@ -245,12 +245,13 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
       intv_2 = all_intv[-length(all_intv)] #takes the last number off
       sum_intv = intv_1 + intv_2 #finds the sums of the adjacent intervals
       i = which(k_ends_new == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of the point that was deleted
-      q2 = (make_k/sum_intv[i-1] ) / (sum(sum_intv))
-      q1 = murder_k/(length(k_ends_new)-2)
+      q1 = (murder_k/sum_intv[i-1] ) / (sum(sum_intv))
+      
+
       full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-
+      q2 = make_k/n_free
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -261,14 +262,14 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
       full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
+      q1 = make_k/n_free
       
       all_intv = diff(k_ends) #finds all of the intervals
       intv_1 = all_intv[-1] #takes the first number off
       intv_2 = all_intv[-length(all_intv)] #takes the last number off
       sum_intv = intv_1 + intv_2 #finds the sums of the adjacent intervals
       i = which(k_ends == abs(sum(k_ends_new) - sum(k_ends))) #finds the location of the point that was deleted
-      q1 =(make_k/sum_intv[i-1] ) / (sum(sum_intv))
-      q2 = murder_k/(length(k_ends)-2)
+      q2 =(murder_k/sum_intv[i-1] ) / (sum(sum_intv))
       
     } else{
       move_u = runif(1)
