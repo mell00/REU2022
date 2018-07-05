@@ -14,7 +14,7 @@ barMake1<-function(k_ends, count){
     k_ends_final = sort(c(k_ends, new_bp))
     d_check = diff(k_ends_final)
     print(min(d_check))
-    if(min(d_check) > 5) {
+    if(min(d_check) > 3) {
       return(k_ends_final)
     } else if (count < 10) {
       count = count + 1
