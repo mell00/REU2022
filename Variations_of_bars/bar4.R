@@ -64,7 +64,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
         return(k_ends_final) #the old breakpoints + the new breakpoints 
       }
     }else {
-      return(k_ends)
+      return("make failure")
     }
   }
   
@@ -170,7 +170,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
   barMove0<-function(k_ends){
     
     k_ends_less = barMurder0(k_ends) #kills a point
-    count = 0 #reset count for failed makes 
+    count <<- 0 #reset count for failed makes 
     k_ends_final = barMake0(k_ends_less, count) #remakes a point
     return(k_ends_final)
     
@@ -514,13 +514,19 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
       count <<- 0 #reset count for failed makes 
       k_ends_new = barMake0(k_ends, count) #make
       
+	if(k_ends_new[1] != "make failure"){
       #setting up qs for ratio
       q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, murder_k)
       
       full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-      q2 = make_k/n_free
+      q2 = make_k/n_free}
+	else{
+	k_ends_new = k_ends
+	q1 = 1
+	q2 = 1
+	}
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"

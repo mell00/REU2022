@@ -112,7 +112,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
   barMove0<-function(k_ends){
     
     k_ends_less = barMurder0(k_ends) #kills a point
-    count = 0 #reset count for failed makes 
+    count <<- 0 #reset count for failed makes 
     k_ends_final = barMake0(k_ends_less, count) #remakes a point
     return(k_ends_final)
     

@@ -139,7 +139,7 @@ bar2 = function(k, time, data, iterations, make_murder_p, percent){
           count = count + 1
           barMake2(k_ends, .25, count)
         } else {
-          return("make fail")
+          return("make failure")
         }
       }
     }
@@ -179,7 +179,7 @@ bar2 = function(k, time, data, iterations, make_murder_p, percent){
   barMove0<-function(k_ends){
     
     k_ends_less = barMurder0(k_ends) #kills a point
-    count = 0 #reset count for failed makes 
+    count <<- 0 #reset count for failed makes 
     k_ends_final = barMake0(k_ends_less, count) #remakes a point
     return(k_ends_final)
     
@@ -538,7 +538,7 @@ bar2 = function(k, time, data, iterations, make_murder_p, percent){
       count <<- 0 #reset count for failed makes 
       k_ends_new = barMake2(k_ends, .25, count) #make
       
-      if(k_ends_new[1] != "make fail"){
+      if(k_ends_new[1] != "make failure"){
         #setting up qs for ratio
         q1 = murder_k/(length(k_ends_new)-2)
         full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
