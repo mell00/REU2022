@@ -2,7 +2,7 @@
 #creates list of all of the n_frees woohoo
 #inputs: data set, list of data points that are either breakpoints, endpoints, or in that unacceptable window
 
-create_n_free_list <- function (data_set, n_not_free_old){
+create_n_free_list_sub <- function (data_set, n_not_free_old){
   n_free_list = setdiff(data_set, n_not_free_old)
   sort(n_free_list)
   return (n_free_list)
@@ -11,7 +11,7 @@ create_n_free_list <- function (data_set, n_not_free_old){
 
 #FUNCTION 2
 #creates a list of the scores for the n_frees 
-n_free_scores <- function(n_free_list, k_ends_old){
+n_free_scores_sub <- function(n_free_list, k_ends_old){
   
   #sets up global variables
   k_ends_ix = 2 #index of the closest breakpoint/endpoint in k_ends_old
@@ -53,7 +53,7 @@ n_free_scores <- function(n_free_list, k_ends_old){
 
 #FUNCTION 3
 #calculates the numbers of wins and ties for the added point
-n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
+n_free_win_count_sub <- function(score_list, k_ends_old, k_ends_new){
   
   #setting up global variables to use later 
   win_counter = 0
@@ -130,17 +130,17 @@ n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
 #calculates the second part of the q algorithm for sub
 #inputs: n_free_list, k_ends_new, k_ends_old
 #rhow --- probability of choosing a random addition instead of our created addition 
-part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
+part_two_q_add_score_sub <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   
   #creates the list of n_free points 
-  list_of_n_frees = create_n_free_list(data, n_unfree)
+  list_of_n_frees = create_n_free_list_sub(data, n_unfree)
   
   #calculates and creates the scoring list for the n_free points 
-  n_free_score_list = n_free_scores(list_of_n_frees, k_ends_new)
+  n_free_score_list = n_free_scores_sub(list_of_n_frees, k_ends_new)
   
-  numerator = n_free_win_count(n_free_score_list, k_ends_old, k_ends_new)
+  numerator = n_free_win_count_sub(n_free_score_list, k_ends_old, k_ends_new)
   denomenator = choose(length(list_of_n_frees), 2)
-  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)-2))
+  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)))
   
   return(part_2)
 }
@@ -152,7 +152,7 @@ K_ENDS_NEW = c(1,15,27,30)
 N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
 RHOW = .5
 
-answer <- part_two_q_add_score(DATA_SET, N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
+answer <- part_two_q_add_score_sub(DATA_SET, N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
 
 answer
 

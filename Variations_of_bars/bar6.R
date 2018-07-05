@@ -549,10 +549,8 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
       #setting up qs for ratio
       #setting up qs for ratio
       if(k_ends_new[1] != "make failure"){
-        
-        
         q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
-        
+    
         i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
         d = diff(k_ends)
         q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
@@ -572,7 +570,7 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends_new)
       q1 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
-      q2 = murder_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) #changed 
+      q2 = murder_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) 
       
     } else{
       move_u = runif(1)
