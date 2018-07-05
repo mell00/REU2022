@@ -51,22 +51,30 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
   }
   
   #interval addition
-  barMake1<-function(k_ends, count ){
+  barMake1<-function(k_ends, count){
     
     d = diff(k_ends) #finding the distance between all those breakpoints
     location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
-    if( d[location] > 4) {
+    if( d[location] > 5) {
       min = k_ends[which.max(location)] #lower bound 
       max = k_ends[(which.max(location) + 1)] #upper bound
       new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
       k_ends_final = sort(c(k_ends, new_bp))
-      return(k_ends_final)
-    } else {
-      if(count < 11) {
+      d_check = diff(k_ends_final)
+      if(min(d_check) > 2) {
+        return(k_ends_final)
+      } else if (count < 10) {
         count = count + 1
         barMake1(k_ends, count)
       } else {
-        return(k_ends)
+        return("make failure")
+      }
+    } else {
+      if(count < 10) {
+        count = count + 1
+        barMake1(k_ends, count)
+      } else {
+        return("make failure")
       }
     }
     
@@ -504,7 +512,7 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
           tie_counter = tie_counter+0.5 #increase the tie counter by .5 
         }
         else{#the breakpoint loss =( so increaste the loss counter 
-          losses_counter = losses_+1 #im so sorry for your loss 
+          losses_counter = losses_counter+1 #im so sorry for your loss 
         }
       }
     }
@@ -539,10 +547,21 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMake1(k_ends, 0) #make
       
       #setting up qs for ratio
-      i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
-      d = diff(k_ends)
-      q1 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
-      q2 = make_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
+      #setting up qs for ratio
+      if(k_ends_new[1] != "make failure"){
+        
+        
+        q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
+        
+        i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
+        d = diff(k_ends)
+        q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+      }else{
+        k_ends_new = k_ends
+        q1 = 1
+        q2 = 1		
+      }
+      
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -550,10 +569,10 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMurder2(k_ends, 0.25) #murder
       
       #setting up qs for ratio
-      q1 = make_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) #changed
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends_new)
-      q2 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+      q1 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+      q2 = murder_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) #changed 
       
     } else{
       move_u = runif(1)

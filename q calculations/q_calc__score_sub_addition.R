@@ -89,7 +89,7 @@ breakpoint_win_count_add <- function(k_ends_old, k_ends_new){
         tie_counter = tie_counter+0.5 #increase the tie counter by .5 
       }
       else{#the breakpoint loss =( so increaste the loss counter 
-        losses_counter = losses_+1 #im so sorry for your loss 
+        losses_counter = losses_counter+1 #im so sorry for your loss 
       }
     }
   }
