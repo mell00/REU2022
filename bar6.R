@@ -539,14 +539,9 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMake1(k_ends, 0) #make
       
       #setting up qs for ratio
-      #q for the interval based addition
       i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
       d = diff(k_ends)
       q1 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
-      
-      #full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-      #overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      #n_free = n - 5*(length(k_ends)-2) - 6 + overlap
       q2 = make_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
@@ -555,11 +550,7 @@ bar6 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMurder2(k_ends, 0.25) #murder
       
       #setting up qs for ratio
-      #full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-      #overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      #n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       q1 = make_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) #changed
-      
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends_new)
       q2 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
