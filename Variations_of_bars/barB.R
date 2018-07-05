@@ -223,7 +223,7 @@ barJiggle<-function(percent, k_ends, count){
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-	count <<- 0 #reset count for failed makes 
+	    count <<- 0 #reset count for failed makes 
       k_ends_new = barMake0(k_ends, count) #make
 
 	    #setting up qs for ratio
@@ -246,29 +246,28 @@ barJiggle<-function(percent, k_ends, count){
 	    q2 = murder_k/(length(k_ends)-2)
 
     } else{
-	move_u = runif(1)
-	if(move_u > 0.75){
-      type = "move"
-      m.count = m.count + 1
-      k_ends_new = barMove0(k_ends) #move
+	    move_u = runif(1)
+	    if(move_u > 0.75){
+        type = "move"
+        m.count = m.count + 1
+        k_ends_new = barMove0(k_ends) #move
 
-	    #fake qs because they cancel
-	    q1 = 1
-	    q2 = 1
-	}else{
-      type = "jiggle"
-      j.count = j.count + 1
-	    count <<- 0 #resetting failed jiggle attempts
-      k_ends_new = barJiggle(percent, k_ends, count) #move
-	  if(k_ends_new[[1]] == "jiggle failure"){
-		  k_ends_new = k_ends
-	  }
+	      #fake qs because they cancel
+	      q1 = 1
+	      q2 = 1
+	    }else{
+        type = "jiggle"
+        j.count = j.count + 1
+	      count <<- 0 #resetting failed jiggle attempts
+        k_ends_new = barJiggle(percent, k_ends, count) #move
+	      if(k_ends_new[[1]] == "jiggle failure"){
+		    k_ends_new = k_ends
+	      }
 
-	    #fake qs because they cancel
-	    q1 = 1
-	    q2 = 1
-	}
-
+	      #fake qs because they cancel
+	      q1 = 1
+	      q2 = 1
+	    }
     }
     
     new_loglik = fitMetrics(k_ends_new, full_data)
