@@ -252,7 +252,7 @@ barMake1<-function(k_ends, count ){
 	if(k_ends_new[1] != "make failure"){
       	q1 = murder_k/(length(k_ends_new)-2)
 
-		i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+		    i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
       	d = diff(k_ends)
       	q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
 	}else{
@@ -271,7 +271,7 @@ barMake1<-function(k_ends, count ){
       d = diff(k_ends_new)
       q1 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
    
-	q2 = murder_k/(length(k_ends)-2)
+	    q2 = murder_k/(length(k_ends)-2)
       
     } else{
       move_u = runif(1)
@@ -307,21 +307,21 @@ barMake1<-function(k_ends, count ){
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
 
-if(is.nan(log(q2)) == TRUE){
-    print(type)
-    print(new_loglik)
-    print(k_ends_new)
-    print(sum(k_ends_new))
-    print(old_loglik)
-    print(k_ends)
-    print(sum(k_ends))
-    print(i_q)
-    print(d)
-    print(-1*delta_bic/2)
-    print(q1)
-    print(q2)
-    print(ratio)
-}
+    if(is.nan(log(q2)) == TRUE){
+      print(type)
+      print(new_loglik)
+      print(k_ends_new)
+      print(sum(k_ends_new))
+      print(old_loglik)
+      print(k_ends)
+      print(sum(k_ends))
+      print(i_q)
+      print(d)
+      print(-1*delta_bic/2)
+      print(q1)
+      print(q2)
+      print(ratio)
+    }
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
@@ -422,7 +422,7 @@ if(is.nan(log(q2)) == TRUE){
 }
 
 #calling the function
-current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
-hist(current_result$NumBkpts)
-current_result$ProposedSteps
-current_result$AcceptedSteps
+current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.5, 0.02)
+#hist(current_result$NumBkpts)
+#current_result$ProposedSteps
+#current_result$AcceptedSteps
