@@ -258,7 +258,7 @@ barMake1<-function(k_ends, count ){
 	}else{
 		k_ends_new = k_ends
 		q1 = 1
-		q2 = 2		
+		q2 = 1		
 	}
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){

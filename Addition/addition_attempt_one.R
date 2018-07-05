@@ -1,6 +1,6 @@
 #addition attempt one (random point in largest interval)
 
-k_ends_test = c(1,4,7,10,13)
+k_ends_test = c(1, 6, 9, 15, 18, 21, 27, 30, 33, 38, 41, 44, 47, 51, 57, 60, 63, 68, 71, 74, 77, 80, 84, 87, 90)
 k_ends = c(1,30,50,60)
 
 barMake1<-function(k_ends, count){
