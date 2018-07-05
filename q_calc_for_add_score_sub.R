@@ -146,8 +146,8 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
 
 #let's test it 
 DATA_SET = c(1:30)
-K_ENDS_OLD = c(1,15,27,30)
-K_ENDS_NEW =c(1,15,21,27,30)
+K_ENDS_OLD = c(1,15,21,27,30) 
+K_ENDS_NEW = c(1,15,27,30)
 N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
 RHOW = .5
 
