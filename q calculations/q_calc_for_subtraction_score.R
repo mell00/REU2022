@@ -103,7 +103,7 @@ breakpoint_win_count_sub <- function(k_ends_old, k_ends_new){
 #rhow --- probability of choosing a random subtraction instead of our created subtraction 
 part_two_q_sub_score_sub <- function(k_ends_old, k_ends_new, rhow){
   numerator = breakpoint_win_count_sub(k_ends_old, k_ends_new) 
-  denomenator = choose(length(k_ends_old)-2, 2)
+  denomenator = choose( (length(k_ends_old)-2) , 2)
   part_2 = (numerator/denomenator)*(1-rhow) + ((rhow)*(1/(length(k_ends_old)-2)))
   return(part_2)
   
