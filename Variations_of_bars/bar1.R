@@ -60,8 +60,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
       k_ends_final = sort(c(k_ends, new_bp))
       d_check = diff(k_ends_final)
-      print(min(d_check))
-      if(min(d_check) > 5) {
+      if(min(d_check) > 2) {
         return(k_ends_final)
       } else if (count < 10) {
         count = count + 1
@@ -234,9 +233,9 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
   
   #getting constants for qs (b_k and d_k in papers)
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_i_q = which(k_ends_new == sum(k_ends) + - sum(k_ends))
+  starting_d = diff(k_ends)
+  starting_nfree = ( ( ( (starting_d[starting_i_q-1])^4  / sum(starting_d)^4) ) * ( 1 / ( starting_d[starting_i_q-1] - 4 ) ) ) #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
   make = make_murder_p/2 #*(starting_nfree/starting_ttl) #proportion for make
   murder = make_murder_p/2 #*(starting_bkpts/starting_ttl) #proportion for murder
@@ -260,7 +259,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 	if(k_ends_new[1] != "make failure"){
       	q1 = murder_k/(length(k_ends_new)-2)
 
-		    i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
+		i_q = which(k_ends_new == sum(k_ends_new)- sum(k_ends))
       	d = diff(k_ends)
       	q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
 	}else{
@@ -430,7 +429,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.5, 0.02)
-#hist(current_result$NumBkpts)
-#current_result$ProposedSteps
-#current_result$AcceptedSteps
+current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps
