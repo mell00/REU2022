@@ -51,26 +51,27 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
   }
   
   #interval addition
-  barMake1<-function(k_ends, count ){
-    
-    d = diff(k_ends) #finding the distance between all those breakpoints
-    location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
-    if( d[location] > 4) {
-      min = k_ends[which.max(location)] #lower bound 
-      max = k_ends[(which.max(location) + 1)] #upper bound
-      new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
-      k_ends_final = sort(c(k_ends, new_bp))
-      return(k_ends_final)
+barMake1<-function(k_ends, count ){
+
+  d = diff(k_ends) #finding the distance between all those breakpoints
+  location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
+  if( d[location] > 4) {
+    min = k_ends[which.max(location)] #lower bound 
+    max = k_ends[(which.max(location) + 1)] #upper bound
+    new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
+    k_ends_final = sort(c(k_ends, new_bp))
+    return(k_ends_final)
+  } else {
+    if(count < 10) {
+      count = count + 1
+      barMake1(k_ends, count)
     } else {
-      if(count < 11) {
-        count = count + 1
-        barMake1(k_ends, count)
-      } else {
-        return(k_ends)
-      }
+      return("make failure")
     }
-    
   }
+
+}
+
   #random make function, this makes a random point 
   barMake0<-function(k_ends, count){
     
@@ -248,16 +249,17 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMake1(k_ends, 0) #make
       
       #setting up qs for ratio
-      #q for the interval based addition
-      i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
-      d = diff(k_ends)
-      q1 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
-      #q1 = murder_k/(length(k_ends_new)-2)
-      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-      q2 = make_k/n_free
-    print(d[i_q-1])
+	if(k_ends_new[1] != "make failure"){
+      	q1 = murder_k/(length(k_ends_new)-2)
+
+		i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+      	d = diff(k_ends)
+      	q2 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+	}else{
+		k_ends_new = k_ends
+		q1 = 1
+		q2 = 2		
+	}
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -265,15 +267,11 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMurder0(k_ends) #murder
       
       #setting up qs for ratio
-      full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
-      q1 = make_k/n_free
-   
       i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
       d = diff(k_ends_new)
-      q2 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
-      #q2 = murder_k/(length(k_ends)-2)
+      q1 = make_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+   
+	q2 = murder_k/(length(k_ends)-2)
       
     } else{
       move_u = runif(1)
@@ -309,7 +307,22 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
 
-    if(abs(ratio) == Inf){ #safe guard against random models creating infinite ratios
+if(is.nan(log(q2)) == TRUE){
+    print(type)
+    print(new_loglik)
+    print(k_ends_new)
+    print(sum(k_ends_new))
+    print(old_loglik)
+    print(k_ends)
+    print(sum(k_ends))
+    print(i_q)
+    print(d)
+    print(-1*delta_bic/2)
+    print(q1)
+    print(q2)
+    print(ratio)
+}
+    if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
     } else if(ratio > u_ratio) {
@@ -409,7 +422,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
-#hist(current_result$NumBkpts)
-#current_result$ProposedSteps
-#current_result$AcceptedSteps
+current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps
