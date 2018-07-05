@@ -381,7 +381,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
           tie_counter = tie_counter+0.5 #increase the tie counter by .5 
         }
         else{#the breakpoint loss =( so increaste the loss counter 
-          losses_counter = losses_+1 #im so sorry for your loss 
+          losses_counter = losses_counter+1
         }
       }
     }
@@ -482,7 +482,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
           tie_counter = tie_counter+0.5 #increase the tie counter by .5 
         }
         else{#the breakpoint loss =( so increaste the loss counter 
-          losses_counter = losses_+1 #im so sorry for your loss 
+          losses_counter = losses_counter+1 #im so sorry for your loss 
         }
       }
     }
