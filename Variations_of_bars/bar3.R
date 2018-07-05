@@ -216,13 +216,13 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
   B_0 = smiley #variance-covariance matrix for posterior draw
   
   #getting constants for qs (b_k and d_k in papers)
-  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+  starting_bkpts = 1 #due to interval subtraction, only 1 breakpoint is likely to be murdered
   full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
   starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p/2 #*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p/2 #*(starting_bkpts/starting_ttl) #proportion for murder
+  make = make_murder_p *(starting_nfree/starting_ttl) #proportion for make
+  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
   make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
   murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
   
@@ -405,7 +405,7 @@ bar3 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-current_result = bar3(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+current_result = bar3(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
 hist(current_result$NumBkpts)
 current_result$ProposedSteps
 current_result$AcceptedSteps
