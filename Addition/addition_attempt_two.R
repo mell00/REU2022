@@ -9,8 +9,6 @@ barMake2<-function(k_ends, prob_of_doing_random){
   if(u < prob_of_doing_random){
     barMake0(k_ends)
   }else{
-  
-  
 
   #random number generator 
   proposed = sample(1:max(k_ends), 2)
@@ -55,8 +53,6 @@ barMake2<-function(k_ends, prob_of_doing_random){
   } else {
     two = c(small_2[which.max(small_2)][[1]][1], proposed[[2]][1], big_2[which.min(big_2)][[1]][1])
   }
-  
-  
 
   #finding the distance between the points 
   d_one = diff(one)
@@ -88,6 +84,7 @@ barMake2<-function(k_ends, prob_of_doing_random){
   k_ends_final = sort(c(k_ends, new_bp))
   return(k_ends_final)
   }
+  
 }
 
 barMake2(k_ends_test)

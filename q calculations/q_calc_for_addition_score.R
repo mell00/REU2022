@@ -1,15 +1,3 @@
-#let's test it 
-DATA_SET = c(1:30)
-K_ENDS_OLD = c(1,15,27,30)
-K_ENDS_NEW =c(1,15,21,27,30)
-N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,67,28,29,30)
-RHOW = .5
-
-answer <- part_two_q_add_score(DATA_SET, K_ENDS_OLD, K_ENDS_NEW, N_UNFREE, RHOW)
-
-print(answer)
-
-
 #FUNCTION 1
 #creates list of all of the n_frees woohoo
 #inputs: data set, list of data points that are either breakpoints, endpoints, or in that unacceptable window
@@ -42,7 +30,7 @@ n_free_scores <- function(n_free_list, k_ends_old){
       r = k_ends_old[k_ends_ix]-n_free_list[i] #distance between breakpoint and right neighbor
     }
     else{#if the current element of the k_ends is not the upper bound, move the upper bound up 
-      k_ends_i = k_ends_i+1
+      k_ends_ix = k_ends_ix+1 
     }
     #gives the min and maxes the correct values
     if(r>l){
@@ -63,7 +51,7 @@ n_free_scores <- function(n_free_list, k_ends_old){
 
 #FUNCTION 3
 #calculates the numbers of wins and ties for the added point
-n_free_win_count <- function(score_list, k_end_old, k_ends_new){
+n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
   
   #setting up global variables to use later 
   win_counter = 0
@@ -73,7 +61,7 @@ n_free_win_count <- function(score_list, k_end_old, k_ends_new){
   max_bkpt = 0
   
   #finds what exactly what the added breakpoint is 
-  added_bkpt = setdiff(k_ends_old,k_ends_new)
+  added_bkpt = setdiff(k_ends_new, k_ends_old)
   
   #finds location of added break point in the original k_ends
   add_bkpt_birthplace = 0
@@ -86,6 +74,7 @@ n_free_win_count <- function(score_list, k_end_old, k_ends_new){
   #sets the min and max scores for the added breakpoint 
   left = k_ends_new[add_bkpt_birthplace]-k_ends_new[add_bkpt_birthplace-1]
   right = k_ends_new[add_bkpt_birthplace+1]-k_ends_new[add_bkpt_birthplace]
+  
   if(right > left){
     max_bkpt = right
     min_bkpt = left
@@ -118,7 +107,7 @@ n_free_win_count <- function(score_list, k_end_old, k_ends_new){
         tie_counter = tie_counter+0.5 #increase the tie counter by .5 
       }
       else{#the breakpoint loss =( so increaste the loss counter 
-        losses_counter = losses_+1 #im so sorry for your loss 
+        losses_counter = losses_counter +1 #im so sorry for your loss 
       }
     }
   }
@@ -148,11 +137,22 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   n_free_score_list = n_free_scores(list_of_n_frees, k_ends_old)
   
   
-  numerator = n_free_win_count(n_free_score_list, k_end_old, k_ends_new)
-  denomenator = choose(length(n_free_list), 2)
-  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/length(n_free_list)-2)
+  numerator = n_free_win_count(n_free_score_list, k_ends_old, k_ends_new)
+  denomenator = choose(length(list_of_n_frees), 2)
+  part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)-2))
   
   return(part_2)
 }
+
+#let's test it 
+DATA_SET = c(1:30)
+K_ENDS_OLD = c(1,15,27,30)
+K_ENDS_NEW =c(1,15,21,27,30)
+N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
+RHOW = .5
+
+answer <- part_two_q_add_score(DATA_SET, K_ENDS_OLD, K_ENDS_NEW, N_UNFREE, RHOW)
+
+answer
 
 
