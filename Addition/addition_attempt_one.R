@@ -1,10 +1,10 @@
 #addition attempt one (random point in largest interval)
 
-k_ends_test = c(1,50,60)
+k_ends_test = c(1,4,7,10,13)
 k_ends = c(1,30,50,60)
 
-barMake1<-function(k_ends, count ){
-
+barMake1<-function(k_ends, count){
+  
   d = diff(k_ends) #finding the distance between all those breakpoints
   location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
   if( d[location] > 4) {
@@ -14,14 +14,14 @@ barMake1<-function(k_ends, count ){
     k_ends_final = sort(c(k_ends, new_bp))
     return(k_ends_final)
   } else {
-    if(count < 11) {
+    if(count < 10) {
       count = count + 1
       barMake1(k_ends, count)
     } else {
-      return(k_ends)
+      return("make failure")
     }
   }
-
+  
 }
 
-barMake1(k_ends_test, 0)
+new = barMake1(k_ends_test, 0)
