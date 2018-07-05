@@ -315,10 +315,10 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
-      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
     } else if(ratio > u_ratio) {
       k_ends = k_ends_new #new
-      bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(2+1))
+      bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1))
       accept_count = accept_count + 1
       #looking at what type of step is done and accepted
       if(type == "add") {
@@ -332,7 +332,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
       }
     } else {
       k_ends = k_ends #old
-      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(2+1))
+      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
     }
     
     #condensing the data
