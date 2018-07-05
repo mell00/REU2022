@@ -61,7 +61,7 @@ bar5 = function(k, time, data, iterations, make_murder_p, percent){
       new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
       k_ends_final = sort(c(k_ends, new_bp))
       d = k_ends_final 
-      if(min(d) > 3) {
+      if(min(d) > 2) {
         return(k_ends_final)
       } else if (count < 10) {
         count = count + 1
