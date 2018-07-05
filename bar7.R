@@ -56,7 +56,7 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent){
     #allowing for the option of doing a random addition 
     u = runif(1) #random number from 0-1 from uniform distribution
     if(u < prob_of_doing_random){
-      barMake0(k_ends)
+      barMake0(k_ends, 0)
     }else{
       
       #random number generator 
@@ -599,7 +599,7 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent){
       type = "add"
       a.count = a.count + 1
       count <<- 0 #reset count for failed makes 
-      k_ends_new = barMake2(k_ends, .25) #make
+      k_ends_new = barMake2(k_ends, 0.25) #make
       
       #setting up qs for ratio
       q1 = murder_k/(length(k_ends_new)-2)
