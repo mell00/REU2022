@@ -302,10 +302,10 @@ bar2 = function(k, time, data, iterations, make_murder_p, percent){
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
   full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_nfree = ceiling((n - 5 * (length(k_ends)-2) - 6 + overlap)/2) #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
+  make = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+  murder = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
   make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
   murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
   
@@ -694,7 +694,7 @@ bar2 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = bar2(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
-#hist(current_result$NumBkpts)
-#current_result$ProposedSteps
-#current_result$AcceptedSteps
+current_result = bar2(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
+hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps
