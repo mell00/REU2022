@@ -57,12 +57,11 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
     if( d[location] > 5) {
       min = k_ends[which.max(location)] #lower bound 
       max = k_ends[(which.max(location) + 1)] #upper bound
-      print(min)
-      print(max)
       new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
       k_ends_final = sort(c(k_ends, new_bp))
-      d = k_ends_final 
-      if(min(d) > 5) {
+      d_check = diff(k_ends_final)
+      print(min(d_check))
+      if(min(d_check) > 5) {
         return(k_ends_final)
       } else if (count < 10) {
         count = count + 1
