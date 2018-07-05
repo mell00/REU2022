@@ -86,8 +86,12 @@ barMake2<-function(k_ends, prob_of_doing_random, count){
     if(min(d) > 2)  {
       return(k_ends_final)
     } else {
-      count = count + 1
-      barMake2(k_ends, .25, 0)
+      if(count < 10) {
+        count = count + 1
+        barMake2(k_ends, .25, count)
+      } else {
+        return("make fail")
+      }
     }
   }
   

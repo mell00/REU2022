@@ -50,8 +50,7 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent){
     return(sum_loglik)
   }
   
-  #addition based on score
-  barMake2<-function(k_ends, prob_of_doing_random){
+  barMake2<-function(k_ends, prob_of_doing_random, count){
     
     #allowing for the option of doing a random addition 
     u = runif(1) #random number from 0-1 from uniform distribution
@@ -131,10 +130,17 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent){
         new_bp = proposed[1]
       }
       k_ends_final = sort(c(k_ends, new_bp))
-      return(k_ends_final)
+      d = diff(k_ends_final)
+      if(min(d) > 2)  {
+        return(k_ends_final)
+      } else {
+        count = count + 1
+        barMake2(k_ends, .25, count)
+      }
     }
     
   }
+  
   #random make function, this makes a random point 
   barMake0<-function(k_ends, count){
     
