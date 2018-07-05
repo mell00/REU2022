@@ -112,4 +112,5 @@ part_two_q_sub_score_add <- function(k_ends_old, k_ends_new, rhow){
 
 
 
-part_two_q_sub_score(c(1,30,60,90), c(1,30,44,60,90), .3)
+part_two_q_sub_score_add(c(1,30,60,90), c(1,30,44,60,90), .3)
+part_two_q_sub_score_add(k_ends_old, k_ends_new, rhow)
