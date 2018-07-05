@@ -31,6 +31,8 @@ n_free_scores <- function(n_free_list, k_ends_old){
     }
     else{#if the current element of the k_ends is not the upper bound, move the upper bound up 
       k_ends_ix = k_ends_ix+1 
+      l = n_free_list[i]-k_ends_old[k_ends_ix-1] #distance between breakpoint and left neighbor
+      r = k_ends_old[k_ends_ix]-n_free_list[i] #distance between breakpoint and right neighbor
     }
     #gives the min and maxes the correct values
     if(r>l){
@@ -62,7 +64,6 @@ n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
   
   #finds what exactly what the added breakpoint is 
   added_bkpt = setdiff(k_ends_new, k_ends_old)
-  
   #finds location of added break point in the original k_ends
   add_bkpt_birthplace = 0
   for(i in 1:length(k_ends_new)){
@@ -74,7 +75,6 @@ n_free_win_count <- function(score_list, k_ends_old, k_ends_new){
   #sets the min and max scores for the added breakpoint 
   left = k_ends_new[add_bkpt_birthplace]-k_ends_new[add_bkpt_birthplace-1]
   right = k_ends_new[add_bkpt_birthplace+1]-k_ends_new[add_bkpt_birthplace]
-  
   if(right > left){
     max_bkpt = right
     min_bkpt = left
@@ -136,7 +136,6 @@ part_two_q_add_score <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
   #calculates and creates the scoring list for the n_free points 
   n_free_score_list = n_free_scores(list_of_n_frees, k_ends_old)
   
-  
   numerator = n_free_win_count(n_free_score_list, k_ends_old, k_ends_new)
   denomenator = choose(length(list_of_n_frees), 2)
   part_2 = (numerator/denomenator)*(1-rhow)+(rhow)*(1/(length(list_of_n_frees)-2))
@@ -151,7 +150,7 @@ K_ENDS_NEW =c(1,15,21,27,30)
 N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
 RHOW = .5
 
-answer <- part_two_q_add_score(DATA_SET, K_ENDS_OLD, K_ENDS_NEW, N_UNFREE, RHOW)
+answer <- part_two_q_add_score(DATA_SET, N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
 
 answer
 
