@@ -1,4 +1,4 @@
-#complete BAR - Variation B (Random/score/Move+Jiggle)
+#complete BAR - Variation B (interval/score/Move+Jiggle)
 
 #-------Key:
 # k			= x-axis values of starting breakpoints
@@ -9,7 +9,7 @@
 #note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
 
-bar4 = function(k, time, data, iterations, make_murder_p, percent){
+bar6 = function(k, time, data, iterations, make_murder_p, percent){
   
   library(MASS)
   
@@ -48,6 +48,28 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
       }
     }
     return(sum_loglik)
+  }
+  
+  #interval addition
+  barMake1<-function(k_ends, count ){
+    
+    d = diff(k_ends) #finding the distance between all those breakpoints
+    location = rmultinom(1, size = 1, prob = (d^4)/sum(d^4))
+    if( d[location] > 4) {
+      min = k_ends[which.max(location)] #lower bound 
+      max = k_ends[(which.max(location) + 1)] #upper bound
+      new_bp = sample((min+3):(max-3), 1) #selecting a random number in the correct interval
+      k_ends_final = sort(c(k_ends, new_bp))
+      return(k_ends_final)
+    } else {
+      if(count < 11) {
+        count = count + 1
+        barMake1(k_ends, count)
+      } else {
+        return(k_ends)
+      }
+    }
+    
   }
   
   #random make function, this makes a random point 
@@ -514,13 +536,17 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
       type = "add"
       a.count = a.count + 1
       count <<- 0 #reset count for failed makes 
-      k_ends_new = barMake0(k_ends, count) #make
+      k_ends_new = barMake1(k_ends, 0) #make
       
       #setting up qs for ratio
-      q1 = murder_k/(length(k_ends_new)-2)
-      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+      #q for the interval based addition
+      i_q = which(k_ends_new == sum(k_ends_new) - sum(k_ends))
+      d = diff(k_ends)
+      q1 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
+      
+      #full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+      #overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+      #n_free = n - 5*(length(k_ends)-2) - 6 + overlap
       q2 = make_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
@@ -529,12 +555,14 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
       k_ends_new = barMurder2(k_ends, 0.25) #murder
       
       #setting up qs for ratio
-      full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
-      
+      #full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
+      #overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+      #n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       q1 = make_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) #changed
-      q2 = murder_k/(length(k_ends)-2)
+      
+      i_q = which(k_ends == sum(k_ends) - sum(k_ends_new) )
+      d = diff(k_ends_new)
+      q2 = murder_k * ( ( ( (d[i_q-1])^4  / sum(d)^4) ) * ( 1 / ( d[i_q-1] - 4 ) ) )
       
     } else{
       move_u = runif(1)
@@ -670,7 +698,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = bar4(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
+#current_result = bar6(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps
