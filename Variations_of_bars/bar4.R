@@ -521,19 +521,19 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
       full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-      q2 = make_k * part_two_q_sub_score_add(k_ends_old, k_ends_new, make_k)
+      q2 = make_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
-      k_ends_new = barMurder2(k_ends) #murder
+      k_ends_new = barMurder2(k_ends, 0.25) #murder
       
       #setting up qs for ratio
       full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
       overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
       n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
       
-      q1 = make_k * part_two_q_sub_score_sub(k_ends_old, k_ends_new, make_k) #changed
+      q1 = make_k * part_two_q_sub_score_sub(k_ends, k_ends_new, make_k) #changed
       q2 = murder_k/(length(k_ends)-2)
       
     } else{
@@ -670,7 +670,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-#current_result = barB(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.6, 0.03)
+#current_result = bar4(c(30,60), test_data_2[,1], test_data_2[,2], 200, 0.6, 0.03)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps
