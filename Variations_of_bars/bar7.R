@@ -134,8 +134,12 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent){
       if(min(d) > 2)  {
         return(k_ends_final)
       } else {
-        count = count + 1
-        barMake2(k_ends, .25, count)
+        if(count < 10) {
+          count = count + 1
+          barMake2(k_ends, .25, count)
+        } else {
+          return("make fail")
+        }
       }
     }
     
@@ -824,14 +828,18 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent){
       type = "add"
       a.count = a.count + 1
       count <<- 0 #reset count for failed makes 
-      k_ends_new = barMake2(k_ends, 0.25) #make
+      k_ends_new = barMake2(k_ends, 0.25, count) #make
       
-      #setting up qs for ratio
-      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-      
-      q2 = make_k * part_two_q_add_score_add( c(1:n), unique(sort(full_set)), k_ends, k_ends_new, make_k)
-      q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
-      
+      if(k_ends_new[1] != "make fail"){
+        #setting up qs for ratio
+        full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+        q2 = make_k * part_two_q_add_score_add( c(1:n), unique(sort(full_set)), k_ends, k_ends_new, make_k)
+        q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, make_k)
+      } else {
+        k_ends_new = k_ends
+        q1 = 1
+        q2 = 1	
+      }
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
