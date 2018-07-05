@@ -258,11 +258,11 @@ barJiggle<-function(percent, k_ends, count){
 	}else{
       type = "jiggle"
       j.count = j.count + 1
-	count <<- 0 #resetting failed jiggle attempts
+	    count <<- 0 #resetting failed jiggle attempts
       k_ends_new = barJiggle(percent, k_ends, count) #move
-	if(k_ends_new[[1]] == "jiggle failure"){
-		k_ends_new = k_ends
-	}
+	  if(k_ends_new[[1]] == "jiggle failure"){
+		  k_ends_new = k_ends
+	  }
 
 	    #fake qs because they cancel
 	    q1 = 1
