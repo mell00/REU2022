@@ -169,7 +169,7 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent, lambda){
     
     #allowing for the option of doing a random addition 
     u = runif(1) #random number from 0-1 from uniform distribution
-    if(u < prob_of_doing_random){
+    if(length(k_ends) < 4 | u < prob_of_doing_random){
       barMurder0(k_ends)
     }else{
       
@@ -538,8 +538,8 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent, lambda){
         min = r
       }
       scores_list = c(scores_list, min, max, recursive=T)  #adds the mins and the maxes to the score_list
-      return(scores_list) 
     } 
+    return(scores_list) 
   }
   
   #calculates the number of wins and ties for a given breakpoint that might be subtracted 
@@ -902,7 +902,7 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent, lambda){
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)+0.00000000001) - log(q2*dpois(length(k_ends)-2,lambda)+0.00000000001))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
@@ -1007,9 +1007,9 @@ bar7 = function(k, time, data, iterations, make_murder_p, percent, lambda){
 }
 
 #calling the function
-break_p = breakpoints(test_data_0_a[,2] ~ test_data_0_a[,1], breaks = 5, h = 0.1) 
-starting_breakpoints = break_p$breakpoints
-current_result = bar7(starting_breakpoints, test_data_0_a[,1], test_data_0_a[,2], 200, 0.5, 0.02, 1)
+#break_p = breakpoints(test_data_0_a[,2] ~ test_data_0_a[,1], breaks = 5, h = 0.1) 
+#starting_breakpoints = break_p$breakpoints
+#current_result = bar7(starting_breakpoints, test_data_0_a[,1], test_data_0_a[,2], 200, 0.5, 0.02, 1)
 #current_result = bar7(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02, 1)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
