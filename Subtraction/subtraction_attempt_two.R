@@ -6,7 +6,7 @@ barMurder2 <- function(k_ends, prob_of_doing_random){
   
   #allowing for the option of doing a random addition 
   u = runif(1) #random number from 0-1 from uniform distribution
-  if(u < prob_of_doing_random){
+  if(length(k_ends) < 4 | u < prob_of_doing_random){
     barMurder0(k_ends)
   }else{
   
