@@ -675,7 +675,9 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
 }
 
 #calling the function
-#current_result = bar4(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02, 1)
+break_p = breakpoints(test_data_0_a[,2] ~ test_data_0_a[,1], breaks = 5, h = 0.1) 
+starting_breakpoints = break_p$breakpoints
+current_result = bar4(starting_breakpoints, test_data_0_a[,1], test_data_0_a[,2], 200, 0.5, 0.02, 1)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps

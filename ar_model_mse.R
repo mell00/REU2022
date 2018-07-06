@@ -74,8 +74,8 @@ fitMetrics<-function(k_ends, full_data){
   
   #get and sum log likelihood for regressions of all intervals
   if(length(k_ends) < 3 ){
-    model = arima(full_data[,2], method = "ML", order = c(1,0,0))
-    sum_loglik = model$loglik
+    model = arima(full_data[,2], method = "ML", order = c(1,0,0)) #AR model on the full dataset
+    sum_loglik = model$loglik #finding the log likeihoods on the full dataset 
   }else{
     for(i in 2:length(k_ends)) {
       if(i == 2){
@@ -83,14 +83,14 @@ fitMetrics<-function(k_ends, full_data){
         x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
         y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
         data = data.frame(x_values, y_values) #re-making this into a dataframe 
-        model = arima(y_values, method = "ML", order = c(1,0,0)) #running a lm on the selected interval 
+        model = arima(y_values, method = "ML", order = c(1,0,0)) #running a AR on the selected interval 
         sum_loglik = sum_loglik + model$loglik #the logLik looks the log likelyhood (relates to both SSR and MLE)
       }else if(i > 2){
         min = k_ends[i-1]
         x_values = full_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
         y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
         data = data.frame(x_values, y_values) #re-making this into a dataframe 
-        model = arima(y_values, method = "ML", order = c(1,0,0)) #running a lm on the selected interval 
+        model = arima(y_values, method = "ML", order = c(1,0,0)) #running a AR on the selected interval 
         sum_loglik = sum_loglik + model$loglik #the logLik looks the log likelyhood (relates to both SSR and MLE)
       }
     }
@@ -98,4 +98,4 @@ fitMetrics<-function(k_ends, full_data){
   return(sum_loglik)
 }
 
-fitMetrics(c(1,30,60,90), test_data_2)
+fitMetrics(c(1,30,60,90), test_data_2) #test call
