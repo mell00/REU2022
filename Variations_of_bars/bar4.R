@@ -74,7 +74,7 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
     
     #allowing for the option of doing a random addition 
     u = runif(1) #random number from 0-1 from uniform distribution
-    if(u < prob_of_doing_random){
+    if(length(k_ends) < 4 | u < prob_of_doing_random){
       barMurder0(k_ends)
     }else{
       
@@ -296,9 +296,9 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
   starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make_k = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
-  murder_k = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
-
+  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
+  
   #functions for q
   #makes a list of mins and maxes for all of the breakpoints; input is the list of breakpoints and endpoints 
   list_of_scores_sub <- function(k_ends){  
@@ -444,8 +444,8 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
         min = r
       }
       scores_list = c(scores_list, min, max, recursive=T)  #adds the mins and the maxes to the score_list
-      return(scores_list) 
     } 
+    return(scores_list) 
   }
   
   #calculates the number of wins and ties for a given breakpoint that might be subtracted 
@@ -539,19 +539,19 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
       count <<- 0 #reset count for failed makes 
       k_ends_new = barMake0(k_ends, count) #make
       
-	if(k_ends_new[1] != "make failure"){
-      #setting up qs for ratio
-      q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, murder_k)
-      
-      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-      q2 = make_k/n_free}
-	else{
-	k_ends_new = k_ends
-	q1 = 1
-	q2 = 1
-	}
+      if(k_ends_new[1] != "make failure"){
+        #setting up qs for ratio
+        q1 = murder_k * part_two_q_sub_score_add(k_ends, k_ends_new, murder_k)
+        
+        full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+        overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+        n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+        q2 = make_k/n_free}
+      else{
+        k_ends_new = k_ends
+        q1 = 1
+        q2 = 1
+      }
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
@@ -598,7 +598,14 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
-    
+
+    print(type)
+    print(k_ends)
+    print(k_ends_new)
+    print(delta_bic)
+    print(q1)
+    print(q2)
+    print(ratio)
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
@@ -699,9 +706,9 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
 }
 
 #calling the function
-break_p = breakpoints(test_data_0_a[,2] ~ test_data_0_a[,1], breaks = 5, h = 0.1) 
-starting_breakpoints = break_p$breakpoints
-current_result = bar4(starting_breakpoints, test_data_0_a[,1], test_data_0_a[,2], 200, 0.5, 0.02, 1)
+#break_p = breakpoints(test_data_0_b[,2] ~ test_data_0_b[,1], breaks = 5, h = 0.1) 
+#starting_breakpoints = break_p$breakpoints
+#current_result = bar4(starting_breakpoints, test_data_0_b[,1], test_data_0_b[,2], 3000, 0.5, 0.02, 1)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps
