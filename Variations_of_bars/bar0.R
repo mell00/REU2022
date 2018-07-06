@@ -8,8 +8,9 @@
 # make_murder_p	= the combine proportion (decimal) for make and murder steps
   #note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
+# lambda		= for Poisson distribution of breakpoint prior
 
-bar0 = function(k, time, data, iterations, make_murder_p, percent){
+bar0 = function(k, time, data, iterations, make_murder_p, percent, lambda){
   
   library(MASS)
   
@@ -208,10 +209,8 @@ barJiggle<-function(percent, k_ends, count){
   overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
   starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p*(starting_nfree/starting_ttl) #proportion for make
-  murder = make_murder_p *(starting_bkpts/starting_ttl) #proportion for murder
-  make_k = make #* min(1, dpois(length(k_ends)-1, 0.1)/dpois(length(k_ends)-2, .5))
-  murder_k = murder #* min(1, dpois(length(k_ends)-2, 0.1)/dpois(length(k_ends)-1, .5))
+  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
 
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -279,7 +278,7 @@ barJiggle<-function(percent, k_ends, count){
     new_loglik = fitMetrics(k_ends_new, full_data)
 
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    ratio = (-1*delta_bic/2) + (log(q1) - log(q2))
+    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
 
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
@@ -385,7 +384,7 @@ barJiggle<-function(percent, k_ends, count){
 }
 
 #calling the function
-#current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.6, 0.03)
+#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02, lambda)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps

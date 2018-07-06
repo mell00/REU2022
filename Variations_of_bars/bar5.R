@@ -8,8 +8,9 @@
 # make_murder_p	= the combine proportion (decimal) for make and murder steps
 #note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
+# lambda		= for Poisson distribution for breakpoint prior
 
-bar5 = function(k, time, data, iterations, make_murder_p, percent){
+bar5 = function(k, time, data, iterations, make_murder_p, percent, lambda){
   
   library(MASS)
   
@@ -248,10 +249,8 @@ bar5 = function(k, time, data, iterations, make_murder_p, percent){
   starting_d = diff(k_ends) #interval sizes between starting breakpoints
   starting_nfree = max(starting_d) - 4 #number of free spaces in largest starting interval
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make = make_murder_p * starting_nfree/starting_ttl #proportion for make
-  murder = make_murder_p * starting_bkpts/starting_ttl #proportion for murder
-  make_k = make
-  murder_k = murder
+  make_k = make_murder_p * starting_nfree/starting_ttl #proportion for make
+  murder_k = make_murder_p * starting_bkpts/starting_ttl #proportion for murder
 
   #Metroplis Hastings 
   for(i in 1:iterations){
@@ -331,7 +330,7 @@ bar5 = function(k, time, data, iterations, make_murder_p, percent){
     new_loglik = fitMetrics(k_ends_new, full_data)
     
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    ratio = (-1*delta_bic/2) + (log(q1) - log(q2))
+    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
@@ -436,7 +435,7 @@ bar5 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-current_result = bar5(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
-hist(current_result$NumBkpts)
-current_result$ProposedSteps
-current_result$AcceptedSteps
+#current_result = bar5(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02, 1)
+#hist(current_result$NumBkpts)
+#current_result$ProposedSteps
+#current_result$AcceptedSteps

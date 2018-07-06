@@ -11,10 +11,11 @@ save_name = "TestList.RData" #edit here !!! (format: "bar#_data#.RData")
 make = 0.3
 percent = 0.03
 col_num = 3 #number of columns needed for Proposed/AcceptedSteps (either 3 or 4)
+lambda = 1
 
 #Step 4 - run simulation
 
-simulation = function(data_fun, runs, iterations, current_bar, make, percent){
+simulation = function(data_fun, runs, iterations, current_bar, make, percent, lambda){
 
 	#initializing storage for returns from all BAR runs
 	current_list = list()
@@ -36,7 +37,7 @@ simulation = function(data_fun, runs, iterations, current_bar, make, percent){
 		current_data = data_fun() 
 		break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 5, h = 0.1) 
 		starting_breakpoints = break_p$breakpoints
-		current_result = current_bar(starting_breakpoints, current_data[,1], current_data[,2], iterations, make, percent)
+		current_result = current_bar(starting_breakpoints, current_data[,1], current_data[,2], iterations, make, percent, lambda)
 		current_list[[1]] = c(current_list[[1]], current_result$AcceptRate[[1]], recursive = TRUE)
 		current_list[[2]] = rbind(current_list[[2]], current_result$ProposedSteps)
 		current_list[[3]] = rbind(current_list[[3]], current_result$AcceptedSteps)
