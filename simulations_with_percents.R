@@ -52,7 +52,7 @@ simulation = function(data_fun, runs, iterations, current_bar, make, percent, la
 	return(current_list)
 }
 
-sim_list = simulation(data_fun, runs, iterations, current_bar, make, percent)
+sim_list = simulation(data_fun, runs, iterations, current_bar, make, percent, lambda)
 
 #Step 5 - clean up and define final version of $Breakpoints from simulation results
 
