@@ -9,7 +9,7 @@
   #note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
 
-barB = function(k, time, data, iterations, make_murder_p, percent){
+bar0 = function(k, time, data, iterations, make_murder_p, percent){
   
   library(MASS)
   
@@ -380,11 +380,12 @@ barJiggle<-function(percent, k_ends, count){
   final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts)
   names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts")
   
+  
   return(final_list)
 }
 
 #calling the function
-#current_result = barB(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.6, 0.03)
+#current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.6, 0.03)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps
