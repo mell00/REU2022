@@ -594,18 +594,11 @@ bar4 = function(k, time, data, iterations, make_murder_p, percent, lambda){
     new_loglik = fitMetrics(k_ends_new, full_data)
     
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)+0.00000000001) - log(q2*dpois(length(k_ends)-2,lambda)+0.00000000001))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
 
-    print(type)
-    print(k_ends)
-    print(k_ends_new)
-    print(delta_bic)
-    print(q1)
-    print(q2)
-    print(ratio)
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends = k_ends #old
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
