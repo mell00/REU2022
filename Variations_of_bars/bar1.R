@@ -413,7 +413,7 @@ bar1 = function(k, time, data, iterations, make_murder_p, percent){
 }
 
 #calling the function
-current_result = bar1(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02)
-hist(current_result$NumBkpts)
-current_result$ProposedSteps
-current_result$AcceptedSteps
+#current_result = bar1(c(30,60), test_data_2[,1], test_data_2[,2], 500, 0.5, 0.02)
+#hist(current_result$NumBkpts)
+#current_result$ProposedSteps
+#current_result$AcceptedSteps
