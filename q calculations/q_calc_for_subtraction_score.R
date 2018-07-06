@@ -14,7 +14,7 @@ list_of_scores_sub <- function(k_ends){
     
     if(i == 1){ #first breakpoint has an endpoint as a neighbor
       l = k_no_ends[i] - k_ends[i] #distance between breakpoint and left endpoint
-      r = k_no_ends[i+1] - k_no_ends[i] #distance between breakpoint and right neighbor
+      r = k_ends[i+1] - k_no_ends[i] #distance between breakpoint and right neighbor
     }
     else if (i == length(k_no_ends)){#last breakpoint has an endpoint as a neighbor
       l = k_no_ends[i] - k_no_ends[i-1]#distance between breakpoint and left neighbor
@@ -104,11 +104,15 @@ breakpoint_win_count_sub <- function(k_ends_old, k_ends_new){
 part_two_q_sub_score_sub <- function(k_ends_old, k_ends_new, rhow){
   numerator = breakpoint_win_count_sub(k_ends_old, k_ends_new) 
   denomenator = choose( (length(k_ends_old)-2) , 2)
-  part_2 = (numerator/denomenator)*(1-rhow) + ((rhow)*(1/(length(k_ends_old)-2)))
+  if(denomenator == 0 ){
+    part_2 = (0)*(1-rhow) + ((rhow)*(1/(length(k_ends_old)-2)))
+  } else {
+    part_2 = (numerator/denomenator)*(1-rhow) + ((rhow)*(1/(length(k_ends_old)-2)))
+  }
   return(part_2)
   
 }
 
-part_two_q_sub_score_sub(c(1,30,44,60,90), c(1,30,60,90), .3)
+part_two_q_sub_score_sub(c(1,30,90), c(1,90), .3)
 part_two_q_sub_score_sub(k_ends_old, k_ends_new, rhow)
 
