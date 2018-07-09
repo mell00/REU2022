@@ -1,17 +1,4 @@
 #analysis data obtained from move simulations
-barB_data0a = readRDS("barB_data0a.RData")
-barB_data0b = readRDS("barB_data0b.RData")
-barB_data1 = readRDS("barB_data1.RData")
-barB_data2 = readRDS("barB_data2.RData")
-barB_data3 = readRDS("barB_data3.RData")
-barB_data4 = readRDS("barB_data4.RData")
-barB_data5 = readRDS("barB_data5.RData")
-barB_data6 = readRDS("barB_data6.RData")
-barB_data7 = readRDS("barB_data7.RData")
-barB_data8 = readRDS("barB_data8.RData")
-barB_data9 = readRDS("barB_data9.RData")
-barB_data10 = readRDS("barB_data10.RData")
-
 bar0_data0a = readRDS("bar0_data0a.RData")
 bar0_data0b = readRDS("bar0_data0b.RData")
 bar0_data1 = readRDS("bar0_data1.RData")
@@ -128,467 +115,6 @@ bar8_data7 = readRDS("bar8_data7.RData")
 bar8_data8 = readRDS("bar8_data8.RData")
 bar8_data9 = readRDS("bar8_data9.RData")
 bar8_data10 = readRDS("bar8_data10.RData")
-
-
-
-
-
-x = c(1:2500)
-y.low = .6
-y.high = 1.5
-
-par(mfrow=c(3,3))
-plot(x, bar0_data0a$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data0a$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data1$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-
-par(mfrow=c(3,3))
-plot(x, bar0_data2$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 16
-y.high = 33
-par(mfrow=c(3,3))
-plot(x, bar0_data3$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data3$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data4$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data5$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data5$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data6$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data6$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data7$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data7$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data8$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data8$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data9$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data9$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-par(mfrow=c(3,3))
-plot(x, bar0_data10$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-
-fit.1 = lm(bar0_data0a$MSE[1]$`current_result$MSE[, 1]`~x)
-plot(x, bar0_data1$MSE[1]$`current_result$MSE[, 1]`, main = 1, ylab="MSE", xlab="Time")
-abline(lm(bar0_data0a$MSE[1]$`current_result$MSE[, 1]`~(x)^2) ,col="red",lwd=2)
-lines(lowess(x,bar0_data0a$MSE[1]$`current_result$MSE[, 1]`), col="blue",lwd=2)
-lines(smooth.spline(x,bar0_data0a$MSE[1]$`current_result$MSE[, 1]`), col="green", lwd=2)
-smoothed25 <- predict(loess(bar0_data0a$MSE[1]$`current_result$MSE[, 1]`~x , data=bar0_data0a, span=0.25)) 
-lines(smoothed25, x=x, col="orange", lwd=3)
-
-#----------------------------BAR A--------------------------------#
-x = c(1:3000)
-y.low = .6
-y.high = 1.5
-
-#Data 0a
-par(mfrow=c(3,3))
-plot(x, barA_data0a$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data0a$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 1
-par(mfrow=c(3,3))
-plot(x, barA_data1$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 2
-par(mfrow=c(3,3))
-plot(x, barA_data2$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 16
-y.high = 33
-#Data 3
-par(mfrow=c(3,3))
-plot(x, barA_data3$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data3$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 4
-par(mfrow=c(3,3))
-plot(x, barA_data4$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 5
-par(mfrow=c(3,3))
-plot(x, barA_data5$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data5$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 6
-par(mfrow=c(3,3))
-plot(x, barA_data6$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data6$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 7
-par(mfrow=c(3,3))
-plot(x, barA_data7$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data7$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 8
-par(mfrow=c(3,3))
-plot(x, barA_data8$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data8$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 9
-par(mfrow=c(3,3))
-plot(x, barA_data9$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data9$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 10
-par(mfrow=c(3,3))
-plot(x, barA_data10$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#-------------------------------------BAR B ---------------------------------#
-x = c(1:2500)
-y.low = .6
-y.high = 1.5
-
-#Data 0a
-par(mfrow=c(3,3))
-plot(x, barB_data0a$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data0a$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 1
-par(mfrow=c(3,3))
-plot(x, barB_data1$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 2
-par(mfrow=c(3,3))
-plot(x, barB_data2$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 3
-par(mfrow=c(3,3))
-plot(x, bar8_data3$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data3$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 20
-y.high = 100
-#Data 4
-par(mfrow=c(3,3))
-plot(x, bar8_data4$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data4$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 5
-par(mfrow=c(3,3))
-plot(x, barB_data5$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data5$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 6
-par(mfrow=c(3,3))
-plot(x, barB_data6$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data6$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#Data 7
-y.low = 0
-y.high = 2
-par(mfrow=c(3,3))
-plot(x, barB_data7$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data7$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 0
-y.high = 3
-#Data 8
-par(mfrow=c(3,3))
-plot(x, barB_data8$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data8$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 5
-y.high = 20
-#Data 9
-par(mfrow=c(3,3))
-plot(x, barB_data9$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data9$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 3
-y.high = 17
-#Data 10
-par(mfrow=c(3,3))
-plot(x, bar8_data10$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar8_data10$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
 
 
 
@@ -1094,4 +620,276 @@ points(x_time, avgbar8-sdbar8*2, col="pink", cex = 1, pch=16)
 for(i in 0:10) {
   lines(c(i,i),c(avgbar8[i+1]-sdbar8[i+1]*2,avgbar8[i+1]+sdbar8[i+1]*2), col="pink",lty=2)
 }
+
+#-------------------------------each dataset--------------------------#
+plot(NULL, ylim=c(0,5), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 0a")
+points(0,avgbar0[1],  col="red", cex = 1, pch=16)
+points(1,avgbar1[1],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[1],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[1],  col="green", cex = 1, pch=16)
+points(4,avgbar4[1],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[1],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[1],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[1],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[1],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[1]-sdbar0[1]*2,avgbar0[1]+sdbar0[1]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[1]-sdbar1[1]*2,avgbar1[1]+sdbar1[1]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[1]-sdbar2[1]*2,avgbar2[1]+sdbar2[1]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[1]-sdbar3[1]*2,avgbar3[1]+sdbar3[1]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[1]-sdbar4[1]*2,avgbar4[1]+sdbar4[1]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[1]-sdbar5[1]*2,avgbar5[1]+sdbar5[1]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[1]-sdbar6[1]*2,avgbar6[1]+sdbar6[1]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[1]-sdbar7[1]*2,avgbar7[1]+sdbar7[1]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[1]-sdbar8[1]*2,avgbar8[1]+sdbar8[1]*2), col="pink",lty=1)
+
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 1")
+points(0,avgbar0[2],  col="red", cex = 1, pch=16)
+points(1,avgbar1[2],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[2],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[2],  col="green", cex = 1, pch=16)
+points(4,avgbar4[2],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[2],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[2],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[2],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[2],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[2]-sdbar0[2]*2,avgbar0[2]+sdbar0[2]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[2]-sdbar1[2]*2,avgbar1[2]+sdbar1[2]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[2]-sdbar2[2]*2,avgbar2[2]+sdbar2[2]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[2]-sdbar3[2]*2,avgbar3[2]+sdbar3[2]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[2]-sdbar4[2]*2,avgbar4[2]+sdbar4[2]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[2]-sdbar5[2]*2,avgbar5[2]+sdbar5[2]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[2]-sdbar6[2]*2,avgbar6[2]+sdbar6[2]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[2]-sdbar7[2]*2,avgbar7[2]+sdbar7[2]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[2]-sdbar8[2]*2,avgbar8[2]+sdbar8[2]*2), col="pink",lty=1)
+
+par(mfrow=c(3,3))
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 2")
+points(0,avgbar0[3],  col="red", cex = 1, pch=16)
+points(1,avgbar1[3],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[3],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[3],  col="green", cex = 1, pch=16)
+points(4,avgbar4[3],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[3],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[3],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[3],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[3],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[3]-sdbar0[3]*2,avgbar0[3]+sdbar0[3]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[3]-sdbar1[3]*2,avgbar1[3]+sdbar1[3]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[3]-sdbar2[3]*2,avgbar2[3]+sdbar2[3]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[3]-sdbar3[3]*2,avgbar3[3]+sdbar3[3]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[3]-sdbar4[3]*2,avgbar4[3]+sdbar4[3]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[3]-sdbar5[3]*2,avgbar5[3]+sdbar5[3]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[3]-sdbar6[3]*2,avgbar6[3]+sdbar6[3]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[3]-sdbar7[3]*2,avgbar7[3]+sdbar7[3]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[3]-sdbar8[3]*2,avgbar8[3]+sdbar8[3]*2), col="pink",lty=1)
+
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 3")
+points(0,avgbar0[4],  col="red", cex = 1, pch=16)
+points(1,avgbar1[4],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[4],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[4],  col="green", cex = 1, pch=16)
+points(4,avgbar4[4],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[4],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[4],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[4],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[4],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[4]-sdbar0[4]*2,avgbar0[4]+sdbar0[4]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[4]-sdbar1[4]*2,avgbar1[4]+sdbar1[4]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[4]-sdbar2[4]*2,avgbar2[4]+sdbar2[4]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[4]-sdbar3[4]*2,avgbar3[4]+sdbar3[4]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[4]-sdbar4[4]*2,avgbar4[4]+sdbar4[4]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[4]-sdbar5[4]*2,avgbar5[4]+sdbar5[4]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[4]-sdbar6[4]*2,avgbar6[4]+sdbar6[4]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[4]-sdbar7[4]*2,avgbar7[4]+sdbar7[4]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[4]-sdbar8[4]*2,avgbar8[4]+sdbar8[4]*2), col="pink",lty=1)
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 4")
+points(0,avgbar0[5],  col="red", cex = 1, pch=16)
+points(1,avgbar1[5],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[5],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[5],  col="green", cex = 1, pch=16)
+points(4,avgbar4[5],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[5],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[5],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[5],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[5],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[5]-sdbar0[5]*2,avgbar0[5]+sdbar0[5]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[5]-sdbar1[5]*2,avgbar1[5]+sdbar1[5]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[5]-sdbar2[5]*2,avgbar2[5]+sdbar2[5]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[5]-sdbar3[5]*2,avgbar3[5]+sdbar3[5]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[5]-sdbar4[5]*2,avgbar4[5]+sdbar4[5]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[5]-sdbar5[5]*2,avgbar5[5]+sdbar5[5]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[5]-sdbar6[5]*2,avgbar6[5]+sdbar6[5]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[5]-sdbar7[5]*2,avgbar7[5]+sdbar7[5]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[5]-sdbar8[5]*2,avgbar8[5]+sdbar8[5]*2), col="pink",lty=1)
+
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Datasets 5")
+points(0,avgbar0[6],  col="red", cex = 1, pch=16)
+points(1,avgbar1[6],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[6],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[6],  col="green", cex = 1, pch=16)
+points(4,avgbar4[6],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[6],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[6],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[6],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[6],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[6]-sdbar0[6]*2,avgbar0[6]+sdbar0[6]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[6]-sdbar1[6]*2,avgbar1[6]+sdbar1[6]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[6]-sdbar2[6]*2,avgbar2[6]+sdbar2[6]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[6]-sdbar3[6]*2,avgbar3[6]+sdbar3[6]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[6]-sdbar4[6]*2,avgbar4[6]+sdbar4[6]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[6]-sdbar5[6]*2,avgbar5[6]+sdbar5[6]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[6]-sdbar6[6]*2,avgbar6[6]+sdbar6[6]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[6]-sdbar7[6]*2,avgbar7[6]+sdbar7[6]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[6]-sdbar8[6]*2,avgbar8[6]+sdbar8[6]*2), col="pink",lty=1)
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 6")
+points(0,avgbar0[7],  col="red", cex = 1, pch=16)
+points(1,avgbar1[7],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[7],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[7],  col="green", cex = 1, pch=16)
+points(4,avgbar4[7],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[7],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[7],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[7],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[7],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[7]-sdbar0[7]*2,avgbar0[7]+sdbar0[7]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[7]-sdbar1[7]*2,avgbar1[7]+sdbar1[7]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[7]-sdbar2[7]*2,avgbar2[7]+sdbar2[7]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[7]-sdbar3[7]*2,avgbar3[7]+sdbar3[7]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[7]-sdbar4[7]*2,avgbar4[7]+sdbar4[7]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[7]-sdbar5[7]*2,avgbar5[7]+sdbar5[7]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[7]-sdbar6[7]*2,avgbar6[7]+sdbar6[7]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[7]-sdbar7[7]*2,avgbar7[7]+sdbar7[7]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[7]-sdbar8[7]*2,avgbar8[7]+sdbar8[7]*2), col="pink",lty=1)
+
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 7")
+points(0,avgbar0[8],  col="red", cex = 1, pch=16)
+points(1,avgbar1[8],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[8],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[8],  col="green", cex = 1, pch=16)
+points(4,avgbar4[8],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[8],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[8],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[8],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[8],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[8]-sdbar0[8]*2,avgbar0[8]+sdbar0[8]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[8]-sdbar1[8]*2,avgbar1[8]+sdbar1[8]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[8]-sdbar2[8]*2,avgbar2[8]+sdbar2[8]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[8]-sdbar3[8]*2,avgbar3[8]+sdbar3[8]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[8]-sdbar4[8]*2,avgbar4[8]+sdbar4[8]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[8]-sdbar5[8]*2,avgbar5[8]+sdbar5[8]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[8]-sdbar6[8]*2,avgbar6[8]+sdbar6[8]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[8]-sdbar7[8]*2,avgbar7[8]+sdbar7[8]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[8]-sdbar8[8]*2,avgbar8[8]+sdbar8[8]*2), col="pink",lty=1)
+
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 8")
+points(0,avgbar0[9],  col="red", cex = 1, pch=16)
+points(1,avgbar1[9],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[9],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[9],  col="green", cex = 1, pch=16)
+points(4,avgbar4[9],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[9],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[9],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[9],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[9],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[9]-sdbar0[9]*2,avgbar0[9]+sdbar0[9]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[9]-sdbar1[9]*2,avgbar1[9]+sdbar1[9]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[9]-sdbar2[9]*2,avgbar2[9]+sdbar2[9]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[9]-sdbar3[9]*2,avgbar3[9]+sdbar3[9]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[9]-sdbar4[9]*2,avgbar4[9]+sdbar4[9]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[9]-sdbar5[9]*2,avgbar5[9]+sdbar5[9]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[9]-sdbar6[9]*2,avgbar6[9]+sdbar6[9]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[9]-sdbar7[9]*2,avgbar7[9]+sdbar7[9]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[9]-sdbar8[9]*2,avgbar8[9]+sdbar8[9]*2), col="pink",lty=1)
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 9")
+points(0,avgbar0[10],  col="red", cex = 1, pch=16)
+points(1,avgbar1[10],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[10],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[10],  col="green", cex = 1, pch=16)
+points(4,avgbar4[10],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[10],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[10],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[10],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[10],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[10]-sdbar0[10]*2,avgbar0[10]+sdbar0[10]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[10]-sdbar1[10]*2,avgbar1[10]+sdbar1[10]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[10]-sdbar2[10]*2,avgbar2[10]+sdbar2[10]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[10]-sdbar3[10]*2,avgbar3[10]+sdbar3[10]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[10]-sdbar4[10]*2,avgbar4[10]+sdbar4[10]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[10]-sdbar5[10]*2,avgbar5[10]+sdbar5[10]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[10]-sdbar6[10]*2,avgbar6[10]+sdbar6[10]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[10]-sdbar7[10]*2,avgbar7[10]+sdbar7[10]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[10]-sdbar8[10]*2,avgbar8[10]+sdbar8[10]*2), col="pink",lty=1)
+
+plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 10")
+points(0,avgbar0[11],  col="red", cex = 1, pch=16)
+points(1,avgbar1[11],  col="orange", cex = 1, pch=16)
+points(2,avgbar2[11],  col="yellow2", cex = 1, pch=16)
+points(3,avgbar3[11],  col="green", cex = 1, pch=16)
+points(4,avgbar4[11],  col="green2", cex = 1, pch=16)
+points(5,avgbar5[11],  col="lightblue", cex = 1, pch=16)
+points(6,avgbar6[11],  col="blue", cex = 1, pch=16)
+points(7,avgbar7[11],  col="purple", cex = 1, pch=16)
+points(8,avgbar8[11],  col="pink", cex = 1, pch=16)
+lines(c(0,0),c(avgbar0[11]-sdbar0[11]*2,avgbar0[11]+sdbar0[11]*2), col="red",lty=1)
+lines(c(1,1),c(avgbar1[11]-sdbar1[11]*2,avgbar1[11]+sdbar1[11]*2), col="orange",lty=1)
+lines(c(2,2),c(avgbar2[11]-sdbar2[11]*2,avgbar2[11]+sdbar2[11]*2), col="yellow2",lty=1)
+lines(c(3,3),c(avgbar3[11]-sdbar3[11]*2,avgbar3[11]+sdbar3[11]*2), col="green",lty=1)
+lines(c(4,4),c(avgbar4[11]-sdbar4[11]*2,avgbar4[11]+sdbar4[11]*2), col="green2",lty=1)
+lines(c(5,5),c(avgbar5[11]-sdbar5[11]*2,avgbar5[11]+sdbar5[11]*2), col="lightblue",lty=1)
+lines(c(6,6),c(avgbar6[11]-sdbar6[11]*2,avgbar6[11]+sdbar6[11]*2), col="blue",lty=1)
+lines(c(7,7),c(avgbar7[11]-sdbar7[11]*2,avgbar7[11]+sdbar7[11]*2), col="purple",lty=1)
+lines(c(8,8),c(avgbar8[11]-sdbar8[11]*2,avgbar8[11]+sdbar8[11]*2), col="pink",lty=1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
