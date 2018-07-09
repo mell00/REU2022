@@ -3,7 +3,7 @@ temp_data = temp_data[-c(1,2,3,4),]
 temp_data[,1] = as.numeric(temp_data[,1])
 temp_data[,2] = as.numeric(as.character(temp_data[,2]))
 
-temp_bkpts = breakpoints(temp_data[,2]~temp_data[,1], h=0.05, breaks=10)
+#temp_bkpts = breakpoints(temp_data[,2]~temp_data[,1], h=0.05, breaks=10)
 
 #temp_results = barB(temp_bkpts$breakpoints, temp_data[,1], temp_data[,2], 2500, 0.5, 0.02)
 #hist(temp_results$NumBkpts)
