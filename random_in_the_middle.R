@@ -14,5 +14,5 @@ random_in_the_middle<-function(x_values){
   return(my_first_breakpoint)
 }
 
-data_set = c(1:100)
+data_set = c(1:103)
 random_in_the_middle(data_set)

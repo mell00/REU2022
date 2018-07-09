@@ -108,11 +108,11 @@ part_two_q_add_score_add <- function(data, n_unfree, k_ends_old, k_ends_new, rho
 }
 
 #let's test it 
-DATA_SET = c(1:30)
-K_ENDS_OLD = c(1,15,27,30)
-K_ENDS_NEW =c(1,15,21,27,30)
-N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
-RHOW = .5
+DATA_SET = c(1:15)
+K_ENDS_OLD = c(1,5,15)
+K_ENDS_NEW =c(1,5,9,15)
+N_UNFREE = c(8,9,10,11,12)
+RHOW = .25
 
 answer <- part_two_q_add_score_add(DATA_SET, N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
 
