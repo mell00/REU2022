@@ -1249,5 +1249,5 @@ lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
 legend(7.5, 5, legend=c("bar4","bar6","bar7"),
        col=c("green3" ,"blue","purple"), lty=1:1, cex=.5)
 
-
+par(mfrow=c(1,1))
 
