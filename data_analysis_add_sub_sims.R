@@ -770,29 +770,104 @@ m6bar0 = 0
 m7bar0 = 0
 m8bar0 = 0
 m9bar0 = 0
-m10barA = 0
-m0abarA = 0
-m1barA = 0
-m2barA = 0
-m3barA = 0
-m4barA = 0
-m5barA = 0
-m6barA = 0
-m7barA = 0
-m8barA = 0
-m9barA = 0
-m10barA = 0
-m0abarB = 0
-m1barB = 0
-m2barB = 0
-m3barB = 0
-m4barB = 0
-m5barB = 0
-m6barB = 0
-m7barB = 0
-m8barB = 0
-m9barB = 0
-m10barB = 0
+
+m0abar1 = 0
+m1bar1 = 0
+m2bar1 = 0
+m3bar1 = 0
+m4bar1 = 0
+m5bar1 = 0
+m6bar1 = 0
+m7bar1 = 0
+m8bar1 = 0
+m9bar1 = 0
+m10bar1 = 0
+
+m0abar2 = 0
+m1bar2 = 0
+m2bar2 = 0
+m3bar2 = 0
+m4bar2 = 0
+m5bar2 = 0
+m6bar2 = 0
+m7bar2 = 0
+m8bar2 = 0
+m9bar2 = 0
+m10bar2 = 0
+
+m0abar3 = 0
+m1bar3 = 0
+m2bar3 = 0
+m3bar3 = 0
+m4bar3 = 0
+m5bar3 = 0
+m6bar3 = 0
+m7bar3 = 0
+m8bar3 = 0
+m9bar3 = 0
+m10bar3 = 0
+
+m0abar4 = 0
+m1bar4 = 0
+m2bar4 = 0
+m3bar4 = 0
+m4bar4 = 0
+m5bar4 = 0
+m6bar4 = 0
+m7bar4 = 0
+m8bar4 = 0
+m9bar4 = 0
+m10bar4 = 0
+
+m0abar5 = 0
+m1bar5 = 0
+m2bar5 = 0
+m3bar5 = 0
+m4bar5 = 0
+m5bar5 = 0
+m6bar5 = 0
+m7bar5 = 0
+m8bar5 = 0
+m9bar5 = 0
+m10bar5 = 0
+
+m0abar6 = 0
+m1bar6 = 0
+m2bar6 = 0
+m3bar6 = 0
+m4bar6 = 0
+m5bar6 = 0
+m6bar6 = 0
+m7bar6 = 0
+m8bar6 = 0
+m9bar6 = 0
+m10bar6 = 0
+
+m0abar7 = 0
+m1bar7 = 0
+m2bar7 = 0
+m3bar7 = 0
+m4bar7 = 0
+m5bar7 = 0
+m6bar7 = 0
+m7bar7 = 0
+m8bar7 = 0
+m9bar7 = 0
+m10bar7 = 0
+
+m0abar8 = 0
+m1bar8 = 0
+m2bar8 = 0
+m3bar8 = 0
+m4bar8 = 0
+m5bar8 = 0
+m6bar8 = 0
+m7bar8 = 0
+m8bar8 = 0
+m9bar8 = 0
+m10bar8 = 0
+
+
 for(i in 1:9) {
   avg0 = mean(bar0_data0a$MSE[[i]])
   m0abar0 =+ avg0
@@ -819,196 +894,360 @@ for(i in 1:9) {
 }
 
 for(i in 1:9) {
-  avg0 = mean(barA_data0a$MSE[[i]])
-  m0abarA =+   avg0
-  avg1 = mean(barA_data1$MSE[[i]])
-  m1barA =+   avg1
-  avg2 = mean(barA_data2$MSE[[i]])
-  m2barA =+   avg2
-  avg3 = mean(barA_data3$MSE[[i]])
-  m3barA =+   avg3
-  avg4 = mean(barA_data4$MSE[[i]])
-  m4barA =+   avg4
-  avg5 = mean(barA_data5$MSE[[i]])
-  m5barA =+   avg5
-  avg6 = mean(barA_data6$MSE[[i]])
-  m6barA =+   avg6
-  avg7 = mean(barA_data7$MSE[[i]])
-  m7barA =+   avg7
-  avg8 = mean(barA_data8$MSE[[i]])
-  m8barA =+   avg8
-  avg9 = mean(barA_data9$MSE[[i]])
-  m9barA =+   avg9
-  avg10 = mean(barA_data10$MSE[[i]])
-  m10barA =+   avg10
+  avg0 = mean(bar1_data0a$MSE[[i]])
+  m0abar1 =+   avg0
+  avg1 = mean(bar1_data1$MSE[[i]])
+  m1bar1 =+   avg1
+  avg2 = mean(bar1_data2$MSE[[i]])
+  m2bar1 =+   avg2
+  avg3 = mean(bar1_data3$MSE[[i]])
+  m3bar1 =+   avg3
+  avg4 = mean(bar1_data4$MSE[[i]])
+  m4bar1 =+   avg4
+  avg5 = mean(bar1_data5$MSE[[i]])
+  m5bar1 =+   avg5
+  avg6 = mean(bar1_data6$MSE[[i]])
+  m6bar1 =+   avg6
+  avg7 = mean(bar1_data7$MSE[[i]])
+  m7bar1 =+   avg7
+  avg8 = mean(bar1_data8$MSE[[i]])
+  m8bar1 =+   avg8
+  avg9 = mean(bar1_data9$MSE[[i]])
+  m9bar1 =+   avg9
+  avg10 = mean(bar1_data10$MSE[[i]])
+  m10bar1 =+   avg10
 }
 
 for(i in 1:9) {
-  avg0 = mean(barB_data0a$MSE[[i]])
-  m0abarB =+   avg0
-  avg1 = mean(barB_data1$MSE[[i]])
-  m1barB =+   avg1
-  avg2 = mean(barB_data2$MSE[[i]])
-  m2barB =+   avg2
-  avg3 = mean(barB_data3$MSE[[i]])
-  m3barB =+   avg3
-  avg4 = mean(barB_data4$MSE[[i]])
-  m4barB =+   avg4
-  avg5 = mean(barB_data5$MSE[[i]])
-  m5barB =+   avg5
-  avg6 = mean(barB_data6$MSE[[i]])
-  m6barB =+   avg6
-  avg7 = mean(barB_data7$MSE[[i]])
-  m7barB =+   avg7
-  avg8 = mean(barB_data8$MSE[[i]])
-  m8barB =+   avg8
-  avg9 = mean(barB_data9$MSE[[i]])
-  m9barB =+   avg9
-  avg10 = mean(barB_data10$MSE[[i]])
-  m10barB =+   avg10
+  avg0 = mean(bar2_data0a$MSE[[i]])
+  m0abar2 =+   avg0
+  avg1 = mean(bar2_data1$MSE[[i]])
+  m1bar2 =+   avg1
+  avg2 = mean(bar2_data2$MSE[[i]])
+  m2bar2 =+   avg2
+  avg3 = mean(bar2_data3$MSE[[i]])
+  m3bar2 =+   avg3
+  avg4 = mean(bar2_data4$MSE[[i]])
+  m4bar2 =+   avg4
+  avg5 = mean(bar2_data5$MSE[[i]])
+  m5bar2 =+   avg5
+  avg6 = mean(bar2_data6$MSE[[i]])
+  m6bar2 =+   avg6
+  avg7 = mean(bar2_data7$MSE[[i]])
+  m7bar2 =+   avg7
+  avg8 = mean(bar2_data8$MSE[[i]])
+  m8bar2 =+   avg8
+  avg9 = mean(bar2_data9$MSE[[i]])
+  m9bar2 =+   avg9
+  avg10 = mean(bar2_data10$MSE[[i]])
+  m10bar2 =+   avg10
 }
 
-avgbar0 = c(m0abar0 / 9, m1bar0 / 9, m2bar0 / 9, m3bar0 / 9 , m4bar0 / 9, m5bar0 / 9, m6bar0 / 9, m7bar0 / 9, 
-            m8bar0 / 9, m9bar0 / 9, m10barA /9)
-avgbarA = c(m0abarA / 9, m1barA / 9, m2barA / 9, m3barA / 9, m4barA / 9,
-            m5barA / 9, m6barA / 9, m7barA / 9, m8barA / 9, m9barA / 9, m10barA / 9)
-avgbarB = c(m0abarB / 9, m1barB / 9, m2barB / 9, m3barB / 9, m4barB / 9, m5barB / 9, 
-            m6barB / 9, m7barB / 9, m8barB / 9, m9barB /9, m10barB / 9 )
+for(i in 1:9) {
+  avg0 = mean(bar3_data0a$MSE[[i]])
+  m0abar3 =+   avg0
+  avg1 = mean(bar3_data1$MSE[[i]])
+  m1bar3 =+   avg1
+  avg2 = mean(bar3_data2$MSE[[i]])
+  m2bar3 =+   avg2
+  avg3 = mean(bar3_data3$MSE[[i]])
+  m3bar3 =+   avg3
+  avg4 = mean(bar3_data4$MSE[[i]])
+  m4bar3 =+   avg4
+  avg5 = mean(bar3_data5$MSE[[i]])
+  m5bar3 =+   avg5
+  avg6 = mean(bar3_data6$MSE[[i]])
+  m6bar3 =+   avg6
+  avg7 = mean(bar3_data7$MSE[[i]])
+  m7bar3 =+   avg7
+  avg8 = mean(bar3_data8$MSE[[i]])
+  m8bar3 =+   avg8
+  avg9 = mean(bar3_data9$MSE[[i]])
+  m9bar3 =+   avg9
+  avg10 = mean(bar3_data10$MSE[[i]])
+  m10bar3 =+   avg10
+}
 
+for(i in 1:9) {
+  avg0 = mean(bar4_data0a$MSE[[i]])
+  m0abar4 =+   avg0
+  avg1 = mean(bar4_data1$MSE[[i]])
+  m1bar4 =+   avg1
+  avg2 = mean(bar4_data2$MSE[[i]])
+  m2bar4 =+   avg2
+  avg3 = mean(bar4_data3$MSE[[i]])
+  m3bar4 =+   avg3
+  avg4 = mean(bar4_data4$MSE[[i]])
+  m4bar4 =+   avg4
+  avg5 = mean(bar4_data5$MSE[[i]])
+  m5bar4 =+   avg5
+  avg6 = mean(bar4_data6$MSE[[i]])
+  m6bar4 =+   avg6
+  avg7 = mean(bar4_data7$MSE[[i]])
+  m7bar4 =+   avg7
+  avg8 = mean(bar4_data8$MSE[[i]])
+  m8bar4 =+   avg8
+  avg9 = mean(bar4_data9$MSE[[i]])
+  m9bar4 =+   avg9
+  avg10 = mean(bar4_data10$MSE[[i]])
+  m10bar4 =+   avg10
+}
+
+for(i in 1:9) {
+  avg0 = mean(bar5_data0a$MSE[[i]])
+  m0abar5 =+   avg0
+  avg1 = mean(bar5_data1$MSE[[i]])
+  m1bar5 =+   avg1
+  avg2 = mean(bar5_data2$MSE[[i]])
+  m2bar5 =+   avg2
+  avg3 = mean(bar5_data3$MSE[[i]])
+  m3bar5 =+   avg3
+  avg4 = mean(bar5_data4$MSE[[i]])
+  m4bar5 =+   avg4
+  avg5 = mean(bar5_data5$MSE[[i]])
+  m5bar5 =+   avg5
+  avg6 = mean(bar5_data6$MSE[[i]])
+  m6bar5 =+   avg6
+  avg7 = mean(bar5_data7$MSE[[i]])
+  m7bar5 =+   avg7
+  avg8 = mean(bar5_data8$MSE[[i]])
+  m8bar5 =+   avg8
+  avg9 = mean(bar5_data9$MSE[[i]])
+  m9bar5 =+   avg9
+  avg10 = mean(bar5_data10$MSE[[i]])
+  m10bar5 =+   avg10
+}
+
+for(i in 1:9) {
+  avg0 = mean(bar6_data0a$MSE[[i]])
+  m0abar6 =+   avg0
+  avg1 = mean(bar6_data1$MSE[[i]])
+  m1bar6 =+   avg1
+  avg2 = mean(bar6_data2$MSE[[i]])
+  m2bar6 =+   avg2
+  avg3 = mean(bar6_data3$MSE[[i]])
+  m3bar6 =+   avg3
+  avg4 = mean(bar6_data4$MSE[[i]])
+  m4bar6 =+   avg4
+  avg5 = mean(bar6_data5$MSE[[i]])
+  m5bar6 =+   avg5
+  avg6 = mean(bar6_data6$MSE[[i]])
+  m6bar6 =+   avg6
+  avg7 = mean(bar6_data7$MSE[[i]])
+  m7bar6 =+   avg7
+  avg8 = mean(bar6_data8$MSE[[i]])
+  m8bar6 =+   avg8
+  avg9 = mean(bar6_data9$MSE[[i]])
+  m9bar6 =+   avg9
+  avg10 = mean(bar6_data10$MSE[[i]])
+  m10bar6 =+   avg10
+}
+for(i in 1:9) {
+  avg0 = mean(bar7_data0a$MSE[[i]])
+  m0abar7 =+   avg0
+  avg1 = mean(bar7_data1$MSE[[i]])
+  m1bar7 =+   avg1
+  avg2 = mean(bar7_data2$MSE[[i]])
+  m2bar7 =+   avg2
+  avg3 = mean(bar7_data3$MSE[[i]])
+  m3bar7 =+   avg3
+  avg4 = mean(bar7_data4$MSE[[i]])
+  m4bar7 =+   avg4
+  avg5 = mean(bar7_data5$MSE[[i]])
+  m5bar7 =+   avg5
+  avg6 = mean(bar7_data6$MSE[[i]])
+  m6bar7 =+   avg6
+  avg7 = mean(bar7_data7$MSE[[i]])
+  m7bar7 =+   avg7
+  avg8 = mean(bar7_data8$MSE[[i]])
+  m8bar7 =+   avg8
+  avg9 = mean(bar7_data9$MSE[[i]])
+  m9bar7 =+   avg9
+  avg10 = mean(bar7_data10$MSE[[i]])
+  m10bar7 =+   avg10
+}
+
+for(i in 1:9) {
+  avg0 = mean(bar8_data0a$MSE[[i]])
+  m0abar8 =+   avg0
+  avg1 = mean(bar8_data1$MSE[[i]])
+  m1bar8 =+   avg1
+  avg2 = mean(bar8_data2$MSE[[i]])
+  m2bar8 =+   avg2
+  avg3 = mean(bar8_data3$MSE[[i]])
+  m3bar8 =+   avg3
+  avg4 = mean(bar8_data4$MSE[[i]])
+  m4bar8 =+   avg4
+  avg5 = mean(bar8_data5$MSE[[i]])
+  m5bar8 =+   avg5
+  avg6 = mean(bar8_data6$MSE[[i]])
+  m6bar8 =+   avg6
+  avg7 = mean(bar8_data7$MSE[[i]])
+  m7bar8 =+   avg7
+  avg8 = mean(bar8_data8$MSE[[i]])
+  m8bar8 =+   avg8
+  avg9 = mean(bar8_data9$MSE[[i]])
+  m9bar8 =+   avg9
+  avg10 = mean(bar8_data10$MSE[[i]])
+  m10bar8 =+   avg10
+}
+
+
+
+avgbar0 = c(m0abar0 / 9, m1bar0 / 9, m2bar0 / 9, m3bar0 / 9 , m4bar0 / 9, m5bar0 / 9, 
+            m6bar0 / 9, m7bar0 / 9, m8bar0 / 9, m9bar0 / 9, m10bar0 /9)
+avgbar1 = c(m0abar1 / 9, m1bar1 / 9, m2bar1 / 9, m3bar1 / 9, m4bar1 / 9, m5bar1 / 9, 
+            m6bar1 / 9, m7bar1 / 9, m8bar1 / 9, m9bar1 / 9, m10bar1 / 9)
+avgbar2 = c(m0abar2 / 9, m1bar2 / 9, m2bar2 / 9, m3bar2 / 9, m4bar2 / 9, m5bar2 / 9, 
+            m6bar2 / 9, m7bar2 / 9, m8bar2 / 9, m9bar2 / 9, m10bar2 / 9)
+avgbar3 = c(m0abar3 / 9, m1bar3 / 9, m2bar3 / 9, m3bar3 / 9, m4bar3 / 9, m5bar3 / 9, 
+            m6bar3 / 9, m7bar3 / 9, m8bar3 / 9, m9bar3 / 9, m10bar3 / 9)
+avgbar4 = c(m0abar4 / 9, m1bar4 / 9, m2bar4 / 9, m3bar4 / 9, m4bar4 / 9, m5bar4 / 9, 
+            m6bar4 / 9, m7bar4 / 9, m8bar4 / 9, m9bar4 / 9, m10bar4 / 9)
+avgbar5 = c(m0abar5 / 9, m1bar5 / 9, m2bar5 / 9, m3bar5 / 9, m4bar5 / 9, m5bar5 / 9, 
+            m6bar5 / 9, m7bar5 / 9, m8bar5 / 9, m9bar5 / 9, m10bar5 / 9)
+avgbar6 = c(m0abar6 / 9, m1bar6 / 9, m2bar6 / 9, m3bar6 / 9, m4bar6 / 9, m5bar6 / 9, 
+            m6bar6 / 9, m7bar6 / 9, m8bar6 / 9, m9bar6 / 9, m10bar6 / 9)
+avgbar7 = c(m0abar7 / 9, m1bar7 / 9, m2bar7 / 9, m3bar7 / 9, m4bar7 / 9, m5bar7 / 9, 
+            m6bar7 / 9, m7bar7 / 9, m8bar7 / 9, m9bar7 / 9, m10bar7 / 9)
+avgbar8 = c(m0abar8 / 9, m1bar8 / 9, m2bar8 / 9, m3bar8 / 9, m4bar8 / 9, m5bar8 / 9, 
+            m6bar8 / 9, m7bar8 / 9, m8bar8 / 9, m9bar8 / 9, m10bar8 / 9)
+
+
+#all!
 x_time = c(0:10)
 plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE over all Datasets", col="red", ylim=c(0,5), cex = 1.5, pch=16)
 lines(c(0,10),c(mean(avgbar0),mean(avgbar0)) , col="red")
-points(x_time, avgbarA, col="blue", cex = 1.5, pch=16)
-lines(c(0,10),c(mean(avgbarA),mean(avgbarA)) , col="blue")
-points(x_time, avgbarB, col="green", cex = 1.5, pch=16)
-lines(c(0,10),c(mean(avgbarB),mean(avgbarB)) , col="green")
-legend(7.5, 4.5, legend=c("bar0", "barA", "barB"),
-       col=c("red", "blue", "green"), lty=1:1, cex=1)
+points(x_time, avgbar1, col="orange", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar1),mean(avgbar1)) , col="orange")
+points(x_time, avgbar2, col="yellow2", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar2),mean(avgbar2)) , col="yellow2")
+points(x_time, avgbar3, col="green", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar3),mean(avgbar3)) , col="green")
+points(x_time, avgbar4, col="green3", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar4),mean(avgbar4)) , col="green3")
+points(x_time, avgbar5, col="lightblue", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar5),mean(avgbar5)) , col="lightblue")
+points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar6),mean(avgbar6)) , col="blue")
+points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar7),mean(avgbar7)) , col="purple")
+points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
+lines(c(0,10),c(mean(avgbar8),mean(avgbar8)) , col="pink")
+legend(8.5, 5, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+       col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.5)
+
+
+#median
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE over all Datasets", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
+points(x_time, avgbar1, col="orange", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
+points(x_time, avgbar2, col="yellow2", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
+points(x_time, avgbar3, col="green", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar3),median(avgbar3)) , col="green")
+points(x_time, avgbar4, col="green3", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
+points(x_time, avgbar5, col="lightblue", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
+points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
+points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
+points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
+legend(8.5, 5, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+       col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.5)
+
+
+#median
+plot(NULL, ylim=c(0.1,.15), xlim=c(0,10), xlab="DataSet Number", ylab="Median MSE", main="Median MSE over all Datasets")
+lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
+lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
+lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
+lines(c(0,10),c(median(avgbar3),median(avgbar3)) , col="green")
+lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
+lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
+lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
+lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
+lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
+legend(8.5, .15, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+       col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.6)
 
 
 
-#------------------------------------BIC mean-----------------------------#
-mBIC0abar0 = 0
-mBIC1bar0 = 0
-mBIC2bar0 = 0
-mBIC3bar0 = 0
-mBIC4bar0 = 0
-mBIC5bar0 = 0
-mBIC6bar0 = 0
-mBIC7bar0 = 0
-mBIC8bar0 = 0
-mBIC9bar0 = 0
-mBIC10barA = 0
-mBIC0abarA = 0
-mBIC1barA = 0
-mBIC2barA = 0
-mBIC3barA = 0
-mBIC4barA = 0
-mBIC5barA = 0
-mBIC6barA = 0
-mBIC7barA = 0
-mBIC8barA = 0
-mBIC9barA = 0
-mBIC10barA = 0
-mBIC0abarB = 0
-mBIC1barB = 0
-mBIC2barB = 0
-mBIC3barB = 0
-mBIC4barB = 0
-mBIC5barB = 0
-mBIC6barB = 0
-mBIC7barB = 0
-mBIC8barB = 0
-mBIC9barB = 0
-mBIC10barB = 0
-for(i in 1:9) {
-  avg0 = mean(bar0_data0a$BIC[[i]])
-  mBIC0abar0 =+ avg0
-  avg1 = mean(bar0_data1$BIC[[i]])
-  mBIC1bar0 =+   avg1
-  avg2 = mean(bar0_data2$BIC[[i]])
-  mBIC2bar0 =+   avg2
-  avg3 = mean(bar0_data3$BIC[[i]])
-  mBIC3bar0 =+   avg3
-  avg4 = mean(bar0_data4$BIC[[i]])
-  mBIC4bar0 =+   avg4
-  avg5 = mean(bar0_data5$BIC[[i]])
-  mBIC5bar0 =+   avg5
-  avg6 = mean(bar0_data6$BIC[[i]])
-  mBIC6bar0 =+   avg6
-  avg7 = mean(bar0_data7$BIC[[i]])
-  mBIC7bar0 =+   avg7
-  avg8 = mean(bar0_data8$BIC[[i]])
-  mBIC8bar0 =+   avg8
-  avg9 = mean(bar0_data9$BIC[[i]])
-  mBIC9bar0 =+   avg9
-  avg10 = mean(bar0_data10$BIC[[i]])
-  mBIC10bar0 =+   avg10
-}
 
-for(i in 1:9) {
-  avg0 = mean(barA_data0a$BIC[[i]])
-  mBIC0abarA =+   avg0
-  avg1 = mean(barA_data1$BIC[[i]])
-  mBIC1barA =+   avg1
-  avg2 = mean(barA_data2$BIC[[i]])
-  mBIC2barA =+   avg2
-  avg3 = mean(barA_data3$BIC[[i]])
-  mBIC3barA =+   avg3
-  avg4 = mean(barA_data4$BIC[[i]])
-  mBIC4barA =+   avg4
-  avg5 = mean(barA_data5$BIC[[i]])
-  mBIC5barA =+   avg5
-  avg6 = mean(barA_data6$BIC[[i]])
-  mBIC6barA =+   avg6
-  avg7 = mean(barA_data7$BIC[[i]])
-  mBIC7barA =+   avg7
-  avg8 = mean(barA_data8$BIC[[i]])
-  mBIC8barA =+   avg8
-  avg9 = mean(barA_data9$BIC[[i]])
-  mBIC9barA =+   avg9
-  avg10 = mean(barA_data10$BIC[[i]])
-  mBIC10barA =+   avg10
-}
 
-for(i in 1:9) {
-  avg0 = mean(barB_data0a$BIC[[i]])
-  mBIC0abarB =+   avg0
-  avg1 = mean(barB_data1$BIC[[i]])
-  mBIC1barB =+   avg1
-  avg2 = mean(barB_data2$BIC[[i]])
-  mBIC2barB =+   avg2
-  avg3 = mean(barB_data3$BIC[[i]])
-  mBIC3barB =+   avg3
-  avg4 = mean(barB_data4$BIC[[i]])
-  mBIC4barB =+   avg4
-  avg5 = mean(barB_data5$BIC[[i]])
-  mBIC5barB =+   avg5
-  avg6 = mean(barB_data6$BIC[[i]])
-  mBIC6barB =+   avg6
-  avg7 = mean(barB_data7$BIC[[i]])
-  mBIC7barB =+   avg7
-  avg8 = mean(barB_data8$BIC[[i]])
-  mBIC8barB =+   avg8
-  avg9 = mean(barB_data9$BIC[[i]])
-  mBIC9barB =+   avg9
-  avg10 = mean(barB_data10$BIC[[i]])
-  mBIC10barB =+   avg10
-}
-
-avgBICbar0 = c(mBIC0abar0 / 9, mBIC1bar0 / 9, mBIC2bar0 / 9, mBIC3bar0 / 9 , mBIC4bar0 / 9, mBIC5bar0 / 9, mBIC6bar0 / 9, mBIC7bar0 / 9, 
-               mBIC8bar0 / 9, mBIC9bar0 / 9, mBIC10barA /9)
-avgBICbarA = c(mBIC0abarA / 9, mBIC1barA / 9, mBIC2barA / 9, mBIC3barA / 9, mBIC4barA / 9,
-               mBIC5barA / 9, mBIC6barA / 9, mBIC7barA / 9, mBIC8barA / 9, mBIC9barA / 9, mBIC10barA / 9)
-avgBICbarB = c(mBIC0abarB / 9, mBIC1barB / 9, mBIC2barB / 9, mBIC3barB / 9, mBIC4barB / 9, mBIC5barB / 9, 
-               mBIC6barB / 9, mBIC7barB / 9, mBIC8barB / 9, mBIC9barB /9, mBIC10barB / 9 )
-
+#Random Addition
 x_time = c(0:10)
-plot(x_time, avgBICbar0, xlab="DataSet Number", ylab="Average BIC of 9 trials", main="Average BIC over all Datasets", col="red", cex = 1.5, pch=16)
-lines(c(0,10),c(mean(avgBICbar0),mean(avgBICbar0)) , col="red")
-points(x_time, avgBICbarA, col="blue", cex = 1.5, pch=16)
-lines(c(0,10),c(mean(avgBICbarA),mean(avgBICbarA)) , col="blue")
-points(x_time, avgBICbarB, col="green", cex = 1.5, pch=16)
-lines(c(0,10),c(mean(avgBICbarB),mean(avgBICbarB)) , col="green")
-legend(7.5, 60, legend=c("bar0", "barA", "barB"),
-       col=c("red", "blue", "green"), lty=1:1, cex=1)
+par(mfrow=c(1,3))
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Random Addition", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
+points(x_time, avgbar3, col="green", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar3),median(avgbar3)) , col="green")
+points(x_time, avgbar4, col="green3", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
+legend(7.5, 5, legend=c("bar0", "bar3","bar4"),
+       col=c("red","green","green3"), lty=1:1, cex=.5)
+
+#Interval Addition 
+x_time = c(0:10)
+plot(x_time, avgbar1, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Interval Addition", col="orange", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
+points(x_time, avgbar5, col="lightblue", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
+points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
+legend(7.5, 5, legend=c( "bar1","bar5","bar6"),
+       col=c("orange","lightblue" ,"blue"), lty=1:1, cex=.5)
+
+
+#Scoring Addition
+x_time = c(0:10)
+plot(x_time, avgbar2, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Addition", col="yellow2", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
+points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
+points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
+legend(7.5, 5, legend=c( "bar2","bar7","bar8"),
+       col=c("yellow2","purple","pink"), lty=1:1, cex=.5)
+
+#Random Subtraction 
+x_time = c(0:10)
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE Random Subtraction", main="Average MSE Random Subtraction", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
+points(x_time, avgbar1, col="orange", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
+points(x_time, avgbar2, col="yellow2", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
+legend(7.5, 5, legend=c("bar0", "bar1", "bar2"),
+       col=c("red","orange","yellow2"), lty=1:1, cex=.5)
+
+
+#Interval Subtraction
+x_time = c(0:10)
+plot(x_time, avgbar3, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Interval Subtraction", col="green", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar3),median(avgbar3)) , col="green")
+points(x_time, avgbar5, col="lightblue", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
+points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
+legend(7.5, 5, legend=c("bar3","bar5","bar8"),
+       col=c("green","lightblue","pink"), lty=1:1, cex=.5)
+
+
+#Scoring Subtraction
+x_time = c(0:10)
+plot(x_time, avgbar4, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Subtraction", col="green3", ylim=c(0,5), cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
+points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
+points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
+lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
+legend(7.5, 5, legend=c("bar4","bar6","bar7"),
+       col=c("green3" ,"blue","purple"), lty=1:1, cex=.5)
+
+par(mfrow=c(1,1))
+

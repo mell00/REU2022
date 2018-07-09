@@ -9,3 +9,4 @@ results = bar0(bkpts, time, data, 1000000, 0.5, 0.02, 1)
 end_time <- Sys.time()
 
 end_time - start_time
+saveRDS(results, file="bar0_data2_bpnoconstraints.RData")
