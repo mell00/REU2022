@@ -1036,4 +1036,62 @@ legend(7.5, 50, legend=c("bar4","bar6","bar7"),
 par(mfrow=c(1,1))
 
 
+par(mfrow=c(3,3))
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar0", col="red", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar0+sdbar0*2, col="red", cex = 1, pch=16)
+points(x_time, avgbar0-sdbar0*2, col="red", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar0[i+1]-sdbar0[i+1]*2,avgbar0[i+1]+sdbar0[i+1]*2), col="red",lty=2)
+}
+plot(x_time, avgbar1, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar1",col="orange", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar1+sdbar1*2, col="orange", cex = 1, pch=16)
+points(x_time, avgbar1-sdbar1*2, col="orange", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar1[i+1]-sdbar1[i+1]*2,avgbar1[i+1]+sdbar1[i+1]*2), col="orange",lty=2)
+}
+plot(x_time, avgbar2, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar2",col="yellow2", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar2+sdbar2*2, col="yellow2", cex = 1, pch=16)
+points(x_time, avgbar2-sdbar2*2, col="yellow2", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar2[i+1]-sdbar2[i+1]*2,avgbar2[i+1]+sdbar2[i+1]*2), col="yellow2",lty=2)
+}
+
+plot(x_time, avgbar3, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar3",col="green", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar3+sdbar3*2, col="green", cex = 1, pch=16)
+points(x_time, avgbar3-sdbar3*2, col="green", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar3[i+1]-sdbar3[i+1]*2,avgbar3[i+1]+sdbar3[i+1]*2), col="green",lty=2)
+}
+
+plot(x_time, avgbar4, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar4",col="green3", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar4+sdbar4*2, col="green3", cex = 1, pch=16)
+points(x_time, avgbar4-sdbar4*2, col="green3", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar4[i+1]-sdbar4[i+1]*2,avgbar4[i+1]+sdbar4[i+1]*2), col="green3",lty=2)
+}
+
+plot(x_time, avgbar5, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar5",col="lightblue", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar5+sdbar5*2, col="lightblue", cex = 1, pch=16)
+points(x_time, avgbar5-sdbar5*2, col="lightblue", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar5[i+1]-sdbar5[i+1]*2,avgbar5[i+1]+sdbar5[i+1]*2), col="lightblue",lty=2)
+}
+plot(x_time, avgbar6, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar6",col="blue", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar6+sdbar6*2, col="blue", cex = 1, pch=16)
+points(x_time, avgbar6-sdbar6*2, col="blue", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar6[i+1]-sdbar6[i+1]*2,avgbar6[i+1]+sdbar6[i+1]*2), col="blue",lty=2)
+}
+plot(x_time, avgbar7, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar7",col="purple", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar7+sdbar7*2, col="purple", cex = 1, pch=16)
+points(x_time, avgbar7-sdbar7*2, col="purple", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar7[i+1]-sdbar7[i+1]*2,avgbar7[i+1]+sdbar7[i+1]*2), col="purple",lty=2)
+}
+plot(x_time, avgbar8, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE bar8",col="pink", ylim=c(0,70), cex = 1.5, pch=16)
+points(x_time, avgbar8+sdbar8*2, col="pink", cex = 1, pch=16)
+points(x_time, avgbar8-sdbar8*2, col="pink", cex = 1, pch=16)
+for(i in 0:10) {
+  lines(c(i,i),c(avgbar8[i+1]-sdbar8[i+1]*2,avgbar8[i+1]+sdbar8[i+1]*2), col="pink",lty=2)
+}
 
