@@ -1181,6 +1181,7 @@ legend(8.5, .15, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","ba
 
 #Random Addition
 x_time = c(0:10)
+par(mfrow=c(1,3))
 plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Random Addition", col="red", ylim=c(0,5), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
 points(x_time, avgbar3, col="green", cex = 1.5, pch=16)
@@ -1239,7 +1240,7 @@ legend(7.5, 5, legend=c("bar3","bar5","bar8"),
 
 #Scoring Subtraction
 x_time = c(0:10)
-plot(x_time, avgbar4, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Socirng Subtraction", col="green3", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar4, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Subtraction", col="green3", ylim=c(0,5), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
 points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
