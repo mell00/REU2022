@@ -282,7 +282,7 @@ smoothed25 <- predict(loess(bar0_data0a$MSE[1]$`current_result$MSE[, 1]`~x , dat
 lines(smoothed25, x=x, col="orange", lwd=3)
 
 #----------------------------BAR A--------------------------------#
-x = c(1:2500)
+x = c(1:3000)
 y.low = .6
 y.high = 1.5
 
@@ -477,30 +477,30 @@ par(mfrow=c(1,1))
 
 #Data 3
 par(mfrow=c(3,3))
-plot(x, barB_data3$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data3$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data3$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
 par(mfrow=c(1,1))
 
 y.low = 20
-y.high = 60
+y.high = 100
 #Data 4
 par(mfrow=c(3,3))
-plot(x, barB_data4$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data4$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
 par(mfrow=c(1,1))
 
 #Data 5
@@ -578,545 +578,261 @@ y.low = 3
 y.high = 17
 #Data 10
 par(mfrow=c(3,3))
-plot(x, barB_data10$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[1]], main = 1, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[2]], main = 2, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[3]], main = 3, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[4]], main = 4, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[5]], main = 5, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[6]], main = 6, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[7]], main = 7, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[8]], main = 8, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
+plot(x, bar8_data10$MSE[[9]], main = 9, ylab="MSE", xlab="Time", ylim=c(y.low,y.high))
 par(mfrow=c(1,1))
 
 
-
-#-----------------------------------------BIC---------------------------------#
-y.low = 200
-y.high = 370
-#bar0 Data 1
-par(mfrow=c(3,3))
-plot(x, bar0_data1$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data1$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barA Data 1
-par(mfrow=c(3,3))
-plot(x, barA_data1$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data1$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barB Data 1
-par(mfrow=c(3,3))
-plot(x, barB_data1$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data1$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 230
-y.high = 350
-#bar0 Data 2
-par(mfrow=c(3,3))
-plot(x, bar0_data2$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data2$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barA Data 2
-par(mfrow=c(3,3))
-plot(x, barA_data2$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data2$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barB Data 2
-par(mfrow=c(3,3))
-plot(x, barB_data2$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data2$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-y.low = 550
-y.high = 700
-#bar0 Data 2
-par(mfrow=c(3,3))
-plot(x, bar0_data4$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data4$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barA Data 2
-par(mfrow=c(3,3))
-plot(x, barA_data4$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data4$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barB Data 2
-par(mfrow=c(3,3))
-plot(x, barB_data4$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data4$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-
-
-y.low = 330
-y.high = 470
-#bar0 Data 10
-par(mfrow=c(3,3))
-plot(x, bar0_data10$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, bar0_data10$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barA Data 10
-par(mfrow=c(3,3))
-plot(x, barA_data10$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barA_data10$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
-
-#barB Data 10
-par(mfrow=c(3,3))
-plot(x, barB_data10$BIC[[1]], main = 1, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[2]], main = 2, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[3]], main = 3, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[4]], main = 4, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[5]], main = 5, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[6]], main = 6, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[7]], main = 7, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[8]], main = 8, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-plot(x, barB_data10$BIC[[9]], main = 9, ylab="BIC", xlab="Time", ylim=c(y.low,y.high))
-par(mfrow=c(1,1))
 
 
 #---------------------------------MSE Averages --------------------------------#
-m0abar0 = 0
-m1bar0 = 0
-m2bar0 = 0
-m3bar0 = 0
-m4bar0 = 0
-m5bar0 = 0
-m6bar0 = 0
-m7bar0 = 0
-m8bar0 = 0
-m9bar0 = 0
+m0abar0 = mean(colMeans(bar0_data0a$MSE))
+m1bar0 = mean(colMeans(bar0_data1$MSE))
+m2bar0 = mean(colMeans(bar0_data2$MSE))
+m3bar0 = mean(colMeans(bar0_data3$MSE))
+m4bar0 = mean(colMeans(bar0_data4$MSE))
+m5bar0 = mean(colMeans(bar0_data5$MSE))
+m6bar0 = mean(colMeans(bar0_data6$MSE))
+m7bar0 = mean(colMeans(bar0_data7$MSE))
+m8bar0 = mean(colMeans(bar0_data8$MSE))
+m9bar0 = mean(colMeans(bar0_data9$MSE))
+m10bar0 = mean(colMeans(bar0_data10$MSE))
 
-m0abar1 = 0
-m1bar1 = 0
-m2bar1 = 0
-m3bar1 = 0
-m4bar1 = 0
-m5bar1 = 0
-m6bar1 = 0
-m7bar1 = 0
-m8bar1 = 0
-m9bar1 = 0
-m10bar1 = 0
+m0abar1 = mean(colMeans(bar1_data0a$MSE))
+m1bar1 = mean(colMeans(bar1_data1$MSE))
+m2bar1 = mean(colMeans(bar1_data2$MSE))
+m3bar1 = mean(colMeans(bar1_data3$MSE))
+m4bar1 = mean(colMeans(bar1_data4$MSE))
+m5bar1 = mean(colMeans(bar1_data5$MSE))
+m6bar1 = mean(colMeans(bar1_data6$MSE))
+m7bar1 = mean(colMeans(bar1_data7$MSE))
+m8bar1 = mean(colMeans(bar1_data8$MSE))
+m9bar1 = mean(colMeans(bar1_data9$MSE))
+m10bar1 = mean(colMeans(bar1_data10$MSE))
 
-m0abar2 = 0
-m1bar2 = 0
-m2bar2 = 0
-m3bar2 = 0
-m4bar2 = 0
-m5bar2 = 0
-m6bar2 = 0
-m7bar2 = 0
-m8bar2 = 0
-m9bar2 = 0
-m10bar2 = 0
+m0abar2 = mean(colMeans(bar2_data0a$MSE))
+m1bar2 = mean(colMeans(bar2_data1$MSE))
+m2bar2 = mean(colMeans(bar2_data2$MSE))
+m3bar2 = mean(colMeans(bar2_data3$MSE))
+m4bar2 = mean(colMeans(bar2_data4$MSE))
+m5bar2 = mean(colMeans(bar2_data5$MSE))
+m6bar2 = mean(colMeans(bar2_data6$MSE))
+m7bar2 = mean(colMeans(bar2_data7$MSE))
+m8bar2 = mean(colMeans(bar2_data8$MSE))
+m9bar2 = mean(colMeans(bar2_data9$MSE))
+m10bar2 = mean(colMeans(bar2_data10$MSE))
 
-m0abar3 = 0
-m1bar3 = 0
-m2bar3 = 0
-m3bar3 = 0
-m4bar3 = 0
-m5bar3 = 0
-m6bar3 = 0
-m7bar3 = 0
-m8bar3 = 0
-m9bar3 = 0
-m10bar3 = 0
+m0abar3 = mean(colMeans(bar3_data0a$MSE))
+m1bar3 = mean(colMeans(bar3_data1$MSE))
+m2bar3 = mean(colMeans(bar3_data2$MSE))
+m3bar3 = mean(colMeans(bar3_data3$MSE))
+m4bar3 = mean(colMeans(bar3_data4$MSE))
+m5bar3 = mean(colMeans(bar3_data5$MSE))
+m6bar3 = mean(colMeans(bar3_data6$MSE))
+m7bar3 = mean(colMeans(bar3_data7$MSE))
+m8bar3 = mean(colMeans(bar3_data8$MSE))
+m9bar3 = mean(colMeans(bar3_data9$MSE))
+m10bar3 = mean(colMeans(bar3_data10$MSE))
 
-m0abar4 = 0
-m1bar4 = 0
-m2bar4 = 0
-m3bar4 = 0
-m4bar4 = 0
-m5bar4 = 0
-m6bar4 = 0
-m7bar4 = 0
-m8bar4 = 0
-m9bar4 = 0
-m10bar4 = 0
+m0abar4 = mean(colMeans(bar4_data0a$MSE))
+m1bar4 = mean(colMeans(bar4_data1$MSE))
+m2bar4 = mean(colMeans(bar4_data2$MSE))
+m3bar4 = mean(colMeans(bar4_data3$MSE))
+m4bar4 = mean(colMeans(bar4_data4$MSE))
+m5bar4 = mean(colMeans(bar4_data5$MSE))
+m6bar4 = mean(colMeans(bar4_data6$MSE))
+m7bar4 = mean(colMeans(bar4_data7$MSE))
+m8bar4 = mean(colMeans(bar4_data8$MSE))
+m9bar4 = mean(colMeans(bar4_data9$MSE))
+m10bar4 = mean(colMeans(bar4_data10$MSE))
 
-m0abar5 = 0
-m1bar5 = 0
-m2bar5 = 0
-m3bar5 = 0
-m4bar5 = 0
-m5bar5 = 0
-m6bar5 = 0
-m7bar5 = 0
-m8bar5 = 0
-m9bar5 = 0
-m10bar5 = 0
+m0abar5 = mean(colMeans(bar5_data0a$MSE))
+m1bar5 = mean(colMeans(bar5_data1$MSE))
+m2bar5 = mean(colMeans(bar5_data2$MSE))
+m3bar5 = mean(colMeans(bar5_data3$MSE))
+m4bar5 = mean(colMeans(bar5_data4$MSE))
+m5bar5 = mean(colMeans(bar5_data5$MSE))
+m6bar5 = mean(colMeans(bar5_data6$MSE))
+m7bar5 = mean(colMeans(bar5_data7$MSE))
+m8bar5 = mean(colMeans(bar5_data8$MSE))
+m9bar5 = mean(colMeans(bar5_data9$MSE))
+m10bar5 = mean(colMeans(bar5_data10$MSE))
 
-m0abar6 = 0
-m1bar6 = 0
-m2bar6 = 0
-m3bar6 = 0
-m4bar6 = 0
-m5bar6 = 0
-m6bar6 = 0
-m7bar6 = 0
-m8bar6 = 0
-m9bar6 = 0
-m10bar6 = 0
+m0abar6 = mean(colMeans(bar6_data0a$MSE))
+m1bar6 = mean(colMeans(bar6_data1$MSE))
+m2bar6 = mean(colMeans(bar6_data2$MSE))
+m3bar6 = mean(colMeans(bar6_data3$MSE))
+m4bar6 = mean(colMeans(bar6_data4$MSE))
+m5bar6 = mean(colMeans(bar6_data5$MSE))
+m6bar6 = mean(colMeans(bar6_data6$MSE))
+m7bar6 = mean(colMeans(bar6_data7$MSE))
+m8bar6 = mean(colMeans(bar6_data8$MSE))
+m9bar6 = mean(colMeans(bar6_data9$MSE))
+m10bar6 = mean(colMeans(bar6_data10$MSE))
 
-m0abar7 = 0
-m1bar7 = 0
-m2bar7 = 0
-m3bar7 = 0
-m4bar7 = 0
-m5bar7 = 0
-m6bar7 = 0
-m7bar7 = 0
-m8bar7 = 0
-m9bar7 = 0
-m10bar7 = 0
+m0abar7 = mean(colMeans(bar7_data0a$MSE))
+m1bar7 = mean(colMeans(bar7_data1$MSE))
+m2bar7 = mean(colMeans(bar7_data2$MSE))
+m3bar7 = mean(colMeans(bar7_data3$MSE))
+m4bar7 = mean(colMeans(bar7_data4$MSE))
+m5bar7 = mean(colMeans(bar7_data5$MSE))
+m6bar7 = mean(colMeans(bar7_data6$MSE))
+m7bar7 = mean(colMeans(bar7_data7$MSE))
+m8bar7 = mean(colMeans(bar7_data8$MSE))
+m9bar7 = mean(colMeans(bar7_data9$MSE))
+m10bar7 = mean(colMeans(bar7_data10$MSE))
 
-m0abar8 = 0
-m1bar8 = 0
-m2bar8 = 0
-m3bar8 = 0
-m4bar8 = 0
-m5bar8 = 0
-m6bar8 = 0
-m7bar8 = 0
-m8bar8 = 0
-m9bar8 = 0
-m10bar8 = 0
+m0abar8 = mean(colMeans(bar8_data0a$MSE))
+m1bar8 = mean(colMeans(bar8_data1$MSE))
+m2bar8 = mean(colMeans(bar8_data2$MSE))
+m3bar8 = mean(colMeans(bar8_data3$MSE))
+m4bar8 = mean(colMeans(bar8_data4$MSE))
+m5bar8 = mean(colMeans(bar8_data5$MSE))
+m6bar8 = mean(colMeans(bar8_data6$MSE))
+m7bar8 = mean(colMeans(bar8_data7$MSE))
+m8bar8 = mean(colMeans(bar8_data8$MSE))
+m9bar8 = mean(colMeans(bar8_data9$MSE))
+m10bar8 = mean(colMeans(bar8_data10$MSE))
 
+sd0abar0 = mean(apply(bar0_data0a$MSE, 1, sd))
+sd1bar0 = mean(apply(bar0_data1$MSE,1,sd))
+sd2bar0 = mean(apply(bar0_data2$MSE,1,sd))
+sd3bar0 = mean(apply(bar0_data3$MSE,1,sd))
+sd4bar0 = mean(apply(bar0_data4$MSE,1,sd))
+sd5bar0 = mean(apply(bar0_data5$MSE,1,sd))
+sd6bar0 = mean(apply(bar0_data6$MSE,1,sd))
+sd7bar0 = mean(apply(bar0_data7$MSE,1,sd))
+sd8bar0 = mean(apply(bar0_data8$MSE,1,sd))
+sd9bar0 = mean(apply(bar0_data9$MSE,1,sd))
+sd10bar0 = mean(apply(bar0_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar0_data0a$MSE[[i]])
-  m0abar0 =+ avg0
-  avg1 = mean(bar0_data1$MSE[[i]])
-  m1bar0 =+   avg1
-  avg2 = mean(bar0_data2$MSE[[i]])
-  m2bar0 =+   avg2
-  avg3 = mean(bar0_data3$MSE[[i]])
-  m3bar0 =+   avg3
-  avg4 = mean(bar0_data4$MSE[[i]])
-  m4bar0 =+   avg4
-  avg5 = mean(bar0_data5$MSE[[i]])
-  m5bar0 =+   avg5
-  avg6 = mean(bar0_data6$MSE[[i]])
-  m6bar0 =+   avg6
-  avg7 = mean(bar0_data7$MSE[[i]])
-  m7bar0 =+   avg7
-  avg8 = mean(bar0_data8$MSE[[i]])
-  m8bar0 =+   avg8
-  avg9 = mean(bar0_data9$MSE[[i]])
-  m9bar0 =+   avg9
-  avg10 = mean(bar0_data10$MSE[[i]])
-  m10bar0 =+   avg10
-}
+sd0abar1 = mean(apply(bar1_data0a$MSE, 1, sd))
+sd1bar1 = mean(apply(bar1_data1$MSE,1,sd))
+sd2bar1 = mean(apply(bar1_data2$MSE,1,sd))
+sd3bar1 = mean(apply(bar1_data3$MSE,1,sd))
+sd4bar1 = mean(apply(bar1_data4$MSE,1,sd))
+sd5bar1 = mean(apply(bar1_data5$MSE,1,sd))
+sd6bar1 = mean(apply(bar1_data6$MSE,1,sd))
+sd7bar1 = mean(apply(bar1_data7$MSE,1,sd))
+sd8bar1 = mean(apply(bar1_data8$MSE,1,sd))
+sd9bar1 = mean(apply(bar1_data9$MSE,1,sd))
+sd10bar1 = mean(apply(bar1_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar1_data0a$MSE[[i]])
-  m0abar1 =+   avg0
-  avg1 = mean(bar1_data1$MSE[[i]])
-  m1bar1 =+   avg1
-  avg2 = mean(bar1_data2$MSE[[i]])
-  m2bar1 =+   avg2
-  avg3 = mean(bar1_data3$MSE[[i]])
-  m3bar1 =+   avg3
-  avg4 = mean(bar1_data4$MSE[[i]])
-  m4bar1 =+   avg4
-  avg5 = mean(bar1_data5$MSE[[i]])
-  m5bar1 =+   avg5
-  avg6 = mean(bar1_data6$MSE[[i]])
-  m6bar1 =+   avg6
-  avg7 = mean(bar1_data7$MSE[[i]])
-  m7bar1 =+   avg7
-  avg8 = mean(bar1_data8$MSE[[i]])
-  m8bar1 =+   avg8
-  avg9 = mean(bar1_data9$MSE[[i]])
-  m9bar1 =+   avg9
-  avg10 = mean(bar1_data10$MSE[[i]])
-  m10bar1 =+   avg10
-}
+sd0abar2 = mean(apply(bar2_data0a$MSE, 1, sd))
+sd1bar2 = mean(apply(bar2_data1$MSE,1,sd))
+sd2bar2 = mean(apply(bar2_data2$MSE,1,sd))
+sd3bar2 = mean(apply(bar2_data3$MSE,1,sd))
+sd4bar2 = mean(apply(bar2_data4$MSE,1,sd))
+sd5bar2 = mean(apply(bar2_data5$MSE,1,sd))
+sd6bar2 = mean(apply(bar2_data6$MSE,1,sd))
+sd7bar2 = mean(apply(bar2_data7$MSE,1,sd))
+sd8bar2 = mean(apply(bar2_data8$MSE,1,sd))
+sd9bar2 = mean(apply(bar2_data9$MSE,1,sd))
+sd10bar2 = mean(apply(bar2_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar2_data0a$MSE[[i]])
-  m0abar2 =+   avg0
-  avg1 = mean(bar2_data1$MSE[[i]])
-  m1bar2 =+   avg1
-  avg2 = mean(bar2_data2$MSE[[i]])
-  m2bar2 =+   avg2
-  avg3 = mean(bar2_data3$MSE[[i]])
-  m3bar2 =+   avg3
-  avg4 = mean(bar2_data4$MSE[[i]])
-  m4bar2 =+   avg4
-  avg5 = mean(bar2_data5$MSE[[i]])
-  m5bar2 =+   avg5
-  avg6 = mean(bar2_data6$MSE[[i]])
-  m6bar2 =+   avg6
-  avg7 = mean(bar2_data7$MSE[[i]])
-  m7bar2 =+   avg7
-  avg8 = mean(bar2_data8$MSE[[i]])
-  m8bar2 =+   avg8
-  avg9 = mean(bar2_data9$MSE[[i]])
-  m9bar2 =+   avg9
-  avg10 = mean(bar2_data10$MSE[[i]])
-  m10bar2 =+   avg10
-}
+sd0abar3 = mean(apply(bar3_data0a$MSE, 1, sd))
+sd1bar3 = mean(apply(bar3_data1$MSE,1,sd))
+sd2bar3 = mean(apply(bar3_data2$MSE,1,sd))
+sd3bar3 = mean(apply(bar3_data3$MSE,1,sd))
+sd4bar3 = mean(apply(bar3_data4$MSE,1,sd))
+sd5bar3 = mean(apply(bar3_data5$MSE,1,sd))
+sd6bar3 = mean(apply(bar3_data6$MSE,1,sd))
+sd7bar3 = mean(apply(bar3_data7$MSE,1,sd))
+sd8bar3 = mean(apply(bar3_data8$MSE,1,sd))
+sd9bar3 = mean(apply(bar3_data9$MSE,1,sd))
+sd10bar3 = mean(apply(bar3_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar3_data0a$MSE[[i]])
-  m0abar3 =+   avg0
-  avg1 = mean(bar3_data1$MSE[[i]])
-  m1bar3 =+   avg1
-  avg2 = mean(bar3_data2$MSE[[i]])
-  m2bar3 =+   avg2
-  avg3 = mean(bar3_data3$MSE[[i]])
-  m3bar3 =+   avg3
-  avg4 = mean(bar3_data4$MSE[[i]])
-  m4bar3 =+   avg4
-  avg5 = mean(bar3_data5$MSE[[i]])
-  m5bar3 =+   avg5
-  avg6 = mean(bar3_data6$MSE[[i]])
-  m6bar3 =+   avg6
-  avg7 = mean(bar3_data7$MSE[[i]])
-  m7bar3 =+   avg7
-  avg8 = mean(bar3_data8$MSE[[i]])
-  m8bar3 =+   avg8
-  avg9 = mean(bar3_data9$MSE[[i]])
-  m9bar3 =+   avg9
-  avg10 = mean(bar3_data10$MSE[[i]])
-  m10bar3 =+   avg10
-}
+sd0abar4 = mean(apply(bar4_data0a$MSE, 1, sd))
+sd1bar4 = mean(apply(bar4_data1$MSE,1,sd))
+sd2bar4 = mean(apply(bar4_data2$MSE,1,sd))
+sd3bar4 = mean(apply(bar4_data3$MSE,1,sd))
+sd4bar4 = mean(apply(bar4_data4$MSE,1,sd))
+sd5bar4 = mean(apply(bar4_data5$MSE,1,sd))
+sd6bar4 = mean(apply(bar4_data6$MSE,1,sd))
+sd7bar4 = mean(apply(bar4_data7$MSE,1,sd))
+sd8bar4 = mean(apply(bar4_data8$MSE,1,sd))
+sd9bar4 = mean(apply(bar4_data9$MSE,1,sd))
+sd10bar4 = mean(apply(bar4_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar4_data0a$MSE[[i]])
-  m0abar4 =+   avg0
-  avg1 = mean(bar4_data1$MSE[[i]])
-  m1bar4 =+   avg1
-  avg2 = mean(bar4_data2$MSE[[i]])
-  m2bar4 =+   avg2
-  avg3 = mean(bar4_data3$MSE[[i]])
-  m3bar4 =+   avg3
-  avg4 = mean(bar4_data4$MSE[[i]])
-  m4bar4 =+   avg4
-  avg5 = mean(bar4_data5$MSE[[i]])
-  m5bar4 =+   avg5
-  avg6 = mean(bar4_data6$MSE[[i]])
-  m6bar4 =+   avg6
-  avg7 = mean(bar4_data7$MSE[[i]])
-  m7bar4 =+   avg7
-  avg8 = mean(bar4_data8$MSE[[i]])
-  m8bar4 =+   avg8
-  avg9 = mean(bar4_data9$MSE[[i]])
-  m9bar4 =+   avg9
-  avg10 = mean(bar4_data10$MSE[[i]])
-  m10bar4 =+   avg10
-}
+sd0abar5 = mean(apply(bar5_data0a$MSE, 1, sd))
+sd1bar5 = mean(apply(bar5_data1$MSE,1,sd))
+sd2bar5 = mean(apply(bar5_data2$MSE,1,sd))
+sd3bar5 = mean(apply(bar5_data3$MSE,1,sd))
+sd4bar5 = mean(apply(bar5_data4$MSE,1,sd))
+sd5bar5 = mean(apply(bar5_data5$MSE,1,sd))
+sd6bar5 = mean(apply(bar5_data6$MSE,1,sd))
+sd7bar5 = mean(apply(bar5_data7$MSE,1,sd))
+sd8bar5 = mean(apply(bar5_data8$MSE,1,sd))
+sd9bar5 = mean(apply(bar5_data9$MSE,1,sd))
+sd10bar5 = mean(apply(bar5_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar5_data0a$MSE[[i]])
-  m0abar5 =+   avg0
-  avg1 = mean(bar5_data1$MSE[[i]])
-  m1bar5 =+   avg1
-  avg2 = mean(bar5_data2$MSE[[i]])
-  m2bar5 =+   avg2
-  avg3 = mean(bar5_data3$MSE[[i]])
-  m3bar5 =+   avg3
-  avg4 = mean(bar5_data4$MSE[[i]])
-  m4bar5 =+   avg4
-  avg5 = mean(bar5_data5$MSE[[i]])
-  m5bar5 =+   avg5
-  avg6 = mean(bar5_data6$MSE[[i]])
-  m6bar5 =+   avg6
-  avg7 = mean(bar5_data7$MSE[[i]])
-  m7bar5 =+   avg7
-  avg8 = mean(bar5_data8$MSE[[i]])
-  m8bar5 =+   avg8
-  avg9 = mean(bar5_data9$MSE[[i]])
-  m9bar5 =+   avg9
-  avg10 = mean(bar5_data10$MSE[[i]])
-  m10bar5 =+   avg10
-}
+sd0abar6 = mean(apply(bar6_data0a$MSE, 1, sd))
+sd1bar6 = mean(apply(bar6_data1$MSE,1,sd))
+sd2bar6 = mean(apply(bar6_data2$MSE,1,sd))
+sd3bar6 = mean(apply(bar6_data3$MSE,1,sd))
+sd4bar6 = mean(apply(bar6_data4$MSE,1,sd))
+sd5bar6 = mean(apply(bar6_data5$MSE,1,sd))
+sd6bar6 = mean(apply(bar6_data6$MSE,1,sd))
+sd7bar6 = mean(apply(bar6_data7$MSE,1,sd))
+sd8bar6 = mean(apply(bar6_data8$MSE,1,sd))
+sd9bar6 = mean(apply(bar6_data9$MSE,1,sd))
+sd10bar6 = mean(apply(bar6_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar6_data0a$MSE[[i]])
-  m0abar6 =+   avg0
-  avg1 = mean(bar6_data1$MSE[[i]])
-  m1bar6 =+   avg1
-  avg2 = mean(bar6_data2$MSE[[i]])
-  m2bar6 =+   avg2
-  avg3 = mean(bar6_data3$MSE[[i]])
-  m3bar6 =+   avg3
-  avg4 = mean(bar6_data4$MSE[[i]])
-  m4bar6 =+   avg4
-  avg5 = mean(bar6_data5$MSE[[i]])
-  m5bar6 =+   avg5
-  avg6 = mean(bar6_data6$MSE[[i]])
-  m6bar6 =+   avg6
-  avg7 = mean(bar6_data7$MSE[[i]])
-  m7bar6 =+   avg7
-  avg8 = mean(bar6_data8$MSE[[i]])
-  m8bar6 =+   avg8
-  avg9 = mean(bar6_data9$MSE[[i]])
-  m9bar6 =+   avg9
-  avg10 = mean(bar6_data10$MSE[[i]])
-  m10bar6 =+   avg10
-}
-for(i in 1:9) {
-  avg0 = mean(bar7_data0a$MSE[[i]])
-  m0abar7 =+   avg0
-  avg1 = mean(bar7_data1$MSE[[i]])
-  m1bar7 =+   avg1
-  avg2 = mean(bar7_data2$MSE[[i]])
-  m2bar7 =+   avg2
-  avg3 = mean(bar7_data3$MSE[[i]])
-  m3bar7 =+   avg3
-  avg4 = mean(bar7_data4$MSE[[i]])
-  m4bar7 =+   avg4
-  avg5 = mean(bar7_data5$MSE[[i]])
-  m5bar7 =+   avg5
-  avg6 = mean(bar7_data6$MSE[[i]])
-  m6bar7 =+   avg6
-  avg7 = mean(bar7_data7$MSE[[i]])
-  m7bar7 =+   avg7
-  avg8 = mean(bar7_data8$MSE[[i]])
-  m8bar7 =+   avg8
-  avg9 = mean(bar7_data9$MSE[[i]])
-  m9bar7 =+   avg9
-  avg10 = mean(bar7_data10$MSE[[i]])
-  m10bar7 =+   avg10
-}
+sd0abar7 = mean(apply(bar7_data0a$MSE, 1, sd))
+sd1bar7 = mean(apply(bar7_data1$MSE,1,sd))
+sd2bar7 = mean(apply(bar7_data2$MSE,1,sd))
+sd3bar7 = mean(apply(bar7_data3$MSE,1,sd))
+sd4bar7 = mean(apply(bar7_data4$MSE,1,sd))
+sd5bar7 = mean(apply(bar7_data5$MSE,1,sd))
+sd6bar7 = mean(apply(bar7_data6$MSE,1,sd))
+sd7bar7 = mean(apply(bar7_data7$MSE,1,sd))
+sd8bar7 = mean(apply(bar7_data8$MSE,1,sd))
+sd9bar7 = mean(apply(bar7_data9$MSE,1,sd))
+sd10bar7 = mean(apply(bar7_data10$MSE,1,sd))
 
-for(i in 1:9) {
-  avg0 = mean(bar8_data0a$MSE[[i]])
-  m0abar8 =+   avg0
-  avg1 = mean(bar8_data1$MSE[[i]])
-  m1bar8 =+   avg1
-  avg2 = mean(bar8_data2$MSE[[i]])
-  m2bar8 =+   avg2
-  avg3 = mean(bar8_data3$MSE[[i]])
-  m3bar8 =+   avg3
-  avg4 = mean(bar8_data4$MSE[[i]])
-  m4bar8 =+   avg4
-  avg5 = mean(bar8_data5$MSE[[i]])
-  m5bar8 =+   avg5
-  avg6 = mean(bar8_data6$MSE[[i]])
-  m6bar8 =+   avg6
-  avg7 = mean(bar8_data7$MSE[[i]])
-  m7bar8 =+   avg7
-  avg8 = mean(bar8_data8$MSE[[i]])
-  m8bar8 =+   avg8
-  avg9 = mean(bar8_data9$MSE[[i]])
-  m9bar8 =+   avg9
-  avg10 = mean(bar8_data10$MSE[[i]])
-  m10bar8 =+   avg10
-}
+sd0abar8 = mean(apply(bar8_data0a$MSE, 1, sd))
+sd1bar8 = mean(apply(bar8_data1$MSE,1,sd))
+sd2bar8 = mean(apply(bar8_data2$MSE,1,sd))
+sd3bar8 = mean(apply(bar8_data3$MSE,1,sd))
+sd4bar8 = mean(apply(bar8_data4$MSE,1,sd))
+sd5bar8 = mean(apply(bar8_data5$MSE,1,sd))
+sd6bar8 = mean(apply(bar8_data6$MSE,1,sd))
+sd7bar8 = mean(apply(bar8_data7$MSE,1,sd))
+sd8bar8 = mean(apply(bar8_data8$MSE,1,sd))
+sd9bar8 = mean(apply(bar8_data9$MSE,1,sd))
+sd10bar8 = mean(apply(bar8_data10$MSE,1,sd))
 
 
+avgbar0 = c(m0abar0, m1bar0, m2bar0, m3bar0, m4bar0, m5bar0, m6bar0, m7bar0, m8bar0, m9bar0, m10bar0)
+avgbar1 = c(m0abar1, m1bar1, m2bar1, m3bar1, m4bar1, m5bar1, m6bar1, m7bar1, m8bar1, m9bar1, m10bar1)
+avgbar2 = c(m0abar2, m1bar2, m2bar2, m3bar2, m4bar2, m5bar2, m6bar2, m7bar2, m8bar2, m9bar2, m10bar2)
+avgbar3 = c(m0abar3, m1bar3, m2bar3, m3bar3, m4bar3, m5bar3, m6bar3, m7bar3, m8bar3, m9bar3, m10bar3)
+avgbar4 = c(m0abar4, m1bar4, m2bar4, m3bar4, m4bar4, m5bar4, m6bar4, m7bar4, m8bar4, m9bar4, m10bar4)
+avgbar5 = c(m0abar5, m1bar5, m2bar5, m3bar5, m4bar5, m5bar5, m6bar5, m7bar5, m8bar5, m9bar5, m10bar5)
+avgbar6 = c(m0abar6, m1bar6, m2bar6, m3bar6, m4bar6, m5bar6, m6bar6, m7bar6, m8bar6, m9bar6, m10bar6)
+avgbar7 = c(m0abar7, m1bar7, m2bar7, m3bar7, m4bar7, m5bar7, m6bar7, m7bar7, m8bar7, m9bar7, m10bar7)
+avgbar8 = c(m0abar8, m1bar8, m2bar8, m3bar8, m4bar8, m5bar8, m6bar8, m7bar8, m8bar8, m9bar8, m10bar8)
 
-avgbar0 = c(m0abar0 / 9, m1bar0 / 9, m2bar0 / 9, m3bar0 / 9 , m4bar0 / 9, m5bar0 / 9, 
-            m6bar0 / 9, m7bar0 / 9, m8bar0 / 9, m9bar0 / 9, m10bar0 /9)
-avgbar1 = c(m0abar1 / 9, m1bar1 / 9, m2bar1 / 9, m3bar1 / 9, m4bar1 / 9, m5bar1 / 9, 
-            m6bar1 / 9, m7bar1 / 9, m8bar1 / 9, m9bar1 / 9, m10bar1 / 9)
-avgbar2 = c(m0abar2 / 9, m1bar2 / 9, m2bar2 / 9, m3bar2 / 9, m4bar2 / 9, m5bar2 / 9, 
-            m6bar2 / 9, m7bar2 / 9, m8bar2 / 9, m9bar2 / 9, m10bar2 / 9)
-avgbar3 = c(m0abar3 / 9, m1bar3 / 9, m2bar3 / 9, m3bar3 / 9, m4bar3 / 9, m5bar3 / 9, 
-            m6bar3 / 9, m7bar3 / 9, m8bar3 / 9, m9bar3 / 9, m10bar3 / 9)
-avgbar4 = c(m0abar4 / 9, m1bar4 / 9, m2bar4 / 9, m3bar4 / 9, m4bar4 / 9, m5bar4 / 9, 
-            m6bar4 / 9, m7bar4 / 9, m8bar4 / 9, m9bar4 / 9, m10bar4 / 9)
-avgbar5 = c(m0abar5 / 9, m1bar5 / 9, m2bar5 / 9, m3bar5 / 9, m4bar5 / 9, m5bar5 / 9, 
-            m6bar5 / 9, m7bar5 / 9, m8bar5 / 9, m9bar5 / 9, m10bar5 / 9)
-avgbar6 = c(m0abar6 / 9, m1bar6 / 9, m2bar6 / 9, m3bar6 / 9, m4bar6 / 9, m5bar6 / 9, 
-            m6bar6 / 9, m7bar6 / 9, m8bar6 / 9, m9bar6 / 9, m10bar6 / 9)
-avgbar7 = c(m0abar7 / 9, m1bar7 / 9, m2bar7 / 9, m3bar7 / 9, m4bar7 / 9, m5bar7 / 9, 
-            m6bar7 / 9, m7bar7 / 9, m8bar7 / 9, m9bar7 / 9, m10bar7 / 9)
-avgbar8 = c(m0abar8 / 9, m1bar8 / 9, m2bar8 / 9, m3bar8 / 9, m4bar8 / 9, m5bar8 / 9, 
-            m6bar8 / 9, m7bar8 / 9, m8bar8 / 9, m9bar8 / 9, m10bar8 / 9)
-
+sdbar0 = c(sd0abar0, sd1bar0, sd2bar0, sd3bar0, sd4bar0, sd5bar0, sd6bar0, sd7bar0, sd8bar0, sd9bar0, sd10bar0)
+sdbar1 = c(sd0abar1, sd1bar1, sd2bar1, sd3bar1, sd4bar1, sd5bar1, sd6bar1, sd7bar1, sd8bar1, sd9bar1, sd10bar1)
+sdbar2 = c(sd0abar2, sd1bar2, sd2bar2, sd3bar2, sd4bar2, sd5bar2, sd6bar2, sd7bar2, sd8bar2, sd9bar2, sd10bar2)
+sdbar3 = c(sd0abar3, sd1bar3, sd2bar3, sd3bar3, sd4bar3, sd5bar3, sd6bar3, sd7bar3, sd8bar3, sd9bar3, sd10bar3)
+sdbar4 = c(sd0abar4, sd1bar4, sd2bar4, sd3bar4, sd4bar4, sd5bar4, sd6bar4, sd7bar4, sd8bar4, sd9bar4, sd10bar4)
+sdbar5 = c(sd0abar5, sd1bar5, sd2bar5, sd3bar5, sd4bar5, sd5bar5, sd6bar5, sd7bar5, sd8bar5, sd9bar5, sd10bar5)
+sdbar6 = c(sd0abar6, sd1bar6, sd2bar6, sd3bar6, sd4bar6, sd5bar6, sd6bar6, sd7bar6, sd8bar6, sd9bar6, sd10bar6)
+sdbar7 = c(sd0abar7, sd1bar7, sd2bar7, sd3bar7, sd4bar7, sd5bar7, sd6bar7, sd7bar7, sd8bar7, sd9bar7, sd10bar7)
+sdbar8 = c(sd0abar8, sd1bar8, sd2bar8, sd3bar8, sd4bar8, sd5bar8, sd6bar8, sd7bar8, sd8bar8, sd9bar8, sd10bar8)
 
 #all!
 x_time = c(0:10)
-plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE over all Datasets", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE over all Datasets", col="red", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(mean(avgbar0),mean(avgbar0)) , col="red")
 points(x_time, avgbar1, col="orange", cex = 1.5, pch=16)
 lines(c(0,10),c(mean(avgbar1),mean(avgbar1)) , col="orange")
@@ -1134,12 +850,12 @@ points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
 lines(c(0,10),c(mean(avgbar7),mean(avgbar7)) , col="purple")
 points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
 lines(c(0,10),c(mean(avgbar8),mean(avgbar8)) , col="pink")
-legend(8.5, 5, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+legend(8, 50, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
        col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.5)
 
 
 #median
-plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE over all Datasets", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE over all Datasets", col="red", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
 points(x_time, avgbar1, col="orange", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
@@ -1157,12 +873,12 @@ points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
 points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
-legend(8.5, 5, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+legend(8.5, 50, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
        col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.5)
 
 
 #median
-plot(NULL, ylim=c(0.1,.15), xlim=c(0,10), xlab="DataSet Number", ylab="Median MSE", main="Median MSE over all Datasets")
+plot(NULL, ylim=c(0.9,1.1), xlim=c(0,10), xlab="DataSet Number", ylab="Median MSE", main="Median MSE over all Datasets")
 lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
 lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
 lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
@@ -1172,8 +888,76 @@ lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
 lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
 lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
 lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
-legend(8.5, .15, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+legend(8.5, 1.05, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
        col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.6)
+
+plot(NULL, ylim=c(7,10), xlim=c(0,10), xlab="DataSet Number", ylab="Mean MSE", main="Average MSE over all Datasets")
+lines(c(0,10),c(mean(avgbar0),mean(avgbar0)) , col="red")
+lines(c(0,10),c(mean(avgbar1),mean(avgbar1)) , col="orange")
+lines(c(0,10),c(mean(avgbar2),mean(avgbar2)) , col="yellow2")
+lines(c(0,10),c(mean(avgbar3),mean(avgbar3)) , col="green")
+lines(c(0,10),c(mean(avgbar4),mean(avgbar4)) , col="green3")
+lines(c(0,10),c(mean(avgbar5),mean(avgbar5)) , col="lightblue")
+lines(c(0,10),c(mean(avgbar6),mean(avgbar6)) , col="blue")
+lines(c(0,10),c(mean(avgbar7),mean(avgbar7)) , col="purple")
+lines(c(0,10),c(mean(avgbar8),mean(avgbar8)) , col="pink")
+legend(8.5, 9.5, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+       col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.6)
+
+#confidence intervals 
+plot(NULL, ylim=c(0,15), xlim=c(0,10), xlab="DataSet Number", ylab="Average MSE", main="Average MSE over all Datasets")
+lines(c(0,10),c(mean(avgbar0) + mean(sdbar0*2),mean(avgbar0) + mean(sdbar0*2)) , col="red", lty=2)
+lines(c(0,10),c(mean(avgbar0),mean(avgbar0)) , col="red")
+lines(c(0,10),c(mean(avgbar0)- mean(sdbar0*2),mean(avgbar0)- mean(sdbar0*2)) , col="red",lty=2)
+
+lines(c(0,10),c(mean(avgbar1)+mean(sdbar1*2) ,mean(avgbar1)+mean(sdbar1*2)) , col="orange", lty=2)
+lines(c(0,10),c(mean(avgbar1),mean(avgbar1)) , col="orange")
+lines(c(0,10),c(mean(avgbar1)-mean(sdbar1*2) ,mean(avgbar1)-mean(sdbar1*2)) , col="orange", lty=2)
+
+lines(c(0,10),c(mean(avgbar2)+mean(sdbar2*2),mean(avgbar2)+mean(sdbar2*2)) , col="yellow2", lty=2)
+lines(c(0,10),c(mean(avgbar2),mean(avgbar2)) , col="yellow2")
+lines(c(0,10),c(mean(avgbar2)-mean(sdbar2*2),mean(avgbar2)-mean(sdbar2*2)) , col="yellow2", lty=2)
+
+lines(c(0,10),c(mean(avgbar3)+mean(sdbar3*2),mean(avgbar3)+mean(sdbar3*2)) , col="green", lty=2)
+lines(c(0,10),c(mean(avgbar3),mean(avgbar3)) , col="green")
+lines(c(0,10),c(mean(avgbar3)-mean(sdbar3*2),mean(avgbar3)-mean(sdbar3*2)) , col="green", lty=2)
+
+lines(c(0,10),c(mean(avgbar4)+mean(sdbar4*2),mean(avgbar4)+mean(sdbar4*2)) , col="green3", lty=2)
+lines(c(0,10),c(mean(avgbar4),mean(avgbar4)) , col="green3")
+lines(c(0,10),c(mean(avgbar4)-mean(sdbar4*2),mean(avgbar4)-mean(sdbar4*2)) , col="green3", lty=2)
+
+lines(c(0,10),c(mean(avgbar5)+mean(sdbar5*2),mean(avgbar5)+mean(sdbar5*2)) , col="lightblue",lty=2)
+lines(c(0,10),c(mean(avgbar5),mean(avgbar5)) , col="lightblue")
+lines(c(0,10),c(mean(avgbar5)-mean(sdbar5*2),mean(avgbar5)-mean(sdbar5*2)) , col="lightblue",lty=2)
+
+lines(c(0,10),c(mean(avgbar6)+mean(sdbar6*2),mean(avgbar6)+mean(sdbar6*2)) , col="blue", lty=2)
+lines(c(0,10),c(mean(avgbar6),mean(avgbar6)) , col="blue")
+lines(c(0,10),c(mean(avgbar6)-mean(sdbar6*2),mean(avgbar6)-mean(sdbar6*2)) , col="blue", lty=2)
+
+lines(c(0,10),c(mean(avgbar7)+mean(sdbar7*2),mean(avgbar7)+mean(sdbar7*2)) , col="purple",lty=2)
+lines(c(0,10),c(mean(avgbar7),mean(avgbar7)) , col="purple")
+lines(c(0,10),c(mean(avgbar7)-mean(sdbar7*2),mean(avgbar7)-mean(sdbar7*2)) , col="purple",lty=2)
+
+lines(c(0,10),c(mean(avgbar8)+mean(sdbar8*2),mean(avgbar8)+mean(sdbar8*2)) , col="pink",lty=2)
+lines(c(0,10),c(mean(avgbar8),mean(avgbar8)) , col="pink")
+lines(c(0,10),c(mean(avgbar8)-mean(sdbar8*2),mean(avgbar8)-mean(sdbar8*2)) , col="pink",lty=2)
+
+legend(8.5, 10.5, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","bar7","bar8"),
+       col=c("red","orange","yellow2","green","green3","lightblue" ,"blue","purple","pink"), lty=1:1, cex=.7)
+
+
+#confidence intervals 
+plot(NULL, ylim=c(0,15), xlim=c(0,10), xlab="DataSet Number", ylab="Average MSE", main="Average MSE over all Datasets")
+lines(c(0,10),c(mean(avgbar0) + mean(sdbar0*2),mean(avgbar0) + mean(sdbar0*2)) , col="red", lty=2)
+lines(c(0,10),c(mean(avgbar0),mean(avgbar0)) , col="red")
+lines(c(0,10),c(mean(avgbar0)- mean(sdbar0*2),mean(avgbar0)- mean(sdbar0*2)) , col="red",lty=2)
+
+lines(c(0,10),c(mean(avgbar5)+mean(sdbar5*2),mean(avgbar5)+mean(sdbar5*2)) , col="lightblue",lty=2)
+lines(c(0,10),c(mean(avgbar5),mean(avgbar5)) , col="lightblue")
+lines(c(0,10),c(mean(avgbar5)-mean(sdbar5*2),mean(avgbar5)-mean(sdbar5*2)) , col="lightblue",lty=2)
+
+legend(8.5, 4, legend=c("bar0","bar5"),
+       col=c("red","lightblue" ), lty=1:1, cex=.7)
 
 
 
@@ -1182,72 +966,74 @@ legend(8.5, .15, legend=c("bar0", "bar1", "bar2","bar3","bar4","bar5","bar6","ba
 #Random Addition
 x_time = c(0:10)
 par(mfrow=c(1,3))
-plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Random Addition", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Random Addition", col="red", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
 points(x_time, avgbar3, col="green", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar3),median(avgbar3)) , col="green")
 points(x_time, avgbar4, col="green3", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
-legend(7.5, 5, legend=c("bar0", "bar3","bar4"),
+legend(7.5, 50, legend=c("bar0", "bar3","bar4"),
        col=c("red","green","green3"), lty=1:1, cex=.5)
 
 #Interval Addition 
 x_time = c(0:10)
-plot(x_time, avgbar1, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Interval Addition", col="orange", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar1, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Interval Addition", col="orange", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
 points(x_time, avgbar5, col="lightblue", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
 points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
-legend(7.5, 5, legend=c( "bar1","bar5","bar6"),
+legend(7.5, 50, legend=c( "bar1","bar5","bar6"),
        col=c("orange","lightblue" ,"blue"), lty=1:1, cex=.5)
 
 
 #Scoring Addition
 x_time = c(0:10)
-plot(x_time, avgbar2, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Addition", col="yellow2", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar2, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Addition", col="yellow2", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
 points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
 points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
-legend(7.5, 5, legend=c( "bar2","bar7","bar8"),
+legend(7.5, 50, legend=c( "bar2","bar7","bar8"),
        col=c("yellow2","purple","pink"), lty=1:1, cex=.5)
 
 #Random Subtraction 
 x_time = c(0:10)
-plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE Random Subtraction", main="Average MSE Random Subtraction", col="red", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar0, xlab="DataSet Number", ylab="Average MSE Random Subtraction", main="Average MSE Random Subtraction", col="red", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar0),median(avgbar0)) , col="red")
 points(x_time, avgbar1, col="orange", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar1),median(avgbar1)) , col="orange")
 points(x_time, avgbar2, col="yellow2", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar2),median(avgbar2)) , col="yellow2")
-legend(7.5, 5, legend=c("bar0", "bar1", "bar2"),
+legend(7.5, 50, legend=c("bar0", "bar1", "bar2"),
        col=c("red","orange","yellow2"), lty=1:1, cex=.5)
 
 
 #Interval Subtraction
 x_time = c(0:10)
-plot(x_time, avgbar3, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Interval Subtraction", col="green", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar3, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Interval Subtraction", col="green", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar3),median(avgbar3)) , col="green")
 points(x_time, avgbar5, col="lightblue", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar5),median(avgbar5)) , col="lightblue")
 points(x_time, avgbar8, col="pink", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar8),median(avgbar8)) , col="pink")
-legend(7.5, 5, legend=c("bar3","bar5","bar8"),
+legend(7.5, 50, legend=c("bar3","bar5","bar8"),
        col=c("green","lightblue","pink"), lty=1:1, cex=.5)
 
 
 #Scoring Subtraction
 x_time = c(0:10)
-plot(x_time, avgbar4, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Subtraction", col="green3", ylim=c(0,5), cex = 1.5, pch=16)
+plot(x_time, avgbar4, xlab="DataSet Number", ylab="Average MSE of 9 trials", main="Average MSE Scoring Subtraction", col="green3", ylim=c(0,55), cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar4),median(avgbar4)) , col="green3")
 points(x_time, avgbar6, col="blue", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar6),median(avgbar6)) , col="blue")
 points(x_time, avgbar7, col="purple", cex = 1.5, pch=16)
 lines(c(0,10),c(median(avgbar7),median(avgbar7)) , col="purple")
-legend(7.5, 5, legend=c("bar4","bar6","bar7"),
+legend(7.5, 50, legend=c("bar4","bar6","bar7"),
        col=c("green3" ,"blue","purple"), lty=1:1, cex=.5)
 
 par(mfrow=c(1,1))
+
+
 
