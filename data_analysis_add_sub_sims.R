@@ -622,7 +622,8 @@ for(i in 0:10) {
 }
 
 #-------------------------------each dataset--------------------------#
-plot(NULL, ylim=c(0,5), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 0a")
+par(mfrow=c(3,4))
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 0a")
 points(0,avgbar0[1],  col="red", cex = 1, pch=16)
 points(1,avgbar1[1],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[1],  col="yellow2", cex = 1, pch=16)
@@ -643,7 +644,7 @@ lines(c(7,7),c(avgbar7[1]-sdbar7[1]*2,avgbar7[1]+sdbar7[1]*2), col="purple",lty=
 lines(c(8,8),c(avgbar8[1]-sdbar8[1]*2,avgbar8[1]+sdbar8[1]*2), col="pink",lty=1)
 
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 1")
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 1")
 points(0,avgbar0[2],  col="red", cex = 1, pch=16)
 points(1,avgbar1[2],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[2],  col="yellow2", cex = 1, pch=16)
@@ -663,8 +664,7 @@ lines(c(6,6),c(avgbar6[2]-sdbar6[2]*2,avgbar6[2]+sdbar6[2]*2), col="blue",lty=1)
 lines(c(7,7),c(avgbar7[2]-sdbar7[2]*2,avgbar7[2]+sdbar7[2]*2), col="purple",lty=1)
 lines(c(8,8),c(avgbar8[2]-sdbar8[2]*2,avgbar8[2]+sdbar8[2]*2), col="pink",lty=1)
 
-par(mfrow=c(3,3))
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 2")
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 2")
 points(0,avgbar0[3],  col="red", cex = 1, pch=16)
 points(1,avgbar1[3],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[3],  col="yellow2", cex = 1, pch=16)
@@ -685,7 +685,7 @@ lines(c(7,7),c(avgbar7[3]-sdbar7[3]*2,avgbar7[3]+sdbar7[3]*2), col="purple",lty=
 lines(c(8,8),c(avgbar8[3]-sdbar8[3]*2,avgbar8[3]+sdbar8[3]*2), col="pink",lty=1)
 
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 3")
+plot(NULL, ylim=c(0,55), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 3")
 points(0,avgbar0[4],  col="red", cex = 1, pch=16)
 points(1,avgbar1[4],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[4],  col="yellow2", cex = 1, pch=16)
@@ -726,7 +726,7 @@ lines(c(7,7),c(avgbar7[5]-sdbar7[5]*2,avgbar7[5]+sdbar7[5]*2), col="purple",lty=
 lines(c(8,8),c(avgbar8[5]-sdbar8[5]*2,avgbar8[5]+sdbar8[5]*2), col="pink",lty=1)
 
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Datasets 5")
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Datasets 5")
 points(0,avgbar0[6],  col="red", cex = 1, pch=16)
 points(1,avgbar1[6],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[6],  col="yellow2", cex = 1, pch=16)
@@ -746,7 +746,7 @@ lines(c(6,6),c(avgbar6[6]-sdbar6[6]*2,avgbar6[6]+sdbar6[6]*2), col="blue",lty=1)
 lines(c(7,7),c(avgbar7[6]-sdbar7[6]*2,avgbar7[6]+sdbar7[6]*2), col="purple",lty=1)
 lines(c(8,8),c(avgbar8[6]-sdbar8[6]*2,avgbar8[6]+sdbar8[6]*2), col="pink",lty=1)
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 6")
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 6")
 points(0,avgbar0[7],  col="red", cex = 1, pch=16)
 points(1,avgbar1[7],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[7],  col="yellow2", cex = 1, pch=16)
@@ -767,7 +767,7 @@ lines(c(7,7),c(avgbar7[7]-sdbar7[7]*2,avgbar7[7]+sdbar7[7]*2), col="purple",lty=
 lines(c(8,8),c(avgbar8[7]-sdbar8[7]*2,avgbar8[7]+sdbar8[7]*2), col="pink",lty=1)
 
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 7")
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 7")
 points(0,avgbar0[8],  col="red", cex = 1, pch=16)
 points(1,avgbar1[8],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[8],  col="yellow2", cex = 1, pch=16)
@@ -788,7 +788,7 @@ lines(c(7,7),c(avgbar7[8]-sdbar7[8]*2,avgbar7[8]+sdbar7[8]*2), col="purple",lty=
 lines(c(8,8),c(avgbar8[8]-sdbar8[8]*2,avgbar8[8]+sdbar8[8]*2), col="pink",lty=1)
 
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 8")
+plot(NULL, ylim=c(0,2), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 8")
 points(0,avgbar0[9],  col="red", cex = 1, pch=16)
 points(1,avgbar1[9],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[9],  col="yellow2", cex = 1, pch=16)
@@ -808,7 +808,7 @@ lines(c(6,6),c(avgbar6[9]-sdbar6[9]*2,avgbar6[9]+sdbar6[9]*2), col="blue",lty=1)
 lines(c(7,7),c(avgbar7[9]-sdbar7[9]*2,avgbar7[9]+sdbar7[9]*2), col="purple",lty=1)
 lines(c(8,8),c(avgbar8[9]-sdbar8[9]*2,avgbar8[9]+sdbar8[9]*2), col="pink",lty=1)
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 9")
+plot(NULL, ylim=c(0,30), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 9")
 points(0,avgbar0[10],  col="red", cex = 1, pch=16)
 points(1,avgbar1[10],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[10],  col="yellow2", cex = 1, pch=16)
@@ -828,7 +828,7 @@ lines(c(6,6),c(avgbar6[10]-sdbar6[10]*2,avgbar6[10]+sdbar6[10]*2), col="blue",lt
 lines(c(7,7),c(avgbar7[10]-sdbar7[10]*2,avgbar7[10]+sdbar7[10]*2), col="purple",lty=1)
 lines(c(8,8),c(avgbar8[10]-sdbar8[10]*2,avgbar8[10]+sdbar8[10]*2), col="pink",lty=1)
 
-plot(NULL, ylim=c(0,70), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 10")
+plot(NULL, ylim=c(0,20), xlim=c(0,8), xlab="Bar Number", ylab="Average MSE", main="Average MSE Dataset 10")
 points(0,avgbar0[11],  col="red", cex = 1, pch=16)
 points(1,avgbar1[11],  col="orange", cex = 1, pch=16)
 points(2,avgbar2[11],  col="yellow2", cex = 1, pch=16)
@@ -847,43 +847,6 @@ lines(c(5,5),c(avgbar5[11]-sdbar5[11]*2,avgbar5[11]+sdbar5[11]*2), col="lightblu
 lines(c(6,6),c(avgbar6[11]-sdbar6[11]*2,avgbar6[11]+sdbar6[11]*2), col="blue",lty=1)
 lines(c(7,7),c(avgbar7[11]-sdbar7[11]*2,avgbar7[11]+sdbar7[11]*2), col="purple",lty=1)
 lines(c(8,8),c(avgbar8[11]-sdbar8[11]*2,avgbar8[11]+sdbar8[11]*2), col="pink",lty=1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
