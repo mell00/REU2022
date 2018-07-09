@@ -114,7 +114,9 @@ datanames = c("0 Breaks, Low SD", "0 Breaks, High SD", "1 Break, Clean SD",
 "2 Breaks, Large Slopes", "1 Break, Small Slopes", "2 Breaks, Small Slopes",
 "1 Break, Diff. Var.", "2 Break, Diff. Var.")
 
-#mean and SD for acceptance rate from all simulations
+#looking at acceptance rate
+
+##mean and SD for acceptance rate from all simulations
 acceptrate_00a = c(mean(bar0_data0a$AcceptRate), sd(bar0_data0a$AcceptRate))
 acceptrate_00b = c(mean(bar0_data0b$AcceptRate), sd(bar0_data0b$AcceptRate))
 acceptrate_01 = c(mean(bar0_data1$AcceptRate), sd(bar0_data1$AcceptRate))
@@ -224,7 +226,7 @@ acceptrate_88 = c(mean(bar8_data8$AcceptRate), sd(bar8_data7$AcceptRate))
 acceptrate_89 = c(mean(bar8_data9$AcceptRate), sd(bar8_data9$AcceptRate))
 acceptrate_810 = c(mean(bar8_data10$AcceptRate), sd(bar8_data10$AcceptRate))
 
-#putting together the acceptance rate means and SD by data set
+##putting together the acceptance rate means and SD by data set
 acceptrate_data0a = c(acceptrate_00a, acceptrate_10a, acceptrate_20a,
 acceptrate_30a, acceptrate_40a, acceptrate_50a,
 acceptrate_60a, acceptrate_70a, acceptrate_80a, recursive=T)
@@ -262,7 +264,7 @@ acceptrate_data10 = c(acceptrate_010, acceptrate_110, acceptrate_210,
 acceptrate_310, acceptrate_410, acceptrate_510,
 acceptrate_610, acceptrate_710, acceptrate_810, recursive=T)
 
-#creating a single data frame with all summary statistics for acceptance rate
+##creating a single data frame with all summary statistics for acceptance rate
 acceptrate = rbind(acceptrate_data0a, acceptrate_data0b, acceptrate_data1, acceptrate_data2,
 acceptrate_data3, acceptrate_data4, acceptrate_data5, acceptrate_data6, acceptrate_data7,
 acceptrate_data8, acceptrate_data9, acceptrate_data10)
@@ -275,8 +277,9 @@ round(acceptrate, 5)
 
 #looking at distribution of number of breakpoints (k)
 
-#quantiatively
+##quantiatively
 
+### getting mean and SD for numberof breakpoints for all files
 num_bar0_0a = c(mean(colMeans(bar0_data0a$NumBkpts)), mean(sapply(bar0_data0a$NumBkpts, sd)))
 num_bar1_0a = c(mean(colMeans(bar1_data0a$NumBkpts)), mean(sapply(bar1_data0a$NumBkpts, sd)))
 num_bar2_0a = c(mean(colMeans(bar2_data0a$NumBkpts)), mean(sapply(bar2_data0a$NumBkpts, sd)))
@@ -386,6 +389,7 @@ num_bar6_10 = c(mean(colMeans(bar6_data10$NumBkpts)), mean(sapply(bar6_data10$Nu
 num_bar7_10 = c(mean(colMeans(bar7_data10$NumBkpts)), mean(sapply(bar7_data10$NumBkpts, sd)))
 num_bar8_10 = c(mean(colMeans(bar8_data10$NumBkpts)), mean(sapply(bar8_data10$NumBkpts, sd)))
 
+###put all means and SDs together by data
 num_data0a = c(num_bar0_0a, num_bar1_0a, num_bar2_0a, num_bar3_0a, num_bar4_0a,
 num_bar5_0a, num_bar6_0a, num_bar7_0a, num_bar8_0a, recursive=T)
 num_data0b = c(num_bar0_0b, num_bar1_0b, num_bar2_0b, num_bar3_0b, num_bar4_0b,
@@ -411,6 +415,7 @@ num_bar5_9, num_bar6_9, num_bar7_9, num_bar8_9, recursive=T)
 num_data10 = c(num_bar0_10, num_bar1_10, num_bar2_10, num_bar3_10, num_bar4_10,
 num_bar5_10, num_bar6_10, num_bar7_10, num_bar8_10, recursive=T)
 
+###create single data frame which shows error (mean - true) and SD for all variations
 num = rbind(num_data0a, num_data0b, num_data1, num_data2,
 num_data3, num_data4, num_data5, num_data6, num_data7,
 num_data8, num_data9, num_data10)
@@ -434,15 +439,15 @@ num = rbind(num, colMeans(num))
 rownames(num) = c(datanames, "Total", recursive=T)
 round(num, 5)
 
-#graphically
+##graphically
 
-#specify which simulation you want to look at right now
+###specify which simulation you want to look at right now
 current_sim = barB_data2$NumBkpts
 current_title = "barB - Data 2"
-#specify correct number of breakpoints for this training set
+###specify correct number of breakpoints for this training set
 current_true = 2
 
-#set graphical parameters
+###set graphical parameters
 x_label = "Number of Breakpoints"
 y_label = "Number of Iterations"
 n_breaks = c(0:10)
@@ -452,7 +457,7 @@ y_upper = 2500
 line_type = 1
 line_width = 2
 
-#plot distributions of number of breakpoints
+###plot distributions of number of breakpoints
 par(mfrow=c(3,3))
 hist(current_sim[[1]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
 lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
@@ -475,7 +480,229 @@ lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=l
 
 #looking at distribution of breakpoint locations (tau)
 
-#function to plot frequency of breakpoints
+##quantitatively
+
+###function for placing all breakpoints for one file into a single list
+all_breakpoints = function(breakpoints){
+
+final_breakpoints = NULL
+
+if(length(breakpoints) == 0){
+	return("")
+}else{
+	for(m in 1:length(breakpoints)){
+		if(is.atomic(breakpoints[[m]]) == TRUE) {
+			final_breakpoints = c(final_breakpoints, breakpoints[[m]], recursive=T)
+		}else if(dim(breakpoints[[m]])[2] >= 2) {
+			column_list = NULL
+			for(i in 1:dim(breakpoints[[m]])[2]){
+				column_list = c(column_list, breakpoints[[m]][,i], recursive=T)
+			}
+			final_breakpoints = c(final_breakpoints, column_list, recursive=T)	
+		}
+	}
+return(final_breakpoints)
+}
+
+}
+
+###getting breakpoints that occur more times than threshold for each file
+bkpts_bar0_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data0a$Breakpoints))), decreasing=T))
+bkpts_bar0_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data0b$Breakpoints))), decreasing=T))
+bkpts_bar0_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data1$Breakpoints))), decreasing=T))
+bkpts_bar0_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data2$Breakpoints))), decreasing=T))
+bkpts_bar0_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data3$Breakpoints))), decreasing=T))
+bkpts_bar0_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data4$Breakpoints))), decreasing=T))
+bkpts_bar0_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data5$Breakpoints))), decreasing=T))
+bkpts_bar0_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data6$Breakpoints))), decreasing=T))
+bkpts_bar0_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data7$Breakpoints))), decreasing=T))
+bkpts_bar0_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data8$Breakpoints))), decreasing=T))
+bkpts_bar0_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data9$Breakpoints))), decreasing=T))
+bkpts_bar0_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar0_data10$Breakpoints))), decreasing=T))
+bkpts_bar1_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data0a$Breakpoints))), decreasing=T))
+bkpts_bar1_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data0b$Breakpoints))), decreasing=T))
+bkpts_bar1_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data1$Breakpoints))), decreasing=T))
+bkpts_bar1_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data2$Breakpoints))), decreasing=T))
+bkpts_bar1_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data3$Breakpoints))), decreasing=T))
+bkpts_bar1_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data4$Breakpoints))), decreasing=T))
+bkpts_bar1_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data5$Breakpoints))), decreasing=T))
+bkpts_bar1_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data6$Breakpoints))), decreasing=T))
+bkpts_bar1_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data7$Breakpoints))), decreasing=T))
+bkpts_bar1_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data8$Breakpoints))), decreasing=T))
+bkpts_bar1_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data9$Breakpoints))), decreasing=T))
+bkpts_bar1_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar1_data10$Breakpoints))), decreasing=T))
+bkpts_bar2_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data0a$Breakpoints))), decreasing=T))
+bkpts_bar2_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data0b$Breakpoints))), decreasing=T))
+bkpts_bar2_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data1$Breakpoints))), decreasing=T))
+bkpts_bar2_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data2$Breakpoints))), decreasing=T))
+bkpts_bar2_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data3$Breakpoints))), decreasing=T))
+bkpts_bar2_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data4$Breakpoints))), decreasing=T))
+bkpts_bar2_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data5$Breakpoints))), decreasing=T))
+bkpts_bar2_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data6$Breakpoints))), decreasing=T))
+bkpts_bar2_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data7$Breakpoints))), decreasing=T))
+bkpts_bar2_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data8$Breakpoints))), decreasing=T))
+bkpts_bar2_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data9$Breakpoints))), decreasing=T))
+bkpts_bar2_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar2_data10$Breakpoints))), decreasing=T))
+bkpts_bar3_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data0a$Breakpoints))), decreasing=T))
+bkpts_bar3_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data0b$Breakpoints))), decreasing=T))
+bkpts_bar3_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data1$Breakpoints))), decreasing=T))
+bkpts_bar3_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data2$Breakpoints))), decreasing=T))
+bkpts_bar3_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data3$Breakpoints))), decreasing=T))
+bkpts_bar3_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data4$Breakpoints))), decreasing=T))
+bkpts_bar3_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data5$Breakpoints))), decreasing=T))
+bkpts_bar3_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data6$Breakpoints))), decreasing=T))
+bkpts_bar3_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data7$Breakpoints))), decreasing=T))
+bkpts_bar3_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data8$Breakpoints))), decreasing=T))
+bkpts_bar3_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data9$Breakpoints))), decreasing=T))
+bkpts_bar3_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar3_data10$Breakpoints))), decreasing=T))
+bkpts_bar4_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data0a$Breakpoints))), decreasing=T))
+bkpts_bar4_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data0b$Breakpoints))), decreasing=T))
+bkpts_bar4_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data1$Breakpoints))), decreasing=T))
+bkpts_bar4_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data2$Breakpoints))), decreasing=T))
+bkpts_bar4_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data3$Breakpoints))), decreasing=T))
+bkpts_bar4_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data4$Breakpoints))), decreasing=T))
+bkpts_bar4_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data5$Breakpoints))), decreasing=T))
+bkpts_bar4_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data6$Breakpoints))), decreasing=T))
+bkpts_bar4_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data7$Breakpoints))), decreasing=T))
+bkpts_bar4_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data8$Breakpoints))), decreasing=T))
+bkpts_bar4_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data9$Breakpoints))), decreasing=T))
+bkpts_bar4_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar4_data10$Breakpoints))), decreasing=T))
+bkpts_bar5_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data0a$Breakpoints))), decreasing=T))
+bkpts_bar5_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data0b$Breakpoints))), decreasing=T))
+bkpts_bar5_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data1$Breakpoints))), decreasing=T))
+bkpts_bar5_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data2$Breakpoints))), decreasing=T))
+bkpts_bar5_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data3$Breakpoints))), decreasing=T))
+bkpts_bar5_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data4$Breakpoints))), decreasing=T))
+bkpts_bar5_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data5$Breakpoints))), decreasing=T))
+bkpts_bar5_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data6$Breakpoints))), decreasing=T))
+bkpts_bar5_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data7$Breakpoints))), decreasing=T))
+bkpts_bar5_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data8$Breakpoints))), decreasing=T))
+bkpts_bar5_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data9$Breakpoints))), decreasing=T))
+bkpts_bar5_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar5_data10$Breakpoints))), decreasing=T))
+bkpts_bar6_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data0a$Breakpoints))), decreasing=T))
+bkpts_bar6_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data0b$Breakpoints))), decreasing=T))
+bkpts_bar6_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data1$Breakpoints))), decreasing=T))
+bkpts_bar6_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data2$Breakpoints))), decreasing=T))
+bkpts_bar6_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data3$Breakpoints))), decreasing=T))
+bkpts_bar6_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data4$Breakpoints))), decreasing=T))
+bkpts_bar6_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data5$Breakpoints))), decreasing=T))
+bkpts_bar6_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data6$Breakpoints))), decreasing=T))
+bkpts_bar6_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data7$Breakpoints))), decreasing=T))
+bkpts_bar6_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data8$Breakpoints))), decreasing=T))
+bkpts_bar6_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data9$Breakpoints))), decreasing=T))
+bkpts_bar6_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar6_data10$Breakpoints))), decreasing=T))
+bkpts_bar7_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data0a$Breakpoints))), decreasing=T))
+bkpts_bar7_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data0b$Breakpoints))), decreasing=T))
+bkpts_bar7_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data1$Breakpoints))), decreasing=T))
+bkpts_bar7_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data2$Breakpoints))), decreasing=T))
+bkpts_bar7_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data3$Breakpoints))), decreasing=T))
+bkpts_bar7_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data4$Breakpoints))), decreasing=T))
+bkpts_bar7_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data5$Breakpoints))), decreasing=T))
+bkpts_bar7_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data6$Breakpoints))), decreasing=T))
+bkpts_bar7_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data7$Breakpoints))), decreasing=T))
+bkpts_bar7_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data8$Breakpoints))), decreasing=T))
+bkpts_bar7_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data9$Breakpoints))), decreasing=T))
+bkpts_bar7_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar7_data10$Breakpoints))), decreasing=T))
+bkpts_bar8_data0a = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data0a$Breakpoints))), decreasing=T))
+bkpts_bar8_data0b = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data0b$Breakpoints))), decreasing=T))
+bkpts_bar8_data1 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data1$Breakpoints))), decreasing=T))
+bkpts_bar8_data2 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data2$Breakpoints))), decreasing=T))
+bkpts_bar8_data3 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data3$Breakpoints))), decreasing=T))
+bkpts_bar8_data4 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data4$Breakpoints))), decreasing=T))
+bkpts_bar8_data5 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data5$Breakpoints))), decreasing=T))
+bkpts_bar8_data6 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data6$Breakpoints))), decreasing=T))
+bkpts_bar8_data7 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data7$Breakpoints))), decreasing=T))
+bkpts_bar8_data8 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data8$Breakpoints))), decreasing=T))
+bkpts_bar8_data9 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data9$Breakpoints))), decreasing=T))
+bkpts_bar8_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data10$Breakpoints))), decreasing=T))
+
+###function to check if no breakpoints were ever found
+breakpoint_check = function(breakpoints){
+
+	threshold <<- 0.20 * 3000 * 9
+
+	if(length(breakpoints) > 1){
+		final_breakpoints = paste(breakpoints[breakpoints[,2] >= threshold, 1], sep="", collapse=", ")
+		return(final_breakpoints)
+	}else{
+		return("")
+	}
+
+}
+
+###putting breakpoints into rows based on data
+bkpts_data0a = cbind(breakpoint_check(bkpts_bar0_data0a), breakpoint_check(bkpts_bar1_data0a),
+breakpoint_check(bkpts_bar2_data0a), breakpoint_check(bkpts_bar3_data0a),
+breakpoint_check(bkpts_bar4_data0a), breakpoint_check(bkpts_bar5_data0a),
+breakpoint_check(bkpts_bar6_data0a), breakpoint_check(bkpts_bar7_data0a),
+breakpoint_check(bkpts_bar8_data0a))
+bkpts_data0b = cbind(breakpoint_check(bkpts_bar0_data0b), breakpoint_check(bkpts_bar1_data0b),
+breakpoint_check(bkpts_bar2_data0b), breakpoint_check(bkpts_bar3_data0b),
+breakpoint_check(bkpts_bar4_data0b), breakpoint_check(bkpts_bar5_data0b),
+breakpoint_check(bkpts_bar6_data0b), breakpoint_check(bkpts_bar7_data0b),
+breakpoint_check(bkpts_bar8_data0b))
+bkpts_data1 = cbind(breakpoint_check(bkpts_bar0_data1), breakpoint_check(bkpts_bar1_data1),
+breakpoint_check(bkpts_bar2_data1), breakpoint_check(bkpts_bar3_data1),
+breakpoint_check(bkpts_bar4_data1), breakpoint_check(bkpts_bar5_data1),
+breakpoint_check(bkpts_bar6_data1), breakpoint_check(bkpts_bar7_data1),
+breakpoint_check(bkpts_bar8_data1))
+bkpts_data2 = cbind(breakpoint_check(bkpts_bar0_data2), breakpoint_check(bkpts_bar1_data2),
+breakpoint_check(bkpts_bar2_data2), breakpoint_check(bkpts_bar3_data2),
+breakpoint_check(bkpts_bar4_data2), breakpoint_check(bkpts_bar5_data2),
+breakpoint_check(bkpts_bar6_data2), breakpoint_check(bkpts_bar7_data2),
+breakpoint_check(bkpts_bar8_data2))
+bkpts_data3 = cbind(breakpoint_check(bkpts_bar0_data3), breakpoint_check(bkpts_bar1_data3),
+breakpoint_check(bkpts_bar2_data3), breakpoint_check(bkpts_bar3_data3),
+breakpoint_check(bkpts_bar4_data3), breakpoint_check(bkpts_bar5_data3),
+breakpoint_check(bkpts_bar6_data3), breakpoint_check(bkpts_bar7_data3),
+breakpoint_check(bkpts_bar8_data3))
+bkpts_data4 = cbind(breakpoint_check(bkpts_bar0_data4), breakpoint_check(bkpts_bar1_data4),
+breakpoint_check(bkpts_bar2_data4), breakpoint_check(bkpts_bar3_data4),
+breakpoint_check(bkpts_bar4_data4), breakpoint_check(bkpts_bar5_data4),
+breakpoint_check(bkpts_bar6_data4), breakpoint_check(bkpts_bar7_data4),
+breakpoint_check(bkpts_bar8_data4))
+bkpts_data5 = cbind(breakpoint_check(bkpts_bar0_data5), breakpoint_check(bkpts_bar1_data5),
+breakpoint_check(bkpts_bar2_data5), breakpoint_check(bkpts_bar3_data5),
+breakpoint_check(bkpts_bar4_data5), breakpoint_check(bkpts_bar5_data5),
+breakpoint_check(bkpts_bar6_data5), breakpoint_check(bkpts_bar7_data5),
+breakpoint_check(bkpts_bar8_data5))
+bkpts_data6 = cbind(breakpoint_check(bkpts_bar0_data6), breakpoint_check(bkpts_bar1_data6),
+breakpoint_check(bkpts_bar2_data6), breakpoint_check(bkpts_bar3_data6),
+breakpoint_check(bkpts_bar4_data6), breakpoint_check(bkpts_bar5_data6),
+breakpoint_check(bkpts_bar6_data6), breakpoint_check(bkpts_bar7_data6),
+breakpoint_check(bkpts_bar8_data6))
+bkpts_data7 = cbind(breakpoint_check(bkpts_bar0_data7), breakpoint_check(bkpts_bar1_data7),
+breakpoint_check(bkpts_bar2_data7), breakpoint_check(bkpts_bar3_data7),
+breakpoint_check(bkpts_bar4_data7), breakpoint_check(bkpts_bar5_data7),
+breakpoint_check(bkpts_bar6_data7), breakpoint_check(bkpts_bar7_data7),
+breakpoint_check(bkpts_bar8_data7))
+bkpts_data8 = cbind(breakpoint_check(bkpts_bar0_data8), breakpoint_check(bkpts_bar1_data8),
+breakpoint_check(bkpts_bar2_data8), breakpoint_check(bkpts_bar3_data8),
+breakpoint_check(bkpts_bar4_data8), breakpoint_check(bkpts_bar5_data8),
+breakpoint_check(bkpts_bar6_data8), breakpoint_check(bkpts_bar7_data8),
+breakpoint_check(bkpts_bar8_data8))
+bkpts_data9 = cbind(breakpoint_check(bkpts_bar0_data9), breakpoint_check(bkpts_bar1_data9),
+breakpoint_check(bkpts_bar2_data9), breakpoint_check(bkpts_bar3_data9),
+breakpoint_check(bkpts_bar4_data9), breakpoint_check(bkpts_bar5_data9),
+breakpoint_check(bkpts_bar6_data9), breakpoint_check(bkpts_bar7_data9),
+breakpoint_check(bkpts_bar8_data9))
+bkpts_data10 = cbind(breakpoint_check(bkpts_bar0_data10), breakpoint_check(bkpts_bar1_data10),
+breakpoint_check(bkpts_bar2_data10), breakpoint_check(bkpts_bar3_data10),
+breakpoint_check(bkpts_bar4_data10), breakpoint_check(bkpts_bar5_data10),
+breakpoint_check(bkpts_bar6_data10), breakpoint_check(bkpts_bar7_data10),
+breakpoint_check(bkpts_bar8_data10))
+
+##creating a single data frame with breakpoints above threshold
+bkpts = rbind(bkpts_data0a, bkpts_data0b, bkpts_data1, bkpts_data2,
+bkpts_data3, bkpts_data4, bkpts_data5, bkpts_data6, bkpts_data7,
+bkpts_data8, bkpts_data9, bkpts_data10)
+rownames(bkpts) = c(datanames, recursive=T)
+colnames(bkpts) = c("bar0", "bar1", "bar2", "bar3", "bar4", "bar5", "bar6", "bar7", "bar8")
+bkpts
+
+##graphically
+
+###function to plot frequency of breakpoints
 plot_tau_hist <- function(breakpoints, title, x_axis_lab, y_axis_lab, color, num_breaks, x_axis_limits, y_axis_limits){
  
 	if(is.atomic(breakpoints) == TRUE) {
@@ -490,13 +717,13 @@ plot_tau_hist <- function(breakpoints, title, x_axis_lab, y_axis_lab, color, num
 
 }
 
-#specify which simulation you want to look at right now
-current_sim = barB_data4$Breakpoints
-current_title = "barB - Data 4"
-#specify correct locations of breakpoints for this training set
+###specify which simulation you want to look at right now
+current_sim = bar0_data2$Breakpoints
+current_title = "bar0 - Data 2"
+###specify correct locations of breakpoints for this training set
 current_true = c(30,60)
 
-#set graphical parameters
+###set graphical parameters
 x_label = "Location of Breakpoints"
 y_label = "Number of Iterations"
 n_breaks = c(1:90)
@@ -508,7 +735,7 @@ line_color = "red1"
 line_type = 2
 line_width = 1
 
-#plot distributions of breakpoint locations
+###plot distributions of breakpoint locations
 par(mfrow=c(3,3))
 plot_tau_hist(current_sim[[1]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
 if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
