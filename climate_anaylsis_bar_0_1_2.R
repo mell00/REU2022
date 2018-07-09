@@ -38,4 +38,28 @@ lines(c(1,1),c(mBICCbar1-sdBICCbar1*2,mBICCbar1+sdBICCbar1*2), col="purple",lty=
 points(2, mBICCbar2, col="blue", cex = 1, pch=16)
 lines(c(2,2),c(mBICCbar2-sdBICCbar2*2,mBICCbar2+sdBICCbar2*2), col="blue",lty=1)
 
+x.y = -250
+y.y = -150
+par(mfrow=c(3,3))
+plot(bar0_climate$BIC[[1]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[2]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[3]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[4]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[5]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[6]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[7]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[8]], ylim=c(x.y,y.y), ylab="BIC")
+plot(bar0_climate$BIC[[9]], ylim=c(x.y,y.y), ylab="BIC")
+
+x.y = .005
+y.y = .015
+plot(bar0_climate$MSE[[1]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[2]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[3]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[4]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[5]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[6]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[7]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[8]], ylim=c(x.y,y.y), ylab="MSE")
+plot(bar0_climate$MSE[[9]], ylim=c(x.y,y.y), ylab="MSE")
 
