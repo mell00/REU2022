@@ -1,5 +1,5 @@
-bar0_data2_bpno
-2.775513 hours
+bar0_data2_bpno | bar2_data2_bpno
+2.775513 hours | 2.934325 hours
 bar0_data2_bpwith
 3.464557 hours
 bar0_data2_middle | bar2_data2_middle
