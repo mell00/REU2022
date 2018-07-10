@@ -1,6 +1,6 @@
 temp_data = read.csv(url("https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/12/1880-2018.csv"))
 temp_data = temp_data[-c(1,2,3,4),]
-temp_data[,1] = as.numeric(temp_data[,1])
+temp_data[,1] = as.numeric(as.character(temp_data[,1]))
 temp_data[,2] = as.numeric(as.character(temp_data[,2]))
 
 temp_bkpts = breakpoints(temp_data[,2]~temp_data[,1], h=0.05, breaks=10)
