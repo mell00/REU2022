@@ -140,5 +140,8 @@ par(mfrow=c(1,1))
 
 
 par(mfrow=c(1,3))
+plot(test_data_2, main = "2 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_10, main = "2 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
 plot(temp_data[,2]~temp_data[,1], main="Global Tempature Anomaly from 1880-2018", ylab="Anomaly in degree Celsius", xlab="Time (years)")
 lines(c(1880,2020), c(0,0))
+par(mfrow=c(1,1))
