@@ -12,7 +12,7 @@ bar0_data10_bpwith
 bar0_data10_middle
 2.899285 hours
 
-bar0_climate_bpno |
+bar0_climate_bpno | bar2_climate_bpno
 5.537377 hours | 4.452221 hours
 bar0_climate_bpwith | bar2_climate_bpwith
 5.412965 hours | 4.503763 hours
