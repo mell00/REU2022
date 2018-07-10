@@ -441,6 +441,21 @@ round(num, 5)
 
 ##graphically
 
+par(mfrow=c(1,2))
+hist(c(bar0_data2$NumBkpts[[1]], bar0_data2$NumBkpts[[2]], bar0_data2$NumBkpts[[3]],
+bar0_data2$NumBkpts[[4]], bar0_data2$NumBkpts[[5]], bar0_data2$NumBkpts[[6]],
+bar0_data2$NumBkpts[[7]], bar0_data2$NumBkpts[[8]], bar0_data2$NumBkpts[[9]], recursive=T),
+ylim=c(0,20000), xlim=c(1,13), breaks=c(1:13), col="red", right=F,
+main="BAR 0", ylab="Number of Iterations Out of 27,000",
+xlab="Number of Breakpoints")
+hist(c(bar6_data2$NumBkpts[[1]], bar6_data2$NumBkpts[[2]], bar6_data2$NumBkpts[[3]],
+bar6_data2$NumBkpts[[4]], bar6_data2$NumBkpts[[5]], bar6_data2$NumBkpts[[6]],
+bar6_data2$NumBkpts[[7]], bar6_data2$NumBkpts[[8]], bar6_data2$NumBkpts[[9]], recursive=T),
+ylim=c(0,20000), xlim=c(1,13), breaks=c(1:13), col="blue", right=F,
+main="BAR 6", ylab="Number of Iterations Out of 27,000",
+xlab="Number of Breakpoints")
+
+
 ###specify which simulation you want to look at right now
 current_sim = barB_data2$NumBkpts
 current_title = "barB - Data 2"
@@ -619,10 +634,13 @@ bkpts_bar8_data10 = as.data.frame(sort(table(na.omit(all_breakpoints(bar8_data10
 ###function to check if no breakpoints were ever found
 breakpoint_check = function(breakpoints){
 
-	threshold <<- 0.20 * 3000 * 9
+	threshold <<- 0.15 * 3000 * 9
 
-	if(length(breakpoints) > 1){
+	if(dim(breakpoints)[[2]] > 1){
 		final_breakpoints = paste(breakpoints[breakpoints[,2] >= threshold, 1], sep="", collapse=", ")
+		return(final_breakpoints)
+	}else if(breakpoints[,1][[1]] == 27000){
+		final_breakpoints = paste(rownames(breakpoints)[which(breakpoints == 27000)], sep="", collapse=", ")
 		return(final_breakpoints)
 	}else{
 		return("")
@@ -701,6 +719,37 @@ colnames(bkpts) = c("bar0", "bar1", "bar2", "bar3", "bar4", "bar5", "bar6", "bar
 bkpts
 
 ##graphically
+
+###function to get single list of all breakpoint locations
+all_breakpoints_graph <- function(breakpoints){
+
+	full_breakpoints = NULL
+
+	for(m in 1:length(breakpoints)){ 
+		if(is.atomic(breakpoints[[m]]) == TRUE) {
+			full_breakpoints = c(full_breakpoints, breakpoints[[m]], recursive=T)
+		}else if(dim(breakpoints[[m]])[2] >= 2) {
+			column_list = NULL
+			for(i in 1:dim(breakpoints[[m]])[2]){
+				column_list = c(column_list, breakpoints[[m]][,i], recursive=TRUE)
+			}
+		full_breakpoints = c(full_breakpoints, column_list, recursive=T)
+		}
+	}
+
+	return(full_breakpoints)
+
+}
+
+par(mfrow=c(1,2))
+hist(all_breakpoints_graph(bar0_data4$Breakpoints), col="red",
+ylim=c(0,20000), right=F, breaks=c(seq(1,90,4)), xlim=c(4,96),
+main="BAR 0", ylab="Number of Iterations Out of 27,000",
+xlab="Locations of Breakpoints (in Observations)")
+hist(all_breakpoints_graph(bar5_data4$Breakpoints), col="lightblue",
+ylim=c(0,20000), right=F, breaks=c(seq(1,90,4)), xlim=c(4,96),
+main="BAR 5", ylab="Number of Iterations Out of 27,000",
+xlab="Locations of Breakpoints (in Observations)")
 
 ###function to plot frequency of breakpoints
 plot_tau_hist <- function(breakpoints, title, x_axis_lab, y_axis_lab, color, num_breaks, x_axis_limits, y_axis_limits){
