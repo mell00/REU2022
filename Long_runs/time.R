@@ -16,5 +16,5 @@
 #5.537377 hours | 4.452221 hours
 #bar0_climate_bpwith | bar2_climate_bpwith
 #5.412965 hours | 4.503763 hours
-#bar0_climate_middle | bar2_climate_middle
-#5.534174 hours | 4.266711 hours
+#bar0_climate_middle | bar1_climate_middle | bar2_climate_middle
+#5.534174 hours | 3.820418 hours | 4.266711 hours
