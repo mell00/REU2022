@@ -110,7 +110,7 @@ K_ENDS_NEW = c(1,15,21,27,30)
 N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
 RHOW = .5
 
-answer <- part_two_q_add_score_add(N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
+part_two_q_add_score_add(N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
 
 answer
 

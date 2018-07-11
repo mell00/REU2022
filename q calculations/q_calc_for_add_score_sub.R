@@ -1,11 +1,4 @@
 
-#creates list of all of the n_frees woohoo
-create_n_free_list_sub <- function (data_set, n_not_free_old){
-  n_free_list = setdiff(data_set, n_not_free_old)
-  sort(n_free_list)
-  return (n_free_list)
-}
-
 #creates a list of the scores for the n_frees 
 n_free_scores_sub <- function(n_free_list, k_ends_new){
   
@@ -98,9 +91,14 @@ n_free_win_count_sub <- function(score_list, k_ends_old, k_ends_new){
 }
 
 #calculates the second part of the q algorithm for sub
-part_two_q_add_score_sub <- function(data, n_unfree, k_ends_old, k_ends_new, rhow){
+part_two_q_add_score_sub <- function(n_unfree, k_ends_old, k_ends_new, rhow){
   
-  list_of_n_frees = create_n_free_list_sub(data, n_unfree) #creates the list of n_free points 
+  data = c(1:max(k_ends_old))
+  
+  #creates the list of n_free points 
+  n_free_list = setdiff(data, n_unfree)
+  list_of_n_frees = sort(n_free_list)
+  
   n_free_score_list = n_free_scores_sub(list_of_n_frees, k_ends_new) #calculates and creates the scoring list for the n_free points 
   numerator = n_free_win_count_sub(n_free_score_list, k_ends_old, k_ends_new)
   denomenator = choose(length(list_of_n_frees), 2)
@@ -116,7 +114,7 @@ K_ENDS_NEW = c(1,15,27,30)
 N_UNFREE = c(1,2,3,13,14,15,16,17,25,26,27,28,29,30)
 RHOW = .5
 
-answer <- part_two_q_add_score_sub(DATA_SET, N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
+answer <- part_two_q_add_score_sub( N_UNFREE, K_ENDS_OLD, K_ENDS_NEW,  RHOW)
 
 answer
 
