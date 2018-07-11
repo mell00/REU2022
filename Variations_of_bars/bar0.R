@@ -386,7 +386,7 @@ barJiggle<-function(percent, k_ends, count){
 }
 
 #calling the function
-current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 250)
-#hist(current_result$NumBkpts)
-#current_result$ProposedSteps
-#current_result$AcceptedSteps
+current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 3000)
+hist(current_result$NumBkpts)
+current_result$ProposedSteps
+current_result$AcceptedSteps
