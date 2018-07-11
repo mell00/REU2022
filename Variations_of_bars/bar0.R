@@ -1,4 +1,4 @@
-#complete BAR - Variation B (Random/Random/Move+Jiggle)
+#complete BAR - Variation 0 (Random/Random/Move+Jiggle)
 
 #-------Key:
 # k			= x-axis values of starting breakpoints
@@ -10,8 +10,16 @@
 # percent		= how much a point can jiggle
 # lambda		= for Poisson distribution of breakpoint prior
 
-bar0 = function(k, time, data, iterations, make_murder_p, percent, lambda){
-  
+bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, lambda = 1){
+
+  if(length(time) != length(data)){
+	return("Data and time vectors must be of equal length.")
+  } else if(make_murder_p >= 1){
+	return("Make/murder proportion must be less than 1.")
+  } else if(percent >= 1){
+	return("Jiggle proportion must be less than 1.")
+  }
+
   library(MASS)
   
   full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
@@ -384,7 +392,7 @@ barJiggle<-function(percent, k_ends, count){
 }
 
 #calling the function
-#current_result = bar0(bkpts_2$breakpoints, test_data_2[,1], test_data_2[,2], 2500, 0.5, 0.02, lambda)
+current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 250)
 #hist(current_result$NumBkpts)
 #current_result$ProposedSteps
 #current_result$AcceptedSteps

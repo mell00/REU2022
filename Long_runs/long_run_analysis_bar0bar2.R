@@ -1,30 +1,12 @@
 #read in all data (set correct working directory prior to this)
-bar0_data2_bpcon = readRDS("bar0_data2_bpconstraints.RData")
-bar0_data2_middle = readRDS("bar0_data2_middle.RData")
-bar1_data2_bpnocon = readRDS("bar1_data2_bpnoconstraints.RData")
-bar1_data2_bpcon = readRDS("bar1_data2_bpconstraints.RData")
-bar1_data2_middle = readRDS("bar1_data2_middle.RData")
-bar2_data2_bpnocon = readRDS("bar2_data2_bpnoconstraints.RData")
-bar2_data2_bpcon = readRDS("bar2_data2_bpconstraints.RData")
-bar2_data2_middle = readRDS("bar2_data2_middle.RData")
-bar0_data10_bpnocon = readRDS("bar0_data10_bpnoconstraints.RData")
-bar0_data10_bpcon = readRDS("bar0_data10_bpconstraints.RData")
-bar0_data10_middle = readRDS("bar0_data10_middle.RData")
-bar1_data10_bpnocon = readRDS("bar1_data10_bpnoconstraints.RData")
-bar1_data10_bpcon = readRDS("bar1_data10_bpconstraints.RData")
-bar1_data10_middle = readRDS("bar1_data10_middle.RData")
-bar2_data10_bpnocon = readRDS("bar2_data10_bpnoconstraints.RData")
-bar2_data10_bpcon = readRDS("bar2_data10_bpconstraints.RData")
-bar2_data10_middle = readRDS("bar2_data10_middle.RData")
-bar0_climate_bpnocon = readRDS("bar0_climate_bpnoconstraints.RData")
-bar0_climate_bpcon = readRDS("bar0_climate_bpconstraints.RData")
-bar0_climate_middle = readRDS("bar0_climate_middle.RData")
-bar1_climate_bpnocon = readRDS("bar1_climate_bpnoconstraints.RData")
-bar1_climate_bpcon = readRDS("bar1_climate_bpconstraints.RData")
-bar1_climate_middle = readRDS("bar1_climate_middle.RData")
-bar2_climate_bpnocon = readRDS("bar2_climate_bpnoconstraints.RData")
-bar2_climate_bpcon = readRDS("bar2_climate_bpconstraints.RData")
-bar2_climate_middle = readRDS("bar2_climate_middle.RData")
+bar0_data3_bpcon = readRDS("bar0_data3_bpconstraints.RData")
+bar0_data4_bpcon = readRDS("bar0_data4_bpconstraints.RData")
+bar0_data7_bpcon = readRDS("bar0_data7_bpconstraints.RData")
+bar0_data8_bpcon = readRDS("bar0_data8_bpconstraints.RData")
+bar2_data3_bpcon = readRDS("bar2_data3_bpconstraints.RData")
+bar2_data4_bpcon = readRDS("bar2_data4_bpconstraints.RData")
+bar2_data7_bpcon = readRDS("bar2_data7_bpconstraints.RData")
+bar2_data8_bpcon = readRDS("bar2_data8_bpconstraints.RData")
 
 #looking at acceptance rate
 
@@ -52,45 +34,21 @@ round(acceptrate, 5)
 ##quantiatively
 
 ### getting mean and SD for numberof breakpoints for all files
-num_bar0_2bpn = c(mean(bar0_data2_bpnocon$NumBkpts), sd(bar0_data2_bpnocon$NumBkpts))
-num_bar0_2bpw = c(mean(bar0_data2_bpcon$NumBkpts), sd(bar0_data2_bpcon$NumBkpts))
-num_bar0_2mid = c(mean(bar0_data2_middle$NumBkpts), sd(bar0_data2_middle$NumBkpts))
-num_bar0_1bpn = c(mean(bar0_data10_bpnocon$NumBkpts), sd(bar0_data10_bpnocon$NumBkpts))
-num_bar0_1bpw = c(mean(bar0_data10_bpcon$NumBkpts), sd(bar0_data10_bpcon$NumBkpts))
-num_bar0_1mid = c(mean(bar0_data10_middle$NumBkpts), sd(bar0_data10_middle$NumBkpts))
-num_bar0_cbpn = c(mean(bar0_climate_bpnocon$NumBkpts), sd(bar0_climate_bpnocon$NumBkpts))
-num_bar0_cbpw = c(mean(bar0_climate_bpcon$NumBkpts), sd(bar0_climate_bpcon$NumBkpts))
-num_bar0_cmid = c(mean(bar0_climate_middle$NumBkpts), sd(bar0_climate_middle$NumBkpts))
-num_bar1_2bpn = c(mean(bar1_data2_bpnocon$NumBkpts), sd(bar1_data2_bpnocon$NumBkpts))
-num_bar1_2bpw = c(mean(bar1_data2_bpcon$NumBkpts), sd(bar1_data2_bpcon$NumBkpts))
-num_bar1_2mid = c(mean(bar1_data2_middle$NumBkpts), sd(bar1_data2_middle$NumBkpts))
-num_bar1_1bpn = c(mean(bar1_data10_bpnocon$NumBkpts), sd(bar1_data10_bpnocon$NumBkpts))
-num_bar1_1bpw = c(mean(bar1_data10_bpcon$NumBkpts), sd(bar1_data10_bpcon$NumBkpts))
-num_bar1_1mid = c(mean(bar1_data10_middle$NumBkpts), sd(bar1_data10_middle$NumBkpts))
-num_bar1_cbpn = c(mean(bar1_climate_bpnocon$NumBkpts), sd(bar1_climate_bpnocon$NumBkpts))
-num_bar1_cbpw = c(mean(bar1_climate_bpcon$NumBkpts), sd(bar1_climate_bpcon$NumBkpts))
-num_bar1_cmid = c(mean(bar1_climate_middle$NumBkpts), sd(bar1_climate_middle$NumBkpts))
-num_bar2_2bpn = c(mean(bar2_data2_bpnocon$NumBkpts), sd(bar2_data2_bpnocon$NumBkpts))
-num_bar2_2bpw = c(mean(bar2_data2_bpcon$NumBkpts), sd(bar2_data2_bpcon$NumBkpts))
-num_bar2_2mid = c(mean(bar2_data2_middle$NumBkpts), sd(bar2_data2_middle$NumBkpts))
-num_bar2_1bpn = c(mean(bar2_data10_bpnocon$NumBkpts), sd(bar2_data10_bpnocon$NumBkpts))
-num_bar2_1bpw = c(mean(bar2_data10_bpcon$NumBkpts), sd(bar2_data10_bpcon$NumBkpts))
-num_bar2_1mid = c(mean(bar2_data10_middle$NumBkpts), sd(bar2_data10_middle$NumBkpts))
-num_bar2_cbpn = c(mean(bar2_climate_bpnocon$NumBkpts), sd(bar2_climate_bpnocon$NumBkpts))
-num_bar2_cbpw = c(mean(bar2_climate_bpcon$NumBkpts), sd(bar2_climate_bpcon$NumBkpts))
-num_bar2_cmid = c(mean(bar2_climate_middle$NumBkpts), sd(bar2_climate_middle$NumBkpts))
+num_bar0_3bpw = c(mean(bar0_data3_bpcon$NumBkpts), sd(bar0_data3_bpcon$NumBkpts))
+num_bar0_4bpw = c(mean(bar0_data4_bpcon$NumBkpts), sd(bar0_data4_bpcon$NumBkpts))
+num_bar0_7bpw = c(mean(bar0_data7_bpcon$NumBkpts), sd(bar0_data7_bpcon$NumBkpts))
+num_bar0_8bpw = c(mean(bar0_data8_bpcon$NumBkpts), sd(bar0_data8_bpcon$NumBkpts))
+num_bar2_3bpw = c(mean(bar2_data3_bpcon$NumBkpts), sd(bar2_data3_bpcon$NumBkpts))
+num_bar2_4bpw = c(mean(bar2_data4_bpcon$NumBkpts), sd(bar2_data4_bpcon$NumBkpts))
+num_bar2_7bpw = c(mean(bar2_data7_bpcon$NumBkpts), sd(bar2_data7_bpcon$NumBkpts))
+num_bar2_8bpw = c(mean(bar2_data8_bpcon$NumBkpts), sd(bar2_data8_bpcon$NumBkpts))
 
 ###create single data frame which shows mean and SD for all variations
-num_bar0 = rbind(num_bar0_2bpn, num_bar0_2bpw, num_bar0_2mid, num_bar0_1bpn,
-num_bar0_1bpw, num_bar0_1mid, num_bar0_cbpn, num_bar0_cbpw, num_bar0_cmid)
-num_bar1 = rbind(num_bar1_2bpn, num_bar1_2bpw, num_bar1_2mid, num_bar1_1bpn,
-num_bar1_1bpw, num_bar1_1mid, num_bar1_cbpn, num_bar1_cbpw, num_bar1_cmid)
-num_bar2 = rbind(num_bar2_2bpn, num_bar2_2bpw, num_bar2_2mid, num_bar2_1bpn,
-num_bar2_1bpw, num_bar2_1mid, num_bar2_cbpn, num_bar2_cbpw, num_bar2_cmid)
-num = cbind(num_bar0, num_bar1, num_bar2)
-rownames(num) = c("2bpn", "2bpw", "2mid", "10bpn", "10bpw", "10mid",
-"climbpn", "climbpw", "climmid")
-colnames(num) = c("bar0 Mean", "bar0 SD", "bar1 Mean", "bar1 SD", "bar2 Mean", "bar2 SD")
+num_bar0 = rbind(num_bar0_3bpw, num_bar0_4bpw, num_bar0_7bpw, num_bar0_8bpw)
+num_bar2 = rbind(num_bar2_3bpw, num_bar2_4bpw, num_bar2_7bpw, num_bar2_8bpw)
+num = cbind(num_bar0, num_bar2)
+rownames(num) = c("Data 3", "Data 4", "Data 7", "Data 8")
+colnames(num) = c("bar0 Mean", "bar0 SD", "bar2 Mean", "bar2 SD")
 round(num, 5)
 
 ###set graphical parameters
@@ -212,18 +170,18 @@ plot_tau_hist <- function(breakpoints, title, x_axis_lab, y_axis_lab, color, num
 	}
 
 }
-par(mfrow=c(3,3))
+par(mfrow=c(2,4))
 ###specify which simulation you want to look at right now
-current_sim = bar2_climate_middle$Breakpoints
-current_title = "BAR 2 - Middle Starting Point"
+current_sim = bar2_data8_bpcon$Breakpoints
+current_title = "BAR 2 - Data 8"
 ###specify correct locations of breakpoints for this training set
 current_true = c()
 
 ###set graphical parameters
 x_label = "Location of Breakpoints"
 y_label = "Number of Iterations"
-n_breaks = c(seq(1,138,2))
-x_limits = c(1,138)
+n_breaks = c(seq(1,90,1))
+x_limits = c(1,90)
 y_lower = 0
 y_upper = 100000
 bar_color = "yellow2"
