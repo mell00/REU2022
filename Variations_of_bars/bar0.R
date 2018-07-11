@@ -12,47 +12,41 @@
 
 bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, lambda = 1){
 
-  if(length(time) != length(data)){
-	return("Data and time vectors must be of equal length.")
-  } else if(make_murder_p >= 1){
-	return("Make/murder proportion must be less than 1.")
-  } else if(percent >= 1){
-	return("Jiggle proportion must be less than 1.")
-  }
+	if(length(time) != length(data)){
+		return("Data and time vectors must be of equal length.")
+	}else if(make_murder_p >= 1){
+		return("Make/murder proportion must be less than 1.")
+	}else if(percent >= 1){
+		return("Jiggle proportion must be less than 1.")
+	}
 
-  library(MASS)
+	library(MASS)
+	full_data = cbind(as.numeric(time), as.numeric(data)) #combining time and data inputs
+	n = length(full_data[,1]) #number of observations
+	k_ends = c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
   
-  full_data = cbind(as.numeric(time), as.numeric(data)) #combing the time and data inputs from user
-  
-  n = length(full_data[,1]) #finding max value
-  
-  k_ends = c(min(full_data[,1]), na.omit(k), n) #adding in end points to k values 
-  
-  fitMetrics<-function(k_ends, full_data){
+	fitMetrics<-function(k_ends, full_data){
+
+		sum_loglik = 0 #create sum object
     
-    #create sum objects
-    sum_loglik = 0
-    
-    #get and sum log likelihood for regressions of all intervals
-    if(length(k_ends) < 3 ){
-      model = lm(full_data[,2]~full_data[,1])
-      sum_loglik = logLik(model)[1]
-    }else{
-      for(i in 2:length(k_ends)) {
-        if(i == 2){
-          min = k_ends[i-1]
-          x_values = full_data[c(min:k_ends[i]),1] #getting the x values in the interval
-          y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-          data = data.frame(x_values, y_values) #re-making this into a dataframe 
-          model = lm(y_values~x_values) #running a lm on the selected interval 
-          sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
-        }else if(i > 2){
-          min = k_ends[i-1]
-          x_values = full_data[c((min+1):k_ends[i]),1] #getting the x values in the interval
-          y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
-          data = data.frame(x_values, y_values) #re-making this into a dataframe 
-          model = lm(y_values~x_values) #running a lm on the selected interval 
-          sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
+		#sum log likelihood for regressions of all subsections
+		if(length(k_ends) < 3 ){ #if only 1 subsection
+			model = lm(full_data[,2]~full_data[,1])
+			sum_loglik = logLik(model)[1]
+		}else{ #if more than 1 subsection
+			for(i in 2:length(k_ends)) {
+				if(i == 2){ #first subsection
+					min = k_ends[i-1] #start of subsection
+   					x_values = full_data[c(min:k_ends[i]),1] #subsection's x values
+					y_values = full_data[c(min:k_ends[i]),2] #subsection's y values
+					model = lm(y_values~x_values) #linear regression of selected subsection 
+					sum_loglik = sum_loglik + logLik(model)[1] #log likelihood
+				}else if(i > 2){ #all other subsections
+					min = k_ends[i-1] #start of subsection
+					x_values = full_data[c((min+1):k_ends[i]),1] #subsection's x values
+					y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
+ 					model = lm(y_values~x_values) #running a lm on the selected interval 
+					sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }
       }
     }
@@ -211,17 +205,17 @@ barJiggle<-function(percent, k_ends, count){
   b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
 
-  #getting constants for qs (b_k and d_k in papers)
-  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
-  starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
-  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
+	#Metroplis Hastings 
+	for(i in 1:iterations){
 
-  #Metroplis Hastings 
-  for(i in 1:iterations){
+  		#getting constants for qs (b and d in papers)
+		starting_bkpts = length(k_ends) - 2 #most probable number of breakpoints based on starting info 
+		full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
+		overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
+		starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+		starting_ttl = starting_bkpts + starting_nfree #total to get percentages
+		make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+		murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
     
     old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
 
@@ -230,7 +224,7 @@ barJiggle<-function(percent, k_ends, count){
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-	    count <<- 0 #reset count for failed makes 
+	count <<- 0 #reset count for failed makes 
       k_ends_new = barMake0(k_ends, count) #make
 
 	if(k_ends_new[1] != "make failure"){
