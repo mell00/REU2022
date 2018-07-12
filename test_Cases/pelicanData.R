@@ -9,7 +9,7 @@ iteration_n = 3000
 
 pelican_bkpts<-breakpoints(pelican$NumberByPartyHours~pelican$Count_yr, breaks=10, h=0.05)
 
-pelican_result<-baar(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, iteration_n, 500)
+pelican_result<-balr(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, iteration_n, 500)
 
 pelican_finbkpts<-NULL
 
