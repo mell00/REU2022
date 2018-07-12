@@ -93,67 +93,67 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
   }
 
   #jiggles an existing breakpoint
-barJiggle<-function(percent, k_ends, count){
+  barJiggle<-function(percent, k_ends, count){
 
-  count <<- count + 1
-  data_length = max(k_ends)
+    count <<- count + 1
+    data_length = max(k_ends)
 
-  #determines how much the knot shoud jiggle
-  jiggle_range = ceiling(percent*data_length)
-  jiggle_neighborhood = c(1:jiggle_range)
-  jiggle_spot = sample(jiggle_neighborhood,1)
+    #determines how much the knot shoud jiggle
+    jiggle_range = ceiling(percent*data_length)
+    jiggle_neighborhood = c(1:jiggle_range)
+    jiggle_spot = sample(jiggle_neighborhood,1)
   
-  #"boolean" variable to make sure that we can jiggle 
-  can_jiggle = "good" #default is good and we can jiggle
+    #"boolean" variable to make sure that we can jiggle 
+    can_jiggle = "good" #default is good and we can jiggle
   
-  #determines randomly if knot is jiggling to left or right
-  direction = "right" #default direction is right
-  u = runif(1) #random number from 0-1 from uniform distribution
-  if(u < 0.5){
-    direction = "left"
-    jiggle_spot = (-1)*jiggle_spot
-  }
-  
-  #determines randomly which knot is jiggling (code related to murders)
-  k = k_ends[c(-1, -length(k_ends))] #removes end points
-  rando_location = sample(1:length(k),1) #chooses random knot 
-  rando_knot = k[rando_location]
-  
-  #check if we can jiggle towards an endpoint
-  possible_knot = rando_knot+jiggle_spot
-  if(direction == "right"){
-    right_end = k_ends[length(k_ends)]
-    possible_diff = (abs(possible_knot - right_end) < 3)
-    if(possible_diff == TRUE){
-      can_jiggle = "bad"
+    #determines randomly if knot is jiggling to left or right
+    direction = "right" #default direction is right
+    u = runif(1) #random number from 0-1 from uniform distribution
+    if(u < 0.5){
+      direction = "left"
+      jiggle_spot = (-1)*jiggle_spot
     }
-  }else{
-    left_end = k_ends[1]
-    possible_diff = (abs(possible_knot - left_end) < 3)
-    if(possible_diff == TRUE){
-      can_jiggle = "bad"
-    }
-  }
   
-  #check if new knot location already has a knot there 
-  for(i in 1:length(k)){
-    possible_diff = (abs(possible_knot - k[i]) < 3)
-    if(rando_knot != k[i] & possible_diff == TRUE){
-      can_jiggle = "bad"
+    #determines randomly which knot is jiggling (code related to murders)
+    k = k_ends[c(-1, -length(k_ends))] #removes end points
+    rando_location = sample(1:length(k),1) #chooses random knot 
+    rando_knot = k[rando_location]
+  
+    #check if we can jiggle towards an endpoint
+    possible_knot = rando_knot+jiggle_spot
+    if(direction == "right"){
+      right_end = k_ends[length(k_ends)]
+      possible_diff = (abs(possible_knot - right_end) < 3)
+      if(possible_diff == TRUE){
+        can_jiggle = "bad"
+      }
+    }else{
+      left_end = k_ends[1]
+      possible_diff = (abs(possible_knot - left_end) < 3)
+      if(possible_diff == TRUE){
+        can_jiggle = "bad"
+      }
     }
-  }
+  
+    #check if new knot location already has a knot there 
+    for(i in 1:length(k)){
+      possible_diff = (abs(possible_knot - k[i]) < 3)
+      if(rando_knot != k[i] & possible_diff == TRUE){
+        can_jiggle = "bad"
+      }
+    }
 
-  #check if we can jiggle, then jiggle!!!
-  if(can_jiggle == "bad" & count < 10){
-    barJiggle(percent, k_ends, count)
-  }else if(can_jiggle == "bad"){
-    return("jiggle failure")
-  }else{
-    middle_set = k_ends[-(rando_location+1)]
-    final_set = sort(c(middle_set,possible_knot))
-    return(final_set)
+    #check if we can jiggle, then jiggle!!!
+    if(can_jiggle == "bad" & count < 10){
+      barJiggle(percent, k_ends, count)
+    }else if(can_jiggle == "bad"){
+      return("jiggle failure")
+    }else{
+      middle_set = k_ends[-(rando_location+1)]
+      final_set = sort(c(middle_set,possible_knot))
+      return(final_set)
+    }
   }
-}
   
 
   #initializing matrices 
@@ -183,18 +183,18 @@ barJiggle<-function(percent, k_ends, count){
 
   beta_lm = function(par) {#function to minimize to get MLE of betas
 
-	beta0 = par[1]  #current intercept
-	beta1 = par[2]  #current slope
-	sigma = sd(full_data[,2]) #standard deviation
+	  beta0 = par[1]  #current intercept
+	  beta1 = par[2]  #current slope
+	  sigma = sd(full_data[,2]) #standard deviation
   
-	#calculated likelihoods
-	lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
+	  #calculated likelihoods
+	  lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
 
-	#convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
-	log_lik = log(lik) #log likelihood of each data point
-	deviance = -2 * sum(log_lik) #calculate deviance
+	  #convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
+	  log_lik = log(lik) #log likelihood of each data point
+	  deviance = -2 * sum(log_lik) #calculate deviance
 
-	return(deviance)
+	  return(deviance)
 
   }
 
@@ -227,19 +227,18 @@ barJiggle<-function(percent, k_ends, count){
 	    count <<- 0 #reset count for failed makes 
       k_ends_new = barMake0(k_ends, count) #make
 
-	if(k_ends_new[1] != "make failure"){
-	    #setting up qs for ratio
-	    q1 = murder_k/(length(k_ends_new)-2)
-	    full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-	    overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-	    n_free = n - 5*(length(k_ends)-2) - 6 + overlap
-	    q2 = make_k/n_free
-	}else{
-	    k_ends_new = k_ends
-	    q1 = 1
-	    q2 = 1
-	}
-
+	    if(k_ends_new[1] != "make failure"){
+	      #setting up qs for ratio
+	      q1 = murder_k/(length(k_ends_new)-2)
+	      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
+	      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
+	      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+	      q2 = make_k/n_free
+	    }else{
+	      k_ends_new = k_ends
+	      q1 = 1
+	      q2 = 1
+	    }
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
@@ -252,7 +251,7 @@ barJiggle<-function(percent, k_ends, count){
 	    q1 = make_k/n_free
 	    q2 = murder_k/(length(k_ends)-2)
 
-    } else{
+    } else {
 	    move_u = runif(1)
 	    if(move_u > 0.75){
         type = "move"
@@ -267,10 +266,10 @@ barJiggle<-function(percent, k_ends, count){
         j.count = j.count + 1
 	      count <<- 0 #resetting failed jiggle attempts
         k_ends_new = barJiggle(percent, k_ends, count) #move
-	      if(k_ends_new[[1]] == "jiggle failure"){
-		    k_ends_new = k_ends
+	      
+        if(k_ends_new[[1]] == "jiggle failure"){
+		      k_ends_new = k_ends
 	      }
-
 	      #fake qs because they cancel
 	      q1 = 1
 	      q2 = 1
@@ -386,7 +385,7 @@ barJiggle<-function(percent, k_ends, count){
 }
 
 #calling the function
-current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 3000)
+current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 300)
 hist(current_result$NumBkpts)
 current_result$ProposedSteps
 current_result$AcceptedSteps
