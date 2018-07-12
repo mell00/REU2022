@@ -145,3 +145,15 @@ plot(test_data_10, main = "2 Breaks, Variance Change", xlab="Time", ylab="Depend
 plot(temp_data[,2]~temp_data[,1], main="Global Tempature Anomaly from 1880-2018", ylab="Anomaly in degree Celsius", xlab="Time (years)")
 lines(c(1880,2020), c(0,0))
 par(mfrow=c(1,1))
+
+
+
+plot(temp_data[,2]~temp_data[,1], main="Global Tempature Anomaly from 1880-2018", ylab="Anomaly in degree Celsius", xlab="Time (years)")
+lines(c(1880,2020), c(0,0))
+points(1944, temp_data[65,2], col="red", cex = 1.5 ,pch=16) 
+points(1909, temp_data[30,2], col="blue", cex = 1.5,pch=16)
+
+plot(temp_data[,2]~temp_data[,1], main="Global Tempature Anomaly from 1880-2018", ylab="Anomaly in degree Celsius", xlab="Time (years)")
+lines(c(1880,2020), c(0,0))
+points(1944, temp_data[65,2], col="red", cex = 1.5 ,pch=16) 
+points(1942, temp_data[63,2], col="blue", cex = 1.5,pch=16)
