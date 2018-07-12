@@ -6,11 +6,13 @@
 # data		= y-values of entire data set
 # interations	= number of runs for sampling with Metropolis-Hastings 
 # make_murder_p	= the combine proportion (decimal) for make and murder steps
-  #note: move proportion is 1 - make_murder_p
+	#note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
 # lambda		= for Poisson distribution of breakpoint prior
+# jump_p		= proportion of move steps that will be jump
+	#note: jiggle proprtion is 1 - jump_p
 
-bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, lambda = 1){
+bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25){
 
 	if(length(time) != length(data)){
 		return("Data and time vectors must be of equal length.")
@@ -21,10 +23,11 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
 	}
 
 	library(MASS)
-	full_data = cbind(as.numeric(time), as.numeric(data)) #combining time and data inputs
+	full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
 	n = length(full_data[,1]) #number of observations
 	k_ends = c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
-  
+
+	#function to get sum of log likelihoods
 	fitMetrics<-function(k_ends, full_data){
 
 		sum_loglik = 0 #create sum object
@@ -47,29 +50,23 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
 					y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
  					model = lm(y_values~x_values) #running a lm on the selected interval 
 					sum_loglik = sum_loglik + logLik(model)[1] #the logLik looks the log likelyhood (relates to both SSR and MLE)
-        }
-      }
-    }
-    return(sum_loglik)
-  }
+				}
+			}
+		}
+		return(sum_loglik)
+	}
   
-  #random make function, this makes a random point 
-  barMake0<-function(k_ends, count){
-    
-    count <<- count + 1 #this check to make sure we do not get stuck in an infinite loop 
-    if(count < 10 ) {
-      rand_spot = sample(k_ends[1]:k_ends[length(k_ends)], 1) #selects a random spot
-      k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
-      d = diff(k_ends_final) #finds the difference between all the spots 
-      if(min(d) < 3) { #this make sure an additional point is not to close to a point already in existance 
-        barMake0(k_ends, count)
-      } else {
-        return(k_ends_final) #the old breakpoints + the new breakpoints 
-      }
-    }else {
-      return("make failure")
-    }
-  }
+	#function to randomly add a new breakpoint
+	barMake<-function(k_ends){
+
+		full_set = c(1:max(k_ends))
+		exclude_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
+		diff_set = setdiff(full_set,exclude_set)
+		rand_spot = sample(diff_set, 1) #selects a random spot
+		k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
+		return(k_ends_final)
+
+	}
   
   
   #this function kills one breakpoint randomly 
@@ -86,8 +83,7 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
   barMove0<-function(k_ends){
     
     k_ends_less = barMurder0(k_ends) #kills a point
-    count <<- 0 #reset count for failed makes 
-    k_ends_final = barMake0(k_ends_less, count) #remakes a point
+    k_ends_final = barMake(k_ends_less) #remakes a point
     return(k_ends_final)
     
   }
@@ -224,21 +220,15 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
     if(length(k_ends) < 3 | u_step <= make_k){
       type = "add"
       a.count = a.count + 1
-	    count <<- 0 #reset count for failed makes 
-      k_ends_new = barMake0(k_ends, count) #make
+      k_ends_new = barMake(k_ends) #make
 
-	    if(k_ends_new[1] != "make failure"){
 	      #setting up qs for ratio
 	      q1 = murder_k/(length(k_ends_new)-2)
 	      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
 	      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
 	      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
 	      q2 = make_k/n_free
-	    }else{
-	      k_ends_new = k_ends
-	      q1 = 1
-	      q2 = 1
-	    }
+
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
       type = "sub"
       s.count = s.count + 1
@@ -385,7 +375,7 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
 }
 
 #calling the function
-current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 300)
+current_result = bar0(c(30,60), test_data_2[,1], test_data_2[,2], 50)
 hist(current_result$NumBkpts)
 current_result$ProposedSteps
 current_result$AcceptedSteps
