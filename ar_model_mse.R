@@ -71,7 +71,8 @@ fitMetrics<-function(k_ends, full_data){
   
   #create sum objects
   sum_loglik = 0
-  
+  coef_1 = 0 
+  coef_2 = 0 
   #get and sum log likelihood for regressions of all intervals
   if(length(k_ends) < 3 ){
     model = arima(full_data[,2], method = "ML", order = c(1,0,0)) #AR model on the full dataset
@@ -99,3 +100,31 @@ fitMetrics<-function(k_ends, full_data){
 }
 
 fitMetrics(c(1,30,60,90), test_data_2) #test call
+
+
+
+
+
+
+
+
+#_____________--------------______________----------
+
+coef_finding = function(full_data) {#function to minimize to get MLE of betas
+
+  model = arima(full_data, method = "ML", order = c(1,0,0)) #AR model on the full datase
+  c = model$coef #finding the log likeihoods on the full dataset 
+  coef = c[[2]]
+  intercept = c[[1]]
+  
+  return(c(intercept, coef))
+  
+}
+coef = coef_finding(full_data[,2])
+model = arima(full_data[,2], method = "ML", order = c(1,0,0)) #AR model on the full datase
+fisher = (-1 * model$var.coef)
+smiley = n * fisher
+
+
+
+

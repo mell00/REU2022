@@ -181,40 +181,20 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
   
   #setting up priors for drawing from betas
   
-  beta_lm = function(par) {#function to minimize to get MLE of betas
+  beta_lm = function(par){#function to minimize for MLE of betas
     
     beta0 = par[1]  #current intercept
-    print(beta0)
     beta1 = par[2]  #current slope
-    sigma = var(full_data[,2]) #standard deviation
-    
-    #This is not right but is a short term method 
-    large_sig = cov(full_data[,1], y = full_data[,2], use = "all.obs", method = c("pearson")) #covariance matrixs (basically SIGMA)
-    omega = large_sig / sigma #This is what we get when we solve for omega
-    #here is the link to the website where I got all these ideas from 
-    #http://economia.unipv.it/pagp/pagine_personali/erossi/rossi_ARMA_estimation_PhD.pdf
+    sigma = sd(full_data[,2]) #standard deviation
     
     #calculated likelihoods
     lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
-    
-    n = length(full_data[,2])
-    
-    lik_1 = -(n/2)*log(2*pi) - (n/2)*log(sigma) - (0.5)*log(abs(omega)) 
-    lik_2 = 0 
-    
-    for(i in 2:n){
-      mu = beta1 * full_data[(i-1),2] + beta0
-      e = (1/(2*sigma)) * (t(full_data[i,2] - mu ) * solve(omega) )* (full_data[i,2] - mu )
-      lik_2 = lik_2 + e
-    }
-    lik = lik_1 - lik_2
     
     #convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
     log_lik = log(lik) #log likelihood of each data point
     deviance = -2 * sum(log_lik) #calculate deviance
     
     return(deviance)
-    
   }
   
   beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
