@@ -1,4 +1,4 @@
-#Complete BAR for Simple Linear Regression
+#Complete BALR (Bayesian Adaptive Linear Regression)
 
 #-------Key:
 # k			= x-axis values of starting breakpoints
@@ -13,7 +13,7 @@
 # jump_p		= proportion of move steps that will be jump
 	#note: jiggle proprtion is 1 - jump_p
 
-bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25){
+balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25){
 
 	if(length(time) != length(data)){
 		return("Data and time vectors must be of equal length.")
@@ -461,4 +461,4 @@ bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, per
 }
 
 #calling the function
-current_result = bar(c(30,60), test_data_2[,1], test_data_2[,2], 100)
+#current_result = balr(c(30,60), test_data_2[,1], test_data_2[,2], 100)
