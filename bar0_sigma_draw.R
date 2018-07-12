@@ -189,8 +189,10 @@ bar0 = function(k, time, data, iterations, make_murder_p = 0.5, percent = 0.02, 
     sigma = var(full_data[,2]) #standard deviation
     
     #This is not right but is a short term method 
-    large_sig = cov(full_data[,1], y = full_data[,2], use = "all.obs", method = c("pearson"))
-    omega = large_sig / sigma
+    large_sig = cov(full_data[,1], y = full_data[,2], use = "all.obs", method = c("pearson")) #covariance matrixs (basically SIGMA)
+    omega = large_sig / sigma #This is what we get when we solve for omega
+    #here is the link to the website where I got all these ideas from 
+    #http://economia.unipv.it/pagp/pagine_personali/erossi/rossi_ARMA_estimation_PhD.pdf
     
     #calculated likelihoods
     lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
