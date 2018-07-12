@@ -121,6 +121,7 @@ coef_finding = function(full_data) {#function to minimize to get MLE of betas
   
 }
 coef = coef_finding(full_data[,2])
+matrix(coef,2,1)
 model = arima(full_data[,2], method = "ML", order = c(1,0,0)) #AR model on the full datase
 fisher = (-1 * model$var.coef)
 smiley = n * fisher
