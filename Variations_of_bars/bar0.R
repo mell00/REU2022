@@ -179,241 +179,228 @@ bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, per
 		return(list(k_ends_new, q1, q2, type))
 	}
 
-  #setting up counters for burn-in Metropolis-Hastings
-  type = "0"
-  a.count <<- 0
-  s.count <<- 0 
-  m.count <<- 0
-  j.count <<- 0
-  add.accept.count <<- 0
-  sub.accept.count <<- 0
-  move.accept.count <<- 0
-  jiggle.accept.count <<- 0
+	#setting up counters for burn-in Metropolis-Hastings
+	type = "0"
+	a.count <<- 0
+	s.count <<- 0 
+	m.count <<- 0
+	j.count <<- 0
+	add.accept.count <<- 0
+	sub.accept.count <<- 0
+	move.accept.count <<- 0
+	jiggle.accept.count <<- 0
 
-  #getting constants for qs (b_k and d_k in papers)
-  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
-  starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
-  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
+	#getting constants for qs for burn-in Metropolis-Hastings
+	starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+	full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
+	overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
+	starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+	starting_ttl = starting_bkpts + starting_nfree #total to get percentages
+	make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+	murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
   
-  #Burn Metropolis Hasting
-  for(i in 1:burn_in){
+	#Burn Metropolis Hasting
+	for(i in 1:burn_in){
     
-    old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
+		old_loglik = fitMetrics(k_ends, full_data) #gets log likelihood for existing breakpoints
 
-	k_and_q = newEnds(k_ends, make_k, murder_k)
-	k_ends_new = k_and_q[[1]]
-	q1 = k_and_q[[2]]
-	q2 = k_and_q[[3]]
+		k_and_q = newEnds(k_ends, make_k, murder_k)
+		k_ends_new = k_and_q[[1]]
+		q1 = k_and_q[[2]]
+		q2 = k_and_q[[3]]
     
-    new_loglik = fitMetrics(k_ends_new, full_data)
+		new_loglik = fitMetrics(k_ends_new, full_data)
 
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
-    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
+		delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+		ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+		u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
-    if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
-      k_ends <<- k_ends #old
-    } else if(ratio > u_ratio) {
-      k_ends <<- k_ends_new #new
-    } else {
-      k_ends <<- k_ends #old
-    }
+		if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
+			k_ends <<- k_ends #old
+		} else if(ratio > u_ratio) {
+			k_ends <<- k_ends_new #new
+		} else {
+			k_ends <<- k_ends #old
+		}
+  	}
 
-  }
-
-  #initializing matrices 
-  ratio_data = data.frame()
-  all_k_new = matrix(NA, nrow=1, ncol=(n/3))
-  all_k_best = matrix(NA, nrow=1, ncol=(n/3))
+	#initializing matrices/storage objects for final Metropolis-Hasting
+	all_k_best = matrix(NA, nrow=1, ncol=(n/3))
+	bar_v = 0
+	bar_beta = 0
+	fit = 0
+	all_MSE = data.frame()
+	all_BIC = data.frame()
+	accept_count = 0
   
-  bar_v = 0
-  bar_beta = 0
-  fit = 0
-  all_MSE = data.frame()
-  all_BIC = data.frame()
-  accept_count = 0
+	#setting up counters for final Metropolis-Hasting
+	type = "0"
+	a.count <<- 0
+	s.count <<- 0 
+	m.count <<- 0
+	j.count <<- 0
+	add.accept.count <<- 0
+	sub.accept.count <<- 0
+	move.accept.count <<- 0
+	jiggle.accept.count <<- 0
+
+	#setting up priors for beta draws
+
+	beta_lm = function(par){#function to minimize for MLE of betas
+
+		beta0 = par[1]  #current intercept
+		beta1 = par[2]  #current slope
+		sigma = sd(full_data[,2]) #standard deviation
   
-  #setting up counters for final Metropolis-Hasting
-  type = "0"
-  a.count <<- 0
-  s.count <<- 0 
-  m.count <<- 0
-  j.count <<- 0
-  add.accept.count <<- 0
-  sub.accept.count <<- 0
-  move.accept.count <<- 0
-  jiggle.accept.count <<- 0
+		#calculated likelihoods
+		lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
 
-  #setting up priors for drawing from betas
+		#convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
+		log_lik = log(lik) #log likelihood of each data point
+		deviance = -2 * sum(log_lik) #calculate deviance
 
-  beta_lm = function(par) {#function to minimize to get MLE of betas
+		return(deviance)
+	}
 
-	  beta0 = par[1]  #current intercept
-	  beta1 = par[2]  #current slope
-	  sigma = sd(full_data[,2]) #standard deviation
+	beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
+	fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
+	smiley = n * solve(fisher) #smiley face is total number of observations times the inverse of Fisher information
+
+	b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
+	B_0 = smiley #variance-covariance matrix for posterior draw
+
+	#beta and sigma draw
+	post_beta_list = data.frame()
+	post_sigma_list = data.frame()
+
+	#getting constants for qs for final Metropolis-Hasting
+	starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+	full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
+	overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
+	starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+	starting_ttl = starting_bkpts + starting_nfree #total to get percentages
+	make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
+	murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
   
-	  #calculated likelihoods
-	  lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
-
-	  #convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
-	  log_lik = log(lik) #log likelihood of each data point
-	  deviance = -2 * sum(log_lik) #calculate deviance
-
-	  return(deviance)
-
-  }
-
-  beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
-  fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
-  smiley = n * solve(fisher) #smiley face is total number of observations times the inverse of Fisher information
-
-  b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
-  B_0 = smiley #variance-covariance matrix for posterior draw
-
-  #beta and sigma draw
-  post_beta_list = 0 
-  post_sigma_list = 0 
-
-  #getting constants for qs (b_k and d_k in papers)
-  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
-  starting_ttl = starting_bkpts + starting_nfree #total to get percentages
-  make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
-  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
-  
-  #Final Metroplis Hastings 
-  for(i in 1:iterations){
+	#Final Metroplis Hastings 
+	for(i in 1:iterations){
     
-    old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
+		old_loglik = fitMetrics(k_ends, full_data) #calls fit matrix to have a function to start with
 
-	k_and_q = newEnds(k_ends, make_k, murder_k)
-	k_ends_new = k_and_q[[1]]
-	q1 = k_and_q[[2]]
-	q2 = k_and_q[[3]]
-	type = k_and_q[[4]]
+		k_and_q = newEnds(k_ends, make_k, murder_k)
+		k_ends_new = k_and_q[[1]]
+		q1 = k_and_q[[2]]
+		q2 = k_and_q[[3]]
+		type = k_and_q[[4]]
     
-    new_loglik = fitMetrics(k_ends_new, full_data)
+		new_loglik = fitMetrics(k_ends_new, full_data)
 
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
-    u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
+		delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+		ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+		u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
+    
+		if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
+			k_ends <<- k_ends #old
+			bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+		} else if(ratio > u_ratio) {
+			k_ends <<- k_ends_new #new
+			bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1))
+			accept_count = accept_count + 1
+			#looking at what type of step is done and accepted
+			if(type == "add") {
+				add.accept.count <<- add.accept.count + 1
+			} else if(type == "sub") {
+				sub.accept.count <<- sub.accept.count + 1
+			} else if(type == "move") {
+				move.accept.count <<- move.accept.count + 1
+			} else if(type == "jiggle") {
+				jiggle.accept.count <<- jiggle.accept.count + 1
+			}
+		} else {
+			k_ends <<- k_ends #old
+			bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+		}
+    
+    	#condensing the data
+	k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
+	all_k_best = rbind(all_k_best, k_ends_best_print)
 
-    ratio_data_print = c(ratio, u_ratio, delta_bic, (-delta_bic/2), log(q1), log(q2))
+	all_BIC = rbind(all_BIC, bic)
     
-    if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
-      k_ends <<- k_ends #old
-	    bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    } else if(ratio > u_ratio) {
-      k_ends <<- k_ends_new #new
-      bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1))
-      accept_count = accept_count + 1
-      #looking at what type of step is done and accepted
-      if(type == "add") {
-        add.accept.count <<- add.accept.count + 1
-      } else if(type == "sub") {
-        sub.accept.count <<- sub.accept.count + 1
-      } else if(type == "move") {
-        move.accept.count <<- move.accept.count + 1
-      } else if(type == "jiggle") {
-        jiggle.accept.count <<- jiggle.accept.count + 1
-      }
-    } else {
-      k_ends <<- k_ends #old
-	    bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
-    }
+	#setting up posterior
     
-    #condensing the data
-    k_ends_new_print = c(k_ends_new, rep(NA, (n/3)-length(k_ends_new)))
-    k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
-    
-    ratio_data = rbind(ratio_data, ratio_data_print)
-    all_k_new = rbind(all_k_new, k_ends_new_print)
-    all_k_best = rbind(all_k_best, k_ends_best_print)
+	##loop through the k_ends to find the intervals 
+	fit = NULL
+	for(m in 2:length(k_ends)) {
+		len = length(k_ends)
+		if(m > 2){
+			min = k_ends[m-1]+1
+		}else{
+			min = k_ends[m-1]
+		}
+		x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
+		x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
+		y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
+		sigma = sd(y_j)
+      
+		#bar_v
+		v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
+		#bar_beta 
+		beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
+      
+		predicted_x = x_j %*% beta
+		fit = c(fit, predicted_x)
+      
+		#drawing a random variable from a multivariate normal pdf 
+  		post_beta = mvrnorm(1, beta, v)
+      
+		bar_v = c(bar_v, v)
+		bar_beta = c(bar_beta, beta)
+      
+		#SIGMA:
+  		v0 = (max(k_ends))/2 + 2
+		d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
+      
+		sigma = rgamma(1, v0, rate = d0)
+		post_sigma = 1 / sigma
+      
+		post_beta_list = rbind(post_beta_list, post_beta)
+		post_sigma_list = rbind(post_sigma_list, post_sigma)
+      
+		if(m == len ) {
+			MSE = mean((full_data[,2]-fit)^2)
+			all_MSE = rbind(all_MSE, MSE)
+		}
+	}
 
-    all_BIC = rbind(all_BIC, bic)
-    
-    #setting up the posterior
-    
-    ##loop through the k_ends to find the intervals 
-    fit = NULL
-    for(m in 2:length(k_ends)) {
-      len = length(k_ends)
-      if(m > 2){
-        min = k_ends[m-1]+1
-      }else{
-        min = k_ends[m-1]
-      }
-      x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
-      x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
-      y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
-      sigma = sd(y_j)
-      
-      #bar_v
-      v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
-      #bar_beta 
-      beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
-      
-      predicted_x = x_j %*% beta
-      fit = c(fit, predicted_x)
-      
-      #drawing a random variable from a multivariate normal pdf 
-      post_beta = mvrnorm(1, beta, v)
-      
-      bar_v = c(bar_v, v)
-      bar_beta = c(bar_beta, beta)
-      
-      #SIGMA:
-      v0 = (max(k_ends))/2 + 2
-      d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
-      
-      sigma = rgamma(1, v0, rate = d0)
-      post_sigma = 1 / sigma
-      
-      post_beta_list = c(post_beta_list, post_beta)
-      post_sigma_list = c(post_sigma_list, post_sigma)
-      
-      if(m == len ) {
-        MSE = mean((full_data[,2]-fit)^2)
-        all_MSE = rbind(all_MSE, MSE)
-      }
-    }
-  }
+	}
 
  
-  #cleaning up the matrices 
-  all_k_new = all_k_new[-1,colSums(is.na(all_k_new))<nrow(all_k_new)]
-  all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
-  clean_max = max(all_k_new[1,], na.rm=TRUE)
-  all_k_new = ifelse(all_k_new == clean_max,NA,all_k_new)
-  all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
-  all_k_new = data.frame(all_k_new[,c(-1,-ncol(all_k_new))], row.names=NULL)
-  all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
+	#cleaning up the matrices 
+	all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
+	clean_max = max(all_k_best[1,], na.rm=TRUE)
+	all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
+	all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
   
-  colnames(ratio_data) = c("Ratio", "Random", "DeltaBIC", "LikeApprox", "LogQOldNew", "LogQNewOld")
-  colnames(all_MSE) = "MSE"
-  colnames(all_BIC) = "BIC"
+	colnames(all_MSE) = "MSE"
+	colnames(all_BIC) = "BIC"
+	colnames(post_beta_list) = c("Beta0", "Beta1")
+	colnames(post_sigma_list) = "Sigma"
   
-  final.propose = c(a.count, s.count, m.count, j.count)
-  final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
+	final.propose = c(a.count, s.count, m.count, j.count)
+	final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
 
-  #getting distribution of k (number of breakpoints)
-  num_bkpts = list()
-  for(i in 1:iterations){
-  	current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
-  	num_bkpts = c(num_bkpts, current_k, recursive=T)
-  }
+	#getting distribution of k (number of breakpoints)
+	num_bkpts = list()
+	for(i in 1:iterations){
+		current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
+		num_bkpts = c(num_bkpts, current_k, recursive=T)
+	}
   
-  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list)
-  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma")
+	final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list)
+	names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma")
   
-  
-  return(final_list)
+	return(final_list)
 }
 
 #calling the function
