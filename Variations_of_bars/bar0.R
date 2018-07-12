@@ -270,8 +270,8 @@ bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, per
 	B_0 = smiley #variance-covariance matrix for posterior draw
 
 	#beta and sigma draw
-	post_beta_list = data.frame()
-	post_sigma_list = data.frame()
+	post_beta_list = data.frame(Empty=c(NA,NA))
+	post_sigma_list = data.frame(Empty=NA)
 
 	#getting constants for qs for final Metropolis-Hasting
 	starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
@@ -321,57 +321,64 @@ bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, per
 			bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
 		}
     
-    	#condensing the data
-	k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
-	all_k_best = rbind(all_k_best, k_ends_best_print)
+    		#condensing the data
+		k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
+		all_k_best = rbind(all_k_best, k_ends_best_print)
 
-	all_BIC = rbind(all_BIC, bic)
+		all_BIC = rbind(all_BIC, bic)
     
-	#setting up posterior
+		#setting up posterior
     
-	##loop through the k_ends to find the intervals 
-	fit = NULL
-	for(m in 2:length(k_ends)) {
-		len = length(k_ends)
-		if(m > 2){
-			min = k_ends[m-1]+1
-		}else{
-			min = k_ends[m-1]
+		##loop through the k_ends to find the intervals 
+		fit = NULL
+		current_post_betas = NULL
+		current_post_sigmas = NULL
+		for(m in 2:length(k_ends)) {
+			len = length(k_ends)
+			if(m > 2){
+				min = k_ends[m-1]+1
+			}else{
+				min = k_ends[m-1]
+			}
+			x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
+			x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
+			y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
+			sigma = sd(y_j)
+      
+			#bar_v
+			v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
+			#bar_beta 
+			beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
+
+			predicted_x = x_j %*% beta
+			fit = c(fit, predicted_x)
+      
+			#drawing a random variable from a multivariate normal pdf 
+  			post_beta = mvrnorm(1, beta, v)
+      
+			bar_v = c(bar_v, v)
+			bar_beta = c(bar_beta, beta)
+      
+			#SIGMA:
+  			v0 = (max(k_ends))/2 + 2
+			d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
+      
+			sigma = rgamma(1, v0, rate = d0)
+			post_sigma = 1 / sigma
+
+			current_post_betas = cbind(current_post_betas, post_beta)
+			current_post_sigmas = cbind(current_post_sigmas, post_sigma)
+      
+			if(m == len ) {
+				MSE = mean((full_data[,2]-fit)^2)
+				all_MSE = rbind(all_MSE, MSE)
+				current_post_betas = as.data.frame(current_post_betas)
+				colnames(current_post_betas) = c(1:ncol(current_post_betas))
+				post_beta_list = cbind(post_beta_list, current_post_betas)
+				colnames(current_post_sigmas) = c(1:ncol(current_post_sigmas))
+				post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
+			}
 		}
-		x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
-		x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
-		y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
-		sigma = sd(y_j)
-      
-		#bar_v
-		v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
-		#bar_beta 
-		beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
-      
-		predicted_x = x_j %*% beta
-		fit = c(fit, predicted_x)
-      
-		#drawing a random variable from a multivariate normal pdf 
-  		post_beta = mvrnorm(1, beta, v)
-      
-		bar_v = c(bar_v, v)
-		bar_beta = c(bar_beta, beta)
-      
-		#SIGMA:
-  		v0 = (max(k_ends))/2 + 2
-		d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
-      
-		sigma = rgamma(1, v0, rate = d0)
-		post_sigma = 1 / sigma
-      
-		post_beta_list = rbind(post_beta_list, post_beta)
-		post_sigma_list = rbind(post_sigma_list, post_sigma)
-      
-		if(m == len ) {
-			MSE = mean((full_data[,2]-fit)^2)
-			all_MSE = rbind(all_MSE, MSE)
-		}
-	}
 
 	}
 
@@ -381,11 +388,13 @@ bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, per
 	clean_max = max(all_k_best[1,], na.rm=TRUE)
 	all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
 	all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
+	post_beta_list = post_beta_list[,-1]
+	post_sigma_list = post_sigma_list[,-1]
   
 	colnames(all_MSE) = "MSE"
 	colnames(all_BIC) = "BIC"
-	colnames(post_beta_list) = c("Beta0", "Beta1")
-	colnames(post_sigma_list) = "Sigma"
+	rownames(post_beta_list) = c("B0", "B1")
+	rownames(post_sigma_list) = "Sigma"
   
 	final.propose = c(a.count, s.count, m.count, j.count)
 	final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
@@ -404,7 +413,5 @@ bar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, per
 }
 
 #calling the function
-current_result = bar(c(30,60), test_data_2[,1], test_data_2[,2], 300)
-hist(current_result$NumBkpts)
-current_result$ProposedSteps
-current_result$AcceptedSteps
+current_result = bar(c(30,60), test_data_2[,1], test_data_2[,2], 100)
+current_result$Sigma
