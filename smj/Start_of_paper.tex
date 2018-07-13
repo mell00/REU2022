@@ -165,6 +165,9 @@ keyword a; keyword b; keyword c; keyword d; keyword e
 \section{Math}
 Here is the math for our paper
 
+\subsection{Derivations of Ratio}
+
+
 To start we need to find the ratio \\ 
 \begin{align*}
 ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_n) }{g(\tau_{o} K_{o} | x_1,\dots,x_n)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})} \\
@@ -183,6 +186,9 @@ $\pi(\sigma)$ is an inverse gamma  \\
 $\pi(\tau | K)$ might be uniform \\
 $\pi(K)$ might be a Poisson or uniform \\
 
+\subsubsection{BIC}
+Applying this ratio into our own model we need to first take the log such that,
+
 \begin{align*}
 ratio &= \frac{\Big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) %likelihood new
 \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{new}%priors for new 
@@ -191,10 +197,7 @@ q(\tau_{o} K_{o} | \tau_{n} K_{n})} %proposal density going to old given new
 {\Big[ f(x_1,\dots,x_n | \tau_{o} K_{o}) %likelihood old 
 \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{old}\Big] %priors for old
 q(\tau_{n} K_{n}| \tau_{o} K_{o})} %proposal density going to new given old
-\end{align*}
-
-Then we take the log of the whole ratio
-\begin{align*}
+\\
 log(ratio) &= log \Big[\frac{\Big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) %likelihood new
 \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)%priors for new 
 \Big] 
@@ -208,7 +211,8 @@ q(\tau_{n} K_{n}| \tau_{o} K_{o})} \Big]%proposal density going to new given old
 log \big[ f(x_1,\dots,x_n | \tau_{o} K_{o}) \big] \Big]  \\
 & \  \ \ \ \ \ \ \  \ \ \ \ \ \ \ \  +  \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big] 
 \end{align*}
-Thus we have that $\Big[ log \big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) \big] -  log \big[ f(x_1,\dots,x_n | \tau_{o} K_{o})\big] \Big] $ approximates BIC such that, 
+
+From the knowledge gained by the (Kass $\&$ Wasserman, 1995) paper we have that $\Big[ log \big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) \big] -  log \big[ f(x_1,\dots,x_n | \tau_{o} K_{o})\big] \Big] $ approximates BIC. Thus,
 \begin{align*}
 log(ratio) &= \frac{- \Delta BIC}{2} + 
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big]
@@ -221,9 +225,7 @@ $q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot dpois(K_{old} , \lambda)$,
 $q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot dpois(K_{new} , \lambda)$, $q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot dpois(K_{old} , \lambda)$ \\
 
 
-\subsection{Derivations of Ratio}
 
-\subsubsection{BIC}
 
 \subsection{Derivations of $\beta$ and $\sigma$ draws}
 
