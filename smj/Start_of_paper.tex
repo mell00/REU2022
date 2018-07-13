@@ -171,7 +171,6 @@ $\beta$ is the regression coefficients \\
 $\sigma$ is the standard deviations  
 
 \subsection{Derivations of Ratio}
-
 \subsubsection{BIC} 
 The Metropolis Hastings algorithm is used to determine the acceptance of the proposed breakpoint set. The general ratio is the product of the Bayes factor, determined by the ratio of the posteriors, $g$, and the ratio of the Markov Chain Monte Carlo (MCMC) proposal densities, $q$, whose values depend on the current MCMC step. 
 \begin{align*}
@@ -196,7 +195,6 @@ which means that
 log(ratio) \approx \frac{- \Delta BIC}{2} + 
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big]
 \end{align*}
-
 In the case of birth, 
 \begin{align*} 
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot Poisson(K_{old} , \lambda), \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot Poisson(K_{old} , \lambda).
