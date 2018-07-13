@@ -145,7 +145,7 @@ Any acknowledgements will be printed at the end of the text.
 %%% Key words
 %%% -------------------------------------------------------------------------------
 \Keywords{
-keyword a; keyword b; keyword c; keyword d; keyword e
+AR; Bayesian; Breakpoint; Time Series; 
 }
 
 
@@ -172,26 +172,6 @@ $\sigma$ is the standard deviations
 
 \subsection{Derivations of Ratio}
 
-
-To start we need to find the ratio \\ 
-\begin{align*}
-ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_t) }{g(\tau_{o} K_{o} | x_1,\dots,x_t)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})} \\
-&= \frac{\Big[ \frac{f(x_1,\dots,x_t | \tau_{n} K_{n}) \pi(\tau_{n} K_{n})}{\int f(x_1, \dots ,x_t | \tau_{n} K_{n}) \pi(\tau_{n} K_{n}) d \tau_{n} K_{n} } \Big] q(\tau_{o} K_{o} | \tau_{n} K_{n})}{\Big[ \frac{f(x_1,\dots,x_t | \tau_{o} K_{o}) \pi(\tau_{o} K_{o})}{\int f(x_1, \dots ,x_t | \tau_{o} K_{o}) \pi(\tau_{o} K_{o}) d \tau_{o} K_{o} }\Big] q(\tau_{n} K_{n}| \tau_{o} K_{o})} 
-\end{align*}
-
-Then we have,
-\begin{align*}
-ratio &= \frac{\Big[ \frac{ \int f(x_1,\dots,x_t | \tau_{n} K_{n}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d\tau dK }{\int f(x_1, \dots ,x_t | \tau_{n} K_{n}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d\tau dK d \beta d\sigma } \Big] q(\tau_{o} K_{o} | \tau_{n} K_{n})}{\Big[ \frac{ \int f(x_1,\dots,x_t | \tau_{o} K_{o}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d\tau dK}{\int f(x_1, \dots ,x_t | \tau_{o} K_{o}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d \tau dK d \beta d\sigma }\Big] q(\tau_{n} K_{n}| \tau_{o} K_{o})} 
-\end{align*}
-
-Basing priors of the  paper written by Kass, DiMatteo, and Genovese (2001) 
-we have that \\ $\pi(\theta) = \pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)$ for both the $\theta_{n}$ and the $\theta_{o}$. \\
-$\pi(\beta)$ is an unit information prior, multivariate normal\\
-$\pi(\sigma)$ is an inverse gamma  \\
-$\pi(\tau | K)$ might be uniform \\
-$\pi(K)$ is a Poisson
-
-
 \subsubsection{BIC} 
 The Metropolis Hastings algorithm is used to determine the acceptance of the proposed breakpoint set. The general ratio is the product of the Bayes factor, determined by the ratio of the posteriors, $g$, and the ratio of the Markov Chain Monte Carlo (MCMC) proposal densities, $q$, whose values depend on the current MCMC step. 
 \begin{align*}
@@ -217,11 +197,11 @@ log(ratio) \approx \frac{- \Delta BIC}{2} +
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big]
 \end{align*}
 
-In the case of addition, 
+In the case of birth, 
 \begin{align*} 
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot Poisson(K_{old} , \lambda), \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot Poisson(K_{old} , \lambda).
 \end{align*}
-When the chosen MCMC step is subtraction,  \begin{align*}
+When the chosen MCMC step is death,  \begin{align*}
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot Poisson(K_{new} , \lambda) , \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot Poisson(K_{old} , \lambda).
 \end{align*} 
 Given the equations above we have that $c$ is the combined probability of doing an addition and subtraction step. $b$ is the balancing birth coefficient and $d$ a balancing death coefficient. They are in place to set the ratio of birth step to death steps. Specifically,
