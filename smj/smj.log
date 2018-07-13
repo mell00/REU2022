@@ -1,0 +1,42 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  13 JUL 2018 13:50
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**smj.cls
+(./smj.cls
+LaTeX2e <2016/03/31>
+Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
+
+LaTeX Warning: You have requested package `',
+               but the package provides `smj'.
+
+Package: smj 2014/02/14 0.2 smj class by Arnost Komarek
+
+./smj.cls:21: LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 \newif\if@
+               submit
+? 
+./smj.cls:21: Emergency stop.
+ ...                                              
+                                                  
+l.21 \newif\if@
+               submit
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+ 
+Here is how much of TeX's memory you used:
+ 13 strings out of 493014
+ 289 string characters out of 6133351
+ 53601 words of memory out of 5000000
+ 3654 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 7i,0n,5p,109b,14s stack positions out of 5000i,500n,10000p,200000b,80000s
+./smj.cls:21:  ==> Fatal error occurred, no output PDF file produced!
