@@ -19,10 +19,10 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 		return("Data and time vectors must be of equal length.")
 	}else if(make_murder_p >= 1){
 		return("Make/murder proportion must be less than 1.")
-	}else if(percent >= 1){
-		return("Percent for jiggle neighrborhood must be less than 1.")
-	}else if(jump_p >= 1){
-		return("Jump proportion must be less than 1.")
+	}else if(percent >= 0.5){
+		return("Percent for jiggle neighrborhood must be less than 0.5.")
+	}else if(jump_p > 1){
+		return("Jump proportion must be less than or equal to 1.")
 	}
 
 	library(MASS)

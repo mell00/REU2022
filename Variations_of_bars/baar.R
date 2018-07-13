@@ -19,10 +19,10 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     return("Data and time vectors must be of equal length.")
   }else if(make_murder_p >= 1){
     return("Make/murder proportion must be less than 1.")
-  }else if(percent >= 1){
-    return("Percent for jiggle neighrborhood must be less than 1.")
-  }else if(jump_p >= 1){
-    return("Jump proportion must be less than 1.")
+  }else if(percent >= 0.5){
+    return("Percent for jiggle neighrborhood must be less than 0.5.")
+  }else if(jump_p > 1){
+    return("Jump proportion must be less than or equal to 1.")
   }
   
   library(MASS)
@@ -456,6 +456,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-current_result = baar(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 500)
-hist(current_result$NumBkpts)
-#current_result$Beta
+#test_data = test_data_10()
+#bkpts = breakpoints(test_data[,2]~test_data[,1])
+#current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 2500, 500)
+#hist(current_result$NumBkpts)
