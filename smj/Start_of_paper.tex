@@ -39,12 +39,11 @@
   %%% For papers with 3 or more authors:
   %%%  in \Author{}, separate the authors with commas, the last author is separated by `and' without a comma,
   %%%  in \AuthorRunning{}, use the full name of the first author followed by \textrm{et al.}.
-\Author{Kathryn Haglich\Affil{1}, Jeff Liebner\Affil{2},
-        Sarah Neitzel\Affil{3}, 
-        and Amy Pitts\Affil{4}
-        %and Emmanuel Lesaffre\Affil{4,}\Affil{5}
+\Author{Kathryn Haglich\Affil{1}, Jeffrey Liebner\Affil{1},
+        Sarah Neitzel\Affil{2}, 
+        and Amy Pitts\Affil{3}
 }
-\AuthorRunning{Haglich, Neitzel, Pitts}
+\AuthorRunning{Haglich, Liebner, Neitzel, Pitts}
 
   %%% For papers with 2 authors:
   %%%  in both \Author{} and \AuthorRunning{},
@@ -72,20 +71,13 @@
       Easton,
       Pennsylvania, USA
 
- %%% 2
-\item Department of Mathematics, 
-	  Faculty of Mathematics,
-      Lafayette College,
-      Easton,
-      Pennsylvania, USA
-  
-  %%% 3    
+ %%% 2  
 \item School of Biodiversity Conservation,
       Unity College, 
       Unity,
       Maine, USA
 
-  %%% 4
+  %%% 3  
 \item Department of Mathematics,
       Marist College,
       Poughkeepsie
@@ -113,9 +105,8 @@
 %%% Use command \CorrEmail{} to provide an e-mail address of the corresponding author.
 %%% Use command \CorrPhone{} to provide a phone number (including the country code!) of the corresponding author.
 %%% Use command \CorrFax{} to provide a fax number (including the country code!) of the corresponding author.
-\CorrAddress{Arno\v{s}t Kom\'arek, 
+\CorrAddress{Jeffrey Liebner, 
              Department of Mathematics, 
-             Faculty of Mathematics,
              Lafayette College, 
              Easton,
              Pennsylvania, 
@@ -128,7 +119,7 @@
 %%% Title and a short title (to be used as a running header) of the paper
 %%% -------------------------------------------------------------------------------
 \Title{Developing a Bayesian method for locating breakpoints in time series data.}
-\TitleRunning{Template paper}
+\TitleRunning{Breakpoints in time series}
 
 
 %%% Abstract
@@ -145,7 +136,7 @@ Any acknowledgements will be printed at the end of the text.
 %%% Key words
 %%% -------------------------------------------------------------------------------
 \Keywords{
-AR; Bayesian; Breakpoint; Time Series; 
+AR; Bayesian; Breakpoints; Time Series; 
 }
 
 
@@ -164,15 +155,17 @@ AR; Bayesian; Breakpoint; Time Series;
 %%% ------------------------------------------
 \section{Introduction}
 
-\section{Math}
-$\tau$ is the location of breakpoints \\
-$K$ is the number of breakpoints \\
-$\beta$ is the regression coefficients \\
-$\sigma$ is the standard deviations  
+\section{Method}
+The Metropolis Hastings algorithm is a mechanism consisting of a Markov Chain Monte Carlo (MCMC) that samples a distribution.  Our MCMC is an adaptation of BARS that have three different overarching step type, death, birth, and move. This process repeatable proposes breakpoint sets which a ratio then determines to accept or not. 
 
-\subsection{Derivations of Ratio}
+\subsection{Step Type}
+The first type of step is we will discuses is death.  This death step takes one existing break point and then deletes it.  The second type of step is Birth. This birth step propose a breakpoint in a random location. There are a couple of constraints on locations of acceptable proposals. A proposed breakpoint can not be an endpoint, an already existing breakpoint, or any data point that is 2 points away from an existing breakpoint. These constraints are necessary in being able to fit an auto-regressive (AR) model. The last type of step is move. Our move step is comprised of two type of moves, jump and jiggle.  Jump has a 25 \% chance of occurring and it is basically a death step and then an birth step. Jiggle has 75\% of occurring and it moves an existing breakpoint in a small defined interval specified by the user. 
+
+\subsection{Probabilities on Steps}
+The probabilities of choosing one step over another is specified by the user. However, the probability of doing a death and birth step is always equal to each other.  When a type of step is selected based of user input, then the Metropolis Hastings ratio determinate if the proposed breakpoint set is accepted.  
+
 \subsubsection{BIC} 
-The Metropolis Hastings algorithm is used to determine the acceptance of the proposed breakpoint set. The general ratio is the product of the Bayes factor, determined by the ratio of the posteriors, $g$, and the ratio of the Markov Chain Monte Carlo (MCMC) proposal densities, $q$, whose values depend on the current MCMC step. 
+The general Metropolis Hastings ratio is the product of the Bayes factor, determined by the ratio of the posteriors, $g$, and the ratio of the Markov Chain Monte Carlo (MCMC) proposal densities, $q$, whose values depend on the current MCMC step. 
 \begin{align*}
 ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_t) }{g(\tau_{o} K_{o} | x_1,\dots,x_t)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})}
 \end{align*}
@@ -184,7 +177,7 @@ log(ratio) & =\Big[ log \big[ g(\tau_{n} K_{n} | x_1,\dots,x_t)
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big] \\
 & \ …
 \end{align*}
-As proved by Kass \& Wasserman (1995), the log of the Bayes Factor can be approximated with BIC with an error on the order of $O(n^{-1/2})$ when the data size is greater than 25 and the prior follows a normal distribution.
+As shown by Kass and Wasserman (1995), the log of the Bayes Factor can be approximated with BIC with an error on the order of $O(n^{-1/2})$ when the data size is greater than 25 and the prior follows a normal distribution.
 Therefore, 
 \begin{align*}
  log \big[ g(\tau_{n} K_{n} | x_1,\dots,x_t)
@@ -211,6 +204,10 @@ d &= \frac{K_{start}}{A_{start} + K_{start} + 1} \times \frac{1}{K}
 \end{align*}
 The first fraction is based off of starting conditions and the second fraction changes through each step. We have that $A_{start}$ is the starting number of available spaces. An available space is any data point that is not itself a breakpoint, and endpoint, or 2 points away from an existing breakpoint.  $K_{start}$ is the starting number of breakpoints that is proposed before the function is called. 
 
+
+\subsection{AR model and draws}
+Once a step has been completed and a new breakpoint set is proposed then the data is fit using an auto-regressive model.  With this information then we can get a draw of the $\beta$ coefficients and $\sigma$.
+
 \subsection{Derivations of $\beta$ and $\sigma$ draws}
 
 The posterior for the $\beta$ coefficient is laid out in detail in the \textit{Forecasting time series} (Pesaran Paper, 2006). 
@@ -233,7 +230,7 @@ Where
 \end{align*}
 
 
-\section{Methods}
+\subsection{Simulation to evaluate}
 
 \section{Results}
 
