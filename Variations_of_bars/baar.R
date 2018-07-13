@@ -266,8 +266,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   smiley = n * fisher
   
   b_0 = matrix(coef,2,1) #matrix of beta means for posterior draw
-  B_0 = smiley #variance-covariance matrix for posterior draw
-  
+  #B_0 = smiley #variance-covariance matrix for posterior draw
+  B_0 = matrix(c(1000,0,0,1000),nrow=2,ncol=2) #variance-covariance matrix for posterior draw
+ 
   #beta and sigma draw
   post_beta_list = data.frame(Empty=c(NA,NA))
   post_sigma_list = data.frame(Empty=NA)
@@ -460,4 +461,15 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#current_result = baar(c(30,60), test_data_2[,1], test_data_2[,2], 100)
+#all_times = NULL
+iterations = 9000
+burnin = 500
+
+for(i in 1:30){
+start_time = Sys.time()
+current_result = baar(c(30,60), test_data_2[,1], test_data_2[,2], iterations, burnin)
+end_time = Sys.time()
+time_diff = end_time - start_time
+all_times = rbind(all_times, cbind(time_diff, iterations, burnin))
+hist(current_result$NumBkpts)
+}
