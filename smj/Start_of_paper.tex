@@ -228,9 +228,17 @@ $q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot dpois(K_{new} , \lambda)$,
 
 \subsection{Derivations of $\beta$ and $\sigma$ draws}
 
+The posterior for the $\beta$ coefficient is laid out in detail in the \textit{Forecasting time series} (Pesaran Paper, 2006) such that, 
+\begin{align*}
+y \sim  N(x \beta , \sigma ) \longrightarrow \beta | \sigma^2, b_0, B_0, V_0, d_0, p , S_{\gamma}, Y_{\gamma} \sim N( \overline{\beta_j } , \overline{V_j} )
+\end{align*}
+Where $\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}$, and $\overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty + B_0^{-1}b_0)$. Thus we have that $\beta  \sim N(\overline{\beta}_j, \overline{V}_j)$. \\
 
-$y \sim  N(x \beta , \sigma ) \longrightarrow \beta | \sigma^2, b_0, B_0, V_0, d_0, p , S_{\gamma}, Y_{\gamma} \sim N( \overline{\beta_j } , \overline{V_j} )$ \\ Where $\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}$, and $\overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty + B_0^{-1}b_0)$. Thus we have that $\beta  \sim N(\overline{\beta}_j, \overline{V}_j)$. 
-
+The \textit{Forecasting time series} (Pesaran Paper, 2006) also lays out the $\sigma$ posterior. $y \sim N(x \beta , \sigma )$ and 
+\begin{align*}
+\sigma_j^{-2} \sim  \Gamma(v_0, d_0) \longrightarrow \sigma^{-2}_j | \beta, b_0, B_0, v_0, d_0, p , S_{\gamma}, Y_{\gamma} \sim \Gamma (d = \overline{v}_0, \beta = \overline{d}_0) 
+\end{align*} 
+Where $\overline{v}_0 = v_0 + \frac{n_j}{2}$, and $\overline{d}_0 = d_0 + \frac{1}{2}(y-x\beta)^T(y-x\beta)$
 
 
 %%% Acknowledgements (if any)
