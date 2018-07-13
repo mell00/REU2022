@@ -44,7 +44,7 @@
         and Amy Pitts\Affil{4}
         %and Emmanuel Lesaffre\Affil{4,}\Affil{5}
 }
-\AuthorRunning{Arno\v{s}t Kom\'arek \textrm{et al.}}
+\AuthorRunning{Haglich, Neitzel, Pitts}
 
   %%% For papers with 2 authors:
   %%%  in both \Author{} and \AuthorRunning{},
@@ -184,7 +184,8 @@ we have that \\ $\pi(\theta) = \pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)$ for both 
 $\pi(\beta)$ is an unit information prior, multivariate normal\\
 $\pi(\sigma)$ is an inverse gamma  \\
 $\pi(\tau | K)$ might be uniform \\
-$\pi(K)$ might be a Poisson or uniform \\
+$\pi(K)$ might be a Poisson or uniform 
+
 
 \subsubsection{BIC}
 Applying this ratio into our own model we need to first take the log such that,
@@ -219,16 +220,16 @@ log(ratio) &= \frac{- \Delta BIC}{2} +
 \end{align*}
 The $q$ values depend on whether the step is addition or subtraction. \\
 \textbf{Addition:} 
-$q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot dpois(K_{old} , \lambda)$, $q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot dpois(K_{old} , \lambda)$ \\
+$q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot dpois(K_{old} , \lambda)$, $q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot dpois(K_{old} , \lambda)$
 \\
 \textbf{Subtraction:}
 $q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot dpois(K_{new} , \lambda)$, $q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot dpois(K_{old} , \lambda)$ \\
 
 
-
-
 \subsection{Derivations of $\beta$ and $\sigma$ draws}
 
+
+$y \sim  N(x \beta , \sigma ) \longrightarrow \beta | \sigma^2, b_0, B_0, V_0, d_0, p , S_{\gamma}, Y_{\gamma} \sim N( \overline{\beta_j } , \overline{V_j} )$ \\ Where $\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}$, and $\overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty + B_0^{-1}b_0)$. Thus we have that $\beta  \sim N(\overline{\beta}_j, \overline{V}_j)$. 
 
 
 
