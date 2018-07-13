@@ -165,76 +165,94 @@ keyword a; keyword b; keyword c; keyword d; keyword e
 \section{Introduction}
 
 \section{Math}
-Here is the math for our paper
+$\tau$ is the location of breakpoints \\
+$K$ is the number of breakpoints \\
+$\beta$ is the regression coefficients \\
+$\sigma$ is the standard deviations  
 
 \subsection{Derivations of Ratio}
 
 
 To start we need to find the ratio \\ 
 \begin{align*}
-ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_n) }{g(\tau_{o} K_{o} | x_1,\dots,x_n)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})} \\
-&= \frac{\Big[ \frac{f(x_1,\dots,x_n | \tau_{n} K_{n}) \pi(\tau_{n} K_{n})}{\int f(x_1, \dots ,x_n | \tau_{n} K_{n}) \pi(\tau_{n} K_{n}) d \tau_{n} K_{n} } \Big] q(\tau_{o} K_{o} | \tau_{n} K_{n})}{\Big[ \frac{f(x_1,\dots,x_n | \tau_{o} K_{o}) \pi(\tau_{o} K_{o})}{\int f(x_1, \dots ,x_n | \tau_{o} K_{o}) \pi(\tau_{o} K_{o}) d \tau_{o} K_{o} }\Big] q(\tau_{n} K_{n}| \tau_{o} K_{o})} 
+ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_t) }{g(\tau_{o} K_{o} | x_1,\dots,x_t)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})} \\
+&= \frac{\Big[ \frac{f(x_1,\dots,x_t | \tau_{n} K_{n}) \pi(\tau_{n} K_{n})}{\int f(x_1, \dots ,x_t | \tau_{n} K_{n}) \pi(\tau_{n} K_{n}) d \tau_{n} K_{n} } \Big] q(\tau_{o} K_{o} | \tau_{n} K_{n})}{\Big[ \frac{f(x_1,\dots,x_t | \tau_{o} K_{o}) \pi(\tau_{o} K_{o})}{\int f(x_1, \dots ,x_t | \tau_{o} K_{o}) \pi(\tau_{o} K_{o}) d \tau_{o} K_{o} }\Big] q(\tau_{n} K_{n}| \tau_{o} K_{o})} 
 \end{align*}
 
 Then we have,
 \begin{align*}
-ratio &= \frac{\Big[ \frac{ \int f(x_1,\dots,x_n | \tau_{n} K_{n}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{new} d\tau dK }{\int f(x_1, \dots ,x_n | \tau_{n} K_{n}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{new} d\tau dK d \beta d\sigma } \Big] q(\tau_{o} K_{o} | \tau_{n} K_{n})}{\Big[ \frac{ \int f(x_1,\dots,x_n | \tau_{o} K_{o}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{old} d\tau dK}{\int f(x_1, \dots ,x_n | \tau_{o} K_{o}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{old} d \tau dK d \beta d\sigma }\Big] q(\tau_{n} K_{n}| \tau_{o} K_{o})} 
+ratio &= \frac{\Big[ \frac{ \int f(x_1,\dots,x_t | \tau_{n} K_{n}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d\tau dK }{\int f(x_1, \dots ,x_t | \tau_{n} K_{n}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d\tau dK d \beta d\sigma } \Big] q(\tau_{o} K_{o} | \tau_{n} K_{n})}{\Big[ \frac{ \int f(x_1,\dots,x_t | \tau_{o} K_{o}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d\tau dK}{\int f(x_1, \dots ,x_t | \tau_{o} K_{o}) \big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big) d \tau dK d \beta d\sigma }\Big] q(\tau_{n} K_{n}| \tau_{o} K_{o})} 
 \end{align*}
 
-Basing priors of the BARS paper (Kass \& Wasserman, 1995)
+Basing priors of the  paper written by Kass, DiMatteo, and Genovese (2001) 
 we have that \\ $\pi(\theta) = \pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)$ for both the $\theta_{n}$ and the $\theta_{o}$. \\
 $\pi(\beta)$ is an unit information prior, multivariate normal\\
 $\pi(\sigma)$ is an inverse gamma  \\
 $\pi(\tau | K)$ might be uniform \\
-$\pi(K)$ might be a Poisson or uniform 
+$\pi(K)$ is a Poisson
 
 
-\subsubsection{BIC}
-Applying this ratio into our own model we need to first take the log such that,
-
+\subsubsection{BIC} 
+The Metropolis Hastings algorithm is used to determine the acceptance of the proposed breakpoint set. The general ratio is the product of the Bayes factor, determined by the ratio of the posteriors, $g$, and the ratio of the Markov Chain Monte Carlo (MCMC) proposal densities, $q$, whose values depend on the current MCMC step. 
 \begin{align*}
-ratio &= \frac{\Big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) %likelihood new
-\big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{new}%priors for new 
-\Big] 
-q(\tau_{o} K_{o} | \tau_{n} K_{n})} %proposal density going to old given new 
-{\Big[ f(x_1,\dots,x_n | \tau_{o} K_{o}) %likelihood old 
-\big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)_{old}\Big] %priors for old
-q(\tau_{n} K_{n}| \tau_{o} K_{o})} %proposal density going to new given old
-\\
-log(ratio) &= log \Big[\frac{\Big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) %likelihood new
-\big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)%priors for new 
-\Big] 
-q(\tau_{o} K_{o} | \tau_{n} K_{n})} %proposal density going to old given new 
-{\Big[ f(x_1,\dots,x_n | \tau_{o} K_{o}) %likelihood old 
-\big(\pi(\tau|K)\pi(K)\pi(\beta)\pi(\sigma)\big)\Big] %priors for old
-q(\tau_{n} K_{n}| \tau_{o} K_{o})} \Big]%proposal density going to new given old
-\\
-& =\Big[ log \big[ f(x_1,\dots,x_n | \tau_{n} K_{n})
-\big] - 
-log \big[ f(x_1,\dots,x_n | \tau_{o} K_{o}) \big] \Big]  \\
-& \  \ \ \ \ \ \ \  \ \ \ \ \ \ \ \  +  \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big] 
+ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_t) }{g(\tau_{o} K_{o} | x_1,\dots,x_t)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})}
 \end{align*}
-
-From the knowledge gained by the (Kass $\&$ Wasserman, 1995) paper we have that $\Big[ log \big[ f(x_1,\dots,x_n | \tau_{n} K_{n}) \big] -  log \big[ f(x_1,\dots,x_n | \tau_{o} K_{o})\big] \Big] $ approximates BIC. Thus,
+To be able to adequately analysis these ratios we need to put the ratio on a logarithmic scale.  
 \begin{align*}
-log(ratio) &= \frac{- \Delta BIC}{2} + 
+log(ratio) & =\Big[ log \big[ g(\tau_{n} K_{n} | x_1,\dots,x_t)
+\big] - log \big[ g(\tau_{o} K_{o} | x_1,\dots,x_t)\big] \Big] \\
+& \ \ \ \ \ \ \ \ \ \ \ \ + 
+\Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big] \\
+& \ …
+\end{align*}
+As proved by Kass \& Wasserman (1995), the log of the Bayes Factor can be approximated with BIC with an error on the order of $O(n^{-1/2})$ when the data size is greater than 25 and the prior follows a normal distribution.
+Therefore, 
+\begin{align*}
+ log \big[ g(\tau_{n} K_{n} | x_1,\dots,x_t)
+\big] - log \big[ g(\tau_{o} K_{o} | x_1,\dots,x_t)\big]  \approx \frac{- \Delta BIC}{2} 
+\end{align*}
+which means that 
+\begin{align*}
+log(ratio) \approx \frac{- \Delta BIC}{2} + 
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big]
 \end{align*}
-The $q$ values depend on whether the step is addition or subtraction. \\
-\textbf{Addition:} 
-$q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot dpois(K_{old} , \lambda)$, $q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot dpois(K_{old} , \lambda)$
-\\
-\textbf{Subtraction:}
-$q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot dpois(K_{new} , \lambda)$, $q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot dpois(K_{old} , \lambda)$ \\
 
+In the case of addition, 
+\begin{align*} 
+q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot Poisson(K_{old} , \lambda), \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot Poisson(K_{old} , \lambda).
+\end{align*}
+When the chosen MCMC step is subtraction,  \begin{align*}
+q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot Poisson(K_{new} , \lambda) , \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot Poisson(K_{old} , \lambda).
+\end{align*} 
+Given the equations above we have that $c$ is the combined probability of doing an addition and subtraction step. $b$ is the balancing birth coefficient and $d$ a balancing death coefficient. They are in place to set the ratio of birth step to death steps. Specifically,
+\begin{align*}
+b &= \frac{A_{start}}{A_{start} + K_{start} + 1} \times \frac{1}{A}
+\end{align*}
+\begin{align*}
+d &= \frac{K_{start}}{A_{start} + K_{start} + 1} \times \frac{1}{K}
+\end{align*}
+The first fraction is based off of starting conditions and the second fraction changes through each step. We have that $A_{start}$ is the starting number of available spaces. An available space is any data point that is not itself a breakpoint, and endpoint, or 2 points away from an existing breakpoint.  $K_{start}$ is the starting number of breakpoints that is proposed before the function is called. 
 
 \subsection{Derivations of $\beta$ and $\sigma$ draws}
 
-The posterior for the $\beta$ coefficient is laid out in detail in the \textit{Forecasting time series} (Pesaran Paper, 2006) such that,  $y \sim  N(x \beta , \sigma ) \longrightarrow \beta | \sigma^2, b_0, B_0, V_0, d_0, p , S_{\gamma}, Y_{\gamma} \sim N( \overline{\beta_j } , \overline{V_j} )$
-Where $\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}$, and $\overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty + B_0^{-1}b_0)$. Thus we have that $\beta  \sim N(\overline{\beta}_j, \overline{V}_j)$. 
-
-The \textit{Forecasting time series} (Pesaran Paper, 2006) also lays out the $\sigma$ posterior. $y \sim N(x \beta , \sigma )$ and $\sigma_j^{-2} \sim  \Gamma(v_0, d_0) \longrightarrow \sigma^{-2}_j | \beta, b_0, B_0, v_0, d_0, p , S_{\gamma}, Y_{\gamma} \sim \Gamma ( \overline{v}_0,  \overline{d}_0) $
-Where $\overline{v}_0 = v_0 + \frac{n_j}{2}$, and $\overline{d}_0 = d_0 + \frac{1}{2}(y-x\beta)^T(y-x\beta)$
+The posterior for the $\beta$ coefficient is laid out in detail in the \textit{Forecasting time series} (Pesaran Paper, 2006). 
+Given that $b_0$ is the mean of the $\beta$s, 
+$B_0$ is the variance co-variance matrix of the $\beta$s for the prior. Also $v_0$ and $d_0$ are the parameters of the inverse gamma prior of the inverse gamma squared (one being the shape the other rate). While $S_t$ is the current state of the break locations, and $y_t$ is the actual data values. 
+\begin{align*}
+\beta | \sigma^2, b_0, B_0, V_0, d_0 , S_{t}, y_{t} \sim N( \overline{\beta_j } , \overline{V_j} )
+\end{align*}
+Where 
+\begin{align*}
+\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}, \ \ \  \overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty_t + B_0^{-1}b_0)
+\end{align*}
+The \textit{Forecasting time series} (Pesaran Paper, 2006) also lays out the $\sigma$ posterior such that 
+\begin{align*}
+\sigma_j^{-2} \sim  \Gamma(v_0, d_0) \longrightarrow \sigma^{-2}_j | \beta, b_0, B_0, v_0, d_0 , S_{t}, y_{t} \sim \Gamma ( \overline{v}_0,  \overline{d}_0)
+\end{align*}
+Where 
+\begin{align*}
+\overline{v}_0 = v_0 + \frac{n_j}{2} , \ \ \  \overline{d}_0 = d_0 + \frac{1}{2}(y_t-x\beta)^T(y_t-x\beta)
+\end{align*}
 
 
 \section{Methods}
