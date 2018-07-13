@@ -26,6 +26,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
   library(MASS)
+  library(FitAR)
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
   n = length(full_data[,1]) #number of observations
   k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
@@ -39,25 +40,27 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     coef_2 = 0 
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
-      model = arima(full_data[,2], method = "ML", order = c(1,0,0)) #AR model on the full dataset
-      sum_loglik = model$loglik #finding the log likeihoods on the full dataset 
+      model = FitAR(full_data[,2], p=1)
+      SEE = sum(na.omit(model$res)^2)
+      s2 = SEE/n
+      sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likeihoods on the full dataset 
     }else{
       for(i in 2:length(k_ends)) {
         if(i == 2){
           min = k_ends[i-1]
           y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-          model = ar.mle(y_values, order=1)
-          sub_n = length(y_values)-1
-          SEE = sum(na.omit(model$resid))
+          model = FitAR(y_values, p=1)
+          sub_n = length(y_values)
+          SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
           sub_loglik = (-1*sub_n/2)*(log(2*pi)+log(s2)+1)
           sum_loglik = sum_loglik + sub_loglik #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }else if(i > 2){
           min = k_ends[i-1]
           y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
-          model = ar.mle(y_values, order=1)
-          sub_n = length(y_values)-1
-          SEE = sum(na.omit(model$resid)^2)
+          model = FitAR(y_values, p=1)
+          sub_n = length(y_values)
+          SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
           sub_loglik = (-1*sub_n/2)*(log(2*pi)+log(s2)+1)
           sum_loglik = sum_loglik + sub_loglik #the logLik looks the log likelyhood (relates to both SSR and MLE)
@@ -253,23 +256,11 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   jiggle.accept.count <<- 0
   
   #setting up priors for beta draws
-  
-  coef_finding = function(full_data) {#function to minimize to get MLE of betas
-    
-    model = arima(full_data, method = "ML", order = c(1,0,0)) #AR model on the full datase
-    c = model$coef #finding the log likeihoods on the full dataset 
-    coef = c[[2]]
-    intercept = c[[1]]
-    
-    return(c(intercept, coef))
-    
-  }
-  coef = coef_finding(full_data[,2])
-  model = arima(full_data[,2], method = "ML", order = c(1,0,0)) #AR model on the full datase
+  model = ar.ols(full_data[,2], order=1, aic=F, demean=F, intercept=T) #AR model on the full datase
   fisher = (1 * model$var.coef)
   smiley = n * fisher
   
-  b_0 = matrix(coef,2,1) #matrix of beta means for posterior draw
+  b_0 = matrix(c(model$x.intercept,model$ar[[1]]),2,1) #matrix of beta means for posterior draw
   #B_0 = smiley #variance-covariance matrix for posterior draw
   B_0 = matrix(c(1000,0,0,1000),nrow=2,ncol=2) #variance-covariance matrix for posterior draw
   
@@ -410,53 +401,53 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     num_bkpts = c(num_bkpts, current_k, recursive=T)
   }
   
-  split_num = NULL #initializing
+  #split_num = NULL #initializing
   
-  for(i in 2:ncol(post_beta_list)){ #detecting where to split up columns in beta/sigma object
-    if(startsWith(colnames(post_beta_list)[i], "1.") == TRUE){
-      split_num = c(split_num, i)
-    }
-  }
+  #for(i in 2:ncol(post_beta_list)){ #detecting where to split up columns in beta/sigma object
+    #if(startsWith(colnames(post_beta_list)[i], "1.") == TRUE){
+      #split_num = c(split_num, i)
+    #}
+  #}
   
-  final_beta_list = list() #initializing
+  #final_beta_list = list() #initializing
   
-  for(i in 1:length(split_num)){ #splitting up columns in beta object
+  #for(i in 1:length(split_num)){ #splitting up columns in beta object
     
-    if(i == 1){ #betas from first run
-      final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
-      colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-    }else if(i < length(split_num)){# betas from middle runs
-      final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-    }else{ #betas from penultimate and final runs
-      final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-      final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
-      colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
-    } 
-  }
+    #if(i == 1){ #betas from first run
+      #final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
+      #colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+    #}else if(i < length(split_num)){# betas from middle runs
+      #final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
+      #colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+    #}else{ #betas from penultimate and final runs
+      #final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
+      #colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+      #final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
+      #colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
+    #} 
+  #}
   
-  post_beta_list = final_beta_list #saving final version of beta object
+  #post_beta_list = final_beta_list #saving final version of beta object
   
-  final_sigma_list = list() #initializing
+  #final_sigma_list = list() #initializing
   
-  for(i in 1:length(split_num)){ #splitting up columns in sigma object
+  #for(i in 1:length(split_num)){ #splitting up columns in sigma object
     
-    if(i == 1){ #sigmas from first run
-      final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
-      colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-    }else if(i < length(split_num)){# sigmas from middle runs
-      final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-    }else{ #sigma from penultimate and final runs
-      final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-      final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
-      colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
-    } 
-  }
+    #if(i == 1){ #sigmas from first run
+      #final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
+      #colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+    #}else if(i < length(split_num)){# sigmas from middle runs
+      #final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
+      #colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+    #}else{ #sigma from penultimate and final runs
+      #final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
+      #colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+      #final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
+      #colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
+    #} 
+  #}
   
-  post_sigma_list = final_sigma_list #saving final version of sigma object
+  #post_sigma_list = final_sigma_list #saving final version of sigma object
   
   final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list)
   names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma")
@@ -465,5 +456,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-current_result = baar(c(30,60), test_data_2[,1], test_data_2[,2], 50, 25)
+current_result = baar(c(30,60), test_data_2[,1], test_data_2[,2], 2500, 500)
+hist(current_result$NumBkpts)
 #current_result$Beta
