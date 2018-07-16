@@ -156,9 +156,182 @@ par(mfrow=c(1,1))
 #data 11
 par(mfrow=c(2,3))
 x.y = 5
+y.y = 60000
 hist(number_of_breakpoints(data11_j1j0), main="Data11 Jump 1 Jiggle 0", xlab="number of Breakpoints", xlim=c(x.x, x.y), ylim=c(y.x, y.y))
 hist(number_of_breakpoints(data11_j75j25), main="Data11 Jump 75 Jiggle 25", xlab="number of Breakpoints", xlim=c(x.x, x.y), ylim=c(y.x, y.y))
 hist(number_of_breakpoints(data11_j50j50), main="Data11 Jump 50 Jiggle 50", xlab="number of Breakpoints", xlim=c(x.x, x.y), ylim=c(y.x, y.y))
 hist(number_of_breakpoints(data11_j25j75), main="Data11 Jump 25 Jiggle 75", xlab="number of Breakpoints", xlim=c(x.x, x.y), ylim=c(y.x, y.y))
 hist(number_of_breakpoints(data11_j0j1), main="Data11 Jump 0 Jiggle 1", xlab="number of Breakpoints", xlim=c(x.x, x.y), ylim=c(y.x, y.y))
+par(mfrow=c(1,1))
+
+
+
+
+
+mse_plots <- function(data, title,x,y) {
+  par(mfrow=c(2,3), oma=c(0,0,2,0))
+  plot(data$MSE[[1]], main = "MSE 1", ylab="MSE", xlab="Time", ylim=c(x,y))
+  plot(data$MSE[[5]], main = "MSE 5", ylab="MSE", xlab="Time", ylim=c(x,y))
+  plot(data$MSE[[10]], main = "MSE 10", ylab="MSE", xlab="Time", ylim=c(x,y))
+  plot(data$MSE[[15]], main = "MSE 15", ylab="MSE", xlab="Time", ylim=c(x,y))
+  plot(data$MSE[[20]], main = "MSE 20", ylab="MSE", xlab="Time", ylim=c(x,y))
+  plot(data$MSE[[25]], main = "MSE 25", ylab="MSE", xlab="Time", ylim=c(x,y))
+  title(title, outer = TRUE)
+}
+
+mse_plots(data11_j1j0, "data11 Jump 1 Jiggle 0", 0.5, 3)
+mse_plots(data11_j75j25, "data11 Jump 75 Jiggle 25", 0.5, 6)
+mse_plots(data11_j50j50, "data11 Jump 50 Jiggle 50", 0.5, 4)
+mse_plots(data11_j25j75, "data11 Jump 25 Jiggle 75", 0.5,4)
+mse_plots(data11_j0j1, "data11 Jump 0 Jiggle 1",0.5,4)
+
+mse_plots(data1_j1j0, "data1 Jump 1 Jiggle 0", 0.5, 1.5)
+mse_plots(data1_j75j25, "data1 Jump 75 Jiggle 25", 0.5, 1.5)
+mse_plots(data1_j50j50, "data1 Jump 50 Jiggle 50", 0.5, 1.5)
+mse_plots(data1_j25j75, "data1 Jump 25 Jiggle 75", 0.5,1.5)
+mse_plots(data1_j0j1, "data1 Jump 0 Jiggle 1",0.5,1.5)
+
+mse_plots(data3_j1j0, "data3 Jump 1 Jiggle 0", 10, 40)
+mse_plots(data3_j75j25, "data3 Jump 75 Jiggle 25", 10, 40)
+mse_plots(data3_j50j50, "data3 Jump 50 Jiggle 50", 10, 40)
+mse_plots(data3_j25j75, "data3 Jump 25 Jiggle 75", 10, 40)
+mse_plots(data3_j0j1, "data3 Jump 0 Jiggle 1",10, 40)
+
+mse_plots(data9_j1j0, "data9 Jump 1 Jiggle 0", 5, 20)
+mse_plots(data9_j75j25, "data9 Jump 75 Jiggle 25", 5, 20)
+mse_plots(data9_j50j50, "data9 Jump 50 Jiggle 50", 5, 20)
+mse_plots(data9_j25j75, "data9 Jump 25 Jiggle 75", 5, 20)
+mse_plots(data9_j0j1, "data9 Jump 0 Jiggle 1",5, 20)
+
+
+
+bic_plots <- function(data, title,x,y) {
+  par(mfrow=c(2,3), oma=c(0,0,2,0))
+  plot(data$BIC[[1]], main = "BIC 1", ylab="BIC", xlab="Time", ylim=c(x,y))
+  plot(data$BIC[[5]], main = "BIC 5", ylab="BIC", xlab="Time", ylim=c(x,y))
+  plot(data$BIC[[10]], main = "BIC 10", ylab="BIC", xlab="Time", ylim=c(x,y))
+  plot(data$BIC[[15]], main = "BIC 15", ylab="BIC", xlab="Time", ylim=c(x,y))
+  plot(data$BIC[[20]], main = "BIC 20", ylab="BIC", xlab="Time", ylim=c(x,y))
+  plot(data$BIC[[25]], main = "BIC 25", ylab="BIC", xlab="Time", ylim=c(x,y))
+  title(title, outer = TRUE)
+}
+
+bic_plots(data11_j1j0, "data11 Jump 1 Jiggle 0", 200, 350)
+bic_plots(data11_j75j25, "data11 Jump 75 Jiggle 25", 200, 350)
+bic_plots(data11_j50j50, "data11 Jump 50 Jiggle 50", 200, 350)
+bic_plots(data11_j25j75, "data11 Jump 25 Jiggle 75", 200, 350)
+bic_plots(data11_j0j1, "data11 Jump 0 Jiggle 1", 200, 350)
+
+bic_plots(data1_j1j0, "data1 Jump 1 Jiggle 0", 200, 350)
+bic_plots(data1_j75j25, "data1 Jump 75 Jiggle 25", 200, 350)
+bic_plots(data1_j50j50, "data1 Jump 50 Jiggle 50", 200, 350)
+bic_plots(data1_j25j75, "data1 Jump 25 Jiggle 75", 200, 350)
+bic_plots(data1_j0j1, "data1 Jump 0 Jiggle 1", 200, 350)
+
+bic_plots(data3_j1j0, "data3 Jump 1 Jiggle 0", 400, 700)
+bic_plots(data3_j75j25, "data3 Jump 75 Jiggle 25", 400, 700)
+bic_plots(data3_j50j50, "data3 Jump 50 Jiggle 50", 400, 700)
+bic_plots(data3_j25j75, "data3 Jump 25 Jiggle 75", 400, 700)
+bic_plots(data3_j0j1, "data3 Jump 0 Jiggle 1",400, 700)
+
+bic_plots(data9_j1j0, "data9 Jump 1 Jiggle 0", 300, 500)
+bic_plots(data9_j75j25, "data9 Jump 75 Jiggle 25", 300, 500)
+bic_plots(data9_j50j50, "data9 Jump 50 Jiggle 50", 300, 500)
+bic_plots(data9_j25j75, "data9 Jump 25 Jiggle 75", 300, 500)
+bic_plots(data9_j0j1, "data9 Jump 0 Jiggle 1", 300, 500)
+
+
+
+
+mse_mean <- function(data) {
+  points = 0
+  for(i in 1:30){
+    hold = mean(data$MSE[[i]])
+    points = c(points, hold)
+  }
+  points = points[-1]
+  return(points)
+}
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(mse_mean(data11_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,7), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data11_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,7), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data11_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,7), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data11_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,7), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data11_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,7), ylab = "Average MSE", xlab="Iteration")
+title("Data 11", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(mse_mean(data1_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,3), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data1_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,3), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data1_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,3), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data1_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,3), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data1_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,3), ylab = "Average MSE", xlab="Iteration")
+title("Data 1", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(mse_mean(data3_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,40), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data3_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,40), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data3_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,40), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data3_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,40), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data3_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,40), ylab = "Average MSE", xlab="Iteration")
+title("Data 3", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(mse_mean(data9_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,30), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data9_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,30), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data9_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,30), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data9_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,30), ylab = "Average MSE", xlab="Iteration")
+plot(mse_mean(data9_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,30), ylab = "Average MSE", xlab="Iteration")
+title("Data 9", outer = TRUE)
+par(mfrow=c(1,1))
+
+
+bic_mean <- function(data) {
+  points = 0
+  for(i in 1:30){
+    hold = mean(data$BIC[[i]])
+    points = c(points, hold)
+  }
+  points = points[-1]
+  return(points)
+}
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(bic_mean(data11_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data11_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data11_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data11_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data11_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+title("Data 11", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(bic_mean(data1_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data1_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data1_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data1_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data1_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,500), ylab = "Average BIC", xlab="Iteration")
+title("Data 1", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(bic_mean(data3_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,700), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data3_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,700), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data3_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,700), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data3_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,700), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data3_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,700), ylab = "Average BIC", xlab="Iteration")
+title("Data 3", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(2,3), oma=c(0,0,2,0))
+plot(bic_mean(data9_j1j0), main="Jump 1 Jiggle 0", ylim = c(0,600), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data9_j25j75), main="Jump 25 Jiggle 75", ylim = c(0,600), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data9_j50j50), main="Jump 50 Jiggle 50", ylim = c(0,600), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data9_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,600), ylab = "Average BIC", xlab="Iteration")
+plot(bic_mean(data9_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,600), ylab = "Average BIC", xlab="Iteration")
+title("Data 9", outer = TRUE)
 par(mfrow=c(1,1))
