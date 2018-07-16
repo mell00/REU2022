@@ -7,13 +7,14 @@
 # interations	= number of runs for final sampling with Metropolis-Hastings
 # burn_in		= number of runs for set-up sampling with Metropolis-Hastings
 # make_murder_p	= the combine proportion (decimal) for make and murder steps
-#note: move proportion is 1 - make_murder_p
+	# note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
 # lambda		= for Poisson distribution of breakpoint prior
 # jump_p		= proportion of move steps that will be jump
-#note: jiggle proprtion is 1 - jump_p
+	# note: jiggle proprtion is 1 - jump_p
+# ar			= order of AR model
 
-baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25){
+baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1){
   
   if(length(time) != length(data)){
     return("Data and time vectors must be of equal length.")
@@ -40,7 +41,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     coef_2 = 0 
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
-      model = FitAR(full_data[,2], p=1)
+      model = FitAR(full_data[,2], p=ar)
       SEE = sum(na.omit(model$res)^2)
       s2 = SEE/n
       sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likeihoods on the full dataset 
@@ -49,7 +50,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         if(i == 2){
           min = k_ends[i-1]
           y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-          model = FitAR(y_values, p=1)
+          model = FitAR(y_values, p=ar)
           sub_n = length(y_values)
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
@@ -58,7 +59,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         }else if(i > 2){
           min = k_ends[i-1]
           y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
-          model = FitAR(y_values, p=1)
+          model = FitAR(y_values, p=ar)
           sub_n = length(y_values)
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
@@ -256,11 +257,19 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   jiggle.accept.count <<- 0
   
   #setting up priors for beta draws
-  model = arima(full_data[,2], order=c(1,0,0))
+  model = arima(full_data[,2], order=c(ar,0,0))
   fisher = model$var.coef
   smiley = n * solve(fisher)
+
+  coef_list = model$coef[[length(model$coef)]]
+
+  for(a in 1:(length(model$coef)-1)){
+
+  	coef_list = c(coef_list, model$coef[[a]], recursive=T)
+
+  }
   
-  b_0 = matrix(c(model$coef[[2]],model$coef[[1]]),2,1) #matrix of beta means for posterior draw
+  b_0 = matrix(coef_list,(ar+1),1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
 
   #beta and sigma draw
@@ -335,7 +344,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         min = k_ends[m-1]
       }
       x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
-      x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
+      x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow=length(x_values), ncol=(ar+1))
       y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
       sigma = sd(y_j)
       
@@ -457,6 +466,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 #calling the function
 test_data = test_data_2()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50)
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50, ar=1)
 hist(current_result$NumBkpts)
 current_result$Beta
