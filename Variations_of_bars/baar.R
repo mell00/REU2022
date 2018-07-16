@@ -16,8 +16,12 @@
 
 baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1){
   
+  ar = floor(ar)
+  
   if(length(time) != length(data)){
     return("Data and time vectors must be of equal length.")
+  }else if(length(data) < 6 * ar){
+   return("Data insufficient for order of AR model. Try a lower order.") 
   }else if(make_murder_p >= 1){
     return("Make/murder proportion must be less than 1.")
   }else if(percent >= 0.5){
@@ -34,7 +38,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   #function to get sum of log likelihoods
   fitMetrics<-function(k_ends, full_data){
-    
+
     #create sum objects
     sum_loglik = 0
     coef_1 = 0 
@@ -71,13 +75,45 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     return(sum_loglik)
   }
   
+  #function to find all available spaces to place new breakpoints in data set
+  freeObservations<-function(k_ends, ar){
+    full_set = c(1:max(k_ends))
+    if(ar == 1){
+      constraint = (3 - 1)
+    }else{
+      constraint = (2*ar-1)
+    }
+    exclude_set = k_ends
+    for(a in 1:length(k_ends)){
+      if(a == 1){
+        right = k_ends[[a]] + constraint
+        right_set = full_set[k_ends[[a]]:right]
+        exclude_set = c(exclude_set, right_set, recursive=T)
+      }else if(a == length(k_ends)){
+        left = k_ends[[a]] - constraint
+        left_set = full_set[left:k_ends[[a]]]
+        exclude_set = c(exclude_set, left_set, recursive=T)
+      }else{
+        right = k_ends[[a]] + constraint
+        right_set = full_set[k_ends[[a]]:right]
+        left = k_ends[[a]] - constraint
+        left_set = full_set[left:k_ends[[a]]]
+        exclude_set = c(exclude_set, left_set, right_set, recursive=T)
+      }
+    }
+    diff_set = setdiff(full_set,exclude_set)
+    return(sort(diff_set))
+  }
+  
   #function to randomly add a new breakpoint
   barMake<-function(k_ends){
     
-    full_set = c(1:max(k_ends))
-    exclude_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-    diff_set = setdiff(full_set,exclude_set)
-    rand_spot = sample(diff_set, 1) #selects a random spot
+    diff_set = freeObservations(k_ends, ar)
+    if(length(diff_set) < 2){
+      rand_spot = diff_set
+    }else{
+      rand_spot = sample(diff_set, 1) #selects a random spots
+    }
     k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
     return(k_ends_final)
     
@@ -114,21 +150,32 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     prelim_neighborhood = full_data[floor(random_bkpt-wiggliness):ceiling(random_bkpt+wiggliness)]
     left_neighbor = k_ends[random_num]
     right_neighbor = k_ends[random_num+2]
-    ll_limit = left_neighbor-2
-    lr_limit = left_neighbor+2
-    rl_limit = right_neighbor-2
-    rr_limit = right_neighbor+2
+    if(ar == 1){
+      constraint = (3 - 1)
+    }else{
+      constraint = (2*ar-1)
+    }
+    ll_limit = left_neighbor-constraint
+    lr_limit = left_neighbor+constraint
+    rl_limit = right_neighbor-constraint
+    rr_limit = right_neighbor+constraint
     if(ll_limit < 0){ll_limit = 0}
     if(rr_limit > max(k_ends)){rr_limit = max(k_ends)}
     exclusions = sort(c(full_data[ll_limit:lr_limit], full_data[rl_limit:rr_limit]))
     final_neighborhood = setdiff(prelim_neighborhood, exclusions)
     
-    if(length(final_neighborhood) > 0){
+    if(length(final_neighborhood) > 1){
       new_location = sample(final_neighborhood, 1)
       k_ends_less = k_ends[-(random_num+1)]
       final_k_ends = sort(c(k_ends_less, new_location))
       return(final_k_ends)
-    }else{
+    }else if(length(final_neighborhood) == 1){
+      new_location = final_neighborhood
+      k_ends_less = k_ends[-(random_num+1)]
+      final_k_ends = sort(c(k_ends_less, new_location))
+      return(final_k_ends)
+    }
+    else{
       return("jiggle failure")
     }
     
@@ -139,16 +186,20 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
-    if(length(k_ends) < 3 | u_step <= make_k){
+    if(ar == 1){
+      constraint = 5
+    }else{
+      constraint = ar * 4
+    }
+    
+    if(max(diff(k_ends)) >= constraint & length(k_ends) < 3 | max(diff(k_ends)) >= constraint & u_step <= make_k){
       type = "add"
       a.count <<- a.count + 1
       k_ends_new = barMake(k_ends) #make
       
       #setting up qs for ratio
       q1 = murder_k/(length(k_ends_new)-2)
-      full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends)-2) - 6 + overlap
+      n_free = length(freeObservations(k_ends,ar))
       q2 = make_k/n_free
       
     } else if(u_step > make_k & u_step <= (make_k + murder_k)){
@@ -157,9 +208,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       k_ends_new = barMurder(k_ends) #murder
       
       #setting up qs for ratio
-      full_set = c(k_ends_new, k_ends_new[1:length(k_ends_new)-1]+1, k_ends_new[1:length(k_ends_new)-1]+2, k_ends_new[2:length(k_ends_new)]-1, k_ends_new[2:length(k_ends_new)]-2) #all precluded observations
-      overlap = sum(table(full_set))-length(table(full_set)) #repeated preclusions
-      n_free = n - 5*(length(k_ends_new)-2) - 6 + overlap
+      n_free = length(freeObservations(k_ends_new,ar))
       q1 = make_k/n_free
       q2 = murder_k/(length(k_ends)-2)
       
@@ -187,7 +236,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         q2 = 1
       }
     }
-    
+
     return(list(k_ends_new, q1, q2, type))
   }
   
@@ -204,9 +253,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   #getting constants for qs for burn-in Metropolis-Hastings
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_nfree = length(freeObservations(k_ends,ar)) #most probable n_free based on starting info
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
   make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
   murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
@@ -273,14 +320,12 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   B_0 = smiley #variance-covariance matrix for posterior draw
 
   #beta and sigma draw
-  post_beta_list = data.frame(Empty=c(NA,NA))
+  post_beta_list = data.frame(Empty=rep(NA,(ar+1)))
   post_sigma_list = data.frame(Empty=NA)
   
   #getting constants for qs for final Metropolis-Hasting
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
-  full_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
-  overlap = sum(table(full_set))-length(table(full_set)) #any repeated values from the set above
-  starting_nfree = n - 5 * (length(k_ends)-2) - 6 + overlap #most probable n_free based on starting info
+  starting_nfree = length(freeObservations(k_ends,ar))
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
   make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
   murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
@@ -343,9 +388,14 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       }else{
         min = k_ends[m-1]
       }
-      x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
-      x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow=length(x_values), ncol=(ar+1))
-      y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
+      x_values = NULL
+      for(a in 1:ar){
+        current_x_values = full_data[c((min+ar-a):(k_ends[[m]]-ar+(ar-a))),1]
+        x_length <<- length(current_x_values)
+        x_values = c(x_values, current_x_values, recursive=T)
+      }
+      x_j = matrix(c( rep(1, each=x_length), x_values, recursive=T), nrow=x_length, ncol=(ar+1))
+      y_j = full_data[c((min+ar):k_ends[[m]]),2] #getting the y values in the interval
       sigma = sd(y_j)
       
       #bar_v
@@ -354,7 +404,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
       
       predicted_x = x_j %*% beta
-      fit = c(fit, predicted_x)
+      squared_resid = (predicted_x - y_j)^2
+      fit = c(fit, squared_resid, recursive=T)
       
       #drawing a random variable from a multivariate normal pdf 
       post_beta = mvrnorm(1, beta, v)
@@ -373,7 +424,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       current_post_sigmas = cbind(current_post_sigmas, post_sigma)
       
       if(m == len ) {
-        MSE = mean((full_data[,2]-fit)^2)
+        MSE = mean(fit)
         all_MSE = rbind(all_MSE, MSE)
         current_post_betas = as.data.frame(current_post_betas)
         colnames(current_post_betas) = c(1:ncol(current_post_betas))
@@ -396,7 +447,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   colnames(all_MSE) = "MSE"
   colnames(all_BIC) = "BIC"
-  rownames(post_beta_list) = c("B0", "B1")
+  rownames(post_beta_list) = c(seq(0,ar,1)) #FIX HERE
+  rownames(post_beta_list) = paste("B", rownames(post_beta_list), sep = "")
   rownames(post_sigma_list) = "Sigma"
   
   final.propose = c(a.count, s.count, m.count, j.count)
@@ -464,8 +516,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-test_data = test_data_2()
+test_data = test_data_11()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50, ar=1)
-hist(current_result$NumBkpts)
-current_result$Beta
+current_result = baar(45, test_data[,1], test_data[,2], 2500, 500, ar=7)
+#hist(current_result$NumBkpts)
+#current_result$Beta
