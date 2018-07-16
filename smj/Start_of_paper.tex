@@ -166,17 +166,14 @@ The combined probabilities of performing a birth step, $b_p$, and a death step, 
 \begin{align*}
 b_p = c  \ \frac{A_{start}}{A_{start}+ K_{start}+1}  \ \ \ \ d_p = c \  \frac{K_{start}+1}{A_{start}+ K_{start}+1}
 \end{align*}
-
 Then, the probability of a specific birth step given $A$ available locations, $b$, is the equation 
 \begin{align*}
 b &= \ b_p \times \frac{1}{A}
 \end{align*}
-
 Thus, the probability of a specific death step given $K$ breakpoints, $d$, is the equation
 \begin{align*}
 d &= \ d_p \times \frac{1}{K}
 \end{align*}
-
 The probability of a move step, $m$ is represented by the equation $m = 1-c$. The probability of jiggle, $jg$, and the probability of jump, $ju$, are calculated by the following equations: 
 \begin{align*}
 jg = m\zeta \ \ \ \ \ ju = 1-jg
@@ -208,22 +205,18 @@ which means that
 log(ratio) \approx \frac{- \Delta BIC}{2} + 
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big]
 \end{align*}
-
 In the case of a birth step, 
 \begin{align*} 
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot Poisson(K_{old} , \lambda), \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot Poisson(K_{old} , \lambda).
 \end{align*}
-
 In the case of a death step,  
 \begin{align*}
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot Poisson(K_{new} , \lambda) , \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot Poisson(K_{old} , \lambda).
 \end{align*} 
-
 In the case of a move step, irrelevant of whether it is specifically jiggle or jump, 
 \begin{align*} 
 log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] = 0 
 \end{align*}
-
 Henceforth, for a move, 
 \begin{align*}
 log(ratio) \approx \frac{- \Delta BIC}{2} 
@@ -242,10 +235,7 @@ where
 \begin{align*}
 \overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}, \ \ \  \overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty_t + B_0^{-1}b_0).
 \end{align*}
-
 The conditions are the following: $b_0$ is the mean of the $\beta$ coefficients, $B_0$ is the variance co-variance matrix of the $\beta$ coefficients for the prior, $v_0$ and $d_0$ are the parameters of the inverse gamma prior of the inverse gamma squared (one being the shape the other rate), $S_t$ is the current breakpoint set, and $y_t$ is the actual data values. 
-
-
 Pesaran (2006) derives the $\sigma$ posterior such that 
 \begin{align*}
 \sigma_j^{-2} \sim  \Gamma(v_0, d_0) \longrightarrow \sigma^{-2}_j | \beta, b_0, B_0, v_0, d_0 , S_{t}, y_{t} \sim \Gamma ( \overline{v}_0,  \overline{d}_0)

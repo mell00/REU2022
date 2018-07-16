@@ -78,45 +78,49 @@ location_of_breakpoints <- function(data) {
 #data 1
 x=0
 y=80000
-par(mfrow=c(2,3))
-hist(location_of_breakpoints(data1_j1j0), main="Data1 Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data1_j75j25), main="Data1 Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data1_j50j50), main="Data1 Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data1_j25j75), main="Data1 Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data1_j0j1), main="Data1 Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
+par(mfrow=c(2,3),oma=c(0,0,2,0))
+hist(location_of_breakpoints(data1_j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data1_j75j25), main="Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data1_j50j50), main="Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data1_j25j75), main="Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data1_j0j1), main="Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+title("Data 1", outer = TRUE)
 par(mfrow=c(1,1))
 
 #data 3
 x=0
 y=60000
-par(mfrow=c(2,3))
-hist(location_of_breakpoints(data3_j1j0), main="Data3 Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data3_j75j25), main="Data3 Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data3_j50j50), main="Data3 Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data3_j25j75), main="Data3 Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data3_j0j1), main="Data3 Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
+par(mfrow=c(2,3),oma=c(0,0,2,0))
+hist(location_of_breakpoints(data3_j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data3_j75j25), main="Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data3_j50j50), main="Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data3_j25j75), main="Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data3_j0j1), main="Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+title("Data 3", outer = TRUE)
 par(mfrow=c(1,1))
 
 #data 9
 x=0
 y=60000
-par(mfrow=c(2,3))
-hist(location_of_breakpoints(data9_j1j0), main="Data9 Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data9_j75j25), main="Data9 Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data9_j50j50), main="Data9 Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data9_j25j75), main="Data9 Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data9_j0j1), main="Data9 Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
+par(mfrow=c(2,3),oma=c(0,0,2,0))
+hist(location_of_breakpoints(data9_j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data9_j75j25), main="Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data9_j50j50), main="Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data9_j25j75), main="Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data9_j0j1), main="Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+title("Data 9", outer = TRUE)
 par(mfrow=c(1,1))
 
 #data 11
 x=0
 y=80000
-par(mfrow=c(2,3))
-hist(location_of_breakpoints(data11_j1j0), main="Data11 Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data11_j75j25), main="Data11 Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data11_j50j50), main="Data11 Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data11_j25j75), main="Data11 Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
-hist(location_of_breakpoints(data11_j0j1), main="Data11 Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y))
+par(mfrow=c(2,3),oma=c(0,0,2,0))
+hist(location_of_breakpoints(data11_j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data11_j75j25), main="Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data11_j50j50), main="Jump 50 Jiggle 50", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data11_j25j75), main="Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data11_j0j1), main="Jump 0 Jiggle 1", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+title("Data 11", outer = TRUE)
 par(mfrow=c(1,1))
 
 number_of_breakpoints <- function(data) {
