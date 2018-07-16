@@ -461,4 +461,8 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#current_result = balr(c(30,60), test_data_2[,1], test_data_2[,2], 100)
+test_data = test_data_2()
+bkpts = breakpoints(test_data[,2]~test_data[,1])
+current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50)
+hist(current_result$NumBkpts)
+current_result$Beta
