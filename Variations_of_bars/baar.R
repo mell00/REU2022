@@ -45,7 +45,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     coef_2 = 0 
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
-      model = FitAR(full_data[,2], p=ar)
+      model = suppressWarnings(FitAR(full_data[,2], p=ar))
       SEE = sum(na.omit(model$res)^2)
       s2 = SEE/n
       sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likeihoods on the full dataset 
@@ -54,7 +54,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         if(i == 2){
           min = k_ends[i-1]
           y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-          model = FitAR(y_values, p=ar)
+          model = suppressWarnings(FitAR(y_values, p=ar))
           sub_n = length(y_values)
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
@@ -63,7 +63,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         }else if(i > 2){
           min = k_ends[i-1]
           y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
-          model = FitAR(y_values, p=ar)
+          model = suppressWarnings(FitAR(y_values, p=ar))
           sub_n = length(y_values)
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
@@ -516,8 +516,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-test_data = test_data_11()
+test_data = test_data_2()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = baar(45, test_data[,1], test_data[,2], 2500, 500, ar=7)
-#hist(current_result$NumBkpts)
-#current_result$Beta
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 50)
+hist(current_result$NumBkpts)
+current_result$Beta
