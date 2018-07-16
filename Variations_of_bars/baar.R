@@ -20,7 +20,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   if(length(time) != length(data)){
     return("Data and time vectors must be of equal length.")
-  }else if(length(data) < 6 * ar){
+  }else if(length(data) < (6 * ar)){
    return("Data insufficient for order of AR model. Try a lower order.") 
   }else if(make_murder_p >= 1){
     return("Make/murder proportion must be less than 1.")
