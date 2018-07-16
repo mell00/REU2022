@@ -22,10 +22,32 @@ plot(ourSimulation)
 
 require(graphics)
 
-ourSimulation_1 = arima.sim(n = 63, list(ar = c(0.8897, -0.4858), ma = c(0, 0)),
+ourSimulation_1 = arima.sim(n = 90, list(ar = c(0.8897, -0.4858), ma = c(0, 0)),
           sd = sqrt(0.1796))
 plot(ourSimulation_1)
 
-ourSimulation_1 = arima.sim(n = 63, list(ar = c(1,-.05), ma = c(0, 0)),
-                            sd = sqrt(0.1796))
+ourSimulation_1 = arima.sim(n = 90, list(ar = c(1,-.05), ma = c(0, 0)),
+                            sd = sqrt(0.5))
 plot(ourSimulation_1)
+
+ourSimulation_1 = arima.sim(n = 90, list(ar = c(0.01,-0.01), ma = c(0, 0)),
+                            sd = sqrt(0.01))
+plot(ourSimulation_1)
+
+ourSimulation_1 = arima.sim(n = 90, list(ar = c(0.5,-0.5), ma = c(0, 0)),
+                            sd = sqrt(0.5))
+plot(ourSimulation_1)
+
+
+
+sim_1 <- arima.sim(model = list(ar = 0.1, order = c(1,0,0)), n = 45)
+
+sim_2 <- arima.sim(model = list(ar = 0.5, order = c(1,0,0)), n = 45)
+
+sim_3 <- arima.sim(model = list(ar = 0.9999, order = c(1,0,0)), n = 45)
+
+plot.ts(cbind(sim_1, sim_2, sim_3))
+
+list = c(sim_3,sim_1)
+x=c(1:90)
+data_1 = data.frame(x,list)

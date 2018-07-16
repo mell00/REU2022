@@ -1,5 +1,6 @@
 #creating data 
 library("strucchange")
+require(graphics)
 time = 1:90
 
 
@@ -121,6 +122,18 @@ data_10 = c(first, second, third)
 test_data_10 = data.frame(time, data_10)
 return(test_data_10)
 }
+
+
+#----------------Eleven---------------- AR Simulation
+test_data_11 = function(){
+  first <- arima.sim(model = list(ar = 0.1, order = c(1,0,0)), n = 45)
+  second <- arima.sim(model = list(ar = 0.9999, order = c(1,0,0)), n = 45)
+  data_11 = c(second, first)
+  test_data_11 = data.frame(time,data_11)
+  return(test_data_11)
+}
+
+
 
 #----------------plots---------------- 
 par(mfrow=c(3,4))
