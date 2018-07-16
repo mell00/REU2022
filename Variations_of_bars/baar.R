@@ -124,7 +124,11 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   barMurder<-function(k_ends){
     
     k = k_ends[c(-1,-length(k_ends))] #removes the end points
-    random_num = sample(1:length(k), 1) #selects a random breakpoint
+    if(length(k) == 1){
+      random_num = 1
+    }else{
+      random_num = sample(1:length(k), 1) #selects a random breakpoint
+    }
     k_ends_final = k_ends[-(random_num+1)] #removes that selected breakpoint
     return(k_ends_final)
     
@@ -518,6 +522,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 #calling the function
 test_data = test_data_2()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 50)
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50)
 hist(current_result$NumBkpts)
 current_result$Beta

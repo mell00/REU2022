@@ -65,7 +65,11 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 		full_set = c(1:max(k_ends))
 		exclude_set = c(k_ends, k_ends[1:length(k_ends)-1]+1, k_ends[1:length(k_ends)-1]+2, k_ends[2:length(k_ends)]-1, k_ends[2:length(k_ends)]-2) #observations where a new breakpoint can't be added
 		diff_set = setdiff(full_set,exclude_set)
-		rand_spot = sample(diff_set, 1) #selects a random spot
+		if(length(diff_set) < 2){
+		  rand_spot = diff_set
+		}else{
+		  rand_spot = sample(diff_set, 1) #selects a random spots
+		}
 		k_ends_final = sort(c(k_ends, rand_spot)) #adds the random spot and sorts it 
 		return(k_ends_final)
 
@@ -74,12 +78,16 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
 	#function to randomly subtract a breakpoint 
 	barMurder<-function(k_ends){
-    
-		k = k_ends[c(-1,-length(k_ends))] #removes the end points
- 		random_num = sample(1:length(k), 1) #selects a random breakpoint
-		k_ends_final = k_ends[-(random_num+1)] #removes that selected breakpoint
-		return(k_ends_final)
-  
+	  
+	  k = k_ends[c(-1,-length(k_ends))] #removes the end points
+	  if(length(k) == 1){
+	    random_num = 1
+	  }else{
+	    random_num = sample(1:length(k), 1) #selects a random breakpoint
+	  }
+	  k_ends_final = k_ends[-(random_num+1)] #removes that selected breakpoint
+	  return(k_ends_final)
+	  
 	}
   
 	#function to move a breakpoint to any new location
@@ -111,13 +119,19 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 		exclusions = sort(c(full_data[ll_limit:lr_limit], full_data[rl_limit:rr_limit]))
 		final_neighborhood = setdiff(prelim_neighborhood, exclusions)
 		
-		if(length(final_neighborhood) > 0){
-			new_location = sample(final_neighborhood, 1)
-			k_ends_less = k_ends[-(random_num+1)]
-			final_k_ends = sort(c(k_ends_less, new_location))
-			return(final_k_ends)
-		}else{
-			return("jiggle failure")
+		if(length(final_neighborhood) > 1){
+		  new_location = sample(final_neighborhood, 1)
+		  k_ends_less = k_ends[-(random_num+1)]
+		  final_k_ends = sort(c(k_ends_less, new_location))
+		  return(final_k_ends)
+		}else if(length(final_neighborhood) == 1){
+		  new_location = final_neighborhood
+		  k_ends_less = k_ends[-(random_num+1)]
+		  final_k_ends = sort(c(k_ends_less, new_location))
+		  return(final_k_ends)
+		}
+		else{
+		  return("jiggle failure")
 		}
 
 	}
@@ -127,7 +141,7 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 		u_step = runif(1) #random number from 0 to 1 taken from a uniform distribution for selecting step
     
-		if(length(k_ends) < 3 | u_step <= make_k){
+		if(max(diff(k_ends)) >= 5 & length(k_ends) < 3 | max(diff(k_ends)) >= 5 & u_step <= make_k){
 			type = "add"
 			a.count <<- a.count + 1
 			k_ends_new = barMake(k_ends) #make
