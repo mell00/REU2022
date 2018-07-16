@@ -520,8 +520,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-test_data = test_data_2()
+test_data = test_data_2
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50)
-hist(current_result$NumBkpts)
-current_result$Beta
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 5000, 5, jump=1, ar=2)
