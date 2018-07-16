@@ -3,9 +3,9 @@
 
 #Step 3 - set up for simulation
 data_fun = test_data_2 #edit here !!! (defines function for generating draws)
-runs = 30
-burn_in = 500
-iterations = 2500
+runs = 3
+burn_in = 50
+iterations = 250
 current_bar = baar
 save_name = "baar_data1.RData" #edit here !!! (format: "baar_data#.RData")
 make = 0.5
@@ -50,6 +50,7 @@ simulation = function(data_fun, runs, iterations, burn_in, current_bar, make, pe
 		current_list[[6]] = cbind(current_list[[6]], current_result$Breakpoints)
 		current_list[[7]] = cbind(current_list[[7]], current_result$NumBkpts)
 		current_list[[8]] = c(current_list[[8]], end_time - start_time, recursive = TRUE)
+		print(i)
 
 	}
 
@@ -92,7 +93,7 @@ sim_list[[6]] = final_list #saving final version of $Breakpoint object
 
 #Step 6 - saving the final list, make sure working directory goes to correct folder
 
-#saveRDS(sim_list, file=save_name)
+saveRDS(sim_list, file=save_name)
 
 summary(sim_list)
 
