@@ -81,19 +81,10 @@
 \item Department of Mathematics,
       Marist College,
       Poughkeepsie
-      NY, USA
+      New York, USA
 
   
-%\item Department of Biostatistics,
-%      Erasmus University Rotterdam,
-%      Rotterdam,
-%      the Netherlands
 
-  %%% 5
-%\item Interuniversity Institute for Biostatistics and Statistical Bioinformatics,
-%      KU Leuven and Universiteit Hasselt,
-%      Leuven,
-%      Belgium
 }   %% end \Affiliations
 
 
@@ -136,7 +127,7 @@ Any acknowledgements will be printed at the end of the text.
 %%% Key words
 %%% -------------------------------------------------------------------------------
 \Keywords{
-AR; Bayesian; Breakpoints; Time Series; 
+Breakpoints; Time Series; Bayesian; AR; BARS
 }
 
 
@@ -156,10 +147,15 @@ AR; Bayesian; Breakpoints; Time Series;
 \section{Introduction}
 
 \section{Method}
-The Metropolis Hastings algorithm is a mechanism consisting of a Markov Chain Monte Carlo (MCMC) that samples a distribution.  Our MCMC is an adaptation of BARS that have three different overarching step type, death, birth, and move. This process repeatable proposes breakpoint sets which a ratio then determines to accept or not. 
+The Metropolis Hastings algorithm is a mechanism consisting of a Markov Chain Monte Carlo (MCMC) that samples a distribution.  Our MCMC is an adaptation of BARS that have three different overarching step types: birth, death and move. This process repeatable proposes breakpoint sets which a ratio then determines whether or not it should be accepted. 
 
 \subsection{Step Type}
-The first type of step is we will discuses is death.  This death step takes one existing break point and then deletes it.  The second type of step is Birth. This birth step propose a breakpoint in a random location. There are a couple of constraints on locations of acceptable proposals. A proposed breakpoint can not be an endpoint, an already existing breakpoint, or any data point that is 2 points away from an existing breakpoint. These constraints are necessary in being able to fit an auto-regressive (AR) model. The last type of step is move. Our move step is comprised of two type of moves, jump and jiggle.  Jump has a 25 \% chance of occurring and it is basically a death step and then an birth step. Jiggle has 75\% of occurring and it moves an existing breakpoint in a small defined interval specified by the user. 
+The birth step randomly proposes a breakpoint at an eligible location according to the following constraints. First, a breakpoint cannot be added to an endpoint or a currently existing breakpoint. Second, it is necessary that for there to be at least two data points in between breakpoints in order for the AR model to be fitted correctly. 
+
+The death step randomly chooses an existing breakpoint and proposes a set without that chosen breakpoint. 
+
+The general move step is a subtraction step followed immediately by an addition step. The two specific move steps are jump and jiggle. Jump has a 25 \% chance of occurring and it is basically a death step and then an birth step. Jiggle has 75\% of occurring and it moves an existing breakpoint in a small defined interval specified by the user. 
+
 
 \subsection{Probabilities on Steps}
 The probabilities of choosing one step over another is specified by the user. However, the probability of doing a death and birth step is always equal to each other.  When a type of step is selected based of user input, then the Metropolis Hastings ratio determinate if the proposed breakpoint set is accepted.  
