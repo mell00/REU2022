@@ -150,22 +150,46 @@ Breakpoints; Time Series; Bayesian; AR; BARS
 The Metropolis Hastings algorithm is a mechanism consisting of a Markov Chain Monte Carlo (MCMC) that samples a distribution.  Our MCMC is an adaptation of BARS that have three different overarching step types: birth, death and move. This process repeatable proposes breakpoint sets which a ratio then determines whether or not it should be accepted. 
 
 \subsection{Step Type}
-The birth step randomly proposes a breakpoint at an eligible location according to the following constraints. First, a breakpoint cannot be added to an endpoint or a currently existing breakpoint. Second, it is necessary that for there to be at least two data points in between breakpoints in order for the AR model to be fitted correctly. 
+
+The birth step randomly proposes a breakpoint at an available location. An available location is where a breakpoint could be placed given the following constraints. First, the location cannot have a breakpoint or an endpoint currently assigned to it. Second, for linear fits and AR(1) models, the location must be at least two data points away from the breakpoints closest to the particular location. For AR(p) models, the minimum distance away a location must be from its closest breakpoints is $2p$. If a location is in accordance with these constrains, then it is an available location.  
 
 The death step randomly chooses an existing breakpoint and proposes a set without that chosen breakpoint. 
 
-The general move step is a subtraction step followed immediately by an addition step. The two specific move steps are jump and jiggle. Jump has a 25 \% chance of occurring and it is basically a death step and then an birth step. Jiggle has 75\% of occurring and it moves an existing breakpoint in a small defined interval specified by the user. 
+The general move step is a subtraction step followed immediately by an addition step and can be broken down to two specific types of move: jump and jiggle. Jump allows the movement of a breakpoint to any available location. Jiggle restricts the distance a breakpoint can move to a jiggle neighborhood, an interval surrounding the breakpoint's original location. To calculate the jiggle neighborhood, $J_n$, 
+\begin{align*}
+J_n = ( x_b-pn, x_b+pn )
+\end{align*}
+where $x_b$ is the original location of the chosen breakpoint, $n$ is the size of the data set, and $p$ is the user-inputed percent in decimal form. When a move step is chosen, there is a $\zeta$ probability that a jiggle will be performed, which is determined by the user such that $0<\zeta<1$ and $\zeta \in \mathbb{Q}$. The probability of a jump occurring is $1-\zeta$. 
 
+\subsection{Probabilities of the Steps}
+The combined probabilities of performing a birth step, $b_p$, and a death step, $d_p$, is equal to the user imputed value, $c$ such that $c \in \mathbb{Q}$ and $0 < c < 1$. The ratio of birth steps to death steps is determined by $c$ and the initial conditions of the starting number of breakpoints, $K_{start}$, and the starting number of available spaces, $A_{start}$. From this, the following equations can be derived for $b_p$ and $d_p$: 
+\begin{align*}
+b_p = c  \ \frac{A_{start}}{A_{start}+ K_{start}+1}  \ \ \ \ d_p = c \  \frac{K_{start}+1}{A_{start}+ K_{start}+1}
+\end{align*}
 
-\subsection{Probabilities on Steps}
-The probabilities of choosing one step over another is specified by the user. However, the probability of doing a death and birth step is always equal to each other.  When a type of step is selected based of user input, then the Metropolis Hastings ratio determinate if the proposed breakpoint set is accepted.  
+Then, the probability of a specific birth step given $A$ available locations, $b$, is the equation 
+\begin{align*}
+b &= \ b_p \times \frac{1}{A}
+\end{align*}
 
-\subsubsection{BIC} 
+Thus, the probability of a specific death step given $K$ breakpoints, $d$, is the equation
+\begin{align*}
+d &= \ d_p \times \frac{1}{K}
+\end{align*}
+
+The probability of a move step, $m$ is represented by the equation $m = 1-c$. The probability of jiggle, $jg$, and the probability of jump, $ju$, are calculated by the following equations: 
+\begin{align*}
+jg = m\zeta \ \ \ \ \ ju = 1-jg
+\end{align*}
+
+\subsubsection{Metropolis Hastings Ratio and BIC Approximation} 
+After a specific step is selected, the Metropolis Hastings ratio, as derived below, is used to determine the acceptance of the proposed breakpoint set. To determine the thresh hold of acceptance,  $r_{unif}$ is generated from a uniform distribution from a sample space on the interval (0,1). If the ratio is greater than $r_{unif}$, then the proposed breakpoint set is accepted and kept. Otherwise, the old breakpoint set is retained. 
+
 The general Metropolis Hastings ratio is the product of the Bayes factor, determined by the ratio of the posteriors, $g$, and the ratio of the Markov Chain Monte Carlo (MCMC) proposal densities, $q$, whose values depend on the current MCMC step. 
 \begin{align*}
 ratio &= \frac{g(\tau_{n} K_{n} | x_1,\dots,x_t) }{g(\tau_{o} K_{o} | x_1,\dots,x_t)} \times \frac{q(\tau_{o} K_{o} | \tau_{n} K_{n})}{q(\tau_{n} K_{n}| \tau_{o} K_{o})}
 \end{align*}
-To be able to adequately analysis these ratios we need to put the ratio on a logarithmic scale.  
+When the log likelihood of the equation is taken, 
 \begin{align*}
 log(ratio) & =\Big[ log \big[ g(\tau_{n} K_{n} | x_1,\dots,x_t)
 \big] - log \big[ g(\tau_{o} K_{o} | x_1,\dots,x_t)\big] \Big] \\
@@ -184,49 +208,55 @@ which means that
 log(ratio) \approx \frac{- \Delta BIC}{2} + 
 \Big[ log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] \Big]
 \end{align*}
-In the case of birth, 
+
+In the case of a birth step, 
 \begin{align*} 
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot d \cdot Poisson(K_{old} , \lambda), \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot b \cdot Poisson(K_{old} , \lambda).
 \end{align*}
-When the chosen MCMC step is death,  \begin{align*}
+
+In the case of a death step,  
+\begin{align*}
 q(\tau_{o} K_{o} | \tau_{n} K_{n}) = c \cdot b \cdot Poisson(K_{new} , \lambda) , \ \ \ q(\tau_{n} K_{n} | \tau_{o} K_{o}) = c \cdot d \cdot Poisson(K_{old} , \lambda).
 \end{align*} 
-Given the equations above we have that $c$ is the combined probability of doing an addition and subtraction step. $b$ is the balancing birth coefficient and $d$ a balancing death coefficient. They are in place to set the ratio of birth step to death steps. Specifically,
-\begin{align*}
-b &= \frac{A_{start}}{A_{start} + K_{start} + 1} \times \frac{1}{A}
-\end{align*}
-\begin{align*}
-d &= \frac{K_{start}}{A_{start} + K_{start} + 1} \times \frac{1}{K}
-\end{align*}
-The first fraction is based off of starting conditions and the second fraction changes through each step. We have that $A_{start}$ is the starting number of available spaces. An available space is any data point that is not itself a breakpoint, and endpoint, or 2 points away from an existing breakpoint.  $K_{start}$ is the starting number of breakpoints that is proposed before the function is called. 
 
+In the case of a move step, irrelevant of whether it is specifically jiggle or jump, 
+\begin{align*} 
+log \big[ q(\tau_{o} K_{o} | \tau_{n} K_{n}) \big] - log \big[ q(\tau_{n} K_{n}| \tau_{o} K_{o})  \big] = 0 
+\end{align*}
+
+Henceforth, for a move, 
+\begin{align*}
+log(ratio) \approx \frac{- \Delta BIC}{2} 
+\end{align*}
 
 \subsection{AR model and draws}
 Once a step has been completed and a new breakpoint set is proposed then the data is fit using an auto-regressive model.  With this information then we can get a draw of the $\beta$ coefficients and $\sigma$.
 
 \subsection{Derivations of $\beta$ and $\sigma$ draws}
 
-The posterior for the $\beta$ coefficient is laid out in detail in the \textit{Forecasting time series} (Pesaran Paper, 2006). 
-Given that $b_0$ is the mean of the $\beta$s, 
-$B_0$ is the variance co-variance matrix of the $\beta$s for the prior. Also $v_0$ and $d_0$ are the parameters of the inverse gamma prior of the inverse gamma squared (one being the shape the other rate). While $S_t$ is the current state of the break locations, and $y_t$ is the actual data values. 
+As determined by Peseran (2006), the posterior for the $\beta$ coefficients is 
 \begin{align*}
-\beta | \sigma^2, b_0, B_0, V_0, d_0 , S_{t}, y_{t} \sim N( \overline{\beta_j } , \overline{V_j} )
+\beta | \sigma^2, b_0, B_0, v_0, d_0 , S_{t}, y_{t} \sim N( \overline{\beta_j } , \overline{V_j} )
 \end{align*}
-Where 
+where 
 \begin{align*}
-\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}, \ \ \  \overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty_t + B_0^{-1}b_0)
+\overline{V}_j = (\sigma^{-2}x^Tx + B_0^{-1})^{-1}, \ \ \  \overline{\beta}_j = \overline{V}_j(\sigma^{-2}x^Ty_t + B_0^{-1}b_0).
 \end{align*}
-The \textit{Forecasting time series} (Pesaran Paper, 2006) also lays out the $\sigma$ posterior such that 
+
+The conditions are the following: $b_0$ is the mean of the $\beta$ coefficients, $B_0$ is the variance co-variance matrix of the $\beta$ coefficients for the prior, $v_0$ and $d_0$ are the parameters of the inverse gamma prior of the inverse gamma squared (one being the shape the other rate), $S_t$ is the current breakpoint set, and $y_t$ is the actual data values. 
+
+
+Pesaran (2006) derives the $\sigma$ posterior such that 
 \begin{align*}
 \sigma_j^{-2} \sim  \Gamma(v_0, d_0) \longrightarrow \sigma^{-2}_j | \beta, b_0, B_0, v_0, d_0 , S_{t}, y_{t} \sim \Gamma ( \overline{v}_0,  \overline{d}_0)
 \end{align*}
-Where 
+where 
 \begin{align*}
-\overline{v}_0 = v_0 + \frac{n_j}{2} , \ \ \  \overline{d}_0 = d_0 + \frac{1}{2}(y_t-x\beta)^T(y_t-x\beta)
+\overline{v}_0 = v_0 + \frac{n_j}{2} , \ \ \  \overline{d}_0 = d_0 + \frac{1}{2}(y_t-x\beta)^T(y_t-x\beta).
 \end{align*}
 
 
-\subsection{Simulation to evaluate}
+\subsection{Simulations to evaluate}
 
 \section{Results}
 
