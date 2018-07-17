@@ -46,3 +46,11 @@ x=c(1:90)
 data_1 = data.frame(x,list)
 
 plot(data_1)
+
+set.seed(1)
+first <- arima.sim(model = list(ar = 0.01, order = c(1,0,0)), n = 45)
+second <- arima.sim(model = list(ar = 0.9, order = c(1,0,0)), n = 45)
+time = c(1:90)
+data_11 = c(second, first)
+test_data_11 = data.frame(time,data_11)
+plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
