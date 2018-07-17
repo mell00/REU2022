@@ -171,4 +171,4 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 
 }
 
-bp_test = bai_perron(seq(1:90), dif_means_2, "ar", "", 3, 0.25, 2)
+#bp_test = bai_perron(seq(1:90), dif_means_2, "ar", "", 3, 0.25, 2)
