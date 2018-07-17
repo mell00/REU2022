@@ -170,3 +170,14 @@ plot(temp_data[,2]~temp_data[,1], main="Global Tempature Anomaly from 1880-2018"
 lines(c(1880,2020), c(0,0))
 points(1944, temp_data[65,2], col="red", cex = 1.5 ,pch=16) 
 points(1942, temp_data[63,2], col="blue", cex = 1.5,pch=16)
+
+
+plot(pelican$Count_y,pelican$NumberByPartyHours, ylab="Individuals per Party Hour", xlab = "Years (Since 1900)", main= "Pacific Brown Pelican Population: 1939-2017", pch=20, col="brown")
+points(pelican$Count_y[28], pelican$NumberByPartyHours[28], col="green3", cex = 1.5 ,pch=16) 
+points(pelican$Count_y[50], pelican$NumberByPartyHours[50], col="blue", cex = 1.5,pch=16)
+
+plot(pelican$Count_y,pelican$NumberByPartyHours, ylab="Individuals per Party Hour", xlab = "Years (Since 1900)", main= "Pacific Brown Pelican Population: 1939-2017", pch=20, col="brown")
+points(pelican$Count_y[28], pelican$NumberByPartyHours[28], col="green3", cex = 1.5 ,pch=16) 
+points(pelican$Count_y[30], pelican$NumberByPartyHours[30], col="blue", cex = 1.5,pch=16)
+
+
