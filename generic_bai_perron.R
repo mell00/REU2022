@@ -183,8 +183,9 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 	}
 
 	SSRs = c(null_SSR, SSRs, recursive=T)
-	names(SSRs) = NULL
+	names(SSRs) = c(0:(length(SSRs)-1))
 	BICs = c(null_BIC, BICs, recursive=T)
+	names(BICs) = c(0:(length(BICs)-1))
 	if(which.min(BICs) == 1){
 		best_breakpoints = NA
 	}else{
