@@ -1,15 +1,12 @@
 pelican<-read.csv("pacificBrownPelican.csv")
 pelican<-pelican[-which(pelican$NumberByPartyHours == 0),]
 
-plot(pelican$NumberByPartyHours~pelican$Count_yr)
-
-library("strucchange")
+plot(pelican$NumberByPartyHours~pelican$Count_y)
 
 iteration_n = 3000
 
-pelican_bkpts<-breakpoints(pelican$NumberByPartyHours~pelican$Count_yr, breaks=10, h=0.05)
-
-pelican_result<-balr(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, iteration_n, 500)
+pelican_bkpts<-bai_perron(pelican$NumberByPartyHours, pelican$Count_yr, "ar", "order=3", 5, 0.15, 3)
+pelican_result<-baar(39, pelican$Count_yr, pelican$NumberByPartyHours, iteration_n, 500, jump=0.25, ar=3)
 
 pelican_finbkpts<-NULL
 
