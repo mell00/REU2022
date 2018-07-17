@@ -199,5 +199,5 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 }
 
 #calling the function
-test_data = test_data_2()
+test_data = test_data_0_a()
 bp_test = bai_perron(test_data[,1], test_data[,2], "ar", "order=1", 4, 0.30, 2)
