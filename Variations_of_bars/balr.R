@@ -289,7 +289,7 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 	beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
 	fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
-	smiley = n * solve(fisher) #smiley face is total number of observations times the inverse of Fisher information
+	smiley = n * fisher #smiley face is total number of observations times the inverse of Fisher information
 
 	b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
 	B_0 = smiley #variance-covariance matrix for posterior draw
@@ -500,4 +500,5 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 #calling the function
 test_data = test_data_2()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50, progress=T)
+current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, progress=T)
+current_result$Beta

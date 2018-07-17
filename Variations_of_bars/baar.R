@@ -319,9 +319,12 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   jiggle.accept.count <<- 0
   
   #setting up priors for beta draws
-  model = arima(full_data[,2], order=c(ar,0,0))
-  fisher = model$var.coef
-  smiley = n * solve(fisher)
+  alt_arima<-function(full_data, ar){
+  	tryCatch(arima(full_data[,2], method="ML", order=c(ar,0,0)), error = function(e) arima(full_data[,2], method="CSS", order=c(ar,0,0)))
+  }
+  model = alt_arima(full_data, ar)
+  fisher = solve(model$var.coef)
+  smiley = n * fisher
 
   coef_list = model$coef[[length(model$coef)]]
 
@@ -543,6 +546,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-test_data = test_data_2()
+test_data = test_data_5()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50, jump=0.25, ar=1, progress=T)
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 5, jump=0.25, ar=1, progress=T)
+#current_result$Beta
