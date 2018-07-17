@@ -12,8 +12,9 @@
 # lambda		= for Poisson distribution of breakpoint prior
 # jump_p		= proportion of move steps that will be jump
 	#note: jiggle proprtion is 1 - jump_p
+# progress		= whether to show progress bars or not, TRUE/FALSE
 
-balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25){
+balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, progress = TRUE){
 
 	if(length(time) != length(data)){
 		return("Data and time vectors must be of equal length.")
@@ -212,7 +213,12 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 	starting_ttl = starting_bkpts + starting_nfree #total to get percentages
 	make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
 	murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
-  
+
+	if(progress == TRUE){
+		writeLines("\nBeginning burn period.")
+		burn_progress <- txtProgressBar(min = 0, max = burn_in, style = 3)
+	}
+
 	#Burn Metropolis Hasting
 	for(i in 1:burn_in){
     
@@ -236,6 +242,11 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 		} else {
 			k_ends <<- k_ends #old
 		}
+
+		if(progress == TRUE){
+			setTxtProgressBar(burn_progress, i)
+		}
+
   	}
 
 	#initializing matrices/storage objects for final Metropolis-Hasting
@@ -295,7 +306,12 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 	starting_ttl = starting_bkpts + starting_nfree #total to get percentages
 	make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
 	murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
-  
+
+	if(progress == TRUE){
+		writeLines("\nBeginning sampling period.")
+		sample_progress <- txtProgressBar(min = 0, max = iterations, style = 3)
+	}
+
 	#Final Metroplis Hastings 
 	for(i in 1:iterations){
     
@@ -394,8 +410,15 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 			}
 		}
 
+		if(progress == TRUE){    
+			setTxtProgressBar(sample_progress, i)
+		}
+
 	}
 
+	if(progress == TRUE){      
+		writeLines("\n")
+	}
  
 	#cleaning up the matrices 
 	all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
@@ -477,6 +500,4 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 #calling the function
 test_data = test_data_2()
 bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50)
-hist(current_result$NumBkpts)
-current_result$Beta
+current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50, progress=T)
