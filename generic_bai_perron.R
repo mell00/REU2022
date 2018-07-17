@@ -63,6 +63,12 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 		return(m_model)
 	}
 
+	#Null model
+	null_form = getForm(x_values, y_values, model_type)
+	null_mod = getModel(spec_function, null_form, arguments)
+	null_SSR = sum((null_mod$resid[!is.na(null_mod$resid)])^2)
+	null_BIC = n + n*log(2*pi) + n*log(as.numeric(null_SSR)/n) + log(n)*p
+
 	#Initializing data frame to store fit information for each subsection
 	all_SSRs = data.frame()
 
@@ -165,10 +171,33 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 
 	}
 
-	return(list(SSR_final, BICs))
+	all_breakpoints = list()
+	for(i in 1:length(SSR_final)){
+		all_breakpoints[[i]] = c(SSR_final[[i]][seq(2,2*i,2)], recursive=T)
+		names(all_breakpoints[[i]]) = c(1:length(all_breakpoints[[i]]))
+	}
 
-	#do null
+	SSRs = NULL
+	for(i in 1:length(SSR_final)){
+		SSRs = c(SSRs, SSR_final[[i]][length(SSR_final[[i]])], recursive=T)
+	}
+
+	SSRs = c(null_SSR, SSRs, recursive=T)
+	names(SSRs) = NULL
+	BICs = c(null_BIC, BICs, recursive=T)
+	if(which.min(BICs) == 1){
+		best_breakpoints = NA
+	}else{
+		best_breakpoints = c(all_breakpoints[which.min(BICs)-1], recursive=T)
+	}
+
+	final_list = list(best_breakpoints, all_breakpoints, SSRs, BICs)
+	names(final_list) = c("Breakpoints", "AllBreakpoints", "SSRs", "BICs")
+
+	return(final_list)
 
 }
 
-#bp_test = bai_perron(seq(1:90), dif_means_2, "ar", "", 3, 0.25, 2)
+#calling the function
+test_data = test_data_2()
+bp_test = bai_perron(test_data[,1], test_data[,2], "ar", "order=1", 4, 0.30, 2)
