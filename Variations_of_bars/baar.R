@@ -13,8 +13,9 @@
 # jump_p		= proportion of move steps that will be jump
 	# note: jiggle proprtion is 1 - jump_p
 # ar			= order of AR model
+# progress		= whether to show progress bars or not, TRUE/FALSE
 
-baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1){
+baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE){
   
   ar = floor(ar)
   
@@ -261,7 +262,12 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
   make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
   murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
-  
+
+  if(progress == TRUE){
+  	writeLines("\nBeginning burn period.")
+  	burn_progress <- txtProgressBar(min = 0, max = burn_in, style = 3)
+  }
+
   #Burn Metropolis Hasting
   for(i in 1:burn_in){
     
@@ -285,6 +291,11 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     } else {
       k_ends <<- k_ends #old
     }
+
+  if(progress == TRUE){
+    setTxtProgressBar(burn_progress, i)
+  }
+
   }
   
   #initializing matrices/storage objects for final Metropolis-Hasting
@@ -333,7 +344,12 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   starting_ttl = starting_bkpts + starting_nfree #total to get percentages
   make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
   murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
-  
+
+  if(progress == TRUE){
+  	writeLines("\nBeginning sampling period.")
+  	sample_progress <- txtProgressBar(min = 0, max = iterations, style = 3)
+  }
+
   #Final Metroplis Hastings 
   for(i in 1:iterations){
     
@@ -437,9 +453,16 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
         post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
       }
     }
-    
+
+  if(progress == TRUE){    
+    setTxtProgressBar(sample_progress, i)
   }
-  
+
+  }
+
+  if(progress == TRUE){      
+ 	writeLines("\n")
+  }
   
   #cleaning up the matrices 
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
@@ -520,6 +543,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_2
-#bkpts = breakpoints(test_data[,2]~test_data[,1])
-#current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 5000, 5, jump=1, ar=2)
+test_data = test_data_2()
+bkpts = breakpoints(test_data[,2]~test_data[,1])
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 50, jump=0.25, ar=1, progress=T)
