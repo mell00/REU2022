@@ -274,7 +274,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ar)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
     ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
@@ -347,16 +347,16 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     
-    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+    delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ar)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
     ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends <<- k_ends #old
-      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
     } else if(ratio > u_ratio) {
       k_ends <<- k_ends_new #new
-      bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+1))
+      bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ar))
       accept_count = accept_count + 1
       #looking at what type of step is done and accepted
       if(type == "add") {
@@ -370,7 +370,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       }
     } else {
       k_ends <<- k_ends #old
-      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
+      bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
     }
     
     #condensing the data
