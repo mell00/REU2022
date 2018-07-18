@@ -580,6 +580,51 @@ current_result$Breakpoints[[1]]
 current_result$Proposed$X1
 current_result$type_step_total
 
+#trying to use beta draws for fitting and failing
+betas_to_average = current_result$Beta[which(current_result$Breakpoints[[1]] == 40)]
+b0_1 = NULL
+b1_1 = NULL
+b0_2 = NULL
+b1_2 = NULL
+for(i in 1:length(betas_to_average)){
+	b0_1 = c(b0_1, betas_to_average[[i]][1,1], recursive=TRUE)
+	b1_1 = c(b1_1, betas_to_average[[i]][2,1], recursive=TRUE)
+	b0_2 = c(b0_2, betas_to_average[[i]][1,2], recursive=TRUE)
+	b1_2 = c(b1_2, betas_to_average[[i]][2,2], recursive=TRUE)
+}
+
+mean_b0_1 = mean(b0_1)
+mean_b1_1 = mean(b1_1)
+mean_b0_2 = mean(b0_2)
+mean_b1_2 = mean(b1_2)
+subsect_one = c(data_11[[1]], data_11[[1]]*mean_b1_1 + mean_b0_1, recursive=T)
+for(i in 3:40){
+	new_value = (subsect_one[[i-1]]*mean_b1_1 + mean_b0_1)
+	subsect_one = c(subsect_one, new_value, recursive=T)
+}
+subsect_two = c(data_11[[41]], data_11[[41]]*mean_b1_2 + mean_b0_2, recursive=T)
+for(i in c(3:50)){
+	new_values = (subsect_two[[i-1]]*mean_b1_2 + mean_b0_2)
+	subsect_two = c(subsect_two, new_value, recursive=T)
+}
+plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
+points(c(1:40), subsect_one, col="red")
+points(c(41:90), subsect_two, col="blue")
+
+#using arima fitted values for fit
+library("forecast")
+
+fitted_one = fitted(arima(data_11[c(1:40)],order=c(1,0,0),method="ML"))
+fitted_two = fitted(arima(data_11[c(41:90)],order=c(1,0,0),method="ML"))
+plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
+points(c(1:40), fitted_one, col="red")
+points(c(41:90), fitted_two, col="red")
+
+fitted_full = fitted(arima(data_11,order=c(1,0,0),method="ML"))
+plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
+points(c(1:90), fitted_full, col="blue")
+
+
 current_result$Breakpoints[[1]]
 hist(c(current_result$Breakpoints[[1]],current_result$Breakpoints[[2]]), breaks = 90, xlim=c(1,90), xlab= "Location", ylab = "Number of Iteration", main="Distribution of Breakpoint Location")
 
