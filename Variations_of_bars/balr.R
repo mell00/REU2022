@@ -254,6 +254,7 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 	bar_v = 0
 	bar_beta = 0
 	fit = 0
+	all_fits = data.frame()
 	all_MSE = data.frame()
 	all_BIC = data.frame()
 	accept_count = 0
@@ -402,6 +403,7 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 			if(m == len ) {
 				MSE = mean((full_data[,2]-fit)^2)
 				all_MSE = rbind(all_MSE, MSE)
+				all_fits = rbind(all_fits, fit)
 				current_post_betas = as.data.frame(current_post_betas)
 				colnames(current_post_betas) = c(1:ncol(current_post_betas))
 				post_beta_list = cbind(post_beta_list, current_post_betas)
@@ -491,14 +493,13 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 	post_sigma_list = final_sigma_list #saving final version of sigma object
   
-	final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list)
-	names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma")
+	final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_fits)
+	names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Fits")
   
 	return(final_list)
 }
 
 #calling the function
-test_data = test_data_6()
-bkpts = breakpoints(test_data[,2]~test_data[,1])
-current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, progress=T)
-current_result$Beta
+#test_data = test_data_2()
+#bkpts = breakpoints(test_data[,2]~test_data[,1])
+#current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, progress=T)
