@@ -72,6 +72,12 @@ hist(location_of_breakpoints(j0j1), main="Jump 0 Jiggle 1", xlab="Location of Br
 title("Data 3 Long Runs", outer = TRUE)
 par(mfrow=c(1,1))
 
+par(mfrow=c(1,2),oma=c(0,0,2,0))
+hist(location_of_breakpoints(j1j0), main="Jump 100% Jiggle 0%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+hist(location_of_breakpoints(j25j75), main="Jump 25% Jiggle 75%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+title("Move Simulations", outer = TRUE)
+par(mfrow=c(1,1))
+
 
 number_of_breakpoints <- function(data) {
   points = 0
