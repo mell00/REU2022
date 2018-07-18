@@ -303,6 +303,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   bar_v = 0
   bar_beta = 0
   fit = 0
+  all_fits = data.frame()
   all_MSE = data.frame()
   all_BIC = data.frame()
   accept_count = 0
@@ -400,8 +401,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     #setting up posterior
     
-    ##loop through the k_ends to find the intervals 
+    ##loop through the k_ends to find the intervals
     fit = NULL
+    squared_resids = NULL
     current_post_betas = NULL
     current_post_sigmas = NULL
     for(m in 2:length(k_ends)) {
@@ -427,8 +429,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
       
       predicted_x = x_j %*% beta
+	fit = c(fit, c(rep(NA, ar), predicted_x, recursive=T), recursive=T)
       squared_resid = (predicted_x - y_j)^2
-      fit = c(fit, squared_resid, recursive=T)
+      squared_resids = c(squared_resids, squared_resid, recursive=T)
       
       #drawing a random variable from a multivariate normal pdf 
       post_beta = mvrnorm(1, beta, v)
@@ -447,7 +450,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       current_post_sigmas = cbind(current_post_sigmas, post_sigma)
       
       if(m == len ) {
-        MSE = mean(fit)
+        MSE = mean(squared_resids)
+	  all_fits = rbind(all_fits, fit)
         all_MSE = rbind(all_MSE, MSE)
         current_post_betas = as.data.frame(current_post_betas)
         colnames(current_post_betas) = c(1:ncol(current_post_betas))
@@ -539,14 +543,13 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   post_sigma_list = final_sigma_list #saving final version of sigma object
   
-  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list)
-  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma")
+  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_fits)
+  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Fits")
   
   return(final_list)
 }
 
 #calling the function
-#test_data = test_data_6()
-#bkpts = breakpoints(test_data[,2]~test_data[,1])
-#current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, jump=0.25, ar=1, progress=T)
-#current_result$Beta
+test_data = test_data_11()
+bkpts = breakpoints(test_data[,2]~test_data[,1])
+current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, jump=0.25, ar=1, progress=T)
