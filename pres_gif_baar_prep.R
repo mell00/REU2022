@@ -303,7 +303,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   all_k_pros = matrix(NA, nrow=1, ncol=(n/3))
   bar_v = 0
   bar_beta = 0
-  fit = 0
+  all_fits = data.frame()
   all_MSE = data.frame()
   all_BIC = data.frame()
   accept_count = 0
@@ -413,6 +413,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     #setting up posterior
     
     ##loop through the k_ends to find the intervals 
+    squared_resids = NULL
     fit = NULL
     current_post_betas = NULL
     current_post_sigmas = NULL
@@ -439,8 +440,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
       
       predicted_x = x_j %*% beta
+	fit = c(fit, c(rep(NA,ar), predicted_x, recursive=T),recursive=T)
       squared_resid = (predicted_x - y_j)^2
-      fit = c(fit, squared_resid, recursive=T)
+      squared_resids = c(squared_resids, squared_resid, recursive=T)
       
       #drawing a random variable from a multivariate normal pdf 
       post_beta = mvrnorm(1, beta, v)
@@ -459,7 +461,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       current_post_sigmas = cbind(current_post_sigmas, post_sigma)
       
       if(m == len ) {
-        MSE = mean(fit)
+	  all_fits = rbind(all_fits, fit)
+        MSE = mean(squared_resids)
         all_MSE = rbind(all_MSE, MSE)
         current_post_betas = as.data.frame(current_post_betas)
         colnames(current_post_betas) = c(1:ncol(current_post_betas))
@@ -560,8 +563,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   type_step_total = type_step_total[-1]
   
-  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_k_pros, type_step_total)
-  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Proposed", "type_step_total")
+  final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_k_pros, type_step_total, all_fits)
+  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Proposed", "type_step_total", "Fits")
   
   return(final_list)
 }
@@ -575,10 +578,14 @@ data_11 = c(second, first)
 test_data_11 = data.frame(time,data_11)
 plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
 
-current_result = baar(c(40), test_data_11[,1], test_data_11[,2], 3000, 2, jump=0.25, ar=1, progress=T)
+current_result = baar(c(40), test_data_11[,1], test_data_11[,2], 50, 2, jump=0.25, ar=1, progress=T)
 current_result$Breakpoints[[1]]
 current_result$Proposed$X1
 current_result$type_step_total
+
+#using provided fits
+fits_to_use = current_result$Fits[which(current_result$Breakpoints[[1]] == 40),]
+points(c(1:90),fits_to_use[1,])
 
 #trying to use beta draws for fitting and failing
 betas_to_average = current_result$Beta[which(current_result$Breakpoints[[1]] == 40)]
@@ -593,10 +600,14 @@ for(i in 1:length(betas_to_average)){
 	b1_2 = c(b1_2, betas_to_average[[i]][2,2], recursive=TRUE)
 }
 
-mean_b0_1 = mean(b0_1)
-mean_b1_1 = mean(b1_1)
-mean_b0_2 = mean(b0_2)
-mean_b1_2 = mean(b1_2)
+#mean_b0_1 = mean(b0_1)
+#mean_b1_1 = mean(b1_1)
+#mean_b0_2 = mean(b0_2)
+#mean_b1_2 = mean(b1_2)
+mean_b0_1 = -1.3563
+mean_b1_1 = 0.9594
+mean_b0_2 = 0.3321
+mean_b1_2 = 0.5118
 subsect_one = c(data_11[[1]], data_11[[1]]*mean_b1_1 + mean_b0_1, recursive=T)
 for(i in 3:40){
 	new_value = (subsect_one[[i-1]]*mean_b1_1 + mean_b0_1)
