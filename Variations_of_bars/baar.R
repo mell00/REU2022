@@ -413,22 +413,22 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       }else{
         min = k_ends[m-1]
       }
-      x_values = NULL
+      y_tp_values = NULL
       for(a in 1:ar){
-        current_x_values = full_data[c((min+ar-a):(k_ends[[m]]-ar+(ar-a))),1]
-        x_length <<- length(current_x_values)
-        x_values = c(x_values, current_x_values, recursive=T)
+        current_y_tp_values = full_data[c((min+ar-a):(k_ends[[m]]-ar+(ar-a))),2]
+        y_tp_length <<- length(current_y_tp_values)
+        y_tp_values = c(y_tp_values, current_y_tp_values, recursive=T)
       }
-      x_j = matrix(c( rep(1, each=x_length), x_values, recursive=T), nrow=x_length, ncol=(ar+1))
+      y_tp = matrix(c( rep(1, each=y_tp_length), y_tp_values, recursive=T), nrow=y_tp_length, ncol=(ar+1))
       y_j = full_data[c((min+ar):k_ends[[m]]),2] #getting the y values in the interval
       sigma = sd(y_j)
       
       #bar_v
-      v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
+      v = solve( (1/sigma) * (t(y_tp) %*% y_tp )+ solve(B_0) )
       #bar_beta 
-      beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
+      beta = v %*% ( (1/sigma) * (t(y_tp) %*% y_j) + solve(B_0) %*% b_0 )
       
-      predicted_x = x_j %*% beta
+      predicted_x = y_tp %*% beta
 	fit = c(fit, c(rep(NA, ar), predicted_x, recursive=T), recursive=T)
       squared_resid = (predicted_x - y_j)^2
       squared_resids = c(squared_resids, squared_resid, recursive=T)
@@ -441,7 +441,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       
       #SIGMA:
       v0 = (max(k_ends))/2 + 2
-      d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
+      d0 = 0 + .5 * t(y_j - y_tp %*% post_beta ) %*% (y_j - y_tp %*% post_beta)
       
       sigma = rgamma(1, v0, rate = d0)
       post_sigma = 1 / sigma
