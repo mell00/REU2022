@@ -5,11 +5,12 @@
 #y_values = y variable for all observations
 #model_type = the type of model used for fitting (i.e. ar, arima, glm, lm), wrapped in quotes (arma seems to work but gets singla Hessian warnings)
 #arguments = any arguments you want applied to the moddle, wrapped in quotes and seperated by semicolons (i.e. "order = c(1,0,0); method='ML'")
+#p = number of parameters per regime/subsection added (i.e. 3 for linear)
 #interval = minimum proportion of observations in each subsection (i.e. 0.15)
 #max_breaks = maximum number of breaks to be considered
-#p = number of parameters per regime/subsection added (i.e. 3 for linear)
+#progress = whether or not to show progress bar, TRUE/FALSE
 
-bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max_breaks){
+bai_perron<-function(x_values, y_values, model_type="ar", arguments="", p=3, interval=0.15, max_breaks=3, progress=T){
 
 	n = length(x_values) #Number of observations
 	x_values = 1:n #Turn x values into observations
@@ -29,7 +30,7 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 
 	#Function to set up data in correct form for model type (default is formula, can also do time series)
 	getForm = function(f_x_values, f_y_values, f_model_type){
-		if(f_model_type == "arima" | f_model_type == "ar" | f_model_type == "arma"){
+		if(f_model_type == "arima" | f_model_type == "ar" | f_model_type == "arma" | f_model_type == "FitAR"){
 			f_formula = ts(f_y_values, start=min(f_x_values), end=max(f_x_values))
 		} else{
 			f_formula = formula(f_y_values ~ f_x_values)
@@ -42,8 +43,6 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 
 	#Function for getting specified model with specified arguments
 	getModel = function(m_spec_function, m_formula, m_arguments){
-
-		m_model = m_spec_function(m_formula)
 
 		if(m_arguments != ""){
 			m_arguments = gsub(" ","",unlist(strsplit(m_arguments, ";")))
@@ -58,6 +57,8 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 				}
 			}
 			m_model = m_spec_function(m_formula, arg_fill(m_arg))
+		}else{
+			m_model = m_spec_function(m_formula)
 		}
 
 		return(m_model)
@@ -66,11 +67,16 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 	#Null model
 	null_form = getForm(x_values, y_values, model_type)
 	null_mod = getModel(spec_function, null_form, arguments)
-	null_SSR = sum((null_mod$resid[!is.na(null_mod$resid)])^2)
+	null_SSR = sum((null_mod$res[!is.na(null_mod$res)])^2)
 	null_BIC = n + n*log(2*pi) + n*log(as.numeric(null_SSR)/n) + log(n)*p
 
 	#Initializing data frame to store fit information for each subsection
 	all_SSRs = data.frame()
+
+	if(progress == TRUE){
+		writeLines("\nFinding all SSRs.")
+		SSR_progress <- txtProgressBar(min = 0, max = (n-int+1), style = 3)
+	}
 
 	for(i in 1:(n-int+1)){#Select starting observation of each subsection (constrained by interval size)
 
@@ -80,10 +86,14 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 			subsect_y = y_values[i:j]
 			subsect_form = getForm(subsect_x, subsect_y, model_type)
 			subsect_mod = getModel(spec_function, subsect_form, arguments)
-			subsect_SSR = sum((subsect_mod$resid[!is.na(subsect_mod$resid)])^2)
+			subsect_SSR = sum((subsect_mod$res[!is.na(subsect_mod$res)])^2)
 			subsect_info = cbind(subsect_x[1], max(subsect_x), subsect_SSR)
 			all_SSRs = rbind(all_SSRs, subsect_info)
 
+		}
+
+		if(progress == TRUE){
+			setTxtProgressBar(SSR_progress, i)
 		}
 
 	}
@@ -137,6 +147,10 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 
 		}
 
+			if(progress == TRUE){
+				writeLines("\nTesting all combinations.")
+				combo_progress <- txtProgressBar(min=(r_int-1), max=(r_n-r_int), style = 3)
+			}
 			for(z in r_int:(r_n-r_int)){
 			
 				first_subsect = which(r_all_SSRs[,1] == 1 & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
@@ -147,6 +161,9 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 				if(r_max_breaks >= 2){
 					subRecurse(2, option[,3], 3, first_subsect)
 				}
+				if(progress == TRUE){
+					setTxtProgressBar(combo_progress, z)
+				}
 
 			}
 
@@ -155,6 +172,10 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 	}
 
 	SSR_final = recurseSSR(int, max_breaks, n, all_SSRs)
+
+	if(progress == TRUE){      
+		writeLines("\n")
+	}
 
 	for(x in 1:length(SSR_final)){
 
@@ -200,5 +221,5 @@ bai_perron<-function(x_values, y_values, model_type, arguments, p, interval, max
 }
 
 #calling the function
-#test_data = test_data_0_a()
-#bp_test = bai_perron(test_data[,1], test_data[,2], "ar", "order=1", 4, 0.30, 2)
+#test_data = test_data_2()
+#bp_test = bai_perron(test_data[,1], test_data[,2], "ar", "order=1", 4, 0.15, 5)
