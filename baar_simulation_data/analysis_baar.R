@@ -99,6 +99,24 @@ hist(location_of_breakpoints(data3_j0j1), main="Jump 0 Jiggle 1", xlab="Location
 title("Data 3", outer = TRUE)
 par(mfrow=c(1,1))
 
+
+
+#----------------------------trying to get a good graph------------
+#data 3
+x=0
+y=60000
+par(mfrow=c(2,1),oma=c(0,0,2,0))
+hist(location_of_breakpoints(data3_j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+hist(location_of_breakpoints(data3_j25j75), main="Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
+title("Data 3", outer = TRUE)
+par(mfrow=c(1,1))
+
+
+
+
+
+#----------------------------trying to get a good graph------------
+
 #data 9
 x=0
 y=60000

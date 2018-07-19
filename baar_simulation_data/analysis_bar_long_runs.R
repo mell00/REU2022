@@ -62,7 +62,7 @@ location_of_breakpoints <- function(data) {
 
 #data 3
 x=0
-y=300000
+y=100000
 par(mfrow=c(2,3),oma=c(0,0,2,0))
 hist(location_of_breakpoints(j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
 hist(location_of_breakpoints(j75j25), main="Jump 75 Jiggle 25", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
@@ -75,6 +75,24 @@ par(mfrow=c(1,1))
 par(mfrow=c(1,2),oma=c(0,0,2,0))
 hist(location_of_breakpoints(j1j0), main="Jump 100% Jiggle 0%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
 hist(location_of_breakpoints(j25j75), main="Jump 25% Jiggle 75%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+title("Move Simulations", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(1,2),oma=c(0,0,2,0))
+hist(c(j1j0$Breakpoints[[3]]$X1[!is.na(j1j0$Breakpoints[[3]]$X1)], j1j0$Breakpoints[[3]]$X2[!is.na(j1j0$Breakpoints[[3]]$X2)], j1j0$Breakpoints[[3]]$X3[!is.na(j1j0$Breakpoints[[3]]$X3)]) , main="Jump 100% Jiggle 0%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+hist(c(j25j75$Breakpoints[[1]]$X1[!is.na(j25j75$Breakpoints[[1]]$X1)], j25j75$Breakpoints[[1]]$X2[!is.na(j25j75$Breakpoints[[1]]$X2)], j25j75$Breakpoints[[1]]$X3[!is.na(j25j75$Breakpoints[[1]]$X3)], j25j75$Breakpoints[[1]]$X4[!is.na(j25j75$Breakpoints[[1]]$X4)]), main="Jump 25% Jiggle 75%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+title("Move Simulations", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(1,2),oma=c(0,0,2,0))
+hist(c(j1j0$Breakpoints[[3]]$X1[!is.na(j1j0$Breakpoints[[3]]$X1)], j1j0$Breakpoints[[3]]$X2[!is.na(j1j0$Breakpoints[[3]]$X2)], j1j0$Breakpoints[[3]]$X3[!is.na(j1j0$Breakpoints[[3]]$X3)]) , main="Jump 100% Jiggle 0%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+hist(c(j25j75$Breakpoints[[2]]$X1[!is.na(j25j75$Breakpoints[[2]]$X1)], j25j75$Breakpoints[[2]]$X2[!is.na(j25j75$Breakpoints[[2]]$X2)]), main="Jump 25% Jiggle 75%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+title("Move Simulations", outer = TRUE)
+par(mfrow=c(1,1))
+
+par(mfrow=c(1,2),oma=c(0,0,2,0))
+hist(c(j50j50$Breakpoints[[1]]$X1[!is.na(j50j50$Breakpoints[[1]]$X1)], j50j50$Breakpoints[[1]]$X2[!is.na(j50j50$Breakpoints[[1]]$X2)], j50j50$Breakpoints[[1]]$X3[!is.na(j50j50$Breakpoints[[1]]$X3)]) , main="Jump 100% Jiggle 0%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+hist(c(j25j75$Breakpoints[[1]]$X1[!is.na(j25j75$Breakpoints[[1]]$X1)], j25j75$Breakpoints[[1]]$X2[!is.na(j25j75$Breakpoints[[1]]$X2)], j25j75$Breakpoints[[1]]$X3[!is.na(j25j75$Breakpoints[[1]]$X3)], j25j75$Breakpoints[[1]]$X4[!is.na(j25j75$Breakpoints[[1]]$X4)]), main="Jump 25% Jiggle 75%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
 title("Move Simulations", outer = TRUE)
 par(mfrow=c(1,1))
 
