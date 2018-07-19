@@ -1,3 +1,4 @@
+setwd("/Users/sarah/REU2018/baar_simulation_data")
 baar_data1_jump0jigg1<-readRDS("baar_data1_jump0jigg1.RData")
 baar_data1_jump2jigg7<-readRDS("baar_data1_jump25jigg75.RData")
 baar_data1_jump5jigg5<-readRDS("baar_data1_jump50jigg50.RData")
@@ -118,3 +119,65 @@ rownames(all) = c("J1J0", "J7J2", "J5J5", "J2J7", "J0J1")
 colnames(all) = c("Data1", "Data3", "Data9", "Data11")
 all
 rowMeans(all)
+
+lower = 30
+upper = 60
+
+finalSDs = function(breakpoints){
+
+final_SDs = NULL
+
+if(length(breakpoints) == 0){
+	return("")
+}else{
+	for(m in 1:length(breakpoints)){
+		if(is.atomic(breakpoints[[m]]) == TRUE) {
+			current_breakpoints = na.omit(c(breakpoints[[m]][c(1:cutoff)], recursive=T))
+			current_breakpoints = current_breakpoints[current_breakpoints > lower & current_breakpoints < upper]
+			final_SDs = c(final_SDs, sd(current_breakpoints), recursive=T)
+		}else if(dim(breakpoints[[m]])[2] >= 2) {
+			column_list = NULL
+			for(i in 1:dim(breakpoints[[m]])[2]){
+				column_list = na.omit(c(column_list, breakpoints[[m]][c(1:cutoff),i], recursive=T))
+			}
+			column_list = column_list[column_list > lower & column_list < upper]
+			final_SDs = c(final_SDs, sd(column_list), recursive=T)	
+		}
+	}
+return(final_SDs)
+
+}
+
+}
+
+SD_data1_jump1jigg0 = finalSDs(baar_data1_jump1jigg0$Breakpoints)
+SD_data1_jump7jigg2 = finalSDs(baar_data1_jump7jigg2$Breakpoints)
+SD_data1_jump5jigg5 = finalSDs(baar_data1_jump5jigg5$Breakpoints)
+SD_data1_jump2jigg7 = finalSDs(baar_data1_jump2jigg7$Breakpoints)
+SD_data1_jump0jigg1 = finalSDs(baar_data1_jump0jigg1$Breakpoints)
+SD_data3_jump1jigg0 = finalSDs(baar_data3_jump1jigg0$Breakpoints)
+SD_data3_jump7jigg2 = finalSDs(baar_data3_jump7jigg2$Breakpoints)
+SD_data3_jump5jigg5 = finalSDs(baar_data3_jump5jigg5$Breakpoints)
+SD_data3_jump2jigg7 = finalSDs(baar_data3_jump2jigg7$Breakpoints)
+SD_data3_jump0jigg1 = finalSDs(baar_data3_jump0jigg1$Breakpoints)
+SD_data9_jump1jigg0 = finalSDs(baar_data9_jump1jigg0$Breakpoints)
+SD_data9_jump7jigg2 = finalSDs(baar_data9_jump7jigg2$Breakpoints)
+SD_data9_jump5jigg5 = finalSDs(baar_data9_jump5jigg5$Breakpoints)
+SD_data9_jump2jigg7 = finalSDs(baar_data9_jump2jigg7$Breakpoints)
+SD_data9_jump0jigg1 = finalSDs(baar_data9_jump0jigg1$Breakpoints)
+SD_data11_jump1jigg0 = finalSDs(baar_data11_jump1jigg0$Breakpoints)
+SD_data11_jump7jigg2 = finalSDs(baar_data11_jump7jigg2$Breakpoints)
+SD_data11_jump5jigg5 = finalSDs(baar_data11_jump5jigg5$Breakpoints)
+SD_data11_jump2jigg7 = finalSDs(baar_data11_jump2jigg7$Breakpoints)
+SD_data11_jump0jigg1 = finalSDs(baar_data11_jump0jigg1$Breakpoints)
+
+data1 = cbind(mean(SD_data1_jump1jigg0), sd(SD_data1_jump1jigg0),
+mean(SD_data1_jump7jigg2), sd(SD_data1_jump7jigg2),
+mean(SD_data1_jump5jigg5), sd(SD_data1_jump5jigg5),
+mean(SD_data1_jump2jigg7), sd(SD_data1_jump2jigg7),
+mean(SD_data1_jump0jigg1), sd(SD_data1_jump0jigg1))
+data3 = cbind(mean(SD_data3_jump1jigg0), sd(SD_data3_jump1jigg0),
+mean(SD_data3_jump7jigg2), sd(SD_data3_jump7jigg2),
+mean(SD_data3_jump5jigg5), sd(SD_data3_jump5jigg5),
+mean(SD_data3_jump2jigg7), sd(SD_data3_jump2jigg7),
+mean(SD_data3_jump0jigg1), sd(SD_data3_jump0jigg1))

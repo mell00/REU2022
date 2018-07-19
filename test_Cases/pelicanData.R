@@ -1,7 +1,9 @@
+setwd("/Users/sarah/REU2018/test_Cases")
 pelican<-read.csv("pacificBrownPelican.csv")
 pelican<-pelican[-which(pelican$NumberByPartyHours == 0),]
 
-plot(pelican$NumberByPartyHours~pelican$Count_y, col="brown", pch=19)
+plot(pelican$NumberByPartyHours~pelican$Count_y, col="brown", pch=19, main="Pacific Brown Pelican Population: 1939 to 2017", ylab="Year (since 1900", xlab="Individuals per Party Hour")
+points(c(39:117), fitted(arima(pelican$NumberByPartyHours, order=c(3,0,0))), col="green3", pch=19)
 
 pelican_bkpts<-bai_perron(pelican$NumberByPartyHours, pelican$Count_yr, "ar", "order=3", 5, 0.1, 3)
 pelican_bkpts
