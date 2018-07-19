@@ -1,0 +1,28 @@
+data2_nocon<-readRDS("baar_data4_nocon.RData")
+data2_bpcon<-readRDS("baar_data4_bpcon.RData")
+data2_middle<-readRDS("baar_data4_middle.RData")
+data4_nocon<-readRDS("baar_data4_nocon.RData")
+data4_bpcon<-readRDS("baar_data4_bpcon.RData")
+data4_middle<-readRDS("baar_data4_middle.RData")
+
+lower=1
+upper=2500
+
+par(mfrow=c(3,3))
+plot(data2_nocon$MSE[lower:upper,1])
+lines(c(lower, upper), c(lm(data2_nocon$MSE[1:10000,1]~c(1:10000))[[1]][[1]], lm(data2_nocon$MSE[1:10000,1]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_bpcon$MSE[lower:upper,1])
+lines(c(lower, upper), c(lm(data2_bpcon$MSE[1:10000,1]~c(1:10000))[[1]][[1]], lm(data2_bpcon$MSE[1:10000,1]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_middle$MSE[lower:upper,1])
+lines(c(lower, upper), c(lm(data2_middle$MSE[1:10000,1]~c(1:10000))[[1]][[1]], lm(data2_middle$MSE[1:10000,1]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_nocon$MSE[lower:upper,2])
+lines(c(lower, upper), c(lm(data2_nocon$MSE[1:10000,2]~c(1:10000))[[1]][[1]], lm(data2_nocon$MSE[1:10000,2]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_bpcon$MSE[lower:upper,2])
+lines(c(lower, upper), c(lm(data2_bpcon$MSE[1:10000,2]~c(1:10000))[[1]][[1]], lm(data2_bpcon$MSE[1:10000,2]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_middle$MSE[lower:upper,2])
+lines(c(lower, upper), c(lm(data2_middle$MSE[1:10000,2]~c(1:10000))[[1]][[1]], lm(data2_middle$MSE[1:10000,2]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_nocon$MSE[lower:upper,3])
+lines(c(lower, upper), c(lm(data2_nocon$MSE[1:10000,3]~c(1:10000))[[1]][[1]], lm(data2_nocon$MSE[1:10000,3]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_bpcon$MSE[lower:upper,3])
+lines(c(lower, upper), c(lm(data2_bpcon$MSE[1:10000,3]~c(1:10000))[[1]][[1]], lm(data2_bpcon$MSE[1:10000,3]~c(1:10000))[[1]][[1]]), col="red")
+plot(data2_middle$MSE[lower:upper,3])
