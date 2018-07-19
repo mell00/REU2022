@@ -591,10 +591,13 @@ points(c(47:90),colMeans(fits_to_use)[47:90],col="blue", pch=19)
 #using arima fitted values for fit
 library("forecast")
 
-fitted_one = fitted(arima(data_11[c(1:40)],order=c(1,0,0),method="ML"))
-fitted_two = fitted(arima(data_11[c(41:90)],order=c(1,0,0),method="ML"))
-points(c(1:40), fitted_one, col="red")
-points(c(41:90), fitted_two, col="red")
+fitted_one = fitted(arima(data_11[c(1:45)],order=c(1,0,0),method="ML"))
+fitted_two = fitted(arima(data_11[c(46:90)],order=c(1,0,0),method="ML"))
+lines(test_data_11)
+points(c(1:45), fitted_one, col="red")
+points(c(46:90), fitted_two, col="blue")
+lines(c(1:45), fitted_one, col="red")
+lines(c(46:90), fitted_two, col="blue")
 
 fitted_full = fitted(arima(data_11,order=c(1,0,0),method="ML"))
 points(c(1:90), fitted_full, col="blue", pch=19)
@@ -603,7 +606,7 @@ points(c(1:90), fitted_full, col="blue", pch=19)
 current_result$Breakpoints[[1]]
 hist(c(current_result$Breakpoints[[1]],current_result$Breakpoints[[2]]), breaks = 90, xlim=c(1,90), ylim=c(0,3000), xlab="Location of Breakpoint(s)", ylab = "Number of Iterations (Out of 3000)", main="Distribution of Breakpoint Location(s)", col="green3")
 
-hist(current_result$NumBkpts, main="Distribution of Breakpoint Number", ylim=c(0,3000), xlab= "Number of Breakpoints", ylab = "Number of Iterations (Out of 3000)", col="green3")
+hist(current_result$NumBkpts, main="Distribution of Breakpoint Number", ylim=c(0,3000), xlab= "Number of Breakpoints", ylab = "Number of Iterations (Out of 3000)", col="green3", breaks=c(.5,1.5,2.5,3.5))
 
 for(i in 1:length(current_result$Breakpoints[[1]])) {
   plot(test_data_11, main=current_result$type_step_total[i], ylab = "Dependent Variable", xlab="Time")
@@ -614,3 +617,15 @@ for(i in 1:length(current_result$Breakpoints[[1]])) {
   points(test_data_11[current_result$Breakpoints[[1]][i],1],test_data_11[current_result$Breakpoints[[1]][i],2], col="green3", cex = 1.5 ,pch=16) 
 }
 points(test_data_11[current_result$Breakpoints[[1]][1],1],test_data_11[current_result$Breakpoints[[1]][1],2], col="green3", cex = 1.5 ,pch=16) 
+
+par(mfrow=c(1,2))
+plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
+points(test_data_11[40,1],test_data_11[40,2],col="green3",pch=16, cex=1.5)
+points(test_data_11[10,1],test_data_11[10,2],col="green3",pch=16, cex=1.5)
+
+
+plot(test_data_11, main="Simulated Time Series Data", ylab = "Dependent Variable", xlab="Time")
+points(test_data_11[40,1],test_data_11[40,2],col="green3",pch=16, cex=1.5)
+points(test_data_11[47,1],test_data_11[47,2],col="blue",pch=16, cex=1.5)
+points(test_data_11[10,1],test_data_11[10,2],col="green3",pch=16, cex=1.5)
+
