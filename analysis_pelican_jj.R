@@ -38,6 +38,7 @@ for(i in 1:length(all$Breakpoints[[1]][1])) {
 }
 
 all$AcceptRate
+plot(all$AcceptRate)
 all$AcceptedSteps / 5000
 
 
