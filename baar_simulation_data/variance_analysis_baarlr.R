@@ -4,9 +4,9 @@ baar_data3_jump5jigg5<-readRDS("baarlr_data3_jump50jigg50.RData")
 baar_data3_jump7jigg2<-readRDS("baarlr_data3_jump75jiggle25.RData")
 baar_data3_jump1jigg0<-readRDS("baarlr_data3_jump1jigg0.RData")
 
-data3 = rbind(mean(baar_data3_jump0jigg1$RunTime), mean(baar_data3_jump2jigg7$RunTime),
-mean(baar_data3_jump5jigg5$RunTime), mean(baar_data3_jump7jigg2$RunTime),
-mean(baar_data3_jump1jigg0$RunTime))
+data3 = rbind(mean(baar_data3_jump1jigg0$RunTime), mean(baar_data3_jump7jigg2$RunTime),
+mean(baar_data3_jump5jigg5$RunTime), mean(baar_data3_jump2jigg7$RunTime),
+mean(baar_data3_jump0jigg1$RunTime))
 all = cbind(data3)
 rownames(all) = c("J1J0", "J7J2", "J5J5", "J2J7", "J0J1")
 colnames(all) = c("Data3")
