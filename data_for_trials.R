@@ -217,3 +217,13 @@ test_data_200 = function(){
   #plot(test_data_200)
   return(test_data_200)
 }
+
+test_data_3 = function(){
+  first = rnorm(100, mean = 10, sd = 5) 
+  second = rnorm(100, mean = 20, sd = 5) 
+  data_300 = c(first, second) 
+  time = c(1:200)
+  test_data_300 = data.frame(time, data_300)
+  plot(test_data_300)
+  return(test_data_300)
+}
