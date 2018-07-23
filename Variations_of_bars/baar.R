@@ -152,7 +152,17 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     random_bkpt = k_ends[random_num+1]
     full_data = c(1:max(k_ends))
     wiggliness = max(k_ends) * percent
-    prelim_neighborhood = full_data[floor(random_bkpt-wiggliness):ceiling(random_bkpt+wiggliness)]
+    if(floor(random_bkpt-wiggliness) > 0){
+	left_lim = floor(random_bkpt-wiggliness)
+    }else{
+	left_lim = 1
+    }
+    if(ceiling(random_bkpt+wiggliness) < n){
+	right_lim = ceiling(random_bkpt+wiggliness)
+    }else{
+	right_lim = n
+    }
+    prelim_neighborhood = full_data[left_lim:right_lim]
     left_neighbor = k_ends[random_num]
     right_neighbor = k_ends[random_num+2]
     if(ar == 1){
