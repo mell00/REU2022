@@ -145,20 +145,23 @@ Breakpoints; Time Series; Bayesian; AR; BARS
 %%% Main text
 %%% ------------------------------------------
 \section{Introduction}
-This paper considers issues of finding number and location of breakpoints in time series data. Time series data, although a very broad category of data, has attracted ample interests from the general public when trying to describe overall trends. When trying to model overarching trends it is helpful to identify significant places of change that the data may hold and combine two models. These places of significant changes search as our breakpoint and finding exactly where they are located and how many exist has been a sought goal. \\
-	Techniques early on consisted on using expert opinion at where breakpoints exists. This is seen in Seidel and Lanzante’s (2004) Ecology paper using expert opinion to break up global atmospheric temperature changes.  This is also seen in (JEFFS PAPER (DATA) ) economics paper using expert opinion to place breakpoints in (CPI? Economic DATA).  Due to the data obtained from these papers, as well as other, being compelling more formulaic methods have been developed in the past 15 years. One of these methods being a frequentist method developed by Bai and Perron (1998) (2003). The first paper written by Bai and Perron (1998) describes issues that structural changes in data pose for running regression. The second paper Bai and Perron (2003) wrote discuss applications and describes a general algorithm for finding an optimal breakpoint set. From their research, an R package was developed named breakpoints located in the package strucchange (Zeileis et~al 2007).  Another method of significance was developed by Pesaran and colleges (2006) that: \textbf{I don’t understand the pesaran paper}  . \\
-	In this paper, the Bayesian Adaptive Auto-Regression (BAAR) is developed in order to create a Bayesian method to find the distribution of the number and location of breakpoints in time series data.  Section two address how we approach the problem of locating number and location of breakpoints.  It dives into our Metropis Hastings and Markov chain Monte Carlo algorithms to gain a distribution of number and location of breakpoints. In the third section we take a look at applications and how our method finds significant breakpoints in data such as \textbf{something else here}. 
+This paper considers issues of finding number and location of breakpoints in time series data. Time series data, although a very broad category of data, has attracted ample interests in trying to describe overall trends. When modeling overarching trends it is helpful to identify significant places of change that the data may hold. This allows the data to be fit some items multiple time and combine those multiple models rather than just having one model.  This way significant jump and changes data may hold is captured and accounted for. These places of significant changes serve as our breakpoints.  Finding exactly where they are located and how many exist has been a sought-after goal. \\
+    In the last 15 or so years, many statisticians and others analyzing data have been creating techniques for addressing problems like our own. Techniques early on consisted on using expert opinion on locations of breakpoints. This is seen in Seidel and Lanzante’s (2004) Ecology paper using expert opinion to break up global atmospheric temperature changes.  This is also seen in Gamber, Liebner, and Smith's (2016) Inflation Persistence paper using expert opinion to place breakpoints in CPI time series data.  Due to the data obtained from these papers, as well as other, contains compelling information, more formulaic methods using technology has been developed to address the issue of breakpoints. One of these methods is a frequentist approach developed by Bai and Perron (1998) (2003). The first paper written by Bai and Perron (1998) describes issues that structural changes in data pose for running regression. The second paper Bai and Perron (2003) wrote discuss applications and describe a general algorithm for finding an optimal breakpoint set. From their research, an R package was developed named breakpoints located in the package strucchange (Zeileis et.~al. 2007).  A similar tequie to the Bai-Perron test is the Review Order Cusum (Pesaran and Timmermann, 2002). This approach flips time series and using historical data attempts to break data into groups. The diviate between groups being a breakpoint. 
+Another method of significance was developed by Pesaran and colleges (2006) that identifies breakpoints in the United States Treasury bill rates.  
+One application of breakpoint analysis is featured in Ruggieri’s paper about climatic records (2013). 
+\\
+In this paper, the Bayesian Adaptive Auto-Regression (BAAR) method is developed in order to create a Bayesian method to find the distribution of the number and location of breakpoints in time series data.  Section two address how we approach the problem of locating number and location of breakpoints.  It dives into our Metropolis-Hastings and Markov chain Monte Carlo algorithms to obtain these distributions. The technique described is inspired by Bayesian curve fitting with free knot splines that describe a method called Bayesian Adaptive Regression Splines (BARS)  (DiMatteo et~al., 2001) and a paper describing the implementation of BARS (Walstrom, Liebner, and Kass, 2008). In the third section, we take a look at applications and how our method finds significant breakpoints in data such as \textbf{whatever data we choose}. Finally, we will discuss significant and other applications. 
+
 
 \section{Method}
-The foundation of this method is based on the BARS method which consists of the Metropolis Hastings algorithm containing a Markov Chain Monte Carlo (MCMC). The steps in the MCMC include the addition of a breakpoint, the subtraction of a breakpoint, and the moving of a breakpoint. A new breakpoint set is proposed at each step of the MCMC, and the Metropolis Hastings ratio determines the set's acceptance. From this, a distribution of possible breakpoint locations can be obtained. 
+The foundation of this method is inspired on the BARS method which consists of the Metropolis Hastings algorithm containing a Markov Chain Monte Carlo (MCMC) (DiMatteo et~al., 2001). The steps in the MCMC include the addition of a breakpoint, the subtraction of a breakpoint, and the moving of a breakpoint. A new breakpoint set is proposed at each step of the MCMC, and the Metropolis Hastings ratio determines the set's acceptance. From this, a distribution of possible breakpoint locations can be obtained. 
 
 \subsection{Initial Breakpoint}
 \textbf{This is going to change depending on next simulation!}
-The BAAR function need to have an input starting breakpoint place(s). In the BARS paper we see that having a more intelligent start location, like with the logsplines starting condition, can significantly reduce burn it periods and run times (DiMatteo et~al. 2001). This opposed to starting with a single middle breakpoint or evenly placed breakpoints. With this knowledge we are taking the Bai-Perron method and breakpoint package to help obtain relatively good initial breakpoints to start out. The algorithm described by Bai and Perron is a frequentist approach that checks every single location for a breakpoint and returns the optimal set. The breakpoint package requires a user to specify an maximum number of breakpoint. The larger the maximum number is the longer it takes for the function to run. Because this is only our initial breakpoint set that we will put into our function, put a smaller max closer to one will help get a intelligent starting place but not take forever to run. Having one to three intelligent starting place, depending on the size of the dataset, helps reduce the burn in period and the overall run time to get a proper distribution. 
+The BAAR function need to have an input starting breakpoint place(s). In the BARS paper we see that having a more intelligent start location, like with the logsplines starting condition, can significantly reduce burn it periods and run times (DiMatteo et~al., 2001). This is opposed to starting with a single middle breakpoint or evenly placed breakpoints. With this knowledge we are taking the Bai-Perron method and breakpoint package to help obtain relatively good initial breakpoints to start out (Bai, Perron, 2003) (Zeileis et~al 2007). The algorithm described by Bai and Perron is a frequentist approach that checks almost every single location for a breakpoint and returns the optimal set (Bai, Perron, 2003). The breakpoint package requires a user to specify an maximum number of breakpoint (Zeileis et~al 2007). The larger the maximum number the longer the run time for the function. Because this is only our initial breakpoint set specifying a smaller maximum value closer to one will help get a intelligent starting place and increase overall speed of the breakpoint function. Having one to three intelligent starting place, depending on the size of the dataset, helps reduce the burn in period and the overall run time to get a proper distribution. 
 
 \subsection{Step Type}
-
-The birth step randomly proposes a breakpoint at an available location. An available location is where a breakpoint could be placed given the following constraints. First, the location cannot have a breakpoint or an endpoint currently assigned to it. Second, for linear fits and AR(1) models, the location must be at least two data points away from the breakpoints closest to the particular location. For AR(p) models, the minimum distance away a location must be from its closest breakpoints is $2p$. If a location is in accordance with these constrains, then it is an available location.  
+Changing from one state to another, the markov chain monte carlo has three different possible steps: birth, death, and move. The birth step randomly proposes a breakpoint at an available location. An available location is where a breakpoint could be placed given the following constraints. First, the location cannot have a breakpoint or an endpoint currently assigned to it. Second, for linear fits and AR(1) models, the location must be at least two data points away from the breakpoints closest to the particular location. For AR(p) models, the minimum distance away a location must be from its closest breakpoints is $2p$. If a location is in accordance with these constrains, then it is an available location.  
 
 The death step randomly chooses an existing breakpoint and proposes a set without that chosen breakpoint. 
 
@@ -166,27 +169,37 @@ The general move step is a subtraction step followed immediately by an addition 
 \begin{align*}
 J_n = ( x_b-pn, x_b+pn )
 \end{align*}
-where $x_b$ is the original location of the chosen breakpoint, $n$ is the size of the data set, and $p$ is the user-inputed percent in decimal form. When a move step is chosen, there is a $\zeta$ probability that a jiggle will be performed, which is determined by the user such that $0<\zeta<1$ and $\zeta \in \mathbb{Q}$. The probability of a jump occurring is $1-\zeta$. 
+where $x_b$ is the original location of the chosen breakpoint, $n$ is the size of the data set, and $p$ is the user-inputed percent in decimal form. When a move step is chosen, there is a $\zeta$ probability that a jiggle will be performed, which is determined by the user such that $0<\zeta<1$ and $\zeta \in \mathbb{Q}$. The probability of a jump occurring is $1-\zeta$.  Based off of data obtained by simulations on different probabilities the suggested probabilities are $75\%$ jiggle and $25\%$ jump. This combination increases overall speed and a combination of jiggle and jump more thoroughly explores the distribution. 
 
 \subsection{Probabilities of the Steps}
 The combined probabilities of performing a birth step, $b_p$, and a death step, $d_p$, is equal to the user imputed value, $c$ such that $c \in \mathbb{Q}$ and $0 < c < 1$. The ratio of birth steps to death steps is determined by $c$ and the initial conditions of the starting number of breakpoints, $K_{start}$, and the starting number of available spaces, $A_{start}$. From this, the following equations can be derived for $b_p$ and $d_p$: 
 \begin{align*}
-b_p = c  \ \frac{A_{start}}{A_{start}+ K_{start}+1}  \ \ \ \ d_p = c \  \frac{K_{start}+1}{A_{start}+ K_{start}+1}
+b_p =   \ \frac{A_{start}}{A_{start}+ K_{start}+1}  \ \ \ \ d_p =  \  \frac{K_{start}+1}{A_{start}+ K_{start}+1}
 \end{align*}
+
 
 Then, the probability of a specific birth step given $A$ available locations, $b$, is the equation 
 \begin{align*}
-b &= \ b_p \times \frac{1}{A}
+b &= c \ b_p \times \frac{1}{A}.
 \end{align*}
 
 Thus, the probability of a specific death step given $K$ breakpoints, $d$, is the equation
 \begin{align*}
-d &= \ d_p \times \frac{1}{K}
+d &= c \ d_p \times \frac{1}{K}.
 \end{align*}
 
 The probability of a move step, $m$ is represented by the equation $m = 1-c$. The probability of jiggle, $jg$, and the probability of jump, $ju$, are calculated by the following equations: 
 \begin{align*}
-jg = m\zeta \ \ \ \ \ ju = 1-jg
+ju_p =\zeta (1-  c(d_p + b_p))  \ \ \ \ jg_p =(1-\zeta)(1-c(d_p + b_p)) 
+\end{align*}
+
+Then, the probability of a specific jump step is,
+\begin{align*}
+ju =ju_p \frac{1}{K_{old} A}.  
+\end{align*}
+For the jiggle step the probability of a specific step occurring is
+\begin{align*}
+jp= jg_p  \frac{1}{K_{old} j_{free}}.
 \end{align*}
 
 \subsubsection{Metropolis Hastings Ratio and BIC Approximation} 
@@ -267,6 +280,8 @@ where
 
 \section{Results}
 
+Middle initial placement makes the function mad. 
+
 \section{Discussion}
 
 \section{Appendix}
@@ -325,6 +340,11 @@ McLeod, A.I. and Zhang, Y., (2008).
 Pesaran, M.H., Pettenuzzo, D. and Timmermann, A., (2006). 
 \textit{Forecasting time series subject to multiple structural breaks}. 
 The Review of Economic Studies, 73(4), pp.1057-1084.
+
+\bibitem[Pesaran and Timmermann (2002)]{Pesaran02}
+Pesaran, M.H. and Timmermann, A., (2002).
+\textit{Market timing and return prediction under model instability}. 
+Journal of Empirical Finance, 9(5), pp.495-510.
 
 \bibitem[R Core Team(2017)]{R17}
 R Core Team( 2017). 

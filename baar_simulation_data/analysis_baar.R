@@ -104,16 +104,21 @@ par(mfrow=c(1,1))
 #----------------------------trying to get a good graph------------
 #data 3
 x=0
-y=60000
+y=3000
 par(mfrow=c(2,1),oma=c(0,0,2,0))
 hist(location_of_breakpoints(data3_j1j0), main="Jump 1 Jiggle 0", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
 hist(location_of_breakpoints(data3_j25j75), main="Jump 25 Jiggle 75", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90)
 title("Data 3", outer = TRUE)
 par(mfrow=c(1,1))
 
+par(mfrow=c(1,2),oma=c(0,0,2,0))
+hist(c(data3_j1j0$Breakpoints[[1]]$X1[!is.na(data3_j1j0$Breakpoints[[1]]$X1)], data3_j1j0$Breakpoints[[1]]$X2[!is.na(data3_j1j0$Breakpoints[[1]]$X2)]) , main="Jump 100% Jiggle 0%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+hist(c(data3_j25j75$Breakpoints[[5]]$X1[!is.na(data3_j25j75$Breakpoints[[5]]$X1)], data3_j25j75$Breakpoints[[5]]$X2[!is.na(data3_j25j75$Breakpoints[[5]]$X2)], data3_j25j75$Breakpoints[[5]]$X3[!is.na(data3_j25j75$Breakpoints[[5]]$X3)]), main="Jump 25% Jiggle 75%", xlab="Location of Breakpoints", xlim=c(0,90), ylim=c(x,y), breaks=90, col="green")
+title("Move Simulations", outer = TRUE)
+par(mfrow=c(1,1))
 
-
-
+#, data3_j25j75$Breakpoints[[1]]$X3[!is.na(data3_j25j75$Breakpoints[[1]]$X3)], data3_j25j75$Breakpoints[[1]]$X4[!is.na(data3_j25j75$Breakpoints[[1]]$X4)]
+#, data3_j1j0$Breakpoints[[3]]$X3[!is.na(data3_j1j0$Breakpoints[[3]]$X3)]
 
 #----------------------------trying to get a good graph------------
 
