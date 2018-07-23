@@ -28,3 +28,17 @@ hist(all$NumBkpts[[9]],breaks=c(.5,1.5,2.5,3.5,4.5))
 hist(all$NumBkpts[[10]],breaks=c(.5,1.5,2.5,3.5,4.5))
 hist(all$NumBkpts[[11]],breaks=c(.5,1.5,2.5,3.5,4.5))
 
+c = 0 
+for(i in 1:length(all$Breakpoints[[1]][1])) {
+  for(j in i:length(all$Breakpoints[[1]][1])) {
+    if(all$Breakpoints[[1]][i,] == all$Breakpoints[[1]][j,]) {
+      c = c +1
+    }
+  }
+}
+
+all$AcceptRate
+all$AcceptedSteps / 5000
+
+
+all_data3 = readRDS("data3_alljump.RData")
