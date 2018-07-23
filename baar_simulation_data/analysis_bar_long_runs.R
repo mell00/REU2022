@@ -249,4 +249,39 @@ points(c(1:5), sd_up, cex = 1, pch=16)
 points(c(1:5), sd_down, cex = 1, pch=16)
 
 
+#-------------run time=--------------
+m_j1j0 = mean(j1j0$RunTimes)
+m_j25j75 = mean(j25j75$RunTimes)
+m_j50j50 = mean(j50j50$RunTimes)
+m_j75j25 = mean(j75j25$RunTimes)
+m_j0j1 = mean(j0j1$RunTimes)
+
+sd_j1j0 = sd(j1j0$RunTimes)
+sd_j25j75 = sd(j25j75$RunTimes)
+sd_j50j50 = sd(j50j50$RunTimes)
+sd_j75j25 = sd(j75j25$RunTimes)
+sd_j0j1 = sd(j0j1$RunTimes)
+
+
+m_j1j0 
+m_j25j75 
+m_j50j50 
+m_j75j25 
+m_j0j1 
+c(m_j1j0 - 2* sd_j1j0 , m_j1j0 + 2* sd_j1j0 )
+c(m_j25j75 - 2*sd_j25j75, m_j25j75 + 2*sd_j25j75)
+c(m_j50j50 - 2*sd_j50j50, m_j50j50 + 2*sd_j50j50)
+c(m_j75j25 - 2*sd_j75j25, m_j75j25 + 2*sd_j75j25)
+c(m_j0j1 - 2*sd_j0j1, m_j0j1 + 2*sd_j0j1)
+
+
+
+plot(c(m_j1j0 ,m_j25j75 ,m_j50j50 ,m_j75j25 ,m_j0j1 ), ylim=c(0,5))
+points(c(1,1),c(m_j1j0 - 2* sd_j1j0 , m_j1j0 + 2* sd_j1j0 ))
+points(c(2,2),c(m_j25j75 - 2*sd_j25j75, m_j25j75 + 2*sd_j25j75))
+points(c(3,3),c(m_j50j50 - 2*sd_j50j50, m_j50j50 + 2*sd_j50j50))
+points(c(4,4),c(m_j75j25 - 2*sd_j75j25, m_j75j25 + 2*sd_j75j25))
+points(c(5,5),c(m_j0j1 - 2*sd_j0j1,m_j0j1 + 2*sd_j0j1))
+
+
 

@@ -370,3 +370,9 @@ plot(bic_mean(data9_j75j25), main="Jump 75 Jiggle 25", ylim = c(0,600), ylab = "
 plot(bic_mean(data9_j0j1), main="Jump 0 Jiggle 1", ylim = c(0,600), ylab = "Average BIC", xlab="Iteration")
 title("Data 9", outer = TRUE)
 par(mfrow=c(1,1))
+
+
+
+
+
+#-------------------------------------run time -----------------------------$

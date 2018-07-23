@@ -181,3 +181,39 @@ points(pelican$Count_y[28], pelican$NumberByPartyHours[28], col="green3", cex = 
 points(pelican$Count_y[30], pelican$NumberByPartyHours[30], col="blue", cex = 1.5,pch=16)
 
 
+
+
+#----------------------------------
+test_data_100 = function(){
+  first = rnorm(100, mean = 5, sd = 1) 
+  second = rnorm(100, mean = 10, sd = 1) 
+  third = rnorm(100, mean = 15, sd = 1) 
+  fourth= rnorm(100, mean = 10, sd = 1) 
+  fifth = rnorm(100, mean = 5, sd = 1) 
+  six = rnorm(100, mean = 10, sd = 1) 
+  seven = rnorm(100, mean = 15, sd = 1) 
+  eight = rnorm(100, mean = 10, sd = 1) 
+  nine = rnorm(100, mean = 5, sd = 1) 
+  time = c(1:900)
+  data_100 = c(first, second, third, fourth, fifth, six, seven, eight, nine) 
+  test_data_100 = data.frame(time, data_100)
+  return(test_data_100)
+  #plot(test_data_100)
+}
+
+test_data_200 = function(){
+  first = rnorm(100, mean = 10, sd = 10) 
+  second = rnorm(100, mean = 10, sd = 5) 
+  third = rnorm(100, mean = 10, sd = 1) 
+  fourth= rnorm(100, mean = 10, sd = 10) 
+  fifth = rnorm(100, mean = 10, sd = 5) 
+  six = rnorm(100, mean = 10, sd = 1) 
+  seven = rnorm(100, mean = 10, sd = 10) 
+  eight = rnorm(100, mean = 10, sd = 5) 
+  nine = rnorm(100, mean = 10, sd = 1) 
+  time = c(1:900)
+  data_200 = c(first, second, third, fourth, fifth, six, seven, eight, nine) 
+  test_data_200 = data.frame(time, data_200)
+  #plot(test_data_200)
+  return(test_data_200)
+}
