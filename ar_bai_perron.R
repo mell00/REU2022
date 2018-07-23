@@ -181,5 +181,5 @@ bai_perron.ar<-function(x_values, y_values, order=1, interval=0.15, max_breaks=3
 }
 
 #calling the function
-test_data = test_data_2()
-bp_test = bai_perron.ar(test_data[,1], test_data[,2])
+#test_data = test_data_2()
+#bp_test = bai_perron.ar(test_data[,1], test_data[,2])

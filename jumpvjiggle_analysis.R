@@ -1,5 +1,9 @@
 setwd("/Users/sarah/REU2018/test_Cases")
 pelican_alljump = readRDS("pelican_alljump.RData")
+setwd("/Users/sarah/REU2018")
+data3_alljump = readRDS("data3_alljump.RData")
+
+alljump = data3_alljump
 
 lim = 500
 
@@ -7,18 +11,26 @@ par(mfrow=c(3,4))
 
 for(a in 1:11){
 
-pelican_finbkpts<-NULL
+finbkpts<-NULL
 
-for(i in 1:ncol(pelican_alljump$Breakpoints[[a]])){
+if(is.atomic(alljump$Breakpoints[[a]]) == T){
 
-	pelican_finbkpts<-c(pelican_finbkpts, na.omit(pelican_alljump$Breakpoints[[a]][1:lim,i]), recursive=T)
+finbkpts = alljump$Breakpoints[[a]][1:lim]
+
+}else {
+	for(i in 1:ncol(alljump$Breakpoints[[a]])){
+
+		finbkpts<-c(finbkpts, na.omit(alljump$Breakpoints[[a]][1:lim,i]), recursive=T)
+
+	}
+}
+
+hist(finbkpts, breaks=seq(96.5,104.5,1), xlim=c(96,105), ylim=c(0,lim), right=F, xlab="Location", ylab="Number of Iterations",
+main=alljump$JumpProportion[[a]], col="brown")
 
 }
 
-hist(pelican_finbkpts, breaks=seq(0.5,78.5,1), xlim=c(7,19), ylim=c(0,lim), right=F, xlab="Years Since 1939", ylab="Number of Iterations",
-main=pelican_alljump$JumpProportion[[a]], col="brown")
 
-}
 
 library(plyr)
 unique_jump0<-ddply(pelican_alljump$Breakpoints[[1]][1:500,],.(X1,X2,X3),nrow)
