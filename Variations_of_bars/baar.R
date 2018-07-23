@@ -145,56 +145,52 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
   #function to move a breakpoint within a small user-defined neighborhood
-  barJiggle<-function(percent, k_ends){
-    
-    k = k_ends[c(-1,-length(k_ends))]
-    random_num = sample(1:length(k), 1)
-    random_bkpt = k_ends[random_num+1]
-    full_data = c(1:max(k_ends))
-    wiggliness = max(k_ends) * percent
-    if(floor(random_bkpt-wiggliness) > 0){
-	left_lim = floor(random_bkpt-wiggliness)
-    }else{
-	left_lim = 1
-    }
-    if(ceiling(random_bkpt+wiggliness) < n){
-	right_lim = ceiling(random_bkpt+wiggliness)
-    }else{
-	right_lim = n
-    }
-    prelim_neighborhood = full_data[left_lim:right_lim]
-    left_neighbor = k_ends[random_num]
-    right_neighbor = k_ends[random_num+2]
-    if(ar == 1){
-      constraint = (3 - 1)
-    }else{
-      constraint = (2*ar-1)
-    }
-    ll_limit = left_neighbor-constraint
-    lr_limit = left_neighbor+constraint
-    rl_limit = right_neighbor-constraint
-    rr_limit = right_neighbor+constraint
-    if(ll_limit < 0){ll_limit = 0}
-    if(rr_limit > max(k_ends)){rr_limit = max(k_ends)}
-    exclusions = sort(c(full_data[ll_limit:lr_limit], full_data[rl_limit:rr_limit]))
-    final_neighborhood = setdiff(prelim_neighborhood, exclusions)
-    
-    if(length(final_neighborhood) > 1){
-      new_location = sample(final_neighborhood, 1)
-      k_ends_less = k_ends[-(random_num+1)]
-      final_k_ends = sort(c(k_ends_less, new_location))
-      return(final_k_ends)
-    }else if(length(final_neighborhood) == 1){
-      new_location = final_neighborhood
-      k_ends_less = k_ends[-(random_num+1)]
-      final_k_ends = sort(c(k_ends_less, new_location))
-      return(final_k_ends)
-    }
-    else{
-      return("jiggle failure")
-    }
-    
+barJiggle<-function(percent, k_ends){
+  
+  k = k_ends[c(-1,-length(k_ends))]
+  random_num = sample(1:length(k), 1)
+  random_bkpt = k_ends[random_num+1]
+  full_data = c(1:max(k_ends))
+  wiggliness = max(k_ends) * percent
+  if(floor(random_bkpt-wiggliness) > 0){
+    left_lim = floor(random_bkpt-wiggliness)
+  }else{
+    left_lim = 1
   }
+  if(ceiling(random_bkpt+wiggliness) < max(k_ends)){
+    right_lim = ceiling(random_bkpt+wiggliness)
+  }else{
+    right_lim = max(k_ends)
+  }
+  prelim_neighborhood = full_data[left_lim:right_lim]
+  left_neighbor = k_ends[random_num]
+  right_neighbor = k_ends[random_num+2]
+  if(ar == 1){
+    constraint = (3 - 1)
+  }else{
+    constraint = (2*ar-1)
+  }
+  lr_limit = left_neighbor+constraint
+  rl_limit = right_neighbor-constraint
+  exclusions = sort(c(full_data[1:lr_limit], full_data[rl_limit:max(k_ends)]))
+  final_neighborhood = setdiff(prelim_neighborhood, exclusions)
+  
+  if(length(final_neighborhood) > 1){
+    new_location = sample(final_neighborhood, 1)
+    k_ends_less = k_ends[-(random_num+1)]
+    final_k_ends = sort(c(k_ends_less, new_location))
+    return(final_k_ends)
+  }else if(length(final_neighborhood) == 1){
+    new_location = final_neighborhood
+    k_ends_less = k_ends[-(random_num+1)]
+    final_k_ends = sort(c(k_ends_less, new_location))
+    return(final_k_ends)
+  }
+  else{
+    return("jiggle failure")
+  }
+  
+}
   
   #function to propose a new breakpoint set (also returns qs and step type)
   newEnds<-function(k_ends, make_k, murder_k){
