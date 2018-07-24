@@ -1,4 +1,4 @@
-#Generic Bai-Perron Test
+#Bai-Perron Test for AR Models
 
 #Key
 #x_values = x variable for all observations
