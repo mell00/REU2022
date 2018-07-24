@@ -201,6 +201,8 @@ test_data_100 = function(){
   #plot(test_data_100)
 }
 
+plot(test_data_100, main="Eight Breaks with Low Variance" , xlab="Time", ylab="Dependent Variable", pch=16)
+
 test_data_200 = function(){
   first = rnorm(100, mean = 10, sd = 10) 
   second = rnorm(100, mean = 10, sd = 5) 
