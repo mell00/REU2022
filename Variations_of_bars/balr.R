@@ -251,7 +251,7 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   	}
 
 	#initializing matrices/storage objects for final Metropolis-Hasting
-	all_k_best = matrix(NA, nrow=1, ncol=(n/3))
+	all_k_best = data.frame(matrix(ncol=(length(k_ends)-2),nrow=0))
 	if(fit_storage == TRUE){
 		bar_v = 0
 		bar_beta = 0
@@ -356,10 +356,15 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 			bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+1))
 		}
     
-    		#condensing the data
-		k_ends_best_print = c(k_ends, rep(NA, (n/3)-length(k_ends)))
-		all_k_best = rbind(all_k_best, k_ends_best_print)
-
+		if((length(k_ends)-2) > ncol(all_k_best)){
+			all_k_best = cbind(all_k_best, rep(NA,nrow(all_k_best)))
+    			all_k_best = rbind(all_k_best, k_ends[c(-1,-length(k_ends))])
+		}else if((length(k_ends)-2) < ncol(all_k_best)){
+			k = c(k_ends[c(-1,-length(k_ends))], rep(NA, (ncol(all_k_best)-length(k_ends)+2)), recursive=T)
+    			all_k_best = rbind(all_k_best, k)
+		}else{
+    			all_k_best = rbind(all_k_best, k_ends[c(-1,-length(k_ends))])
+		}
 		all_BIC = rbind(all_BIC, bic)
     
 		#setting up posterior
@@ -429,10 +434,7 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 	}
  
 	#cleaning up the matrices and counts
-	all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
-	clean_max = max(all_k_best[1,], na.rm=TRUE)
-	all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
-	all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
+	colnames(all_k_best) = c(1:ncol(all_k_best))  
 	final.propose = c(a.count, s.count, m.count, j.count)
 	final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
 	colnames(all_BIC) = "BIC"
@@ -513,6 +515,5 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_11()
-#bkpts = breakpoints(test_data[,2]~test_data[,1])
-#current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, progress=T, fit_storage=F)
+#test_data = test_data_2()
+#current_result = balr(NA, test_data[,1], test_data[,2], 200, 200, progress=T, fit_storage=F)
