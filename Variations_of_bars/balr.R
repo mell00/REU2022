@@ -13,8 +13,9 @@
 # jump_p		= proportion of move steps that will be jump
 	#note: jiggle proprtion is 1 - jump_p
 # progress		= whether to show progress bars or not, TRUE/FALSE
+# fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, progress = TRUE){
+balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, progress = TRUE, fit_storage = TRUE){
 
 	if(length(time) != length(data)){
 		return("Data and time vectors must be of equal length.")
@@ -251,11 +252,13 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 	#initializing matrices/storage objects for final Metropolis-Hasting
 	all_k_best = matrix(NA, nrow=1, ncol=(n/3))
-	bar_v = 0
-	bar_beta = 0
-	fit = 0
-	all_fits = data.frame()
-	all_MSE = data.frame()
+	if(fit_storage == TRUE){
+		bar_v = 0
+		bar_beta = 0
+		fit = 0
+		all_fits = data.frame()
+		all_MSE = data.frame()
+	}
 	all_BIC = data.frame()
 	accept_count = 0
   
@@ -271,33 +274,34 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 	jiggle.accept.count <<- 0
 
 	#setting up priors for beta draws
+	if(fit_storage == TRUE){
+		beta_lm = function(par){#function to minimize for MLE of betas
 
-	beta_lm = function(par){#function to minimize for MLE of betas
-
-		beta0 = par[1]  #current intercept
-		beta1 = par[2]  #current slope
-		sigma = sd(full_data[,2]) #standard deviation
+			beta0 = par[1]  #current intercept
+			beta1 = par[2]  #current slope
+			sigma = sd(full_data[,2]) #standard deviation
   
-		#calculated likelihoods
-		lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
+			#calculated likelihoods
+			lik = dnorm(full_data[,2], mean = full_data[,1] * beta1 + beta0, sd = sigma)
 
-		#convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
-		log_lik = log(lik) #log likelihood of each data point
-		deviance = -2 * sum(log_lik) #calculate deviance
+			#convert likelihood to summary deviance score (minimizing deviance = maximizing likelihood)
+			log_lik = log(lik) #log likelihood of each data point
+			deviance = -2 * sum(log_lik) #calculate deviance
 
-		return(deviance)
+			return(deviance)
+		}
+
+		beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
+		fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
+		smiley = n * fisher #smiley face is total number of observations times the inverse of Fisher information
+
+		b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
+		B_0 = smiley #variance-covariance matrix for posterior draw
+
+		#beta and sigma draw
+		post_beta_list = data.frame(Empty=c(NA,NA))
+		post_sigma_list = data.frame(Empty=NA)
 	}
-
-	beta_fits = optim(par = c(0, 0), fn = beta_lm, hessian = T) #get parameter estimates for betas
-	fisher = 0.5*beta_fits$hessian #if minimizing deviance, observed Fisher information is half of hessian
-	smiley = n * fisher #smiley face is total number of observations times the inverse of Fisher information
-
-	b_0 = matrix(beta_fits$par,2,1) #matrix of beta means for posterior draw
-	B_0 = smiley #variance-covariance matrix for posterior draw
-
-	#beta and sigma draw
-	post_beta_list = data.frame(Empty=c(NA,NA))
-	post_sigma_list = data.frame(Empty=NA)
 
 	#getting constants for qs for final Metropolis-Hasting
 	starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
@@ -360,55 +364,57 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
 		#setting up posterior
     
-		##loop through the k_ends to find the intervals 
-		fit = NULL
-		current_post_betas = NULL
-		current_post_sigmas = NULL
-		for(m in 2:length(k_ends)) {
-			len = length(k_ends)
-			if(m > 2){
-				min = k_ends[m-1]+1
-			}else{
-				min = k_ends[m-1]
-			}
-			x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
-			x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
-			y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
-			sigma = sd(y_j)
+		##loop through the k_ends to find the intervals
+		if(fit_storage == TRUE){
+			fit = NULL
+			current_post_betas = NULL
+			current_post_sigmas = NULL
+			for(m in 2:length(k_ends)) {
+				len = length(k_ends)
+				if(m > 2){
+					min = k_ends[m-1]+1
+				}else{
+					min = k_ends[m-1]
+				}
+				x_values = full_data[c(min:k_ends[m]),1] #getting the x values in the interval
+				x_j = matrix(c( rep(1, each=length(x_values)), x_values), nrow= length(x_values), ncol= 2)
+				y_j = full_data[c(min:k_ends[m]),2] #getting the y values in the interval
+				sigma = sd(y_j)
       
-			#bar_v
-			v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
-			#bar_beta 
-			beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
+				#bar_v
+				v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
+				#bar_beta 
+				beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
 
-			predicted_x = x_j %*% beta
-			fit = c(fit, predicted_x)
+				predicted_x = x_j %*% beta
+				fit = c(fit, predicted_x)
       
-			#drawing a random variable from a multivariate normal pdf 
-  			post_beta = mvrnorm(1, beta, v)
+				#drawing a random variable from a multivariate normal pdf 
+  				post_beta = mvrnorm(1, beta, v)
       
-			bar_v = c(bar_v, v)
-			bar_beta = c(bar_beta, beta)
+				bar_v = c(bar_v, v)
+				bar_beta = c(bar_beta, beta)
       
-			#SIGMA:
-  			v0 = (max(k_ends))/2 + 2
-			d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
+				#SIGMA:
+  				v0 = (max(k_ends))/2 + 2
+				d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
       
-			sigma = rgamma(1, v0, rate = d0)
-			post_sigma = 1 / sigma
+				sigma = rgamma(1, v0, rate = d0)
+				post_sigma = 1 / sigma
 
-			current_post_betas = cbind(current_post_betas, post_beta)
-			current_post_sigmas = cbind(current_post_sigmas, post_sigma)
+				current_post_betas = cbind(current_post_betas, post_beta)
+				current_post_sigmas = cbind(current_post_sigmas, post_sigma)
       
-			if(m == len ) {
-				MSE = mean((full_data[,2]-fit)^2)
-				all_MSE = rbind(all_MSE, MSE)
-				all_fits = rbind(all_fits, fit)
-				current_post_betas = as.data.frame(current_post_betas)
-				colnames(current_post_betas) = c(1:ncol(current_post_betas))
-				post_beta_list = cbind(post_beta_list, current_post_betas)
-				colnames(current_post_sigmas) = c(1:ncol(current_post_sigmas))
-				post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
+				if(m == len ) {
+					MSE = mean((full_data[,2]-fit)^2)
+					all_MSE = rbind(all_MSE, MSE)
+					all_fits = rbind(all_fits, fit)
+					current_post_betas = as.data.frame(current_post_betas)
+					colnames(current_post_betas) = c(1:ncol(current_post_betas))
+					post_beta_list = cbind(post_beta_list, current_post_betas)
+					colnames(current_post_sigmas) = c(1:ncol(current_post_sigmas))
+					post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
+				}
 			}
 		}
 
@@ -422,84 +428,91 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 		writeLines("\n")
 	}
  
-	#cleaning up the matrices 
+	#cleaning up the matrices and counts
 	all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
 	clean_max = max(all_k_best[1,], na.rm=TRUE)
 	all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
 	all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
-	post_beta_list = post_beta_list[,-1]
-	post_sigma_list = post_sigma_list[,-1]
-  
-	colnames(all_MSE) = "MSE"
-	colnames(all_BIC) = "BIC"
-	rownames(post_beta_list) = c("B0", "B1")
-	rownames(post_sigma_list) = "Sigma"
-  
 	final.propose = c(a.count, s.count, m.count, j.count)
 	final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
+	colnames(all_BIC) = "BIC"
 
+	#cleaning up beta/sigma draws
+	if(fit_storage == TRUE){
+		rownames(post_beta_list) = c("B0", "B1")
+		rownames(post_sigma_list) = "Sigma"
+		colnames(all_MSE) = "MSE"
+		post_beta_list = post_beta_list[,-1]
+		post_sigma_list = post_sigma_list[,-1]
+
+		split_num = NULL #initializing
+
+		for(i in 2:ncol(post_beta_list)){ #detecting where to split up columns in beta/sigma object
+			if(startsWith(colnames(post_beta_list)[i], "1.") == TRUE){
+				split_num = c(split_num, i)
+			}
+		}
+
+		final_beta_list = list() #initializing
+
+		for(i in 1:length(split_num)){ #splitting up columns in beta object
+
+			if(i == 1){ #betas from first run
+				final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
+				colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+			}else if(i < length(split_num)){# betas from middle runs
+				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
+				colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+			}else{ #betas from penultimate and final runs
+				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
+				colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
+				colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
+			} 
+		}
+
+		post_beta_list = final_beta_list #saving final version of beta object
+
+		final_sigma_list = list() #initializing
+
+		for(i in 1:length(split_num)){ #splitting up columns in sigma object
+
+			if(i == 1){ #sigmas from first run
+				final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
+				colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+			}else if(i < length(split_num)){# sigmas from middle runs
+				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
+				colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+			}else{ #sigma from penultimate and final runs
+				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
+				colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
+				colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
+			} 
+		}
+
+		post_sigma_list = final_sigma_list #saving final version of sigma object
+	}
+  
 	#getting distribution of k (number of breakpoints)
 	num_bkpts = list()
 	for(i in 1:iterations){
 		current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
 		num_bkpts = c(num_bkpts, current_k, recursive=T)
 	}
-	
-	split_num = NULL #initializing
 
-	for(i in 2:ncol(post_beta_list)){ #detecting where to split up columns in beta/sigma object
-		if(startsWith(colnames(post_beta_list)[i], "1.") == TRUE){
-			split_num = c(split_num, i)
-		}
+	if(fit_storage == TRUE){      
+		final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_fits)
+		names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Fits")
+  	}else{
+		final_list = list(accept_count / iterations, final.propose, final.accept, all_BIC, all_k_best, num_bkpts)
+		names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "BIC", "Breakpoints", "NumBkpts")
 	}
 
-	final_beta_list = list() #initializing
-
-	for(i in 1:length(split_num)){ #splitting up columns in beta object
-
-		if(i == 1){ #betas from first run
-			final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
-			colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-		}else if(i < length(split_num)){# betas from middle runs
-			final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-			colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-		}else{ #betas from penultimate and final runs
-			final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-			colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-			final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
-			colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
-		} 
-	}
-
-	post_beta_list = final_beta_list #saving final version of beta object
-
-	final_sigma_list = list() #initializing
-
-	for(i in 1:length(split_num)){ #splitting up columns in sigma object
-
-		if(i == 1){ #sigmas from first run
-			final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
-			colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-		}else if(i < length(split_num)){# sigmas from middle runs
-			final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-			colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-		}else{ #sigma from penultimate and final runs
-			final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-			colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-			final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
-			colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
-		} 
-	}
-
-	post_sigma_list = final_sigma_list #saving final version of sigma object
-  
-	final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_fits)
-	names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Fits")
-  
 	return(final_list)
 }
 
 #calling the function
-#test_data = test_data_2()
+#test_data = test_data_11()
 #bkpts = breakpoints(test_data[,2]~test_data[,1])
-#current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, progress=T)
+#current_result = balr(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, progress=T, fit_storage=F)

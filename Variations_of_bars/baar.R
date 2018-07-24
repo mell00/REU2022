@@ -14,8 +14,9 @@
 	# note: jiggle proprtion is 1 - jump_p
 # ar			= order of AR model
 # progress		= whether to show progress bars or not, TRUE/FALSE
+# fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE){
+baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = TRUE){
   
   ar = floor(ar)
   
@@ -145,7 +146,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
   #function to move a breakpoint within a small user-defined neighborhood
-barJiggle<-function(percent, k_ends){
+  barJiggle<-function(percent, k_ends){
   
   k = k_ends[c(-1,-length(k_ends))]
   random_num = sample(1:length(k), 1)
@@ -306,11 +307,13 @@ barJiggle<-function(percent, k_ends){
   
   #initializing matrices/storage objects for final Metropolis-Hasting
   all_k_best = matrix(NA, nrow=1, ncol=(n/3))
-  bar_v = 0
-  bar_beta = 0
-  fit = 0
-  all_fits = data.frame()
-  all_MSE = data.frame()
+  if(fit_storage == TRUE){
+  	bar_v = 0
+  	bar_beta = 0
+  	fit = 0
+	all_fits = data.frame()
+  	all_MSE = data.frame()
+  }
   all_BIC = data.frame()
   accept_count = 0
   
@@ -326,27 +329,29 @@ barJiggle<-function(percent, k_ends){
   jiggle.accept.count <<- 0
   
   #setting up priors for beta draws
-  alt_arima<-function(full_data, ar){
-  	tryCatch(arima(full_data[,2], method="ML", order=c(ar,0,0)), error = function(e) arima(full_data[,2], method="CSS", order=c(ar,0,0)))
-  }
-  model = alt_arima(full_data, ar)
-  fisher = solve(model$var.coef)
-  smiley = n * fisher
+  if(fit_storage == TRUE){
+  	alt_arima<-function(full_data, ar){
+  		tryCatch(arima(full_data[,2], method="ML", order=c(ar,0,0)), error = function(e) arima(full_data[,2], method="CSS", order=c(ar,0,0)))
+  	}
+  	model = alt_arima(full_data, ar)
+  	fisher = solve(model$var.coef)
+  	smiley = n * fisher
 
-  coef_list = model$coef[[length(model$coef)]]
+  	coef_list = model$coef[[length(model$coef)]]
 
-  for(a in 1:(length(model$coef)-1)){
+  	for(a in 1:(length(model$coef)-1)){
 
-  	coef_list = c(coef_list, model$coef[[a]], recursive=T)
+  		coef_list = c(coef_list, model$coef[[a]], recursive=T)
 
-  }
+  	}
   
-  b_0 = matrix(coef_list,(ar+1),1) #matrix of beta means for posterior draw
-  B_0 = smiley #variance-covariance matrix for posterior draw
+  	b_0 = matrix(coef_list,(ar+1),1) #matrix of beta means for posterior draw
+  	B_0 = smiley #variance-covariance matrix for posterior draw
 
-  #beta and sigma draw
-  post_beta_list = data.frame(Empty=rep(NA,(ar+1)))
-  post_sigma_list = data.frame(Empty=NA)
+  	#beta and sigma draw
+  	post_beta_list = data.frame(Empty=rep(NA,(ar+1)))
+  	post_sigma_list = data.frame(Empty=NA)
+  }
   
   #getting constants for qs for final Metropolis-Hasting
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
@@ -408,64 +413,66 @@ barJiggle<-function(percent, k_ends){
     #setting up posterior
     
     ##loop through the k_ends to find the intervals
-    fit = NULL
-    squared_resids = NULL
-    current_post_betas = NULL
-    current_post_sigmas = NULL
-    for(m in 2:length(k_ends)) {
-      len = length(k_ends)
-      if(m > 2){
-        min = k_ends[m-1]+1
-      }else{
-        min = k_ends[m-1]
-      }
-      y_tp_values = NULL
-      for(a in 1:ar){
-        current_y_tp_values = full_data[c((min+ar-a):(k_ends[[m]]-ar+(ar-a))),2]
-        y_tp_length <<- length(current_y_tp_values)
-        y_tp_values = c(y_tp_values, current_y_tp_values, recursive=T)
-      }
-      x_j = matrix(c( rep(1, each=y_tp_length), y_tp_values, recursive=T), nrow=y_tp_length, ncol=(ar+1))
-      y_j = full_data[c((min+ar):k_ends[[m]]),2] #getting the y values in the interval
-      sigma = sd(y_j)
+    if(fit_storage == TRUE){
+    	fit = NULL
+    	squared_resids = NULL
+    	current_post_betas = NULL
+    	current_post_sigmas = NULL
+    	for(m in 2:length(k_ends)) {
+      	len = length(k_ends)
+      	if(m > 2){
+        		min = k_ends[m-1]+1
+      	}else{
+        		min = k_ends[m-1]
+      	}
+      	y_tp_values = NULL
+      	for(a in 1:ar){
+        		current_y_tp_values = full_data[c((min+ar-a):(k_ends[[m]]-ar+(ar-a))),2]
+        		y_tp_length <<- length(current_y_tp_values)
+        		y_tp_values = c(y_tp_values, current_y_tp_values, recursive=T)
+      	}
+      	x_j = matrix(c( rep(1, each=y_tp_length), y_tp_values, recursive=T), nrow=y_tp_length, ncol=(ar+1))
+      	y_j = full_data[c((min+ar):k_ends[[m]]),2] #getting the y values in the interval
+      	sigma = sd(y_j)
       
-      #bar_v
-      v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
-      #bar_beta 
-      beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
+      	#bar_v
+      	v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
+      	#bar_beta 
+      	beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
       
-      predicted_x = x_j %*% beta
-	fit = c(fit, c(rep(NA, ar), predicted_x, recursive=T), recursive=T)
-      squared_resid = (predicted_x - y_j)^2
-      squared_resids = c(squared_resids, squared_resid, recursive=T)
+      	predicted_x = x_j %*% beta
+		fit = c(fit, c(rep(NA, ar), predicted_x, recursive=T), recursive=T)
+      	squared_resid = (predicted_x - y_j)^2
+      	squared_resids = c(squared_resids, squared_resid, recursive=T)
       
-      #drawing a random variable from a multivariate normal pdf 
-      post_beta = mvrnorm(1, beta, v)
+      	#drawing a random variable from a multivariate normal pdf 
+      	post_beta = mvrnorm(1, beta, v)
       
-      bar_v = c(bar_v, v)
-      bar_beta = c(bar_beta, beta)
+      	bar_v = c(bar_v, v)
+      	bar_beta = c(bar_beta, beta)
       
-      #SIGMA:
-      v0 = (max(k_ends))/2 + 2
-      d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
+      	#SIGMA:
+      	v0 = (max(k_ends))/2 + 2
+      	d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
       
-      sigma = rgamma(1, v0, rate = d0)
-      post_sigma = 1 / sigma
+      	sigma = rgamma(1, v0, rate = d0)
+      	post_sigma = 1 / sigma
       
-      current_post_betas = cbind(current_post_betas, post_beta)
-      current_post_sigmas = cbind(current_post_sigmas, post_sigma)
+      	current_post_betas = cbind(current_post_betas, post_beta)
+      	current_post_sigmas = cbind(current_post_sigmas, post_sigma)
       
-      if(m == len ) {
-        MSE = mean(squared_resids)
-	  all_fits = rbind(all_fits, fit)
-        all_MSE = rbind(all_MSE, MSE)
-        current_post_betas = as.data.frame(current_post_betas)
-        colnames(current_post_betas) = c(1:ncol(current_post_betas))
-        post_beta_list = cbind(post_beta_list, current_post_betas)
-        colnames(current_post_sigmas) = c(1:ncol(current_post_sigmas))
-        post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
-      }
-    }
+      	if(m == len ) {
+        		MSE = mean(squared_resids)
+	 	 	all_fits = rbind(all_fits, fit)
+        		all_MSE = rbind(all_MSE, MSE)
+        		current_post_betas = as.data.frame(current_post_betas)
+        		colnames(current_post_betas) = c(1:ncol(current_post_betas))
+        		post_beta_list = cbind(post_beta_list, current_post_betas)
+        		colnames(current_post_sigmas) = c(1:ncol(current_post_sigmas))
+        		post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
+      	}
+    	}
+  }
 
   if(progress == TRUE){    
     setTxtProgressBar(sample_progress, i)
@@ -477,30 +484,24 @@ barJiggle<-function(percent, k_ends){
  	writeLines("\n")
   }
   
-  #cleaning up the matrices 
+  #cleaning up the matrices and counts
   all_k_best = all_k_best[-1,colSums(is.na(all_k_best))<nrow(all_k_best)]
   clean_max = max(all_k_best[1,], na.rm=TRUE)
   all_k_best = ifelse(all_k_best == clean_max,NA,all_k_best)
   all_k_best = data.frame(all_k_best[,c(-1,-ncol(all_k_best))], row.names=NULL)
-  post_beta_list = post_beta_list[,-1]
-  post_sigma_list = post_sigma_list[,-1]
-  
-  colnames(all_MSE) = "MSE"
-  colnames(all_BIC) = "BIC"
-  rownames(post_beta_list) = c(seq(0,ar,1)) #FIX HERE
-  rownames(post_beta_list) = paste("B", rownames(post_beta_list), sep = "")
-  rownames(post_sigma_list) = "Sigma"
-  
   final.propose = c(a.count, s.count, m.count, j.count)
   final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
-  
-  #getting distribution of k (number of breakpoints)
-  num_bkpts = list()
-  for(i in 1:iterations){
-    current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
-    num_bkpts = c(num_bkpts, current_k, recursive=T)
-  }
-  
+  colnames(all_BIC) = "BIC"
+
+  #cleaning up beta/sigma draws
+  if(fit_storage == TRUE){
+  	colnames(all_MSE) = "MSE"
+  	post_beta_list = post_beta_list[,-1]
+  	post_sigma_list = post_sigma_list[,-1]
+  	rownames(post_beta_list) = c(seq(0,ar,1))
+  	rownames(post_beta_list) = paste("B", rownames(post_beta_list), sep = "")
+  	rownames(post_sigma_list) = "Sigma"
+
   split_num = NULL #initializing
   
   for(i in 2:ncol(post_beta_list)){ #detecting where to split up columns in beta/sigma object
@@ -548,14 +549,29 @@ barJiggle<-function(percent, k_ends){
   }
   
   post_sigma_list = final_sigma_list #saving final version of sigma object
-  
+
+  }
+
+  #getting distribution of k (number of breakpoints)
+  num_bkpts = list()
+  for(i in 1:iterations){
+    current_k = length(all_k_best[i,][!is.na(all_k_best[i,])])
+    num_bkpts = c(num_bkpts, current_k, recursive=T)
+  }
+
+
+  if(fit_storage == TRUE){    
   final_list = list(accept_count / iterations, final.propose, final.accept, all_MSE, all_BIC, all_k_best, num_bkpts, post_beta_list, post_sigma_list, all_fits)
   names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "Beta", "Sigma", "Fits")
-  
+  }else{
+  final_list = list(accept_count / iterations, final.propose, final.accept, all_BIC, all_k_best, num_bkpts)  
+  names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "BIC", "Breakpoints", "NumBkpts")
+  }
+
   return(final_list)
 }
 
 #calling the function
 #test_data = test_data_11()
 #bkpts = breakpoints(test_data[,2]~test_data[,1])
-#current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 10, 2, jump=0.25, ar=1, progress=T)
+#current_result = baar(bkpts$breakpoints, test_data[,1], test_data[,2], 100, 2, jump=0.25, ar=1, progress=T, fit_storage=T)
