@@ -45,5 +45,5 @@ all$AcceptedSteps / 5000
 all_data3 = readRDS("data3_alljump.RData")
 
 all_data3$AcceptRate
-all_data3$AcceptedSteps / 5000
+all_data3$AcceptedSteps / all_data3$ProposedSteps
 
