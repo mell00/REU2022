@@ -404,14 +404,15 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       bic = (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
     }
     
-		if((length(k_ends)-2) > ncol(all_k_best)){
+		k = k_ends[c(-1,-length(k_ends))]
+		if(length(k) > ncol(all_k_best)){
 			all_k_best = cbind(all_k_best, rep(NA,nrow(all_k_best)))
-    			all_k_best = rbind(all_k_best, k_ends[c(-1,-length(k_ends))])
-		}else if((length(k_ends)-2) < ncol(all_k_best)){
-			k = c(k_ends[c(-1,-length(k_ends))], rep(NA, (ncol(all_k_best)-length(k_ends)+2)), recursive=T)
+    			all_k_best = rbind(all_k_best, k)
+		}else if(length(k) < ncol(all_k_best)){
+			k = c(k, rep(NA, (ncol(all_k_best)-length(k))), recursive=T)
     			all_k_best = rbind(all_k_best, k)
 		}else{
-    			all_k_best = rbind(all_k_best, k_ends[c(-1,-length(k_ends))])
+    			all_k_best = rbind(all_k_best, k)
 		}
 		all_BIC = rbind(all_BIC, bic)
     
@@ -574,5 +575,5 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_11()
-#current_result = baar(NA, test_data[,1], test_data[,2], 200, 200, jump=0.25, ar=1, progress=T, fit_storage=F)
+#test_data = test_data_3()
+#current_result = baar(45, test_data[,1], test_data[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
