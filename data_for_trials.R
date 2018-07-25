@@ -231,5 +231,18 @@ test_data_3 = function(){
   return(test_data_300)
 }
 
+test_data_44 = function(){
+  first = rnorm(100, mean = 10, sd = 5) 
+  second = rnorm(100, mean = 20, sd = 5) 
+  third = rnorm(100, mean = 30, sd = 5) 
+  data_44 = c(first, second,third) 
+  time = c(1:300)
+  test_data_44 = data.frame(time, data_44)
+  return(test_data_44)
+}
 
+
+set.seed(1)
 plot(test_data_300, main = "One Break with High Variance", xlab="Time", ylab="Dependent Variable", pch=16)
+
+

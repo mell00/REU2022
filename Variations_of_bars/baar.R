@@ -577,3 +577,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 #calling the function
 #test_data = test_data_3()
 #current_result = baar(45, test_data[,1], test_data[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
+
+#For results section of paper 
+#current_result = baar(c(100,200), test_data_44[,1], test_data_44[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)

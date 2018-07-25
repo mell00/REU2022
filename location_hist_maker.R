@@ -15,4 +15,6 @@ if(is.atomic(current_result$Breakpoints) == T){
 
 finbkpts = finbkpts+offset
 
-hist(finbkpts, xlim=c(0,90), breaks=seq(1.5,89.5,1), ylim=c(0,10000), xaxp=c(0, 90, 10), right=F, xlab="Time", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Locations", col="#006e82")
+hist(finbkpts, breaks = c(1:300), xlim=c(0,300), ylim=c(0,10000), right=F, xlab="Time", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Locations", col="#006e82")
+
+#xaxp=c(0, 90, 10)
