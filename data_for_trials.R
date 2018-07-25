@@ -46,6 +46,7 @@ test_data_3 = data.frame(time, data_3)
 return(test_data_3)
 }
 
+
 #----------------FOUR---------------- (messy sd 2 breaks)
 test_data_4 = function(){
 first = rnorm(30, mean = 5, sd = 6) 
@@ -226,6 +227,9 @@ test_data_3 = function(){
   data_300 = c(first, second) 
   time = c(1:200)
   test_data_300 = data.frame(time, data_300)
-  plot(test_data_300)
+  #plot(test_data_300)
   return(test_data_300)
 }
+
+
+plot(test_data_300, main = "One Break with High Variance", xlab="Time", ylab="Dependent Variable", pch=16)
