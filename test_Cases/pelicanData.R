@@ -16,8 +16,8 @@ BIC(arima(pelican$NumberByPartyHours, order=c(3,0,0)))
 pelican_bkpts<-bai_perron.ar(pelican$Count_yr, pelican$NumberByPartyHours, order=3, max_breaks=1)
 pelican_bkpts<-breakpoints(pelican$NumberByPartyHours~pelican$Count_yr)
 
-pelican_result<-baar(pelican_bkpts$Breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25, ar=3)
-pelican_result<-balr(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25)
+#pelican_result<-baar(pelican_bkpts$Breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25, ar=3)
+#pelican_result<-balr(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25)
 #saveRDS(pelican_result, file="casestudy_data.RData")
 
 pelican_result<-readRDS("casestudy_data.RData")
@@ -42,9 +42,12 @@ pelican_finbkpts = pelican_finbkpts+1937
 hist(pelican_result$NumBkpts, breaks=c(0.5,1.5,2.5), xlim=c(0.5,2.5), ylim=c(0,10000), right=F, xlab="Number of Breaks", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Number", col="#aa0a3c")
 hist(pelican_finbkpts, breaks=seq(1938.5,2016.5,1), xlim=c(1940,2015), xaxp=c(1940, 2015, 5), ylim=c(0,10000), right=F, xlab="Year", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Locations", col="#aa0a3c")
 
+beta_to_use = pelican_result$Beta[which(pelican_result$Breakpoints[,1] == 11 & pelican_result$NumBkpts == 1)]
+sigma_to_use = pelican_result$Sigma[which(pelican_result$Breakpoints[,1] == 11 & pelican_result$NumBkpts == 1)]
+fits_to_use = pelican_result$Fits[which(pelican_result$Breakpoints[,1] == 11 & pelican_result$NumBkpts == 1),]
+
 plot(pelican$NumberByPartyHours~pelican$Count_yr, col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="B. Pacific Brown Pelican Population: Fit from BAAR", xlab="Year", ylab="Individuals per Party Hour")
 lines(pelican$Count_yr, pelican$NumberByPartyHours, col="#aa0a3c")
-fits_to_use = pelican_result$Fits[which(pelican_result$Breakpoints[,1] == 11 & pelican_result$NumBkpts == 1),]
 points(c(1938:1948),colMeans(fits_to_use)[1:11], col="#00a0fa", pch=17)
 lines(c(1938:1948),colMeans(fits_to_use)[1:11], col="#00a0fa", lty=1)
 points(c(1949:2016),colMeans(fits_to_use)[12:79], col="#0ab45a", pch=18)
