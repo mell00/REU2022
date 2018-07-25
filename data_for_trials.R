@@ -242,7 +242,13 @@ test_data_44 = function(){
 }
 
 
+plot(test_data_300, main = "One Break with High Variances", xlab="Time", ylab="Dependent Variable", pch=16)
+
 set.seed(1)
-plot(test_data_300, main = "One Break with High Variance", xlab="Time", ylab="Dependent Variable", pch=16)
+plot(test_data_300, main = "Jiggle Example", xlab="Time", ylab="Dependent Variable", pch=16)
+points(test_data_300[100,1], test_data_300[100,2], col="#006e82", pch=16, cex=3)
+points(test_data_300[99,1], test_data_300[99,2], col="red", pch=16, cex=3)
 
-
+plot(test_data_300, main = "Jump Example", xlab="Time", ylab="Dependent Variable", pch=16)
+points(test_data_300[100,1], test_data_300[100,2], col="#006e82", pch=16, cex=3)
+points(test_data_300[175,1], test_data_300[175,2], col="red", pch=16, cex=3)

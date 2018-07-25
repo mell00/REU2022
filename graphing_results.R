@@ -1,6 +1,6 @@
 current_result <- current_result #EDIT HERE! define name of results you want to work with
-current_data <- test_data[,2] #EDIT HERE! vector of true data points
-color <- "red" #EDIT HERE! color to use for results
+current_data <- test_data_300[,2] #EDIT HERE! vector of true data points
+color <- "#006e82" #EDIT HERE! color to use for results
 
 finbkpts<-NULL
 
@@ -19,7 +19,7 @@ offset <- 0
 finbkpts <- finbkpts+offset
 
 #EDIT HERE! change histogram of breakpoint locations
-hist(finbkpts, ylim=c(0,length(current_result$BIC[,1])), right=F, xlab="Time", ylab="Number of Iterations", main="Distribution of Breakpoint Locations", col=color)
+hist(finbkpts, breaks=c(1:200), xlim = c(1,200), ylim=c(0,length(current_result$BIC[,1])), right=F, xlab="Time", ylab="Number of Iterations", main="Distribution of Breakpoint Locations", col=color)
 
 #EDIT HERE! define which k/tau for mean posterior fit
 bkpt_set <- c(30,60)
