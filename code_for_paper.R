@@ -27,6 +27,8 @@ mean(current_result$BIC[which(current_result$Breakpoints[,1] == 11 & current_res
   #data set with one break
 plot(test_data_300, main = "One Break with High Variances", xlab="Time", ylab="Dependent Variable", pch=16)
 
+####for all the table information look at the file burn_in_analysis_baar
+
 #Data for the tables
 setwd("/Users/Amy/REU2018/test_Cases")
 all_data3 = readRDS("data3_alljump.RData")
