@@ -1,4 +1,5 @@
 current_result <- current_result #EDIT HERE! define name of results you want to work with
+current_data <- test_data[,2] #EDIT HERE! vector of true data points
 color <- "red" #EDIT HERE! color to use for results
 
 finbkpts<-NULL
@@ -17,7 +18,7 @@ if(is.atomic(current_result$Breakpoints) == T){
 offset <- 0
 finbkpts <- finbkpts+offset
 
-#EDIT HERE! change  histogram of breakpoint locations
+#EDIT HERE! change histogram of breakpoint locations
 hist(finbkpts, ylim=c(0,length(current_result$BIC[,1])), right=F, xlab="Time", ylab="Number of Iterations", main="Distribution of Breakpoint Locations", col=color)
 
 #EDIT HERE! define which k/tau for mean posterior fit
@@ -55,5 +56,8 @@ if(length(bkpt_set) > 3){
 
 }
 
-plot(test_data[,2])
+#EDIT HERE! change plot of fitted values
+plot(current_data, xlab="Time", ylab="Responsive Variable")
+lines(current_data)
 points(colMeans(fits_to_use), col=color)
+lines(colMeans(fits_to_use), col=color)
