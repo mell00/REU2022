@@ -444,9 +444,10 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 	#cleaning up beta/sigma draws
 	if(fit_storage == TRUE){
+  		colnames(all_MSE) = "MSE"
+		colnames(all_fits) = c(1:ncol(all_fits))
 		rownames(post_beta_list) = c("B0", "B1")
 		rownames(post_sigma_list) = "Sigma"
-		colnames(all_MSE) = "MSE"
 		post_beta_list = post_beta_list[,-1]
 		post_sigma_list = post_sigma_list[,-1]
 
