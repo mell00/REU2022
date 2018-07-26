@@ -1,3 +1,4 @@
+#make all graphics 1028 642
 
 #For results section of paper (section 3.1)
   #make sure the BAAR function is loaded as well as data 44
@@ -10,17 +11,54 @@ plot(test_data_44, main = "Two Breaks with High Variance", xlab="Time", ylab="De
 hist(current_result$NumBkpts,xlim=c(0,3), breaks = c(0.5,1.5,2.5),xaxp=c(0, 3, 3), xlab="Time", ylab="Number of Iterations (out of 10,000)", main="Distribution of Number of Breakpoints", col="#006e82")
 
 #tau
+current_data <- test_data_44[,2] #EDIT HERE! vector of true data points
+color <- "#006e82" #EDIT HERE! color to use for results
+finbkpts<-NULL
+if(is.atomic(current_result$Breakpoints) == T){
+  finbkpts=na.omit(current_result$Breakpoints)
+}else{
+  for(i in 1:ncol(current_result$Breakpoints)){
+    finbkpts<-c(finbkpts, na.omit(current_result$Breakpoints[,i]), recursive=T)
+  }
+}
+offset <- 0
+finbkpts <- finbkpts+offset
 hist(finbkpts, breaks = c(1:300), xlim=c(0,300), ylim=c(0,10000), right=F, xlab="Time", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Locations", col="#006e82")
 
 #beta and Sigma
 fits_to_use = current_result$Fits[which(current_result$Breakpoints[,1] == 100 & current_result$Breakpoints[,2] == 200 & current_result$NumBkpts == 2),]
+
+
+beta_to_use = current_result$Beta[which(current_result$Breakpoints[,1] == 100 & current_result$Breakpoints[,2] == 200 & current_result$NumBkpts == 2)]
+sigma_to_use = current_result$Sigma[which(current_result$Breakpoints[,1] == 100 & current_result$Breakpoints[,2] == 200 & current_result$NumBkpts == 2)]
+fits_to_use = current_result$Fits[which(current_result$Breakpoints[,1] == 100 & current_result$Breakpoints[,2] == 200 & current_result$NumBkpts == 2),]
+lower = apply(fits_to_use, 2, quantile, probs = 0.025, na.rm = T)
+upper = apply(fits_to_use, 2, quantile, probs = 0.975, na.rm = T)
+
+par(mfrow=c(1,2))
+plot(test_data_44, main = "Simulated Data: BAAR Fits", xlab="Time", ylab="Dependent Variable", pch=16)
 points(c(1:100),colMeans(fits_to_use)[1:100], col="#00a0fa", pch=17)
 lines(c(1:100),colMeans(fits_to_use)[1:100], col="#00a0fa", lty=2)
 points(c(101:200),colMeans(fits_to_use)[101:200], col="#0ab45a", pch=18)
 lines(c(101:200),colMeans(fits_to_use)[101:200], col="#0ab45a", lty=2)
 points(c(201:300),colMeans(fits_to_use)[201:300], col="purple", pch=18)
 lines(c(201:300),colMeans(fits_to_use)[201:300], col="purple", lty=2)
-mean(current_result$BIC[which(current_result$Breakpoints[,1] == 11 & current_result$NumBkpts == 1),])
+
+plot(test_data_44, main = "Simulated Data: BAAR Fits with Quantiles", xlab="Time", ylab="Dependent Variable", pch=16)
+points(c(1:100),colMeans(fits_to_use)[1:100], col="#00a0fa", pch=17)
+lines(c(1:100),colMeans(fits_to_use)[1:100], col="#00a0fa", lty=2)
+points(c(101:200),colMeans(fits_to_use)[101:200], col="#0ab45a", pch=18)
+lines(c(101:200),colMeans(fits_to_use)[101:200], col="#0ab45a", lty=2)
+points(c(201:300),colMeans(fits_to_use)[201:300], col="purple", pch=18)
+lines(c(201:300),colMeans(fits_to_use)[201:300], col="purple", lty=2)
+lines(c(1:100),lower[1:100], col="#00a0fa", lty=3)
+lines(c(101:200),lower[101:200], col="#0ab45a", lty=3)
+lines(c(201:300),lower[201:300], col="purple", lty=3)
+lines(c(1:100),upper[1:100], col="#00a0fa", lty=3)
+lines(c(101:200),upper[101:200], col="#0ab45a", lty=3)
+lines(c(201:300),upper[201:300], col="purple", lty=3)
+
+
 
 
 #(section 3.2)
