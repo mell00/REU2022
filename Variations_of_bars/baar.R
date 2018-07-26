@@ -491,7 +491,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
 	#cleaning up the matrices and counts
-	colnames(all_k_best) = c(1:ncol(all_k_best))  
+	if(length(all_k_best) != 0){
+		colnames(all_k_best) = c(1:ncol(all_k_best))	
+	}
 	final.propose = c(a.count, s.count, m.count, j.count)
 	final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
 	colnames(all_BIC) = "BIC"
@@ -615,8 +617,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-test_data = test_data_0_a()
-current_result = baar(45, test_data[,1], test_data[,2], 1000, 150, jump=0.25, ar=1, progress=T, fit_storage=F)
+#test_data = test_data_0_a()
+#current_result = baar(NA, test_data[,1], test_data[,2], 100, 1, jump=0.25, ar=1, progress=T, fit_storage=F)
 
 #for results section of paper 
 #current_result = baar(c(100), test_data_300[,1], test_data_300[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
