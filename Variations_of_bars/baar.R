@@ -446,13 +446,13 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       	#bar_beta 
       	beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
       
-      	predicted_x = x_j %*% beta
+      	#drawing a random variable from a multivariate normal pdf 
+      	post_beta = mvrnorm(1, beta, v)
+
+      	predicted_x = x_j %*% post_beta
 		fit = c(fit, c(rep(NA, ar), predicted_x, recursive=T), recursive=T)
       	squared_resid = (predicted_x - y_j)^2
       	squared_resids = c(squared_resids, squared_resid, recursive=T)
-      
-      	#drawing a random variable from a multivariate normal pdf 
-      	post_beta = mvrnorm(1, beta, v)
       
       	bar_v = c(bar_v, v)
       	bar_beta = c(bar_beta, beta)
@@ -578,6 +578,5 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 #test_data = test_data_3()
 #current_result = baar(45, test_data[,1], test_data[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
 
-#For results section of paper 
-current_result = baar(c(100), test_data_300[,1], test_data_300[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
-
+#for results section of paper 
+#current_result = baar(c(100), test_data_300[,1], test_data_300[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)

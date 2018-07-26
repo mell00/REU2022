@@ -391,12 +391,12 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
 				#bar_beta 
 				beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
-
-				predicted_x = x_j %*% beta
-				fit = c(fit, predicted_x)
       
 				#drawing a random variable from a multivariate normal pdf 
   				post_beta = mvrnorm(1, beta, v)
+
+				predicted_x = x_j %*% post_beta
+				fit = c(fit, predicted_x)
       
 				bar_v = c(bar_v, v)
 				bar_beta = c(bar_beta, beta)
@@ -516,5 +516,5 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_2()
-#current_result = balr(NA, test_data[,1], test_data[,2], 200, 200, progress=T, fit_storage=F)
+#test_data = test_data_4()
+#current_result = balr(c(30,60), test_data[,1], test_data[,2], 100, 2, progress=T, fit_storage=T)

@@ -1,26 +1,24 @@
 setwd("/Users/sarah/REU2018/test_Cases")
 pelican<-read.csv("pacificBrownPelican.csv")
 pelican<-pelican[-which(pelican$NumberByPartyHours == 0),]
+pelican$Count_yr = pelican$Count_yr + 1899
 
 cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be')
 
-pelican$Count_yr = pelican$Count_yr + 1899
-par(mfrow=c(1,2))
-plot(pelican$NumberByPartyHours~pelican$Count_yr, col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="A. Pacific Brown Pelican Population: Single AR(3) Fit", xlab="Year", ylab="Individuals per Party Hour")
-lines(pelican$Count_yr, pelican$NumberByPartyHours, col="#aa0a3c")
 library("forecast")
-points(c(1938:2016), fitted(arima(pelican$NumberByPartyHours, order=c(3,0,0))), col="#8214a0", pch=15)
-lines(c(1938:2016), fitted(arima(pelican$NumberByPartyHours, order=c(3,0,0))), col="#8214a0", lty=1)
-BIC(arima(pelican$NumberByPartyHours, order=c(3,0,0)))
+single_model <- arima(pelican$NumberByPartyHours, order=c(3,0,0))
+single_fitted <- fitted(single_model)
+single_BIC <- BIC(single_model)
 
 pelican_bkpts<-bai_perron.ar(pelican$Count_yr, pelican$NumberByPartyHours, order=3, max_breaks=1)
 pelican_bkpts<-breakpoints(pelican$NumberByPartyHours~pelican$Count_yr)
 
-#pelican_result<-baar(pelican_bkpts$Breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25, ar=3)
+pelican_result<-baar(pelican_bkpts$Breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25, ar=3)
 #pelican_result<-balr(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25)
-#saveRDS(pelican_result, file="casestudy_data.RData")
+#saveRDS(pelican_result, file="casestudy_data2.RData")
 
-pelican_result<-readRDS("casestudy_data.RData")
+#pelican_result<-readRDS("casestudy_data.RData")
+pelican_result<-readRDS("casestudy_data2.RData")
 length(which(pelican_result$Breakpoints[,1] == 11)) +
 length(which(pelican_result$Breakpoints[,1] == 12)) +
 length(which(pelican_result$Breakpoints[,1] == 13)) +
@@ -46,15 +44,23 @@ beta_to_use = pelican_result$Beta[which(pelican_result$Breakpoints[,1] == 11 & p
 sigma_to_use = pelican_result$Sigma[which(pelican_result$Breakpoints[,1] == 11 & pelican_result$NumBkpts == 1)]
 fits_to_use = pelican_result$Fits[which(pelican_result$Breakpoints[,1] == 11 & pelican_result$NumBkpts == 1),]
 
-plot(pelican$NumberByPartyHours~pelican$Count_yr, col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="B. Pacific Brown Pelican Population: Fit from BAAR", xlab="Year", ylab="Individuals per Party Hour")
+lower = apply(fits_to_use, 2, quantile, probs = 0.025, na.rm = T)
+upper = apply(fits_to_use, 2, quantile, probs = 0.975, na.rm = T)
+
+par(mfrow=c(1,2))
+plot(pelican$NumberByPartyHours~pelican$Count_yr, ylim=c(-1,2.5), col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="A. Pacific Brown Pelican Population: Single AR(3) Fit", xlab="Year", ylab="Individuals per Party Hour")
+lines(pelican$Count_yr, pelican$NumberByPartyHours, col="#aa0a3c")
+points(c(1938:2016), single_fitted, col="#8214a0", pch=15)
+lines(c(1938:2016), single_fitted, col="#8214a0", lty=1)
+
+plot(pelican$NumberByPartyHours~pelican$Count_yr, ylim=c(-1,2.5), col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="B. Pacific Brown Pelican Population: Fit from BAAR", xlab="Year", ylab="Individuals per Party Hour")
 lines(pelican$Count_yr, pelican$NumberByPartyHours, col="#aa0a3c")
 points(c(1938:1948),colMeans(fits_to_use)[1:11], col="#00a0fa", pch=17)
 lines(c(1938:1948),colMeans(fits_to_use)[1:11], col="#00a0fa", lty=1)
 points(c(1949:2016),colMeans(fits_to_use)[12:79], col="#0ab45a", pch=18)
 lines(c(1949:2016),colMeans(fits_to_use)[12:79], col="#0ab45a", lty=1)
-lower = apply(fits_to_use, 2, quantile, probs = 0.025, na.rm = T)
-upper = apply(fits_to_use, 2, quantile, probs = 0.975, na.rm = T)
 lines(c(1938:1948),lower[1:11], col="#00a0fa", lty=3)
 lines(c(1949:2016),lower[12:79], col="#0ab45a", lty=3)
 lines(c(1938:1948),upper[1:11], col="#00a0fa", lty=3)
 lines(c(1949:2016),upper[12:79], col="#0ab45a", lty=3)
+
