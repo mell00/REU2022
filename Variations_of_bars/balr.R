@@ -462,15 +462,35 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 			if(i == 1){ #betas from first run
 				final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
-				colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				if(is.atomic(final_beta_list[[i]]) == T){
+					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					colnames(final_beta_list[[i]]) = 1
+				}else{
+					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				}
 			}else if(i < length(split_num)){# betas from middle runs
 				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-				colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				if(is.atomic(final_beta_list[[i]]) == T){
+					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					colnames(final_beta_list[[i]]) = 1
+				}else{
+					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				}
 			}else{ #betas from penultimate and final runs
 				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-				colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				if(is.atomic(final_beta_list[[i]]) == T){
+					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					colnames(final_beta_list[[i]]) = 1
+				}else{
+					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				}
 				final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
-				colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
+				if(is.atomic(final_beta_list[[i+1]]) == T){
+					final_beta_list[[i+1]] = as.data.frame(final_beta_list[[i+1]])
+					colnames(final_beta_list[[i+1]]) = 1
+				}else{
+					colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
+				}
 			} 
 		}
 
@@ -482,15 +502,35 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 			if(i == 1){ #sigmas from first run
 				final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
-				colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				if(is.atomic(final_sigma_list[[i]]) == T){
+					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					colnames(final_sigma_list[[i]]) = 1
+				}else{
+					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				}
 			}else if(i < length(split_num)){# sigmas from middle runs
 				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-				colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				if(is.atomic(final_sigma_list[[i]]) == T){
+					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					colnames(final_sigma_list[[i]]) = 1
+				}else{
+					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				}
 			}else{ #sigma from penultimate and final runs
 				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-				colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				if(is.atomic(final_sigma_list[[i]]) == T){
+					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					colnames(final_sigma_list[[i]]) = 1
+				}else{
+					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				}
 				final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
-				colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
+				if(is.atomic(final_sigma_list[[i+1]]) == T){
+					final_sigma_list[[i+1]] = as.data.frame(final_sigma_list[[i+1]])
+					colnames(final_sigma_list[[i+1]]) = 1
+				}else{
+					colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
+				}
 			} 
 		}
 
@@ -516,5 +556,5 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_4()
-#current_result = balr(c(30,60), test_data[,1], test_data[,2], 100, 2, progress=T, fit_storage=T)
+test_data = test_data_0_a()
+current_result = balr(30, test_data[,1], test_data[,2], 100, 2, progress=T, fit_storage=T)

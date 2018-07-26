@@ -513,45 +513,85 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     }
   }
   
-  final_beta_list = list() #initializing
-  
-  for(i in 1:length(split_num)){ #splitting up columns in beta object
-    
-    if(i == 1){ #betas from first run
-      final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
-      colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-    }else if(i < length(split_num)){# betas from middle runs
-      final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-    }else{ #betas from penultimate and final runs
-      final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-      final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
-      colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
-    } 
-  }
-  
-  post_beta_list = final_beta_list #saving final version of beta object
-  
-  final_sigma_list = list() #initializing
-  
-  for(i in 1:length(split_num)){ #splitting up columns in sigma object
-    
-    if(i == 1){ #sigmas from first run
-      final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
-      colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-    }else if(i < length(split_num)){# sigmas from middle runs
-      final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-    }else{ #sigma from penultimate and final runs
-      final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-      colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-      final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
-      colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
-    } 
-  }
-  
-  post_sigma_list = final_sigma_list #saving final version of sigma object
+		final_beta_list = list() #initializing
+
+		for(i in 1:length(split_num)){ #splitting up columns in beta object
+
+			if(i == 1){ #betas from first run
+				final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
+				if(is.atomic(final_beta_list[[i]]) == T){
+					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					colnames(final_beta_list[[i]]) = 1
+				}else{
+					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				}
+			}else if(i < length(split_num)){# betas from middle runs
+				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
+				if(is.atomic(final_beta_list[[i]]) == T){
+					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					colnames(final_beta_list[[i]]) = 1
+				}else{
+					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				}
+			}else{ #betas from penultimate and final runs
+				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
+				if(is.atomic(final_beta_list[[i]]) == T){
+					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					colnames(final_beta_list[[i]]) = 1
+				}else{
+					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
+				}
+				final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
+				if(is.atomic(final_beta_list[[i+1]]) == T){
+					final_beta_list[[i+1]] = as.data.frame(final_beta_list[[i+1]])
+					colnames(final_beta_list[[i+1]]) = 1
+				}else{
+					colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
+				}
+			} 
+		}
+
+		post_beta_list = final_beta_list #saving final version of beta object
+
+		final_sigma_list = list() #initializing
+
+		for(i in 1:length(split_num)){ #splitting up columns in sigma object
+
+			if(i == 1){ #sigmas from first run
+				final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
+				if(is.atomic(final_sigma_list[[i]]) == T){
+					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					colnames(final_sigma_list[[i]]) = 1
+				}else{
+					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				}
+			}else if(i < length(split_num)){# sigmas from middle runs
+				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
+				if(is.atomic(final_sigma_list[[i]]) == T){
+					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					colnames(final_sigma_list[[i]]) = 1
+				}else{
+					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				}
+			}else{ #sigma from penultimate and final runs
+				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
+				if(is.atomic(final_sigma_list[[i]]) == T){
+					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					colnames(final_sigma_list[[i]]) = 1
+				}else{
+					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
+				}
+				final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
+				if(is.atomic(final_sigma_list[[i+1]]) == T){
+					final_sigma_list[[i+1]] = as.data.frame(final_sigma_list[[i+1]])
+					colnames(final_sigma_list[[i+1]]) = 1
+				}else{
+					colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
+				}
+			} 
+		}
+
+		post_sigma_list = final_sigma_list #saving final version of sigma object
 
   }
 
@@ -575,8 +615,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_3()
-#current_result = baar(45, test_data[,1], test_data[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
+test_data = test_data_0_a()
+current_result = baar(45, test_data[,1], test_data[,2], 1000, 150, jump=0.25, ar=1, progress=T, fit_storage=F)
 
 #for results section of paper 
 #current_result = baar(c(100), test_data_300[,1], test_data_300[,2], 10000, 1500, jump=0.25, ar=1, progress=T, fit_storage=F)
