@@ -524,6 +524,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
 				if(is.atomic(final_beta_list[[i]]) == T){
 					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					rownames(final_beta_list[[i]]) = rownames(post_beta_list)
 					colnames(final_beta_list[[i]]) = 1
 				}else{
 					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
@@ -532,6 +533,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
 				if(is.atomic(final_beta_list[[i]]) == T){
 					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					rownames(final_beta_list[[i]]) = rownames(post_beta_list)
 					colnames(final_beta_list[[i]]) = 1
 				}else{
 					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
@@ -540,6 +542,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
 				if(is.atomic(final_beta_list[[i]]) == T){
 					final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
+					rownames(final_beta_list[[i]]) = rownames(post_beta_list)
 					colnames(final_beta_list[[i]]) = 1
 				}else{
 					colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
@@ -547,6 +550,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
 				if(is.atomic(final_beta_list[[i+1]]) == T){
 					final_beta_list[[i+1]] = as.data.frame(final_beta_list[[i+1]])
+					rownames(final_beta_list[[i+1]]) = rownames(post_beta_list)
 					colnames(final_beta_list[[i+1]]) = 1
 				}else{
 					colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
@@ -564,6 +568,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
 				if(is.atomic(final_sigma_list[[i]]) == T){
 					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					rownames(final_sigma_list[[i]]) = rownames(post_sigma_list)
 					colnames(final_sigma_list[[i]]) = 1
 				}else{
 					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
@@ -572,6 +577,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
 				if(is.atomic(final_sigma_list[[i]]) == T){
 					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					rownames(final_sigma_list[[i]]) = rownames(post_sigma_list)
 					colnames(final_sigma_list[[i]]) = 1
 				}else{
 					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
@@ -580,6 +586,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
 				if(is.atomic(final_sigma_list[[i]]) == T){
 					final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
+					rownames(final_sigma_list[[i]]) = rownames(post_sigma_list)
 					colnames(final_sigma_list[[i]]) = 1
 				}else{
 					colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
@@ -587,6 +594,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 				final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
 				if(is.atomic(final_sigma_list[[i+1]]) == T){
 					final_sigma_list[[i+1]] = as.data.frame(final_sigma_list[[i+1]])
+					rownames(final_sigma_list[[i+1]]) = rownames(post_sigma_list)
 					colnames(final_sigma_list[[i+1]]) = 1
 				}else{
 					colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
@@ -619,4 +627,4 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 
 #calling the function
 #test_data = test_data_0_a()
-#current_result = baar(NA, test_data[,1], test_data[,2], 100, 1, jump=0.25, ar=1, progress=T, fit_storage=T)
+#current_result = baar(NA, test_data[,1], test_data[,2], 5, 1, jump=0.25, ar=1, progress=T, fit_storage=T)
