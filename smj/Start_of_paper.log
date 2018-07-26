@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  24 JUL 2018 11:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 JUL 2018 10:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -286,25 +286,28 @@ LaTeX Info: Redefining \cite on input line 694.
 )
 \c@AffilCount=\count117
 )
-(./Start_of_paper.aux)
+(./Start_of_paper.aux
+
+LaTeX Warning: Label `Pelican Move Simulation Results' multiply defined.
+
+)
 \openout1 = `Start_of_paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 136.
-LaTeX Font Info:    ... okay on input line 136.
-
-(/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 132.
+LaTeX Font Info:    ... okay on input line 132.
+ (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count118
 \scratchdimen=\dimen120
@@ -335,7 +338,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 \AtBeginShipoutBox=\box30
-Package hyperref Info: Link coloring ON on input line 136.
+Package hyperref Info: Link coloring ON on input line 132.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -345,25 +348,25 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count124
 )
-LaTeX Info: Redefining \ref on input line 136.
-LaTeX Info: Redefining \pageref on input line 136.
-LaTeX Info: Redefining \nameref on input line 136.
+LaTeX Info: Redefining \ref on input line 132.
+LaTeX Info: Redefining \pageref on input line 132.
+LaTeX Info: Redefining \nameref on input line 132.
 
 (./Start_of_paper.out) (./Start_of_paper.out)
 \@outlinefile=\write4
 \openout4 = `Start_of_paper.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 142.
+LaTeX Font Info:    Try loading font information for U+msa on input line 138.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 142.
+LaTeX Font Info:    Try loading font information for U+msb on input line 138.
 
 (/usr/local/texlive/2017/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (13.31604pt too wide) in paragraph at lines 142--142
+Overfull \hbox (13.31604pt too wide) in paragraph at lines 138--138
 \OT1/cmr/bx/n/12 Ad-dress for cor-re-spon-dence: \OT1/cmr/m/n/12 Jef-frey Lieb-
 ner, De-part-ment of Math-e-mat-ics, Lafayette
  []
@@ -371,16 +374,6 @@ ner, De-part-ment of Math-e-mat-ics, Lafayette
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Missing character: There is no ‚ in font cmr12!
-Missing character: There is no Ä in font cmr12!
-Missing character: There is no ô in font cmr12!
-Missing character: There is no ‚ in font cmr12!
-Missing character: There is no Ä in font cmr12!
-Missing character: There is no ô in font cmr12!
-
-Underfull \vbox (badness 5345) has occurred while \output is active []
-
-
 Overfull \hbox (5.87494pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 2 []
  []
@@ -404,71 +397,60 @@ Overfull \hbox (5.87494pt too wide) has occurred while \output is active
  []
 
 [5]
+Underfull \vbox (badness 5446) has occurred while \output is active []
+
+
 Overfull \hbox (5.87494pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 6 []
  []
 
 [6]
-Missing character: There is no ‚ in font cmr12!
-Missing character: There is no Ä in font cmr12!
-Missing character: There is no ¶ in font cmr12!
-Missing character: There is no ‚ in font cmr12!
-Missing character: There is no Ä in font cmr12!
-Missing character: There is no ¶ in font cmr12!
-
 Overfull \hbox (5.87494pt too wide) has occurred while \output is active
 [] \OT1/cmr/m/n/12 7
  []
 
 [7]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 255.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\beta' on input line 255.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 255.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 255.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\sigma' on input line 255.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 255.
-
+Missing character: There is no ‚ in font cmr12!
+Missing character: There is no Ä in font cmr12!
+Missing character: There is no ¶ in font cmr12!
+Missing character: There is no ‚ in font cmr12!
+Missing character: There is no Ä in font cmr12!
+Missing character: There is no ¶ in font cmr12!
 
 Overfull \hbox (5.87494pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 8 []
  []
 
 [8]
-Overfull \hbox (5.00323pt too wide) in paragraph at lines 291--293
-\OT1/cmr/m/n/12 This re-search was funded by the Na-tional Sci-ence Foun-da-tio
-n, grant num-ber #1650222. 
- []
-
-
 Overfull \hbox (5.87494pt too wide) has occurred while \output is active
 [] \OT1/cmr/m/n/12 9
  []
 
 [9]
-No file Start_of_paper.bbl.
-Missing character: There is no ‚ in font cmti12!
-Missing character: There is no Ä in font cmti12!
-Missing character: There is no ê in font cmti12!
-Missing character: There is no ‚ in font cmti12!
-Missing character: There is no Ä in font cmti12!
-Missing character: There is no ê in font cmti12!
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 263.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\beta' on input line 263.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 263.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 263.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `\sigma' on input line 263.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 263.
+
 
 Overfull \hbox (11.74988pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 10 []
@@ -480,46 +462,162 @@ Overfull \hbox (11.74988pt too wide) has occurred while \output is active
  []
 
 [11]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 382.
+Underfull \vbox (badness 1062) has occurred while \output is active []
+
 
 Overfull \hbox (11.74988pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 12 []
  []
 
 [12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 382.
+Overfull \hbox (49.24191pt too wide) in paragraph at lines 326--345
+ [] 
+ []
+
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+[] \OT1/cmr/m/n/12 13
+ []
+
+[13]
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+\OT1/cmr/m/n/12 14 []
+ []
+
+[14]
+Overfull \hbox (27.35365pt too wide) in paragraph at lines 361--373
+ [] 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+[] \OT1/cmr/m/n/12 15
+ []
+
+[15]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+\OT1/cmr/m/n/12 16 []
+ []
+
+[16]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+[] \OT1/cmr/m/n/12 17
+ []
+
+[17]
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+\OT1/cmr/m/n/12 18 []
+ []
+
+[18]
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+[] \OT1/cmr/m/n/12 19
+ []
+
+[19]
+Overfull \hbox (5.00323pt too wide) in paragraph at lines 452--454
+\OT1/cmr/m/n/12 This re-search was funded by the Na-tional Sci-ence Foun-da-tio
+n, grant num-ber #1650222. 
+ []
+
+No file Start_of_paper.bbl.
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+\OT1/cmr/m/n/12 20 []
+ []
+
+[20]
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no ê in font cmti12!
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no ê in font cmti12!
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+[] \OT1/cmr/m/n/12 21
+ []
+
+[21]
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no ≤ in font cmti12!
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no ≤ in font cmti12!
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+\OT1/cmr/m/n/12 22 []
+ []
+
+[22]
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no ì in font cmti12!
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no î in font cmti12!
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no ì in font cmti12!
+Missing character: There is no ‚ in font cmti12!
+Missing character: There is no Ä in font cmti12!
+Missing character: There is no î in font cmti12!
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 591.
+
+Overfull \hbox (11.74988pt too wide) has occurred while \output is active
+[] \OT1/cmr/m/n/12 23
+ []
+
+[23]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 591.
  (./Start_of_paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 382.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 382.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 591.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 591.
 Package rerunfilecheck Info: File `Start_of_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 2DC3D16D211BB98E1423ACCA250F0A9E;747.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 382.
+(rerunfilecheck)             Checksum: 38E8F9B60414085BDD78FCFE8BD1AF4F;986.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 591.
  ) 
 Here is how much of TeX's memory you used:
- 6954 strings out of 492995
- 99893 string characters out of 6132704
- 192817 words of memory out of 5000000
- 10379 multiletter control sequences out of 15000+600000
+ 7020 strings out of 492995
+ 100790 string characters out of 6132704
+ 201542 words of memory out of 5000000
+ 10417 multiletter control sequences out of 15000+600000
  16953 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 35i,12n,34p,1448b,450s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 35i,12n,34p,1469b,462s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb>
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
-sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
-/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/lo
-cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/loc
-al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/lo
-cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
-al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local
-/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/
-texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/t
-exlive/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Start_of_paper.pdf (12 pages, 169848 bytes).
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/l
+ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/loca
+l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/t
+exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/te
+xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/t
+exlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
+xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texl
+ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texli
+ve/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texliv
+e/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Start_of_paper.pdf (23 pages, 222731 bytes).
 PDF statistics:
- 191 PDF objects out of 1000 (max. 8388607)
- 162 compressed objects within 2 object streams
- 45 named destinations out of 1000 (max. 500000)
- 97 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 281 PDF objects out of 1000 (max. 8388607)
+ 238 compressed objects within 3 object streams
+ 73 named destinations out of 1000 (max. 500000)
+ 129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
