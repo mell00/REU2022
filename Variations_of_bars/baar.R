@@ -339,7 +339,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   	alt_solve<-function(model_coef){
   		tryCatch(solve(model_coef), error = function(e) informationless)
 	}
-  	fisher = alt_solve(model$var.coef)
+  	fisher = suppressWarnings(alt_solve(model$var.coef))
   	smiley = n * fisher
 
   	coef_list = model$coef[[length(model$coef)]]
