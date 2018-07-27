@@ -332,9 +332,14 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   if(fit_storage == TRUE){
   	alt_arima<-function(full_data, ar){
   		tryCatch(arima(full_data[,2], method="ML", order=c(ar,0,0)), error = function(e) arima(full_data[,2], method="CSS", order=c(ar,0,0)))
-  	}
-  	model = alt_arima(full_data, ar)
-  	fisher = solve(model$var.coef)
+	}
+  	model = suppressWarnings(alt_arima(full_data, ar))
+	informationless = matrix(0, ncol=(ar+1), nrow=(ar+1))
+	diag(informationless) = rep(1000, (ar+1))
+  	alt_solve<-function(model_coef){
+  		tryCatch(solve(model_coef), error = function(e) informationless)
+	}
+  	fisher = alt_solve(model$var.coef)
   	smiley = n * fisher
 
   	coef_list = model$coef[[length(model$coef)]]
@@ -626,5 +631,5 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_0_a()
-#current_result = baar(NA, test_data[,1], test_data[,2], 5, 1, jump=0.25, ar=1, progress=T, fit_storage=T)
+#test_data = test_data_44()
+#current_result = baar(NA, test_data[,1], test_data[,2], 50, 50, jump=0.25, ar=1, progress=T, fit_storage=T)
