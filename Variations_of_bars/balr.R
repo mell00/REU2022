@@ -568,5 +568,5 @@ balr = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
 }
 
 #calling the function
-#test_data = test_data_0_a()
-#current_result = balr(NA, test_data[,1], test_data[,2], 5, 1, progress=T, fit_storage=T)
+#test_data = test_data_11()
+#current_result = balr(NA, test_data[,1], test_data[,2], 500, 100, progress=T, fit_storage=T)
