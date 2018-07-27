@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  26 JUL 2018 10:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  27 JUL 2018 01:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -542,6 +542,12 @@ Missing character: There is no  in font cmti12!
 Missing character: There is no â in font cmti12!
 Missing character: There is no € in font cmti12!
 Missing character: There is no  in font cmti12!
+Missing character: There is no â in font cmti12!
+Missing character: There is no € in font cmti12!
+Missing character: There is no ² in font cmti12!
+Missing character: There is no â in font cmti12!
+Missing character: There is no € in font cmti12!
+Missing character: There is no ² in font cmti12!
 
 Overfull \hbox (11.74988pt too wide) has occurred while \output is active
 [] \OT1/cmr/m/n/12 21
@@ -550,19 +556,13 @@ Overfull \hbox (11.74988pt too wide) has occurred while \output is active
 [21]
 Missing character: There is no â in font cmti12!
 Missing character: There is no € in font cmti12!
-Missing character: There is no ² in font cmti12!
-Missing character: There is no â in font cmti12!
-Missing character: There is no € in font cmti12!
-Missing character: There is no ² in font cmti12!
+Missing character: There is no “ in font cmti12!
 
 Overfull \hbox (11.74988pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 22 []
  []
 
 [22]
-Missing character: There is no â in font cmti12!
-Missing character: There is no € in font cmti12!
-Missing character: There is no “ in font cmti12!
 Missing character: There is no â in font cmti12!
 Missing character: There is no € in font cmti12!
 Missing character: There is no ” in font cmti12!
@@ -592,10 +592,10 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 591.
  ) 
 Here is how much of TeX's memory you used:
- 7020 strings out of 492995
- 100790 string characters out of 6132704
- 201542 words of memory out of 5000000
- 10417 multiletter control sequences out of 15000+600000
+ 7008 strings out of 492995
+ 100611 string characters out of 6132704
+ 201421 words of memory out of 5000000
+ 10408 multiletter control sequences out of 15000+600000
  16953 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  35i,12n,34p,1469b,462s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -614,10 +614,10 @@ xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texli
 ve/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texliv
 e/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Start_of_paper.pdf (23 pages, 222731 bytes).
+Output written on Start_of_paper.pdf (23 pages, 221755 bytes).
 PDF statistics:
- 281 PDF objects out of 1000 (max. 8388607)
- 238 compressed objects within 3 object streams
- 73 named destinations out of 1000 (max. 500000)
+ 276 PDF objects out of 1000 (max. 8388607)
+ 233 compressed objects within 3 object streams
+ 70 named destinations out of 1000 (max. 500000)
  129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
