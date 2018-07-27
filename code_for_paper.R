@@ -87,16 +87,12 @@ all_data3$AcceptedSteps / all_data3$ProposedSteps
 plot(test_data_100, main="Eight Breaks with Low Variance" , xlab="Time", ylab="Dependent Variable", pch=16)
 
 
-
 #Case Study 
 setwd("/Users/Amy/REU2018/test_Cases")
 all = readRDS("pelican_alljump.RData")
 all$AcceptRate
 plot(all$AcceptRate)
 all$AcceptedSteps / 5000
-
-
-
 
 
 
