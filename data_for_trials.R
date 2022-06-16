@@ -193,20 +193,20 @@ test_data_44 = function(){
 
 
 #----------------plots of 10 datasets---------------- 
-#par(mfrow=c(3,4))
-#plot(test_data_0_a, main = "0 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_0_b, main = "0 Breaks, High Variance", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_1, main = "1 Break, Low Variance", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_2, main = "2 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_3, main = "1 Break, High Variance", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_4, main = "2 Breaks, High Variance", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_5, main = "1 Break, Big Slopes", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_6, main = "2 Breaks, Big Slopes", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_7, main = "1 Break, Small Slopes", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_8, main = "2 Breaks, Small Slopes", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_9, main = "1 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
-#plot(test_data_10, main = "2 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
-#par(mfrow=c(1,1))
+par(mfrow=c(3,4))
+plot(test_data_0_a(), main = "0 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_0_b(), main = "0 Breaks, High Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_1(), main = "1 Break, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_2(), main = "2 Breaks, Low Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_3(), main = "1 Break, High Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_4(), main = "2 Breaks, High Variance", xlab="Time", ylab="Dependent Variable")
+plot(test_data_5(), main = "1 Break, Big Slopes", xlab="Time", ylab="Dependent Variable")
+plot(test_data_6(), main = "2 Breaks, Big Slopes", xlab="Time", ylab="Dependent Variable")
+plot(test_data_7(), main = "1 Break, Small Slopes", xlab="Time", ylab="Dependent Variable")
+plot(test_data_8(), main = "2 Breaks, Small Slopes", xlab="Time", ylab="Dependent Variable")
+plot(test_data_9(), main = "1 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
+plot(test_data_10(), main = "2 Breaks, Variance Change", xlab="Time", ylab="Dependent Variable")
+par(mfrow=c(1,1))
 
 
 #-------------------plots of climate data ------------------

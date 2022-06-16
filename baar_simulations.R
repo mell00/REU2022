@@ -1,5 +1,17 @@
+# install.packages("devtools")
+# library(devtools)
+# install_version("FitAR", version = "1.94", repos = "http://cran.us.r-project.org")
+library(FitAR)
+
 #Step 1 - define current bar function (if not previously defined in workspace)
 #Step 2 - generate time and data functions (see data_for_trials)
+
+
+setwd("/Users/khaglich/Desktop/Edited REU Main/Variations_of_bars")
+source("baar.R")
+
+setwd("/Users/khaglich/Desktop/Edited REU Main")
+source("data_for_trials.R")
 
 #Step 3 - set up for simulation
 data_fun = test_data_2 #edit here !!! (defines function for generating draws)
@@ -7,7 +19,7 @@ runs = 3
 burn_in = 50
 iterations = 250
 current_bar = baar
-save_name = "baar_data1.RData" #edit here !!! (format: "baar_data#.RData")
+save_name = "KH_check_061222.RData" #edit here !!! (format: "baar_data#.RData")
 make = 0.5
 percent = 0.02
 col_num = 4

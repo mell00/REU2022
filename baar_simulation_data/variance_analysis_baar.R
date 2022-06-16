@@ -1,4 +1,4 @@
-setwd("/Users/sarah/REU2018/baar_simulation_data")
+#setwd("/Users/sarah/REU2018/baar_simulation_data")
 baar_data1_jump0jigg1<-readRDS("baar_data1_jump0jigg1.RData")
 baar_data1_jump2jigg7<-readRDS("baar_data1_jump25jigg75.RData")
 baar_data1_jump5jigg5<-readRDS("baar_data1_jump50jigg50.RData")

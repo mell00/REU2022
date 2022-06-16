@@ -1,3 +1,5 @@
+setwd("/Users/khaglich/Desktop/Edited REU Main/Presentations_Pictures_Old/old_crap/old_simulation_data/Addsub_simulation_data")
+
 #read in all data (set correct working directory prior to this)
 bar0_climate = readRDS("bar0_climate.RData")
 bar1_climate = readRDS("bar1_climate.RData")
@@ -41,6 +43,13 @@ y_upper = 2500
 line_type = 1
 line_width = 2
 
+#Is this supposed to go here?
+# ###specify which simulation you want to look at right now
+# current_sim = bar2_climate$Breakpoints
+# current_title = "bar2 - Climate Data"
+# ###specify correct locations of breakpoints for this training set
+# current_true = c()
+
 ###plot distributions of number of breakpoints
 par(mfrow=c(3,3))
 hist(current_sim[[1]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
@@ -59,10 +68,11 @@ hist(current_sim[[7]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_
 lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
 hist(current_sim[[8]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
 lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
-hist(current_sim[[9]], main=current_title, xlab=x_label, ylab=y_label, breaacceptrate = rbind(acceptrate_bar0, acceptrate_bar1, acceptrate_bar2)
-rownames(acceptrate) = c("bar0", "bar1", "bar2")
-colnames(acceptrate) = c("Mean", "SD")
-round(acceptrate, 5)ks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
+hist(current_sim[[9]], main=current_title, xlab=x_label, ylab=y_label, 
+     breaacceptrate = rbind(acceptrate_bar0, acceptrate_bar1, acceptrate_bar2),
+     rownames(acceptrate) = c("bar0", "bar1", "bar2"),
+     colnames(acceptrate) = c("Mean", "SD"),
+     round(acceptrate, 5), ks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
 lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
 
 #looking at distribution of breakpoint locations (tau)
@@ -140,11 +150,11 @@ plot_tau_hist <- function(breakpoints, title, x_axis_lab, y_axis_lab, color, num
 
 }
 
-###specify which simulation you want to look at right now
-current_sim = bar2_climate$Breakpoints
-current_title = "bar2 - Climate Data"
-###specify correct locations of breakpoints for this training set
-current_true = c()
+# ###specify which simulation you want to look at right now
+# current_sim = bar2_climate$Breakpoints
+# current_title = "bar2 - Climate Data"
+# ###specify correct locations of breakpoints for this training set
+# current_true = c()
 
 ###set graphical parameters
 x_label = "Location of Breakpoints"
@@ -187,3 +197,4 @@ if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_low
 plot_tau_hist(current_sim[[9]], current_title, x_label, y_label, bar_color, n_breaks, x_limits, c(y_lower, y_upper))
 if(length(current_true)>=1){lines(c(current_true[[1]],current_true[[1]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
 if(length(current_true)>=2){lines(c(current_true[[2]],current_true[[2]]),c(y_lower,y_upper),col=line_color, lty=line_type, lwd=line_width)}
+

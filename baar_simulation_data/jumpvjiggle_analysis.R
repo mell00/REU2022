@@ -1,8 +1,5 @@
-setwd("/Users/sarah/REU2018/test_Cases")
-pelican_alljump = readRDS("pelican_alljump.RData")
-setwd("/Users/sarah/REU2018")
-data3_alljump = readRDS("data3_alljump.RData")
 
+data3_alljump = readRDS("data3_alljump.RData")
 alljump = data3_alljump
 
 lim = 500
@@ -32,38 +29,41 @@ main=alljump$JumpProportion[[a]], col="brown")
 
 
 
-library(plyr)
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[1]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
 
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[2]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[3]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[4]][1:500,],.(X1,X2),nrow)
-unique_jump0[which.max(unique_jump0[,3]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[5]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[6]][1:500,],.(X1,X2),nrow)
-unique_jump0[which.max(unique_jump0[,3]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[7]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[8]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[9]][1:500,],.(X1,X2),nrow)
-unique_jump0[which.max(unique_jump0[,3]),]
-
-unique_jump0<-ddply(pelican_alljump$Breakpoints[[10]][1:500,],.(X1,X2,X3),nrow)
-unique_jump0[which.max(unique_jump0[,4]),]
-
-unique_jump100<-ddply(pelican_alljump$Breakpoints[[11]][1:500,],.(X1,X2,X3,X4),nrow)
-unique_jump100[which.max(unique_jump100[,5]),]
-
+# setwd("/Users/khaglich/Desktop/Edited REU Main/test_Cases/Old")
+# pelican_alljump = readRDS("pelican_alljump.RData")
+# 
+# library(plyr)
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[1]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[2]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[3]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[4]][1:500,],.(X1,X2),nrow)
+# unique_jump0[which.max(unique_jump0[,3]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[5]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[6]][1:500,],.(X1,X2),nrow)
+# unique_jump0[which.max(unique_jump0[,3]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[7]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[8]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[9]][1:500,],.(X1,X2),nrow)
+# unique_jump0[which.max(unique_jump0[,3]),]
+# 
+# unique_jump0<-ddply(pelican_alljump$Breakpoints[[10]][1:500,],.(X1,X2,X3),nrow)
+# unique_jump0[which.max(unique_jump0[,4]),]
+# 
+# unique_jump100<-ddply(pelican_alljump$Breakpoints[[11]][1:500,],.(X1,X2,X3,X4),nrow)
+# unique_jump100[which.max(unique_jump100[,5]),]
 
