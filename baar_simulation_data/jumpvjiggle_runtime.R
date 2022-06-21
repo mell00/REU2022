@@ -113,6 +113,7 @@ barJiggle<-function(percent, k_ends){
   }
   
 }
+
 k_ends = c(1,15,30,45,60,75,90)
 percent = 0.05
 ar = 1
@@ -173,3 +174,4 @@ time_frame = rbind(time_frame, cbind(jiggle_time, jump_time, length(k_ends-2),ma
 }
 colMeans(time_frame)
 apply(time_frame, 2, sd)
+

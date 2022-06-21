@@ -1,4 +1,3 @@
-setwd("/Users/sarah/REU2018/baar_simulation_data")
 data100_bpnocon<-readRDS("baar_data100_bpnocon.RData")
 data100_bpcon1<-readRDS("baar_data100_bpcon1.RData")
 data100_bpcon2<-readRDS("baar_data100_bpcon2.RData")
@@ -82,9 +81,12 @@ lineplot = function(){
 	
 }
 
+#Error: Error in plot.xy(xy.coords(x, y), type = type, ...) : plot.new has not been called yet
 par(mfrow=c(4,3))
 plot(current_run$MSE[lower:upper,1])
-lines(c(lower, upper), c(lm(current_run$MSE[1:10000,1]~c(1:10000))[[1]][[1]], lm(current_run$MSE[1:10000,1]~c(1:10000))[[1]][[1]]), col=col1)
+lines(c(lower, upper), 
+      c(lm(current_run$MSE[1:10000,1]~c(1:10000))[[1]][[1]], 
+        lm(current_run$MSE[1:10000,1]~c(1:10000))[[1]][[1]]), col=col1)
 lineplot()
 plot(current_run$MSE[lower:upper,2])
 lines(c(lower, upper), c(lm(current_run$MSE[1:10000,2]~c(1:10000))[[1]][[1]], lm(current_run$MSE[1:10000,2]~c(1:10000))[[1]][[1]]), col=col1)

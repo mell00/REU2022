@@ -1,3 +1,4 @@
+
 current_result <- current_result #EDIT HERE! define name of results you want to work with
 current_data <- test_data_300[,2] #EDIT HERE! vector of true data points
 color <- "#006e82" #EDIT HERE! color to use for results

@@ -221,5 +221,6 @@ bai_perron<-function(x_values, y_values, model_type="ar", arguments="", p=3, int
 }
 
 #calling the function
-#test_data = test_data_2()
-#bp_test = bai_perron(test_data[,1], test_data[,2], "ar", "order=1", 4, 0.15, 5)
+source("data_for_trials.R")
+test_data = test_data_2()
+bp_test = bai_perron(test_data[,1], test_data[,2], "ar", "order=1", 4, 0.15, 5)

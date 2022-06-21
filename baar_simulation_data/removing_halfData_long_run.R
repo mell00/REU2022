@@ -1,30 +1,41 @@
+
+setwd("/Users/khaglich/Desktop/Edited REU Main/Presentations_Pictures_Old/old_crap/old_simulation_data/Long_runs")
+
 #analysis data obtained from move simulations
 bar0_climate_bpconstraints = readRDS("bar0_climate_bpconstraints.RData")
 bar0_climate_bpnoconstraints = readRDS("bar0_climate_bpnoconstraints.RData")
 bar0_climate_middle = readRDS("bar0_climate_middle.RData")
-bar0_data10_bpconstraints = readRDS("bar0_data10_bpconstraints.RData")
-bar0_data10_bpnoconstraints = readRDS("bar0_data10_bpnoconstraints.RData")
-bar0_data10_middle = readRDS("bar0_data10_middle.RData")
-bar0_data2_bpconstraints = readRDS("bar0_data2_bpconstraints.RData")
-bar0_data2_bpnoconstraints = readRDS("bar0_data2_bpnoconstraints.RData")
-bar0_data2_middle = readRDS("bar0_data2_middle.RData")
 
 bar1_climate_bpconstraints = readRDS("bar1_climate_bpconstraints.RData")
 bar1_climate_bpnoconstraints = readRDS("bar1_climate_bpnoconstraints.RData")
 bar1_climate_middle = readRDS("bar1_climate_middle.RData")
-bar1_data10_bpconstraints = readRDS("bar1_data10_bpconstraints.RData")
-bar1_data10_bpnoconstraints = readRDS("bar1_data10_bpnoconstraints.RData")
-bar1_data10_middle = readRDS("bar1_data10_middle.RData")
-bar1_data2_bpconstraints = readRDS("bar1_data2_bpconstraints.RData")
-bar1_data2_bpnoconstraints = readRDS("bar1_data2_bpnoconstraints.RData")
-bar1_data2_middle = readRDS("bar1_data2_middle.RData")
 
 bar2_climate_bpconstraints = readRDS("bar2_climate_bpconstraints.RData")
 bar2_climate_bpnoconstraints = readRDS("bar2_climate_bpnoconstraints.RData")
 bar2_climate_middle = readRDS("bar2_climate_middle.RData")
+
+bar0_data10_bpconstraints = readRDS("bar0_data10_bpconstraints.RData")
+bar0_data10_bpnoconstraints = readRDS("bar0_data10_bpnoconstraints.RData")
+bar0_data10_middle = readRDS("bar0_data10_middle.RData")
+
+bar1_data10_bpconstraints = readRDS("bar1_data10_bpconstraints.RData")
+bar1_data10_bpnoconstraints = readRDS("bar1_data10_bpnoconstraints.RData")
+bar1_data10_middle = readRDS("bar1_data10_middle.RData")
+
 bar2_data10_bpconstraints = readRDS("bar2_data10_bpconstraints.RData")
 bar2_data10_bpnoconstraints = readRDS("bar2_data10_bpnoconstraints.RData")
 bar2_data10_middle = readRDS("bar2_data10_middle.RData")
+
+
+
+bar0_data2_bpconstraints = readRDS("bar0_data2_bpconstraints.RData")
+bar0_data2_bpnoconstraints = readRDS("bar0_data2_bpnoconstraints.RData")
+bar0_data2_middle = readRDS("bar0_data2_middle.RData")
+
+bar1_data2_bpconstraints = readRDS("bar1_data2_bpconstraints.RData")
+bar1_data2_bpnoconstraints = readRDS("bar1_data2_bpnoconstraints.RData")
+bar1_data2_middle = readRDS("bar1_data2_middle.RData")
+
 bar2_data2_bpconstraints = readRDS("bar2_data2_bpconstraints.RData")
 bar2_data2_bpnoconstraints = readRDS("bar2_data2_bpnoconstraints.RData")
 bar2_data2_middle = readRDS("bar2_data2_middle.RData")

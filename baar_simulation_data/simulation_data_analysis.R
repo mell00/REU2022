@@ -1,4 +1,7 @@
 #read in all data (set correct working directory prior to this)
+#calls old simulation things found in: 
+      #Presentations_Pictures_Old/old_crap/old_simulation_data/Addsub_simulation_data
+setwd("/Users/khaglich/Desktop/Edited REU Main/Presentations_Pictures_Old/old_crap/old_simulation_data/Addsub_simulation_data")
 bar0_data0a = readRDS("bar0_data0a.RData")
 bar0_data0b = readRDS("bar0_data0b.RData")
 bar0_data1 = readRDS("bar0_data1.RData")
@@ -11,6 +14,10 @@ bar0_data7 = readRDS("bar0_data7.RData")
 bar0_data8 = readRDS("bar0_data8.RData")
 bar0_data9 = readRDS("bar0_data9.RData")
 bar0_data10 = readRDS("bar0_data10.RData")
+
+#calls old simulation things found in: 
+#Presentations_Pictures_Old/old_crap/old_simulation_data/Move_simulation_data
+setwd("/Users/khaglich/Desktop/Edited REU Main/Presentations_Pictures_Old/old_crap/old_simulation_data/Move_simulation_data")
 barA_data0a = readRDS("barA_data0a.RData")
 barA_data0b = readRDS("barA_data0b.RData")
 barA_data1 = readRDS("barA_data1.RData")
@@ -37,10 +44,18 @@ barB_data9 = readRDS("barB_data9.RData")
 barB_data10 = readRDS("barB_data10.RData")
 
 #names for different training data sets
-datanames = c("0 Breaks, Low SD", "0 Breaks, High SD", "1 Break, Clean SD",
-"2 Breaks, Clean SD", "1 Break, Messy SD", "2 Breaks, Messy SD", "1 Break, Large Slopes",
-"2 Breaks, Large Slopes", "1 Break, Small Slopes", "2 Breaks, Small Slopes",
-"1 Break, Diff. Var.", "2 Break, Diff. Var.")
+datanames = c("0 Breaks, Low SD", 
+              "0 Breaks, High SD", 
+              "1 Break, Clean SD",
+              "2 Breaks, Clean SD", 
+              "1 Break, Messy SD", 
+              "2 Breaks, Messy SD", 
+              "1 Break, Large Slopes",
+              "2 Breaks, Large Slopes", 
+              "1 Break, Small Slopes", 
+              "2 Breaks, Small Slopes",
+              "1 Break, Diff. Var.", 
+              "2 Break, Diff. Var.")
 
 #mean and SD for acceptance rate from all simulations
 acceptrate_00a = c(mean(bar0_data0a$AcceptRate), sd(bar0_data0a$AcceptRate))
@@ -122,6 +137,7 @@ line_type = 1
 line_width = 2
 
 #plot distributions of number of breakpoints
+#Note: make sure your window is large enough to see the graphs 
 par(mfrow=c(3,3))
 hist(current_sim[[1]], main=current_title, xlab=x_label, ylab=y_label, breaks=n_breaks, xlim=x_limits, ylim=c(y_lower,y_upper))
 lines(c(current_true+0.5,current_true+0.5), c(y_lower,y_upper), col="red", lty=line_type, lwd=line_width)
