@@ -310,17 +310,20 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       return(prod(product_runs))
     }
     
-    prior = NA
-    
-    birth_old_to_new_ratio = (factorial(num_of_bkpts+1)*q2(dpois(k_ends_new,lambda)))/(old_new_product_birth(num_of_bkpts)*prior)
-    birth_new_to_old_ratio = (factorial(num_of_bkpts)*q1(dpois(k_ends,lambda)))/(product_death(num_of_bkpts)*prior)
-    death_new_to_old_ratio = (factorial(num_of_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(num_of_bkpts)*prior)
-    death_old_to_new_ratio = (factorial(num_of_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(num_of_bkpts)*prior)
-    #
+    #need find package to do draws with MA model
+    prior = c()
+    birth_old_to_new_ratio = (factorial(num_bkpts+1)*q2*(dpois(k_ends_new,lambda))*prior[1])/(old_new_product_birth(num_bkpts))
+    birth_new_to_old_ratio = (factorial(num_bkpts)*q1*(dpois(k_ends,lambda))*prior[2])/(product_death(num_bkpts))
+    death_new_to_old_ratio = (factorial(num_bkpts)*q2*(dpois(k_ends,lambda))*prior[3])/(product_death(num_bkpts))
+    death_old_to_new_ratio = (factorial(num_bkpts-1)*make_k*(dpois(k_ends_new,lambda))*prior[4])/(old_new_product_death(num_bkpts))
+    ratios = c(birth_old_to_new_ratio,birth_new_to_old_ratio,death_new_to_old_ratio,death_old_to_new_ratio)
+    for (i in ratios){ #finds priors for birth and death ratios
+      prior[i] = 1-ratios[i]
+    }
     #end of birth and death ratios
     
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ar)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+    ratio = (-1*delta_bic/2) + log(birth_old_to_new_ratio) - log(death_new_to_old_ratio)
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
