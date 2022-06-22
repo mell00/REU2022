@@ -4,7 +4,7 @@
 # k			= x-axis values of starting breakpoints
 # time		= integer x-values of the entire data set
 # data		= y-values of entire data set
-# interations	= number of runs for final sampling with Metropolis-Hastings
+# iterations	= number of runs for final sampling with Metropolis-Hastings
 # burn_in		= number of runs for set-up sampling with Metropolis-Hastings
 # make_murder_p	= the combine proportion (decimal) for make and murder steps
 # note: move proportion is 1 - make_murder_p

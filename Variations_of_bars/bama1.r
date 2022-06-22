@@ -4,7 +4,7 @@
 # k			= x-axis values of starting breakpoints
 # time		= integer x-values of the entire data set
 # data		= y-values of entire data set
-# interations	= number of runs for final sampling with Metropolis-Hastings
+# iterations	= number of runs for final sampling with Metropolis-Hastings
 # burn_in		= number of runs for set-up sampling with Metropolis-Hastings
 # make_murder_p	= th e combine proportion (decimal) for make and murder steps
 # note: move proportion is 1 - make_murder_p
@@ -33,7 +33,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
   library(MASS)
-  #library(FitAR)
+  library(forecast)
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
   n = length(full_data[,1]) #number of observations
   k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
