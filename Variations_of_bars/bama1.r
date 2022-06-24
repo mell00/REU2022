@@ -23,7 +23,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   if(length(time) != length(data)){
     return("Data and time vectors must be of equal length.")
   }else if(length(data) < (6 * ma)){
-    return("Data insufficient for order of AR model. Try a lower order.") 
+    return("Data insufficient for order of MA model. Try a lower order.") 
   }else if(make_murder_p >= 1){
     return("Make/murder proportion must be less than 1.")
   }else if(percent >= 0.5){
@@ -50,7 +50,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       model = suppressWarnings(arima(full_data[,2], order=c(0,0,1)))
       SEE = sum(na.omit(model$res)^2)
       s2 = SEE/n
-      sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likeihoods on the full dataset 
+      sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likelihoods on the full data set 
     }else{
       for(i in 2:length(k_ends)) {
         if(i == 2){
@@ -61,7 +61,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
           sub_loglik = (-1*sub_n/2)*(log(2*pi)+log(s2)+1)
-          sum_loglik = sum_loglik + sub_loglik #the logLik looks the log likelyhood (relates to both SSR and MLE)
+          sum_loglik = sum_loglik + sub_loglik #the logLik looks the log likelihood (relates to both SSR and MLE)
         }else if(i > 2){
           min = k_ends[i-1]
           y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
