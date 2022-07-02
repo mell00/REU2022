@@ -360,7 +360,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   move.accept.count <<- 0
   jiggle.accept.count <<- 0
   
-  #setting up priors for beta draws
+  #setting up priors for beta draws (define what b_0 and B_0 are)
   if(fit_storage == TRUE){
     alt_arima<-function(full_data, ma){
       tryCatch(arima(full_data[,2], method="ML", order=c(0,0,1)), error = function(e) arima(full_data[,2], method="CSS", order=c(0,0,ma)))
@@ -371,14 +371,14 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     alt_solve<-function(model_coef){
       tryCatch(solve(model_coef), error = function(e) informationless)
     }
-    fisher = suppressWarnings(alt_solve(model$var.coef))
-    smiley = n * fisher
+    fisher = suppressWarnings(alt_solve(model$var.coef)) #amount of data contained in 1 data point
+    smiley = n * fisher #empirical Bayes (using data to set priors) #as n goes to inf, variance becomes unbiased
     
     coef_list = model$coef[[length(model$coef)]]
     
     for(a in 1:(length(model$coef)-1)){
       
-      coef_list = c(coef_list, model$coef[[a]], recursive=T)
+      coef_list = c(coef_list, model$coef[[a]], recursive=T) #pulls each coefficient from model
       
     }
     
