@@ -1,3 +1,4 @@
+par(mar=c(1,1,1,1))
 setwd("/Users/mellm/github/REU2022/test_Cases")
 pelican<-read.csv("pacificBrownPelican.csv")
 pelican<-pelican[-which(pelican$NumberByPartyHours == 0),]
@@ -6,8 +7,8 @@ pelican$Count_yr = pelican$Count_yr + 1899
 cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be')
 
 library("forecast")
-source("/Users/mellm/github/REU2022/ar_bai_perron.R")
-source("/Users/mellm/github/REU2022/data_for_trials.R")
+source("/Users/mellm/github/REU2022/ar_bai_perron.r")
+source("data_for_trials.r")
 single_model <- arima(pelican$NumberByPartyHours, order=c(3,0,0))
 single_fitted <- fitted(single_model)
 single_BIC <- BIC(single_model)

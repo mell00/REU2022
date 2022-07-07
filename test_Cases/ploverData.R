@@ -1,3 +1,4 @@
+setwd("/Users/mellm/github/REU2022/test_Cases")
 plover<-read.csv("ncPipingPlover.csv")
 plot(plover$NumberByPartyHours~plover$Count_yr)
 

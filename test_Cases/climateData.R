@@ -3,7 +3,7 @@ temp_data = temp_data[-c(1,2,3,4),]
 temp_data[,1] = as.numeric(as.character(temp_data[,1]))
 temp_data[,2] = as.numeric(as.character(temp_data[,2]))
 
-setwd("/Users/khaglich/Desktop/Edited REU Main/baar_simulation_data")
+setwd("/Users/mellm/github/REU2022/baar_simulation_data")
 source("analysis_baar.R")
 ## Not sure where these functions are? 
 temp_bkpts = breakpoints(temp_data[,2]~temp_data[,1], h=0.05, breaks=10)
