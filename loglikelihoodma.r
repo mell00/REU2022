@@ -1,20 +1,35 @@
 
 
-epsilon_t = function(ma, k_ends, data.ts){
-  model = suppressWarnings(arima(full_data[,2], order=c(0,0,ma)))
-  for (i in 1:ma){
-    epsilon_list[i] = data.ts[i]-mu-epsilon_list[i-1]
-  }
-}
+library(MASS)
+ ma = 1
+ k_ends = 5
+ mu = 1.5
+ tao = abs(1)
+ sigma = c(tao,0,0,tao)
+ sigma_mtrx = matrix(sigma,nrow=2,ncol=2,byrow=TRUE)
+ 
+ setwd("/Users/mellm/github/REU2022/test_Cases")
+ full_data = read.csv("pacificBrownPelican.csv")
+ data.ts = arima(full_data$Count_yr,order=c(0,0,ma))
+ 
+   
+   epsilon_list = c(1,2,3,4,5,6,7)
+   epsilon_t = function(ma, k_ends, data.ts,mu){
+       for (i in 1:ma){
+           epsilon_list[i] = data.ts[i]- mu -epsilon_list[i-1]
+         }
+         return(epsilon_list)
 
 logl <- function(sigma,alpha,beta,data.ts) {
-  for (i in 1:length(model))
-  -dnorm(model[-1],alpha+beta*data.ts[1:length(model)-1],sigma,log=TRUE)
+  sum_loglik = 0
+  for (i in 1:length(model)){
+    sum_loglik = sum_loglik - dnorm(model[-1],alpha+beta*data.ts[1:length(model)-1],sigma,log=TRUE)
+  }
 }
 
 theta_list = c(0)
 
-theta_new = mvrnorm(tail(theta_list,1),
+theta_new = mvrnorm(tail(theta_list,sigma_mtrx))
 
 fitMetrics<-function(k_ends, full_data){
   
