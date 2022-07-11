@@ -1,14 +1,41 @@
 library(MASS)
- ma = 10
- k_ends = 5
- mu = 1.5
- tao = abs(1)
- sigma_mtrx = diag(tao,length(theta_list))
  
  setwd("/Users/mellm/github/REU2022/test_Cases")
  full_data = read.csv("pacificBrownPelican.csv")
  data.ts = arima(full_data$Count_yr,order=c(0,0,ma))
- min = k_ends[i-1]
+ ma = 10
+ n = length(full_data[,1]) #number of observations
+ k = tail(full_data$NumberByPartyHours,-1)
+ k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
+ mu = 1.5
+ tao = abs(1)
+ theta_list = data.ts$model$theta
+ sigma_mtrx = diag(tao,length(theta_list))
+ 
+ if(length(k_ends) < 3 ){
+   model = suppressWarnings(FitAR(full_data[,2], p=ar))
+   SEE = sum(na.omit(model$res)^2)
+   s2 = SEE/n
+ } else {
+   for(i in 2:length(k_ends)) {
+     if(i == 2){
+       min = k_ends[i-1]
+       y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
+       model = suppressWarnings(FitAR(y_values, p=ar))
+       sub_n = length(y_values)
+       SEE = sum(na.omit(model$res)^2)
+       s2 = SEE/sub_n
+     }
+     else if(i > 2){
+       min = k_ends[i-1]
+       y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
+       model = suppressWarnings(FitAR(y_values, p=ar))
+       sub_n = length(y_values)
+       SEE = sum(na.omit(model$res)^2)
+       s2 = SEE/sub_n
+     }
+   }
+ }
  y_values = full_data[c(min:k_ends[i]),2]
    
   epsilon_list = c(0,1)
@@ -35,8 +62,6 @@ logl <- function(sigma,alpha,beta,data.ts) { #log likelihood calculation
   }
   return(sum_loglik)
 }
-
-theta_list = data.ts$model$theta
 
 theta_new = mvrnorm(n=1,mu=theta_list,Sigma=sigma_mtrx,tol = 1e-6, empirical = FALSE,EISPACK = FALSE)
 
@@ -73,7 +98,7 @@ fitMetrics<-function(k_ends, full_data){
     model = suppressWarnings(arima(full_data[,2], order=c(0,0,ma)))
     SEE = sum(na.omit(model$res)^2)
     s2 = SEE/n
-    sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likelihoods on the full dataset 
+    sum_loglik = sum_loglik - prod(dnorm(y_values[i],alpha+beta*data.ts[1:length(data.ts)-1],sigma,log=TRUE)) #finding the log likelihoods on the full dataset 
   }else{
     for(i in 2:length(k_ends)) {
       if(i == 2){
