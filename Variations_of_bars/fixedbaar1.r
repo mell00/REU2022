@@ -289,9 +289,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     #birth and death ratios
     
-    product_runs = c()
+    product_runs = c(0)
     
-    old_new_product_birth = function(k){
+    old_new_product_birth = function(product_runs){
       for (j in k){
         product_runs.append(n-(3*ar-(q1+1)(2*ar + j)))
       }
@@ -312,10 +312,10 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     #need find package to do draws with MA model
     prior = c()
-    birth_old_to_new_ratio = (factorial(num_bkpts+1)*q2*(dpois(k_ends_new,lambda))*prior[1])/(old_new_product_birth(num_bkpts))
-    birth_new_to_old_ratio = (factorial(num_bkpts)*q1*(dpois(k_ends,lambda))*prior[2])/(product_death(num_bkpts))
-    death_new_to_old_ratio = (factorial(num_bkpts)*q2*(dpois(k_ends,lambda))*prior[3])/(product_death(num_bkpts))
-    death_old_to_new_ratio = (factorial(num_bkpts-1)*make_k*(dpois(k_ends_new,lambda))*prior[4])/(old_new_product_death(num_bkpts))
+    birth_old_to_new_ratio = (factorial(num_bkpts+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(num_bkpts))
+    birth_new_to_old_ratio = (factorial(num_bkpts)*q1*(dpois(k_ends,lambda)))/(product_death(num_bkpts))
+    death_new_to_old_ratio = (factorial(num_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(num_bkpts))
+    death_old_to_new_ratio = (factorial(num_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(num_bkpts))
     ratios = c(birth_old_to_new_ratio,birth_new_to_old_ratio,death_new_to_old_ratio,death_old_to_new_ratio)
     for (i in ratios){ #finds priors for birth and death ratios
       prior[i] = 1-ratios[i]
@@ -387,7 +387,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     b_0 = matrix(coef_list,(ar+1),1) #matrix of beta means for posterior draw
     B_0 = smiley #variance-covariance matrix for posterior draw
-    
+  
     #beta and sigma draw
     post_beta_list = data.frame(Empty=rep(NA,(ar+1)))
     post_sigma_list = data.frame(Empty=NA)
