@@ -6,37 +6,34 @@ library(MASS)
  ma = 10
  n = length(full_data[,1]) #number of observations
  k = tail(full_data$NumberByPartyHours,-1)
- k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
+ k_ends = suppressWarnings(as.numeric(c(min(full_data[,2]), na.omit(k), n))) #adding end points to k
+ k_ends = k_ends[!is.na(k_ends)]
  mu = 1.5
  tao = abs(1)
  theta_list = data.ts$model$theta
  sigma_mtrx = diag(tao,length(theta_list))
  
  if(length(k_ends) < 3 ){
-   model = suppressWarnings(FitAR(full_data[,2], p=ar))
-   SEE = sum(na.omit(model$res)^2)
+   SEE = sum(na.omit(data.ts$residuals)^2)
    s2 = SEE/n
  } else {
    for(i in 2:length(k_ends)) {
      if(i == 2){
        min = k_ends[i-1]
        y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-       model = suppressWarnings(FitAR(y_values, p=ar))
        sub_n = length(y_values)
-       SEE = sum(na.omit(model$res)^2)
+       SEE = sum(na.omit(data.ts$residuals)^2)
        s2 = SEE/sub_n
      }
      else if(i > 2){
        min = k_ends[i-1]
        y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-       model = suppressWarnings(FitAR(y_values, p=ar))
        sub_n = length(y_values)
-       SEE = sum(na.omit(model$res)^2)
+       SEE = sum(na.omit(data.ts$residuals)^2)
        s2 = SEE/sub_n
      }
    }
  }
- y_values = full_data[c(min:k_ends[i]),2]
    
   epsilon_list = c(0,1)
   epsilon_t = function(ma, k_ends, data.ts,mu){
@@ -58,7 +55,7 @@ alpha = 1 #between -1 and 1
 logl <- function(sigma,alpha,beta,data.ts) { #log likelihood calculation
   sum_loglik = 0
   for (i in 1:length(data.ts)){
-    sum_loglik = sum_loglik - prod(dnorm(y_values[i],alpha+beta*data.ts[1:length(data.ts)-1],sigma,log=TRUE))
+    sum_loglik = sum_loglik - prod(dnorm(y_values[i],alpha+beta*data.ts[1:length(data.ts)-1],s2,log=TRUE))
   }
   return(sum_loglik)
 }
