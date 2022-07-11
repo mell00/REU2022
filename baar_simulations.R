@@ -7,10 +7,10 @@ library(FitAR)
 #Step 2 - generate time and data functions (see data_for_trials)
 
 
-setwd("/Users/khaglich/Desktop/Edited REU Main/Variations_of_bars")
+setwd("\\Users\\mellm\\github\\REU2022\\Variations_of_bars")
 source("baar.R")
 
-setwd("/Users/khaglich/Desktop/Edited REU Main")
+setwd("\\Users\\mellm\\github\\REU2022")
 source("data_for_trials.R")
 
 #Step 3 - set up for simulation
@@ -41,15 +41,15 @@ simulation = function(data_fun, runs, iterations, burn_in, current_bar, make, pe
 	current_list[[7]] = data.frame(matrix(ncol=0, nrow=iterations)) #NumBkpts
 	current_list[[8]] = list() #RunTimes
 	names(current_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "MSE", "BIC", "Breakpoints", "NumBkpts", "RunTimes")
- 
-	#getting the initial points using the Bai-Perron test 
+
+	#getting the initial points using the Bai-Perron test
 	library("strucchange")
 
 	#running BAR the specified number of times and storing the results
 	for(i in 1:runs){
 
 		current_data = data_fun()
-		break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 5, h = 0.1) 
+		break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 5, h = 0.1)
 		starting_breakpoints = break_p$breakpoints
 		start_time = Sys.time()
 		current_result = current_bar(starting_breakpoints, current_data[,1], current_data[,2], iterations, burn_in, make, percent, lambda, jump)
@@ -76,14 +76,14 @@ sim_list = simulation(data_fun, runs, iterations, burn_in, current_bar, make, pe
 
 split_num = NULL #initializing
 
-colnames(sim_list[[6]]) <- gsub(x = colnames(sim_list[[6]]), pattern = "all_k_best...c..1...ncol.all_k_best...", replacement = "X1")  
+colnames(sim_list[[6]]) <- gsub(x = colnames(sim_list[[6]]), pattern = "all_k_best...c..1...ncol.all_k_best...", replacement = "X1")
 
 for(i in 2:ncol(sim_list[[6]])){ #detecting where to split up columns in $Breakpoint object
-  
+
 	if(endsWith(colnames(sim_list[[6]])[i], "X1") == TRUE){
 		split_num = c(split_num, i)
 	}
-  
+
 }
 
 final_list = list() #initializing
@@ -98,7 +98,7 @@ for(i in 1:length(split_num)){ #splitting up columns in $Breakpoint object
 		final_list[[i]] = sim_list[[6]][,split_num[i-1]:(split_num[i]-1)]
 		final_list[[i+1]] = sim_list[[6]][,split_num[i]:ncol(sim_list[[6]])]
 	}
-  
+
 }
 
 sim_list[[6]] = final_list #saving final version of $Breakpoint object

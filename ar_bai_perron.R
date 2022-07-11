@@ -8,6 +8,8 @@
 #max_breaks = maximum number of breaks to be considered
 #progress = whether or not to show progress bar, TRUE/FALSE
 
+source("/Users/mellm/github/REU2022/data_for_trials.r")
+
 bai_perron.ar<-function(x_values, y_values, order=1, interval=0.15, max_breaks=3, progress=T){
 
 	n = length(x_values) #Number of observations
