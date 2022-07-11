@@ -10,13 +10,15 @@
 # note: move proportion is 1 - make_murder_p
 # percent		= how much a point can jiggle
 # lambda		= for Poisson distribution of breakpoint prior
+# tao       = for multivariate normal distribution of new theta
+# alpha     = for multivariate normal distribution of new theta
 # jump_p		= proportion of move steps that will be jump
 # note: jiggle proprtion is 1 - jump_p
 # ma			= order of MA model
 # progress		= whether to show progress bars or not, TRUE/FALSE
 # fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ma = 1, progress = TRUE, fit_storage = TRUE){
+bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, tao = abs(1), alpha = 1, jump_p = 0.25, ma = 1, progress = TRUE, fit_storage = TRUE){
   
   ma = floor(ma)
   
@@ -415,6 +417,37 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     new_loglik = fitMetrics(k_ends_new, full_data)
     
+    #birth and death ratios
+    
+    product_runs = c()
+    
+    old_new_product_birth = function(k){
+      for (j in k){
+        product_runs.append(n-(3*ar-(q1+1)(2*ar + j)))
+      }
+      return(prod(product_runs))
+    }
+    product_death = function(k){
+      for (j in k){
+        product_runs.append(n-3*ma-q1*2*ma + j)
+      }
+      return(prod(product_runs))
+    }
+    old_new_product_death = function(k){
+      for (j in k){
+        product_runs.append(n-3*ma-(q1-1)*(2*ma)+j)
+      }
+      return(prod(product_runs))
+    }
+    
+    prior = NA
+    
+    birth_old_to_new_ratio = (factorial(num_of_bkpts+1)*q2(dpois(k_ends_new,lambda)))/(old_new_product_birth(num_of_bkpts)*prior)
+    birth_new_to_old_ratio = (factorial(num_of_bkpts)*q1(dpois(k_ends,lambda)))/(product_death(num_of_bkpts)*prior)
+    death_new_to_old_ratio = (factorial(num_of_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(num_of_bkpts)*prior)
+    death_old_to_new_ratio = (factorial(num_of_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(num_of_bkpts)*prior)
+    #
+    #end of birth and death ratios
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ma)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ma))
     ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
