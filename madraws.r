@@ -1,9 +1,25 @@
-source(".\\loglikelihoodma.r")
+setwd("\\Users\\mellm\\github\\REU2022")
+source("loglikelihoodma.r")
 
+big_theta = NA
+l = NA
+big_B = NA
 
+#MA equation (work in progress)
+x_t = big_theta(big_B)
 
+#theta sum
+i = 0:q; sum(hat_theta[i])
 
+#D_n sum
+k = 0:2l; (sum(big_I - big_theta(big_B))^k)x_t
 
+#argmax of D_n
+hat_theta = list(hat_theta, theta)
+outputs = sapply(hat_theta, D_n)
+best.input = hat_theta[which.max(outputs)]
+
+#D_n
 
 
 #setting up posterior
@@ -33,7 +49,7 @@ if(fit_storage == TRUE){
     
     #bar_v
     v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
-    #bar_beta 
+    #bar_theta
     theta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
     
     #drawing a random variable from a multivariate normal pdf 
