@@ -81,29 +81,29 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   freeObservations<-function(k_ends, ar){
     full_set = c(1:max(k_ends))
     if(ar == 1){
-      constraint = (3 - 1)
+      constraint = (3 - 1) #Determines space betweeen breakpoints
     }else{
       constraint = (2*ar-1)
     }
-    exclude_set = k_ends
+    exclude_set = k_ends #k_ends =end of segments between breakpoints
     for(a in 1:length(k_ends)){
       if(a == 1){
-        right = k_ends[[a]] + constraint
-        right_set = full_set[k_ends[[a]]:right]
-        exclude_set = c(exclude_set, right_set, recursive=T)
+        right = k_ends[[a]] + constraint #applies constraint to put space between potential breakpoints on the right
+        right_set = full_set[k_ends[[a]]:right] #makes new interval of unavailable spaces
+        exclude_set = c(exclude_set, right_set, recursive=T) #creates set in which we cannot have breakpoints
       }else if(a == length(k_ends)){
-        left = k_ends[[a]] - constraint
-        left_set = full_set[left:k_ends[[a]]]
-        exclude_set = c(exclude_set, left_set, recursive=T)
-      }else{
+        left = k_ends[[a]] - constraint #applies contraint to put space between potential breakpoints on the left
+        left_set = full_set[left:k_ends[[a]]] #makes new interval of unavailable spaces
+        exclude_set = c(exclude_set, left_set, recursive=T) #creates set in which we cannot have breakpoints
+      }else{ #applies the right and left codes together
         right = k_ends[[a]] + constraint
         right_set = full_set[k_ends[[a]]:right]
         left = k_ends[[a]] - constraint
         left_set = full_set[left:k_ends[[a]]]
-        exclude_set = c(exclude_set, left_set, right_set, recursive=T)
+        exclude_set = c(exclude_set, left_set, right_set, recursive=T) # applies both the right and left exclude sets
       }
     }
-    diff_set = setdiff(full_set,exclude_set)
+    diff_set = setdiff(full_set,exclude_set) #check for available spots after applying exclude and full sets 
     return(sort(diff_set))
   }
   
@@ -152,21 +152,21 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     random_num = sample(1:length(k), 1)
     random_bkpt = k_ends[random_num+1]
     full_data = c(1:max(k_ends))
-    wiggliness = max(k_ends) * percent
+    wiggliness = max(k_ends) * percent #sets the amount of space a breakpoint can wiggle
     if(floor(random_bkpt-wiggliness) > 0){
-      left_lim = floor(random_bkpt-wiggliness)
+      left_lim = floor(random_bkpt-wiggliness) #set limit for how much a breakpoint can wiggle to the left
     }else{
       left_lim = 1
     }
     if(ceiling(random_bkpt+wiggliness) < max(k_ends)){
-      right_lim = ceiling(random_bkpt+wiggliness)
+      right_lim = ceiling(random_bkpt+wiggliness) #set limit for how much breakpoint can wiggle to the right
     }else{
       right_lim = max(k_ends)
     }
-    prelim_neighborhood = full_data[left_lim:right_lim]
+    prelim_neighborhood = full_data[left_lim:right_lim] #sets the startting neighborhood for where breakpoint can jiggle
     left_neighbor = k_ends[random_num]
     right_neighbor = k_ends[random_num+2]
-    if(ar == 1){
+    if(ar == 1){ #jiggles subsequent breakpoints in order to fulfill space constraint
       constraint = (3 - 1)
     }else{
       constraint = (2*ar-1)
