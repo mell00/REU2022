@@ -310,12 +310,11 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       return(prod(product_runs))
     }
     
-    #need find package to do draws with MA model
     prior = c()
-    birth_old_to_new_ratio = (factorial(num_bkpts+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(num_bkpts))
-    birth_new_to_old_ratio = (factorial(num_bkpts)*q1*(dpois(k_ends,lambda)))/(product_death(num_bkpts))
-    death_new_to_old_ratio = (factorial(num_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(num_bkpts))
-    death_old_to_new_ratio = (factorial(num_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(num_bkpts))
+    birth_old_to_new_ratio = (factorial(k_nu+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts))
+    birth_new_to_old_ratio = (factorial(starting_bkpts)*q1*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
+    death_new_to_old_ratio = (factorial(starting_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
+    death_old_to_new_ratio = (factorial(starting_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(starting_bkpts))
     ratios = c(birth_old_to_new_ratio,birth_new_to_old_ratio,death_new_to_old_ratio,death_old_to_new_ratio)
     for (i in ratios){ #finds priors for birth and death ratios
       prior[i] = 1-ratios[i]
@@ -394,11 +393,11 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
   #getting constants for qs for final Metropolis-Hasting
-  starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
+  starting_bkpts_2 = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
   starting_nfree = length(freeObservations(k_ends,ar))
-  starting_ttl = starting_bkpts + starting_nfree #total to get percentages
+  starting_ttl = starting_bkpts_2 + starting_nfree #total to get percentages
   make_k = make_murder_p * (starting_nfree/starting_ttl) #proportion for make
-  murder_k = make_murder_p * (starting_bkpts/starting_ttl) #proportion for murder
+  murder_k = make_murder_p * (starting_bkpts_2/starting_ttl) #proportion for murder
   
   if(progress == TRUE){
     writeLines("\nBeginning sampling period.")
@@ -417,6 +416,40 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     type = k_and_q[[4]]
     
     new_loglik = fitMetrics(k_ends_new, full_data)
+    
+    #birth and death ratios
+    
+    product_runs = c(0)
+    
+    old_new_product_birth = function(product_runs){
+      for (j in k){
+        product_runs.append(n-(3*ar-(q1+1)(2*ar + j)))
+      }
+      return(prod(product_runs))
+    }
+    product_death = function(k){
+      for (j in k){
+        product_runs.append(n-3*ar-q1*2*ar + j)
+      }
+      return(prod(product_runs))
+    }
+    old_new_product_death = function(k){
+      for (j in k){
+        product_runs.append(n-3*ar-(q1-1)*(2*ar)+j)
+      }
+      return(prod(product_runs))
+    }
+    
+    prior = c()
+    birth_old_to_new_ratio = (factorial(starting_bkpts_2+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts_2))
+    birth_new_to_old_ratio = (factorial(starting_bkpts_2)*q1*(dpois(k_ends,lambda)))/(product_death(starting_bkpts_2))
+    death_new_to_old_ratio = (factorial(starting_bkpts_2)*q2*(dpois(k_ends,lambda)))/(product_death(starting_bkpts_2))
+    death_old_to_new_ratio = (factorial(starting_bkpts_2-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(starting_bkpts_2))
+    ratios = c(birth_old_to_new_ratio,birth_new_to_old_ratio,death_new_to_old_ratio,death_old_to_new_ratio)
+    for (i in ratios){ #finds priors for birth and death ratios
+      prior[i] = 1-ratios[i]
+    }
+    #end of birth and death ratios
     
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ar)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ar))
     ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
