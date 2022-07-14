@@ -311,7 +311,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     }
     
     prior = c()
-    birth_old_to_new_ratio = (factorial(k_nu+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts))
+    birth_old_to_new_ratio = (factorial(starting_bkpts+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts))
     birth_new_to_old_ratio = (factorial(starting_bkpts)*q1*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
     death_new_to_old_ratio = (factorial(starting_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
     death_old_to_new_ratio = (factorial(starting_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(starting_bkpts))
