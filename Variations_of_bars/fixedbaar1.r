@@ -293,25 +293,30 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     old_new_product_birth = function(product_runs){
       for (j in k){
-        product_runs.append(n-(3*ar-(q1+1)(2*ar + j)))
+        product_runs = append(product_runs,(n-(3*ar-(q1+1)*(2*ar + j))))
       }
       return(prod(product_runs))
     }
     product_death = function(k){
       for (j in k){
-        product_runs.append(n-3*ar-q1*2*ar + j)
+        product_runs = append(product_runs,(n-3*ar-q1*2*ar + j))
       }
       return(prod(product_runs))
     }
     old_new_product_death = function(k){
       for (j in k){
-        product_runs.append(n-3*ar-(q1-1)*(2*ar)+j)
+        product_runs = append(product_runs,(n-3*ar-(q1-1)*(2*ar)+j))
       }
       return(prod(product_runs))
     }
+    starting_bkpts = 3
+    k_ends_new = 4
+    lambda = 5
+    q2 = 6
+    
     
     prior = c()
-    birth_old_to_new_ratio = (factorial(k_nu+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts))
+    birth_old_to_new_ratio = (factorial(starting_bkpts+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts))
     birth_new_to_old_ratio = (factorial(starting_bkpts)*q1*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
     death_new_to_old_ratio = (factorial(starting_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
     death_old_to_new_ratio = (factorial(starting_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(starting_bkpts))
@@ -386,7 +391,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     b_0 = matrix(coef_list,(ar+1),1) #matrix of beta means for posterior draw
     B_0 = smiley #variance-covariance matrix for posterior draw
-  
+    
     #beta and sigma draw
     post_beta_list = data.frame(Empty=rep(NA,(ar+1)))
     post_sigma_list = data.frame(Empty=NA)
@@ -423,19 +428,19 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     old_new_product_birth = function(product_runs){
       for (j in k){
-        product_runs.append(n-(3*ar-(q1+1)(2*ar + j)))
+        product_runs = append(product_runs,(n-(3*ar-(q1+1)*(2*ar + j))))
       }
       return(prod(product_runs))
     }
     product_death = function(k){
       for (j in k){
-        product_runs.append(n-3*ar-q1*2*ar + j)
+        product_runs = append(product_runs,(n-3*ar-q1*2*ar + j))
       }
       return(prod(product_runs))
     }
     old_new_product_death = function(k){
       for (j in k){
-        product_runs.append(n-3*ar-(q1-1)*(2*ar)+j)
+        product_runs = append(product_runs,(n-3*ar-(q1-1)*(2*ar)+j))
       }
       return(prod(product_runs))
     }
