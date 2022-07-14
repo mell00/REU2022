@@ -1,6 +1,6 @@
-# install.packages("devtools")
-# library(devtools)
-# install_version("FitAR", version = "1.94", repos = "http://cran.us.r-project.org")
+install.packages("devtools")
+library(devtools)
+install_version("FitAR", version = "1.94", repos = "http://cran.us.r-project.org")
 library(FitAR)
 
 #Step 1 - define current bar function (if not previously defined in workspace)
@@ -8,7 +8,7 @@ library(FitAR)
 
 
 setwd("\\Users\\mellm\\github\\REU2022\\Variations_of_bars")
-source("baar.R")
+source("fixedbaar1.R")
 
 setwd("\\Users\\mellm\\github\\REU2022")
 source("data_for_trials.R")
@@ -110,3 +110,4 @@ saveRDS(sim_list, file=save_name)
 summary(sim_list)
 
 #sim_list = readRDS() #to load an existing RDS
+

@@ -2,6 +2,7 @@
 
 #-------Key:
 # k			= x-axis values of starting breakpoints
+    #(NOTE: k must be between lower x-value limit+2 and upper x-value limit-2)
 # time		= integer x-values of the entire data set
 # data		= y-values of entire data set
 # iterations	= number of runs for final sampling with Metropolis-Hastings
@@ -34,6 +35,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   library(MASS)
   library(FitAR)
+  data = y
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
   n = length(full_data[,1]) #number of observations
   k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
@@ -289,7 +291,9 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     #birth and death ratios
     
-    product_runs = c(0)
+    
+    product_runs = c(1)
+    
     
     old_new_product_birth = function(product_runs){
       for (j in k){
@@ -309,17 +313,13 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       }
       return(prod(product_runs))
     }
-    starting_bkpts = 3
-    k_ends_new = 4
-    lambda = 5
-    q2 = 6
     
     
     prior = c()
-    birth_old_to_new_ratio = (factorial(starting_bkpts+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts))
-    birth_new_to_old_ratio = (factorial(starting_bkpts)*q1*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
-    death_new_to_old_ratio = (factorial(starting_bkpts)*q2*(dpois(k_ends,lambda)))/(product_death(starting_bkpts))
-    death_old_to_new_ratio = (factorial(starting_bkpts-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(starting_bkpts))
+    birth_old_to_new_ratio = (factorial(starting_bkpts+1)*q2*(dpois(length(k_ends_new)-2,lambda)))/(old_new_product_birth(starting_bkpts))
+    birth_new_to_old_ratio = (factorial(starting_bkpts)*q1*(dpois(length(k_ends)-2,lambda)))/(product_death(starting_bkpts))
+    death_new_to_old_ratio = (factorial(starting_bkpts)*q2*(dpois(length(k_ends)-2,lambda)))/(product_death(starting_bkpts))
+    death_old_to_new_ratio = (factorial(starting_bkpts-1)*make_k*(dpois(length(k_ends_new)-2,lambda)))/(old_new_product_death(starting_bkpts))
     ratios = c(birth_old_to_new_ratio,birth_new_to_old_ratio,death_new_to_old_ratio,death_old_to_new_ratio)
     for (i in ratios){ #finds priors for birth and death ratios
       prior[i] = 1-ratios[i]
@@ -446,10 +446,10 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     }
     
     prior = c()
-    birth_old_to_new_ratio = (factorial(starting_bkpts_2+1)*q2*(dpois(k_ends_new,lambda)))/(old_new_product_birth(starting_bkpts_2))
-    birth_new_to_old_ratio = (factorial(starting_bkpts_2)*q1*(dpois(k_ends,lambda)))/(product_death(starting_bkpts_2))
-    death_new_to_old_ratio = (factorial(starting_bkpts_2)*q2*(dpois(k_ends,lambda)))/(product_death(starting_bkpts_2))
-    death_old_to_new_ratio = (factorial(starting_bkpts_2-1)*make_k*(dpois(k_ends_new,lambda)))/(old_new_product_death(starting_bkpts_2))
+    birth_old_to_new_ratio = (factorial(starting_bkpts_2+1)*q2*(dpois(length(k_ends_new)-2,lambda)))/(old_new_product_birth(starting_bkpts_2))
+    birth_new_to_old_ratio = (factorial(starting_bkpts_2)*q1*(dpois(length(k_ends)-2,lambda)))/(product_death(starting_bkpts_2))
+    death_new_to_old_ratio = (factorial(starting_bkpts_2)*q2*(dpois(length(k_ends)-2,lambda)))/(product_death(starting_bkpts_2))
+    death_old_to_new_ratio = (factorial(starting_bkpts_2-1)*make_k*(dpois(length(k_ends_new)-2,lambda)))/(old_new_product_death(starting_bkpts_2))
     ratios = c(birth_old_to_new_ratio,birth_new_to_old_ratio,death_new_to_old_ratio,death_old_to_new_ratio)
     for (i in ratios){ #finds priors for birth and death ratios
       prior[i] = 1-ratios[i]
@@ -702,6 +702,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   return(final_list)
 }
+
 
 #calling the function
 #test_data = test_data_44()
