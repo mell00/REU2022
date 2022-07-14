@@ -2,6 +2,7 @@ setwd("\\Users\\mellm\\github\\REU2022")
 source("loglikelihoodma.r")
 
 z = runif(1,0,1) #1 value between 0 and 1
+n = 40
 hat_theta = theta_new #TEST
 t = seq(1:10) #sequence of integers
 q = 5 # a positive integer
@@ -24,11 +25,20 @@ big_theta = function(z_0){
 }
 
 
-l = NA
+l = function(q){ #first integer such that 2*l >= q
+  l = 1
+  while(2*l < q){
+    l = l + 1
+  }
+  return(l)
+}
+
+l = l(q)
 
 big_B = function(process){ #NEEDS WORK
-  for (t in length(process)){
-    big_B[t] = (process[t])/(process[t+1])
+  big_B = c()
+  for (i in length(process)){
+    big_B[i] = (process[i])/(process[i+1])
   }
   return(big_B)
 }
@@ -37,6 +47,9 @@ big_B(Z_t)
 
 #theta sum
 i = 0:q; theta_sum = sum(hat_theta[i])
+
+#D_n t
+D_nt = seq(2*l*q + 1,n)
 
 #D_n sum
 d_sum= 0:(2*l); (sum(big_I - big_theta(big_B))^k)x_t
