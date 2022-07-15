@@ -12,12 +12,12 @@
 # percent		= how much a point can jiggle
 # lambda		= for Poisson distribution of breakpoint prior
 # jump_p		= proportion of move steps that will be jump
-# note: jiggle proprtion is 1 - jump_p
+# note: jiggle proportion is 1 - jump_p
 # ar			= order of AR model
 # progress		= whether to show progress bars or not, TRUE/FALSE
 # fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = TRUE){
+baar = function(k, time, data = y, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = TRUE){
   
   ar = floor(ar)
   
@@ -295,7 +295,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     product_runs = c(1)
     
     
-    old_new_product_birth = function(product_runs){
+    old_new_product_birth = function(k){
       for (j in k){
         product_runs = append(product_runs,(n-(3*ar-(q1+1)*(2*ar + j))))
       }
