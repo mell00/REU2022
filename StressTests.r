@@ -13,21 +13,23 @@ setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_b
 source("baar.R")
 
 test_data_45 = function(){
-  beta = -.7
-  stdev= 1
+  beta1 = .7
+  beta2 = .3
+  stdev= .25
   y= rnorm(1,0,1)
-  for( i in 2:32){
-    y[i] = beta*y[i-1]+rnorm(1,0,stdev)}
-  for(i in 33:90){
-    y[i] = beta*y[i-1]+rnorm(1,0,stdev)}
+  for( i in 2:10){
+    y[i] = beta1*y[i-1]+rnorm(1,0,stdev)}
+  for(i in 11:90){
+    y[i] = beta2*y[i-1]+rnorm(1,0,stdev)}
   data_45=y
   time = c(1:90)
   test_data_45 = data.frame(time, data_45)
   return(test_data_45)
 }
 iterations=250
-runs=10
+runs=100
 L=matrix(NA,nrow=iterations,ncol=runs)
+M=NA
 for(i in 1:runs){
   y=test_data_45()
   current_data = y
@@ -35,6 +37,10 @@ for(i in 1:runs){
   starting_breakpoints = break_p$breakpoints
   test1=baar(starting_breakpoints,1:90,y[,2],iterations)
   print(i)
-  L[,i]=test1$NumBkpts}
+  L[,i]=test1$NumBkpts
+  M[i]=length(starting_breakpoints)
+}
 mean(L)
 sd(L)
+mean(M)
+sd(M)
