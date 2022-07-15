@@ -10,7 +10,7 @@ library(MASS)
 par(mfrow=c(2,2))
 
 setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
-source("baar.R")
+source("fixedbaar1.r")
 
 test_data_45 = function(){
   beta1 = .7
@@ -27,7 +27,7 @@ test_data_45 = function(){
   return(test_data_45)
 }
 iterations=250
-runs=100
+runs=2
 L=matrix(NA,nrow=iterations,ncol=runs)
 M=NA
 for(i in 1:runs){
@@ -38,7 +38,7 @@ for(i in 1:runs){
   test1=baar(starting_breakpoints,1:90,y[,2],iterations)
   print(i)
   L[,i]=test1$NumBkpts
-  M[i]=length(starting_breakpoints)
+  M[i]=length(starting_breakpoints[!is.na(starting_breakpoints)])
 }
 mean(L)
 sd(L)
