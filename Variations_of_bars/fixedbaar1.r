@@ -17,7 +17,7 @@
 # progress		= whether to show progress bars or not, TRUE/FALSE
 # fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-baar = function(k, time, data = y, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = TRUE){
+baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = TRUE){
   
   ar = floor(ar)
   
@@ -35,7 +35,6 @@ baar = function(k, time, data = y, iterations, burn_in = 50, make_murder_p = 0.5
   
   library(MASS)
   library(FitAR)
-  data = y
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
   n = length(full_data[,1]) #number of observations
   k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
