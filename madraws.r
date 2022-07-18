@@ -1,29 +1,34 @@
 setwd("\\Users\\mellm\\github\\REU2022")
 source("loglikelihoodma.r")
 
-z = runif(1,0,1) #1 value between 0 and 1
+q = 5 # a positive integer
+z_0 = runif(1,0,1) #1 value between 0 and 1
 n = 40
 hat_theta = theta_new #TEST
 t = seq(1:10) #sequence of integers
-q = 5 # a positive integer
-Z_t = abs(rnorm(t)) #iid sequence of non-negative random variables
+Z_t = c(abs(rnorm(length(t-1),1))) #iid sequence of non-negative random variables
 
-#x_sum
+#x_sum (needs work)
 i = 1:q; x_sum = sum(hat_theta[i]*Z_t[i-1])
 
-#MA equation (work in progress)
-x_t = function (big_theta,big_B,Z_t){
-  for (t in q){
-    x_t[t] = big_theta[t]*big_B[t]*Z_t[t]
-  }
-  return(x_t)
+#nonseasonal MA polynomial
+x_t = function (B_theta,B_B,Z_t,q){
+  B_theta * B_B[1:q]*Z_t[1:q]
 }
+
+#seasonal MA polynomial
+
 
 big_theta = function(z_0){
   i = 0:q; big_theta = sum(hat_theta[i]*z_0^i)
   return(big_theta) #assumed to be non-zero
 }
 
+B_theta = big_theta(z_0)
+
+hat_big_theta = function(q){
+  i = 0:q; hat_Big_theta[i] = big_theta
+}
 
 l = function(q){ #first integer such that 2*l >= q
   l = 1
@@ -36,14 +41,16 @@ l = function(q){ #first integer such that 2*l >= q
 l = l(q)
 
 big_B = function(process){ #NEEDS WORK
-  big_B = c()
-  for (i in length(process)){
-    big_B[i] = (process[i])/(process[i+1])
+  b_B = c()
+  for (i in t){
+    b_B[i] = (process[i])/(process[i+1])
   }
-  return(big_B)
+  return(b_B)
 }
 
-big_B(Z_t)
+B_B = big_B(Z_t)
+
+big_I = x_t(B_theta,B_B,Z_t,q)
 
 #theta sum
 i = 0:q; theta_sum = sum(hat_theta[i])
@@ -52,23 +59,60 @@ i = 0:q; theta_sum = sum(hat_theta[i])
 D_nt = seq(2*l*q + 1,n)
 
 #D_n sum
-d_sum= 0:(2*l); (sum(big_I - big_theta(big_B))^k)x_t
+i = 0:(2*l); D_sum = (sum((big_I[i] - B_theta*B_B)^i))*x_t
 
 #argmax of D_n
-hat_theta = list(hat_theta, theta)
+hat_theta = list(hat_theta, 1)
 outputs = sapply(hat_theta, D_n)
 bestD_n = hat_theta[which.max(outputs)]
 
+#hat_theta
+hat_theta = function(bestD_n,q){
+  i = 0:q; hat_theta_sum = sum(hat_theta[i])
+  hat_theta = bestD_n*hat_theta_sum
+  return(hat_theta)
+}
+
 #D_n
+
+#e_t #WORK IN PROGRESS - starts at e_0
+e = function(x_t,hat_theta,B_theta,epsilon_list){
+  e_t = list()
+  e_t[1] = 0
+  q = 4
+  i = 1:q; sum_q = hat_theta[i]*e_t[2-i]
+  j = 1:q; sum_Q = big_theta[j*3]*e_t[t-(3*2)]
+  sum_q
+  
+  if (ma == 0){}
+  else if (ma == 1){
+    for (t in 2:q){
+      e_t[t] = x_t[t] -
+    }
+  }
+  else if (ma >= 2){
+    
+  }
+}
+#H matrix setup #WORK IN PROGRESS
+s = 3 #seasonal period
+n = 10
+q = 10
+H = function(s,n,q){
+  for (t in 1:n){
+    e[t] = 
+  }
+}
+
 
 #setting up priors for theta draws (define what b_0 and B_0 are)
 if(fit_storage == TRUE){
-  alt_arima<-function(full_data, ar){
-    tryCatch(arima(full_data[,2], method="ML", order=c(ar,0,0)), error = function(e) arima(full_data[,2], method="CSS", order=c(ar,0,0)))
+  alt_arima<-function(full_data, ma){
+    tryCatch(arima(full_data[,2], method="ML", order=c(0,0,ma)), error = function(e) arima(full_data[,2], method="CSS", order=c(0,0,ma)))
   }
-  model = suppressWarnings(alt_arima(full_data, ar))
-  informationless = matrix(0, ncol=(ar+1), nrow=(ar+1))
-  diag(informationless) = rep(1000, (ar+1))
+  model = suppressWarnings(alt_arima(full_data, ma))
+  informationless = matrix(0, ncol=(ma+1), nrow=(ma+1))
+  diag(informationless) = rep(1000, (ma+1))
   alt_solve<-function(model_coef){
     tryCatch(solve(model_coef), error = function(e) informationless)
   }
@@ -83,11 +127,11 @@ if(fit_storage == TRUE){
     
   }
   
-  b_0 = matrix(coef_list,(ar+1),1) #matrix of beta means for posterior draw
+  b_0 = matrix(coef_list,(ma+1),1) #matrix of beta means for posterior draw
   B_0 = smiley #variance-covariance matrix for posterior draw
   
   #beta and sigma draw
-  post_theta_list = data.frame(Empty=rep(NA,(ar+1)))
+  post_theta_list = data.frame(Empty=rep(NA,(ma+1)))
   post_sigma_list = data.frame(Empty=NA)
 }
 
