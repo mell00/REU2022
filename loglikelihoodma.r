@@ -1,26 +1,34 @@
 library(MASS)
- 
+
+ #THESE ARE TEST VALUES, feel free to change as needed
+ ma = 10
+ alpha = 0 #must between -1 and 1
  setwd("/Users/mellm/github/REU2022/test_Cases")
  full_data1 = read.csv("pacificBrownPelican.csv")
- full_data = cbind(c(1:length(as.numeric(full_data1$NumberByPartyHours))), as.numeric(full_data1$Count_yr))
+ full_data = cbind(c(1:length(as.numeric(full_data1$NumberByPartyHours))), as.numeric(full_data1$Count_yr)) #binding time and count data
+ 
+ 
  data.ts = arima(full_data1$Count_yr,order=c(0,0,ma))
- ma = 10
  n = length(full_data[,1]) #number of observations
  k = tail(full_data,-1) #omitting non-numeric 1st row
  k_ends = suppressWarnings(c(min(full_data[,1]), na.omit(k), n)) #adding end points to k
 
- mu = 1.5
+ mu = 1.5 #TEST VALUE
  tao = abs(1)
- theta_list = data.ts$model$theta
- theta_new = mvrnorm(n=length(theta_list),theta_list,sigma_mtrx)
+ 
+ 
+ 
+ theta_list = data.ts$model$theta #draw existing theta values from data
  sigma_mtrx = diag(tao,length(theta_list))
-   
-  epsilon_list = c(0,1)
+ theta_new = mvrnorm(n=length(theta_list),theta_list,sigma_mtrx) #generate new theta values
+
+
+  epsilon_list = c(0,1,2,3,4,5) #needs to be fixed, ignore for now
   epsilon_t = function(ma, k_ends, data.ts,mu){
-     if (ma == 0){ 
+     if (ma == 0){
        
      }
-     if (ma == 1){ 
+     if (ma == 1){
        y_values[ma] - mu
      }
      else{
@@ -30,10 +38,9 @@ library(MASS)
        return(epsilon_list)
      }
    }
-   epsilon_t(ma,k_ends,data.ts,mu)
-   
-alpha = 1 #between -1 and 1
-sum_loglik = function(){
+   epsilon_list = epsilon_t(ma,k_ends,data.ts,mu)
+
+sum_loglik = function(){ #loglikelihood calculation
   for (i in 1:length(full_data)-1){
     sum_loglik = prod(dnorm(y_values[i],alpha+beta*full_data[i],sigma,log=TRUE))
   }
