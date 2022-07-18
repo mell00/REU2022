@@ -4,6 +4,7 @@ source("loglikelihoodma.r")
 q = 5 # a positive integer
 z_0 = runif(1,0,1) #1 value between 0 and 1
 n = 40
+theta_new = theta_new
 hat_theta = theta_new #TEST
 t = seq(1:10) #sequence of integers
 Z_t = c(abs(rnorm(length(t-1),1))) #iid sequence of non-negative random variables
@@ -62,7 +63,7 @@ D_nt = seq(2*l*q + 1,n)
 i = 0:(2*l); D_sum = (sum((big_I[i] - B_theta*B_B)^i))*x_t
 
 #argmax of D_n
-hat_theta = list(hat_theta, 1)
+hat_theta = list(hat_theta, theta)
 outputs = sapply(hat_theta, D_n)
 bestD_n = hat_theta[which.max(outputs)]
 
@@ -76,13 +77,28 @@ hat_theta = function(bestD_n,q){
 #D_n
 
 #e_t #WORK IN PROGRESS - starts at e_0
-e = function(x_t,hat_theta,B_theta,epsilon_list){
+e = function(x_t,theta_new,B_theta,epsilon_list){
   e_t = list()
-  e_t[1] = 0
   q = 4
-  i = 1:q; sum_q = hat_theta[i]*e_t[2-i]
-  j = 1:q; sum_Q = big_theta[j*3]*e_t[t-(3*2)]
-  sum_q
+  # sample data
+  mtrx <- matrix(1:q)
+  #t <- 1:ncol(mtrx)
+  #i <- 1:nrow(mtrx)
+  for (t in 1:ncol(mtrx)){
+    for (i in 1:nrow(mtrx)){
+      k = 1:q; sum_q = sum(theta_new[k]*e_t[t-k])
+      j = 1:q; sum_Q = sum(big_theta[j*s]*e_t[t-(j*s)])
+    }
+  }
+  #k = 1:q; sum_q = sum(theta_new[k]*e_t[t-k])
+  #j = 1:q; sum_Q = sum(big_theta[j*s]*e_t[t-(j*s)])
+  for (index in t){
+    e_t[index] = sum(sum_q-sum_Q-sum_q*sum_Q)
+  }
+  return(e_t)
+}
+  
+  e(x_t,theta_new,B_theta,epsilon_list)
   
   if (ma == 0){}
   else if (ma == 1){
@@ -94,14 +110,14 @@ e = function(x_t,hat_theta,B_theta,epsilon_list){
     
   }
 }
+
 #H matrix setup #WORK IN PROGRESS
 s = 3 #seasonal period
 n = 10
 q = 10
 H = function(s,n,q){
-  for (t in 1:n){
-    e[t] = 
-  }
+  
+  H = apply()
 }
 
 
