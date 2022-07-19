@@ -77,26 +77,20 @@ hat_theta = function(bestD_n,q){
 #D_n
 
 #e_t #WORK IN PROGRESS - starts at e_0
-e = function(x_t,theta_new,B_theta,epsilon_list){
-  e_t = list()
+e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
+  e_t = data.ts$residuals
   q = 4
   # sample data
   mtrx <- matrix(1:q)
-  #t <- 1:ncol(mtrx)
-  #i <- 1:nrow(mtrx)
-  for (t in 1:ncol(mtrx)){
-    for (i in 1:nrow(mtrx)){
-      k = 1:q; sum_q = sum(theta_new[k]*e_t[t-k])
-      j = 1:q; sum_Q = sum(big_theta[j*s]*e_t[t-(j*s)])
-    }
-  }
-  #k = 1:q; sum_q = sum(theta_new[k]*e_t[t-k])
-  #j = 1:q; sum_Q = sum(big_theta[j*s]*e_t[t-(j*s)])
+  t <- 1:ncol(mtrx)
+  i <- 1:nrow(mtrx)
+  k = 1:q; sum_q = sum(theta_new[k]*e_t[t-k])
+  j = 1:q; sum_Q = sum(big_theta(j)*big_theta(s)*e_t[t-(j*s)])
   for (index in t){
     e_t[index] = sum(sum_q-sum_Q-sum_q*sum_Q)
   }
   return(e_t)
-}
+})
   
   e(x_t,theta_new,B_theta,epsilon_list)
   
