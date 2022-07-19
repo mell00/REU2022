@@ -13,7 +13,7 @@ Z_t = c(abs(rnorm(length(t-1),1))) #iid sequence of non-negative random variable
 #x_sum (needs work)
 i = 1:q; x_sum = sum(hat_theta[i]*Z_t[i-1])
 
-#nonseasonal MA polynomial
+#nonseasonal MA polynomial #NEEDS WORK
 x_t = function (B_theta,B_B,Z_t,q){
   return(B_theta * B_B[1:q]*Z_t[1:q])
 }
@@ -76,7 +76,7 @@ D_sum = function(){
 }
 
 #argmax of D_n
-hat_theta = list(hat_theta, theta_list)
+#hat_theta = c(hat_theta, theta_list)
 outputs = sapply(hat_theta, D_n)
 bestD_n = hat_theta[which.max(outputs)]
 
@@ -98,7 +98,7 @@ D_n = function(D_sum(),big_I){
 D_n(D_sum(),big_I)
 
 #e_t #WORK IN PROGRESS - starts at e_0
-e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
+e = suppressWarnings(function(t,i){
   e_t = data.ts$residuals
   q = 4
   s = 3
@@ -114,27 +114,37 @@ e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
   return(e_t)
 })
   
-e_list = e(x_t,theta_new,B_theta,epsilon_list)
+e_list = e(5,6)
   
 #H matrix setup #WORK IN PROGRESS
 s = 3 #seasonal period
 n = 10
 q = 10
 by_t_rows = function(x){
-  for(i in 1:nrow(x)){
-    e
+  for(t in 1:nrow(x)){
+    for (i in 1:ncol(x)){
+      if (x[t,i] == 1){
+        x[t,i] = 
+      }
+    }
   }
 }
 
+
+
 by_i_columns = function(x){
   for (j in 1:ncol(x)){
-    
+    if (x[,i]==1){
+      
+    }
+    else{
+      next
+    }
   }
 }
 H = function(s,n,q){
-  H_matrix = matrix(e_list)
+  H_matrix = matrix(1,nrow=n,ncol=q)
   H = apply(H_matrix,1,by_t_rows)
-  H = apply(H_matrix,2,by_i_columns)
   
 }
 
