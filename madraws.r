@@ -101,6 +101,7 @@ D_n(D_sum(),big_I)
 e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
   e_t = data.ts$residuals
   q = 4
+  s = 3
   # sample data
   mtrx <- matrix(1:q)
   t <- 1:ncol(mtrx)
@@ -113,15 +114,28 @@ e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
   return(e_t)
 })
   
-  e(x_t,theta_new,B_theta,epsilon_list)
+e_list = e(x_t,theta_new,B_theta,epsilon_list)
   
 #H matrix setup #WORK IN PROGRESS
 s = 3 #seasonal period
 n = 10
 q = 10
+by_t_rows = function(x){
+  for(i in 1:nrow(x)){
+    e
+  }
+}
+
+by_i_columns = function(x){
+  for (j in 1:ncol(x)){
+    
+  }
+}
 H = function(s,n,q){
+  H_matrix = matrix(e_list)
+  H = apply(H_matrix,1,by_t_rows)
+  H = apply(H_matrix,2,by_i_columns)
   
-  H = apply()
 }
 
 
