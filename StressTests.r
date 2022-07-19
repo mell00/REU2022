@@ -7,27 +7,27 @@ library(devtools)
 library(FitAR)
 library(strucchange)
 library(MASS)
-par(mfrow=c(2,2))
 
-setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
-source("fixedbaar1.r")
+
+#setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
+source("baar.R")
 
 test_data_45 = function(){
-  beta1 = .7
-  beta2 = .3
-  stdev= .25
+  beta1 = -.3
+  beta2 = -.7
+  stdev= 1
   y= rnorm(1,0,1)
-  for( i in 2:10){
+  for( i in 2:45){
     y[i] = beta1*y[i-1]+rnorm(1,0,stdev)}
-  for(i in 11:90){
+  for(i in 46:90){
     y[i] = beta2*y[i-1]+rnorm(1,0,stdev)}
   data_45=y
   time = c(1:90)
   test_data_45 = data.frame(time, data_45)
   return(test_data_45)
 }
-iterations=250
-runs=2
+iterations=5000
+runs=100
 L=matrix(NA,nrow=iterations,ncol=runs)
 M=NA
 for(i in 1:runs){
@@ -42,5 +42,4 @@ for(i in 1:runs){
 }
 mean(L)
 sd(L)
-mean(M)
-sd(M)
+plot(apply(L,1,mean))
