@@ -1,9 +1,10 @@
 setwd("\\Users\\mellm\\github\\REU2022")
 source("loglikelihoodma.r")
 
-q = 5 # a positive integer
+q = 10 # a positive integer
 z_0 = runif(1,0,1) #1 value between 0 and 1
 n = 40
+theta_list = theta_list
 theta_new = theta_new
 hat_theta = theta_new #TEST
 t = seq(1:10) #sequence of integers
@@ -14,12 +15,12 @@ i = 1:q; x_sum = sum(hat_theta[i]*Z_t[i-1])
 
 #nonseasonal MA polynomial
 x_t = function (B_theta,B_B,Z_t,q){
-  B_theta * B_B[1:q]*Z_t[1:q]
+  return(B_theta * B_B[1:q]*Z_t[1:q])
 }
 
 #seasonal MA polynomial
 
-
+#Seasonal theta calculation (a double)
 big_theta = function(z_0){
   i = 0:q; big_theta = sum(hat_theta[i]*z_0^i)
   return(big_theta) #assumed to be non-zero
@@ -27,43 +28,55 @@ big_theta = function(z_0){
 
 B_theta = big_theta(z_0)
 
+#List of seasonal thetas #UNDER CONSTRUCTION
 hat_big_theta = function(q){
-  i = 0:q; hat_Big_theta[i] = big_theta
-}
-
-l = function(q){ #first integer such that 2*l >= q
-  l = 1
-  while(2*l < q){
-    l = l + 1
+  hat_Big_theta = c()
+  for (i in 1:q){
+    hat_Big_theta[i] = big_theta(Z_t[i])
   }
-  return(l)
+  return(hat_Big_theta)
 }
 
+hat_big_theta(q)
+
+#first integer such that 2*l >= q
+l = function(q){
+  L = 1
+  while(2*L < q){
+    L = L + 1
+  }
+  return(L)
+}
 l = l(q)
 
+#big B calculation (a list of doubles)
 big_B = function(process){ #NEEDS WORK
   b_B = c()
   for (i in t){
     b_B[i] = (process[i])/(process[i+1])
   }
-  return(b_B)
+  return(na.omit(b_B))
 }
-
 B_B = big_B(Z_t)
 
+#identity operator calculation
 big_I = x_t(B_theta,B_B,Z_t,q)
 
 #theta sum
 i = 0:q; theta_sum = sum(hat_theta[i])
 
 #D_n t
-D_nt = seq(2*l*q + 1,n)
+D_nt = seq(2*l(q)*q + 1,n)
 
-#D_n sum
-i = 0:(2*l); D_sum = (sum((big_I[i] - B_theta*B_B)^i))*x_t
+#D_n sum - returns NAs and needs more work
+D_sum = function(){
+  i = 0:(2*l(q))
+  D_sum = sum((big_I[i] - B_theta*B_B)^i)
+  return (D_sum)
+}
 
 #argmax of D_n
-hat_theta = list(hat_theta, theta)
+hat_theta = list(hat_theta, theta_list)
 outputs = sapply(hat_theta, D_n)
 bestD_n = hat_theta[which.max(outputs)]
 
@@ -75,6 +88,14 @@ hat_theta = function(bestD_n,q){
 }
 
 #D_n
+D_n = function(D_sum(),big_I){
+  D_N = c()
+  for (i in 1:length(big_I)){
+    D_N[i] = D_sum()*big_I[i]
+  }
+  return(D_N)
+}
+D_n(D_sum(),big_I)
 
 #e_t #WORK IN PROGRESS - starts at e_0
 e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
@@ -94,17 +115,6 @@ e = suppressWarnings(function(x_t,theta_new,B_theta,epsilon_list){
   
   e(x_t,theta_new,B_theta,epsilon_list)
   
-  if (ma == 0){}
-  else if (ma == 1){
-    for (t in 2:q){
-      e_t[t] = x_t[t] -
-    }
-  }
-  else if (ma >= 2){
-    
-  }
-}
-
 #H matrix setup #WORK IN PROGRESS
 s = 3 #seasonal period
 n = 10
