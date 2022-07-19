@@ -7,29 +7,28 @@ library(devtools)
 library(FitAR)
 library(strucchange)
 library(MASS)
+par(mfrow=c(2,2))
 
-
-#setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
-source("baar.R")
+setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
+source("Baar.R")
 
 test_data_45 = function(){
-  beta1 = -.3
-  beta2 = -.7
-  stdev= 1
+  beta1 = .7
+  stdev=1
   y= rnorm(1,0,1)
-  for( i in 2:45){
+  for( i in 2:90){
     y[i] = beta1*y[i-1]+rnorm(1,0,stdev)}
-  for(i in 46:90){
-    y[i] = beta2*y[i-1]+rnorm(1,0,stdev)}
   data_45=y
   time = c(1:90)
   test_data_45 = data.frame(time, data_45)
   return(test_data_45)
 }
-iterations=5000
-runs=100
+iterations=250
+runs=2
 L=matrix(NA,nrow=iterations,ncol=runs)
+A=NA
 M=NA
+B=NA
 for(i in 1:runs){
   y=test_data_45()
   current_data = y
@@ -39,7 +38,14 @@ for(i in 1:runs){
   print(i)
   L[,i]=test1$NumBkpts
   M[i]=length(starting_breakpoints[!is.na(starting_breakpoints)])
+  A=c(A,(unlist(test1$Breakpoints))) #Baar location of breakpoints
+  B=c(B,(starting_breakpoints)) #B-P
 }
+A2=A[!is.na(A)]
+B2=B[!is.na(B)]
 mean(L)
 sd(L)
-plot(apply(L,1,mean))
+mean(M)
+sd(M)
+hist(A2, breaks=100)
+hist(B2, breaks=100)
