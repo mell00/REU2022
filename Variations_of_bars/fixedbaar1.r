@@ -331,7 +331,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends <<- k_ends #old
-    } else if(ratio > u_ratio) {
+    } else if(ratio >= u_ratio) {
       k_ends <<- k_ends_new #new
     } else {
       k_ends <<- k_ends #old
