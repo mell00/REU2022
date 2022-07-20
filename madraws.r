@@ -98,23 +98,23 @@ D_n = function(D_sum(),big_I){
 D_n(D_sum(),big_I)
 
 #e_t #WORK IN PROGRESS - starts at e_0
-e = suppressWarnings(function(t,i){
+e = suppressWarnings(function(t){
   e_t = data.ts$residuals
+
   q = 4
   s = 3
   # sample data
-  mtrx <- matrix(1:q)
-  t <- 1:ncol(mtrx)
-  i <- 1:nrow(mtrx)
+  mtrx <- matrix(1:t)
   k = 1:q; sum_q = sum(theta_new[k]*e_t[t-k])
   j = 1:q; sum_Q = sum(big_theta(j)*big_theta(s)*e_t[t-(j*s)])
-  for (index in t){
-    e_t[index] = sum(sum_q-sum_Q-sum_q*sum_Q)
+  m = 1:q; sum_qQ = sum(theta_new[k]*big_theta(j)*big_theta(s)*e_t[t-k-(j*s)])
+  for (index in 1:t){
+    e_t[index] = sum(sum_q-sum_Q-sum_qQ)
   }
   return(e_t)
 })
   
-e_list = e(5,6)
+e_list = e(5)
   
 #H matrix setup #WORK IN PROGRESS
 s = 3 #seasonal period
@@ -122,10 +122,10 @@ n = 10
 q = 10
 by_t_rows = function(x){
   for(t in 1:nrow(x)){
-    for (i in 1:ncol(x)){
-      if (x[t,i] == 1){
-        x[t,i] = 
-      }
+    if (x[t,i] == 1){
+      apply(x[t,],1,)
+    } else {
+      next
     }
   }
 }
@@ -134,12 +134,7 @@ by_t_rows = function(x){
 
 by_i_columns = function(x){
   for (j in 1:ncol(x)){
-    if (x[,i]==1){
-      
-    }
-    else{
-      next
-    }
+
   }
 }
 H = function(s,n,q){
