@@ -1,5 +1,6 @@
 setwd("\\Users\\mellm\\github\\REU2022")
 source("loglikelihoodma.r")
+library(matlib)
 
 q = 10 # a positive integer
 z_0 = runif(1,0,1) #1 value between 0 and 1
@@ -139,10 +140,13 @@ by_i_columns = function(x){
 }
 H = function(s,n,q){
   H_matrix = matrix(1,nrow=n,ncol=q)
-  H = apply(H_matrix,1,by_t_rows)
-  
+  apply(H_matrix,1,by_t_rows)
+  return(H_matrix)
 }
 
+star_mu_theta = inv(t(H(s,n,q))*H(s,n,q) + sigma())
+  
+star_upsilon_theta =
 
 #setting up priors for theta draws (define what b_0 and B_0 are)
 if(fit_storage == TRUE){
@@ -166,8 +170,8 @@ if(fit_storage == TRUE){
     
   }
   
-  b_0 = matrix(coef_list,(ma+1),1) #matrix of beta means for posterior draw
-  B_0 = smiley #variance-covariance matrix for posterior draw
+  theta_0 = matrix(coef_list,(ma+1),1) #matrix of beta means for posterior draw
+  Theta_0 = smiley #variance-covariance matrix for posterior draw
   
   #beta and sigma draw
   post_theta_list = data.frame(Empty=rep(NA,(ma+1)))
@@ -206,7 +210,7 @@ if(fit_storage == TRUE){
     
     #drawing a random variable from a multivariate normal pdf 
     post_theta = mvrnorm(1, theta, v)
-    
+    mvrnorm()
     predicted_x = x_j %*% post_theta
     fit = c(fit, c(rep(NA, ma), predicted_x, recursive=T), recursive=T)
     squared_resid = (predicted_x - y_j)^2
