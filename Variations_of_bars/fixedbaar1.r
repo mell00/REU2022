@@ -17,7 +17,7 @@
 # progress		= whether to show progress bars or not, TRUE/FALSE
 # fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = TRUE){
+baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, jump_p = 0.25, ar = 1, progress = TRUE, fit_storage = FALSE){
   
   ar = floor(ar)
   
@@ -34,7 +34,8 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   }
   
   library(MASS)
-  library(FitAR)
+  #library(FitAR)
+  library(stats)
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
   n = length(full_data[,1]) #number of observations
   k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
@@ -48,29 +49,38 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     coef_2 = 0 
     #get and sum log likelihood for regressions of all intervals
     if(length(k_ends) < 3 ){
-      model = suppressWarnings(FitAR(full_data[,2], p=ar))
+      #model = suppressWarnings(FitAR(full_data[,2], p=ar))	
+      model = suppressWarnings(ar(full_data[,2],aic=F,order.max=ar,demean=T))	
+      #model = suppressWarnings(arima(y_values,order=c(ar,0,0)))
       SEE = sum(na.omit(model$res)^2)
       s2 = SEE/n
       sum_loglik = (-1*n/2)*(log(2*pi)+log(s2)+1) #finding the log likeihoods on the full dataset 
+      #sum_loglik = model$loglik
     }else{
       for(i in 2:length(k_ends)) {
         if(i == 2){
           min = k_ends[i-1]
           y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
-          model = suppressWarnings(FitAR(y_values, p=ar))
+          #       model = suppressWarnings(FitAR(y_values, p=ar))	
+          model = suppressWarnings(ar(y_values,aic=F,order.max=ar,demean=T))	
+          #       model = suppressWarnings(arima(y_values,order=c(ar,0,0)))
           sub_n = length(y_values)
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
           sub_loglik = (-1*sub_n/2)*(log(2*pi)+log(s2)+1)
+          #       sub_loglik = model$loglik
           sum_loglik = sum_loglik + sub_loglik #the logLik looks the log likelyhood (relates to both SSR and MLE)
         }else if(i > 2){
           min = k_ends[i-1]
           y_values = full_data[c((min+1):k_ends[i]),2] #getting the y values in the interval
-          model = suppressWarnings(FitAR(y_values, p=ar))
+          #       model = suppressWarnings(FitAR(y_values, p=ar))	
+          model = suppressWarnings(ar(y_values,aic=F,order.max=ar,demean=T))	
+          #       model = suppressWarnings(arima(y_values,order=c(ar,0,0)))
           sub_n = length(y_values)
           SEE = sum(na.omit(model$res)^2)
           s2 = SEE/sub_n
           sub_loglik = (-1*sub_n/2)*(log(2*pi)+log(s2)+1)
+          #        sub_loglik = model$loglik
           sum_loglik = sum_loglik + sub_loglik #the logLik looks the log likelihood (relates to both SSR and MLE)
         }
       }
@@ -493,76 +503,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     }
     all_BIC = rbind(all_BIC, bic)
     
-    #setting up posterior
     
-    ##loop through the k_ends to find the intervals
-    if(fit_storage == TRUE){
-      fit = NULL
-      squared_resids = NULL
-      current_post_betas = NULL
-      current_post_sigmas = NULL
-      for(m in 2:length(k_ends)) {
-        len = length(k_ends)
-        if(m > 2){
-          min = k_ends[m-1]+1
-        }else{
-          min = k_ends[m-1]
-        }
-        y_tp_values = NULL
-        for(a in 1:ar){
-          current_y_tp_values = full_data[c((min+ar-a):(k_ends[[m]]-ar+(ar-a))),2]
-          y_tp_length <<- length(current_y_tp_values)
-          y_tp_values = c(y_tp_values, current_y_tp_values, recursive=T)
-        }
-        x_j = matrix(c( rep(1, each=y_tp_length), y_tp_values, recursive=T), nrow=y_tp_length, ncol=(ar+1))
-        y_j = full_data[c((min+ar):k_ends[[m]]),2] #getting the y values in the interval
-        sigma = sd(y_j)
-        
-        #bar_v
-        v = solve( (1/sigma) * (t(x_j) %*% x_j )+ solve(B_0) )
-        #bar_beta 
-        beta = v %*% ( (1/sigma) * (t(x_j) %*% y_j) + solve(B_0) %*% b_0 )
-        
-        #drawing a random variable from a multivariate normal pdf 
-        post_beta = mvrnorm(1, beta, v)
-        
-        predicted_x = x_j %*% post_beta
-        fit = c(fit, c(rep(NA, ar), predicted_x, recursive=T), recursive=T)
-        squared_resid = (predicted_x - y_j)^2
-        squared_resids = c(squared_resids, squared_resid, recursive=T)
-        
-        bar_v = c(bar_v, v)
-        bar_beta = c(bar_beta, beta)
-        
-        #SIGMA:
-        v0 = (max(k_ends))/2 + 2
-        d0 = 0 + .5 * t(y_j - x_j %*% post_beta ) %*% (y_j - x_j %*% post_beta)
-        
-        sigma = rgamma(1, v0, rate = d0)
-        post_sigma = 1 / sigma
-        
-        current_post_betas = cbind(current_post_betas, post_beta)
-        current_post_sigmas = cbind(current_post_sigmas, post_sigma)
-        
-        if(m == len ) {
-          MSE = mean(squared_resids)
-          all_fits = rbind(all_fits, fit)
-          all_MSE = rbind(all_MSE, MSE)
-          current_post_betas = as.data.frame(current_post_betas)
-          colnames(current_post_betas) = c(1:ncol(current_post_betas))
-          post_beta_list = cbind(post_beta_list, current_post_betas)
-          colnames(current_post_sigmas) = c(1:ncol(current_post_sigmas))
-          post_sigma_list = cbind(post_sigma_list, current_post_sigmas)
-        }
-      }
-    }
-    
-    if(progress == TRUE){    
-      setTxtProgressBar(sample_progress, i)
-    }
-    
-  }
-  
   if(progress == TRUE){      
     writeLines("\n")
   }
@@ -574,114 +515,6 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   final.propose = c(a.count, s.count, m.count, j.count)
   final.accept = c(add.accept.count, sub.accept.count, move.accept.count, jiggle.accept.count)
   colnames(all_BIC) = "BIC"
-  
-  #cleaning up beta/sigma draws
-  if(fit_storage == TRUE){
-    colnames(all_MSE) = "MSE"
-    colnames(all_fits) = c(1:ncol(all_fits))
-    post_beta_list = post_beta_list[,-1]
-    post_sigma_list = post_sigma_list[,-1]
-    rownames(post_beta_list) = c(seq(0,ar,1))
-    rownames(post_beta_list) = paste("B", rownames(post_beta_list), sep = "")
-    rownames(post_sigma_list) = "Sigma"
-    
-    split_num = NULL #initializing
-    
-    for(i in 2:ncol(post_beta_list)){ #detecting where to split up columns in beta/sigma object
-      if(startsWith(colnames(post_beta_list)[i], "1.") == TRUE){
-        split_num = c(split_num, i)
-      }
-    }
-    
-    final_beta_list = list() #initializing
-    
-    for(i in 1:length(split_num)){ #splitting up columns in beta object
-      
-      if(i == 1){ #betas from first run
-        final_beta_list[[i]] = post_beta_list[,1:(split_num[i]-1)]
-        if(is.atomic(final_beta_list[[i]]) == T){
-          final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
-          rownames(final_beta_list[[i]]) = rownames(post_beta_list)
-          colnames(final_beta_list[[i]]) = 1
-        }else{
-          colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-        }
-      }else if(i < length(split_num)){# betas from middle runs
-        final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-        if(is.atomic(final_beta_list[[i]]) == T){
-          final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
-          rownames(final_beta_list[[i]]) = rownames(post_beta_list)
-          colnames(final_beta_list[[i]]) = 1
-        }else{
-          colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-        }
-      }else{ #betas from penultimate and final runs
-        final_beta_list[[i]] = post_beta_list[,split_num[i-1]:(split_num[i]-1)]
-        if(is.atomic(final_beta_list[[i]]) == T){
-          final_beta_list[[i]] = as.data.frame(final_beta_list[[i]])
-          rownames(final_beta_list[[i]]) = rownames(post_beta_list)
-          colnames(final_beta_list[[i]]) = 1
-        }else{
-          colnames(final_beta_list[[i]]) = c(1:ncol(final_beta_list[[i]]))
-        }
-        final_beta_list[[i+1]] = post_beta_list[,split_num[i]:ncol(post_beta_list)]
-        if(is.atomic(final_beta_list[[i+1]]) == T){
-          final_beta_list[[i+1]] = as.data.frame(final_beta_list[[i+1]])
-          rownames(final_beta_list[[i+1]]) = rownames(post_beta_list)
-          colnames(final_beta_list[[i+1]]) = 1
-        }else{
-          colnames(final_beta_list[[i+1]]) = c(1:ncol(final_beta_list[[i+1]]))
-        }
-      } 
-    }
-    
-    post_beta_list = final_beta_list #saving final version of beta object
-    
-    final_sigma_list = list() #initializing
-    
-    for(i in 1:length(split_num)){ #splitting up columns in sigma object
-      
-      if(i == 1){ #sigmas from first run
-        final_sigma_list[[i]] = post_sigma_list[,1:(split_num[i]-1)]
-        if(is.atomic(final_sigma_list[[i]]) == T){
-          final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
-          rownames(final_sigma_list[[i]]) = rownames(post_sigma_list)
-          colnames(final_sigma_list[[i]]) = 1
-        }else{
-          colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-        }
-      }else if(i < length(split_num)){# sigmas from middle runs
-        final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-        if(is.atomic(final_sigma_list[[i]]) == T){
-          final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
-          rownames(final_sigma_list[[i]]) = rownames(post_sigma_list)
-          colnames(final_sigma_list[[i]]) = 1
-        }else{
-          colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-        }
-      }else{ #sigma from penultimate and final runs
-        final_sigma_list[[i]] = post_sigma_list[,split_num[i-1]:(split_num[i]-1)]
-        if(is.atomic(final_sigma_list[[i]]) == T){
-          final_sigma_list[[i]] = as.data.frame(final_sigma_list[[i]])
-          rownames(final_sigma_list[[i]]) = rownames(post_sigma_list)
-          colnames(final_sigma_list[[i]]) = 1
-        }else{
-          colnames(final_sigma_list[[i]]) = c(1:ncol(final_sigma_list[[i]]))
-        }
-        final_sigma_list[[i+1]] = post_sigma_list[,split_num[i]:ncol(post_sigma_list)]
-        if(is.atomic(final_sigma_list[[i+1]]) == T){
-          final_sigma_list[[i+1]] = as.data.frame(final_sigma_list[[i+1]])
-          rownames(final_sigma_list[[i+1]]) = rownames(post_sigma_list)
-          colnames(final_sigma_list[[i+1]]) = 1
-        }else{
-          colnames(final_sigma_list[[i+1]]) = c(1:ncol(final_sigma_list[[i+1]]))
-        }
-      } 
-    }
-    
-    post_sigma_list = final_sigma_list #saving final version of sigma object
-    
-  }
   
   #getting distribution of k (number of breakpoints)
   num_bkpts = list()
