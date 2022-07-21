@@ -4,27 +4,31 @@
 #install.packages("devtools")
 library(devtools)
 #install_version("FitAR", version = "1.94", repos = "http://cran.us.r-project.org")
-library(FitAR)
+#library(FitAR)
 library(strucchange)
+library(stats)
 library(MASS)
-par(mfrow=c(2,2))
+par(mfrow=c(1,1))
 
 setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
 source("Baar.R")
 
 test_data_45 = function(){
   beta1 = .7
+  beta2= .3
   stdev=1
   y= rnorm(1,0,1)
-  for( i in 2:90){
+  for( i in 2:45){
     y[i] = beta1*y[i-1]+rnorm(1,0,stdev)}
+  for( i in 46:90){
+    y[i] = beta2*y[i-1]+rnorm(1,0,stdev)}
   data_45=y
   time = c(1:90)
   test_data_45 = data.frame(time, data_45)
   return(test_data_45)
 }
-iterations=250
-runs=2
+iterations=1000
+runs=100
 L=matrix(NA,nrow=iterations,ncol=runs)
 A=NA
 M=NA
@@ -47,5 +51,14 @@ mean(L)
 sd(L)
 mean(M)
 sd(M)
-hist(A2, breaks=100)
-hist(B2, breaks=100)
+plot(apply(L,1,mean))
+hist(A2, breaks=100, main="BAAR Breakpoints", ylab="Number of iterations (out of interations*runs)", xlab="Time")#50= 5000(iterations*runs)
+abline(v=45, col="red",lwd = 3)# change v to match breakpoints
+hist(B2, breaks=100, main="Bai-Perron Breakpoints", xlab="time") #(frenquency/runs)
+
+hist(A2, breaks=100, main="BAAR Breakpoints", ylab="Percentage of time location chosen", xlab="Time",yaxt="n")
+axis(2, at=c(0,100,200,300,400),labels=c(0,100/100,000,200/100,000,300/100,000,400/100,000)) #100,000=(iterations*runs)
+abline(v=45, col="red",lwd = 3)# change v to match breakpoints
+hist(B2, breaks=100, main="Bai-Perron Breakpoints", ylab= "Percentage of time location chosen ", xlab="Time",yaxt="n")
+axis(2, at=c(0,0.5,1,1.5,2),labels=c(0,0.5/100,1/100,1.5/100,2/100))#(frenquency/runs)
+abline(v=45, col="red",lwd = 3)# change v to match breakpoints
