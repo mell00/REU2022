@@ -11,14 +11,18 @@ library(MASS)
 par(mfrow=c(1,1))
 
 setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
-source("Baar.R")
+source("Baar.R") #should be fixedaar updated version
+
+#NOTES: burn-in=100 CHANGE on Fixed BAAR
+        #iterations = 1000
+        #runs =100
 
 test_data_45 = function(){
   beta1 = .7
   beta2= .3
   stdev=1
   y= rnorm(1,0,1)
-  for( i in 2:45){
+  for( i in 2:45){ 
     y[i] = beta1*y[i-1]+rnorm(1,0,stdev)}
   for( i in 46:90){
     y[i] = beta2*y[i-1]+rnorm(1,0,stdev)}
@@ -56,9 +60,14 @@ hist(A2, breaks=100, main="BAAR Breakpoints", ylab="Number of iterations (out of
 abline(v=45, col="red",lwd = 3)# change v to match breakpoints
 hist(B2, breaks=100, main="Bai-Perron Breakpoints", xlab="time") #(frenquency/runs)
 
+#percentage graphs "saved graphs"
+#Step1: Change the axis to match percents
+#Step2: Save onto REU folder shared as in the following order BAAR(orBP)_beta1value_beta2value_sdvalue_@breakpointlocation
+      #example BAAR7_3_1_@45
+      #example BP7_3_1_@45
 hist(A2, breaks=100, main="BAAR Breakpoints", ylab="Percentage of time location chosen", xlab="Time",yaxt="n")
-axis(2, at=c(0,100,200,300,400),labels=c(0,100/100,000,200/100,000,300/100,000,400/100,000)) #100,000=(iterations*runs)
+axis(2, at=c(0,1000,2000,3000,4000),labels=c(0,1000/100000,2000/100000,3000/100000,4000/100000)) #100,000=(iterations*runs)
 abline(v=45, col="red",lwd = 3)# change v to match breakpoints
 hist(B2, breaks=100, main="Bai-Perron Breakpoints", ylab= "Percentage of time location chosen ", xlab="Time",yaxt="n")
-axis(2, at=c(0,0.5,1,1.5,2),labels=c(0,0.5/100,1/100,1.5/100,2/100))#(frenquency/runs)
+axis(2, at=c(0,3.5,7,10.5,14),labels=c(0,3.5/100,7/100,10.5/100,14/100))#(frenquency/runs)
 abline(v=45, col="red",lwd = 3)# change v to match breakpoints
