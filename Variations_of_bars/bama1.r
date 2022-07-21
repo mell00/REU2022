@@ -47,7 +47,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   sigma_mtrx = diag(tao,length(theta_list))
   init_epsilon_list = rnorm(n,0,init_sigma2) #needs to be fixed, ignore for now
   
-  
+  #-----------------------------------------------------------------------------------------------------
   thetaDraw<-function(){
     theta_new = mvrnorm(n=1,mu=theta_list,Sigma=sigma_mtrx,tol = 1e-6, empirical = FALSE,EISPACK = FALSE)
     return(theta_new)
@@ -67,6 +67,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       return(epsilon_list)
     }
   }
+  #-----------------------------------------------------------------------------------------------------
   
   #function to get sum of log likelihoods
   fitMetrics<-function(k_ends, full_data){
@@ -359,7 +360,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     #end of birth and death ratios
     
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ma)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ma))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+    ratio = (-1*delta_bic/2) + (log(q1*dnorm(length(k_ends_new)-2,epsilon_list[ma],init_sigma2)) - log(q2*dnorm(length(k_ends)-2,epsilon_list[ma],init_sigma2))) #both dnorms are the same, make sure that this is correct
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
@@ -398,36 +399,6 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   sub.accept.count <<- 0
   move.accept.count <<- 0
   jiggle.accept.count <<- 0
-  
-  #setting up priors for beta draws (define what b_0 and B_0 are)
-  if(fit_storage == TRUE){
-    alt_arima<-function(full_data, ma){
-      tryCatch(arima(full_data[,2], method="ML", order=c(0,0,1)), error = function(e) arima(full_data[,2], method="CSS", order=c(0,0,ma)))
-    }
-    model = suppressWarnings(alt_arima(full_data, ma))
-    informationless = matrix(0, ncol=(ma+1), nrow=(ma+1))
-    diag(informationless) = rep(1000, (ma+1))
-    alt_solve<-function(model_coef){
-      tryCatch(solve(model_coef), error = function(e) informationless)
-    }
-    fisher = suppressWarnings(alt_solve(model$var.coef)) #amount of data contained in 1 data point
-    smiley = n * fisher #empirical Bayes (using data to set priors) #as n goes to inf, variance becomes unbiased
-    
-    coef_list = model$coef[[length(model$coef)]]
-    
-    for(a in 1:(length(model$coef)-1)){
-      
-      coef_list = c(coef_list, model$coef[[a]], recursive=T) #pulls each coefficient from model
-      
-    }
-    
-    b_0 = matrix(coef_list,(ma+1),1) #matrix of beta means for posterior draw
-    B_0 = smiley #variance-covariance matrix for posterior draw
-    
-    #beta and sigma draw
-    post_beta_list = data.frame(Empty=rep(NA,(ma+1)))
-    post_sigma_list = data.frame(Empty=NA)
-  }
   
   #getting constants for qs for final Metropolis-Hasting
   starting_bkpts = length(k_ends) - 1 #most probable number of breakpoints based on starting info 
@@ -486,7 +457,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     #
     #end of birth and death ratios
     delta_bic = (-2*new_loglik + log(n)*(length(k_ends_new)-1)*(3+ma)) - (-2*old_loglik + log(n)*(length(k_ends)-1)*(3+ma))
-    ratio = (-1*delta_bic/2) + (log(q1*dpois(length(k_ends_new)-2,lambda)) - log(q2*dpois(length(k_ends)-2,lambda)))
+    ratio = (-1*delta_bic/2) + (log(q1*dnorm(length(k_ends_new)-2,epsilon_list[ma],init_sigma2)) - log(q2*dnorm(length(k_ends)-2,epsilon_list[ma],init_sigma2))) #both dnorms are the same, make sure that this is correct
     u_ratio = log(runif(1)) #random number from 0 to 1 taken from a uniform distribution and then log transformed
     
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
@@ -538,7 +509,6 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     final_list = list(accept_count / iterations, final.propose, final.accept, all_BIC, all_k_best, num_bkpts)  
     names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "BIC", "Breakpoints", "NumBkpts")
   }
-  
   return(final_list)
 }
 
