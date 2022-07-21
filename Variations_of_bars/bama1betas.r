@@ -1,3 +1,33 @@
+#setting up priors for beta draws (define what b_0 and B_0 are)
+if(fit_storage == TRUE){
+  alt_arima<-function(full_data, ma){
+    tryCatch(arima(full_data[,2], method="ML", order=c(0,0,1)), error = function(e) arima(full_data[,2], method="CSS", order=c(0,0,ma)))
+  }
+  model = suppressWarnings(alt_arima(full_data, ma))
+  informationless = matrix(0, ncol=(ma+1), nrow=(ma+1))
+  diag(informationless) = rep(1000, (ma+1))
+  alt_solve<-function(model_coef){
+    tryCatch(solve(model_coef), error = function(e) informationless)
+  }
+  fisher = suppressWarnings(alt_solve(model$var.coef)) #amount of data contained in 1 data point
+  smiley = n * fisher #empirical Bayes (using data to set priors) #as n goes to inf, variance becomes unbiased
+  
+  coef_list = model$coef[[length(model$coef)]]
+  
+  for(a in 1:(length(model$coef)-1)){
+    
+    coef_list = c(coef_list, model$coef[[a]], recursive=T) #pulls each coefficient from model
+    
+  }
+  
+  b_0 = matrix(coef_list,(ma+1),1) #matrix of beta means for posterior draw
+  B_0 = smiley #variance-covariance matrix for posterior draw
+  
+  #beta and sigma draw
+  post_beta_list = data.frame(Empty=rep(NA,(ma+1)))
+  post_sigma_list = data.frame(Empty=NA)
+}
+
 #setting up posterior
 
 ##loop through the k_ends to find the intervals
