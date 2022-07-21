@@ -19,9 +19,9 @@ library(forecast)
  sigma_mtrx = diag(tao,length(theta_list))
  theta_new = mvrnorm(n=length(theta_list),theta_list,sigma_mtrx) #generate new theta values
 
-
-  epsilon_list = c(0,1,2,3,4,5) #needs to be fixed, ignore for now
-  epsilon_t = function(ma, k_ends, data.ts,mu){
+ma = 3
+  epsilon_list = data.ts$residuals #needs to be fixed, ignore for now
+  epsilon_t = function(ma, k_ends, y_values, mu){
      if (ma == 0){
        
      }
@@ -30,12 +30,12 @@ library(forecast)
      }
      else{
        for (i in 2:ma){
-         epsilon_list[i] = data.ts$residuals[i]- mu - alpha*epsilon_list[i-1]
+         epsilon_list[i] = y_values[ma] - mu - alpha*epsilon_list[i-1]
        }
        return(epsilon_list)
      }
    }
-   epsilon_list = epsilon_t(ma,k_ends,data.ts,mu)
+   epsilon_list = epsilon_t(ma,k_ends,y_values,mu)
 
 sum_loglik = function(){ #loglikelihood calculation
   for (i in 1:length(full_data)-1){
