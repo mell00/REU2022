@@ -12,13 +12,14 @@
 # lambda		= for Poisson distribution of breakpoint prior
 # tao       = for multivariate normal distribution of new theta
 # alpha     = for multivariate normal distribution of new theta
+# mu        = for multivariate normal distribution of new theta
 # jump_p		= proportion of move steps that will be jump
-# note: jiggle proprtion is 1 - jump_p
+# note: jiggle proportion is 1 - jump_p
 # ma			= order of MA model
 # progress		= whether to show progress bars or not, TRUE/FALSE
 # fit_storage	= whether or not to store betas, sigmas, and fits for each iteration, TRUE/FALSE
 
-bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, tao = abs(1), alpha = 1, jump_p = 0.25, ma = 1, progress = TRUE, fit_storage = TRUE){
+bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, percent = 0.02, lambda = 1, tao = abs(1), alpha = 0, mu = 1.5, jump_p = 0.25, ma = 1, progress = TRUE, fit_storage = TRUE){
   
   ma = floor(ma)
   
@@ -38,7 +39,11 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   library(forecast)
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
   n = length(full_data[,1]) #number of observations
-  k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k 
+  k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k
+  theta_list = full_data$model$theta #draw existing theta prior from data
+  sigma_mtrx = diag(tao,length(theta_list))
+  
+  thetaDraw<-function()
   
   #function to get sum of log likelihoods
   fitMetrics<-function(k_ends, full_data){

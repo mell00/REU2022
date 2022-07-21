@@ -1,20 +1,17 @@
 library(MASS)
+library(forecast)
 
  #THESE ARE TEST VALUES, feel free to change as needed
- ma = 10
- alpha = 0 #must between -1 and 1
  setwd("/Users/mellm/github/REU2022/test_Cases")
  full_data1 = read.csv("pacificBrownPelican.csv")
  full_data = cbind(c(1:length(as.numeric(full_data1$NumberByPartyHours))), as.numeric(full_data1$Count_yr)) #binding time and count data
  
  
  data.ts = arima(full_data1$Count_yr,order=c(0,0,ma))
+ data.ts_2 = auto.arima(full_data1$Count_yr)
  n = length(full_data[,1]) #number of observations
  k = tail(full_data,-1) #omitting non-numeric 1st row
  k_ends = suppressWarnings(c(min(full_data[,1]), na.omit(k), n)) #adding end points to k
-
- mu = 1.5 #TEST VALUE
- tao = abs(1)
  
  
  
