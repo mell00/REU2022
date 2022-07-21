@@ -502,7 +502,7 @@ baar = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       all_k_best = rbind(all_k_best, k)
     }
     all_BIC = rbind(all_BIC, bic)
-    
+  }   
     
   if(progress == TRUE){      
     writeLines("\n")
