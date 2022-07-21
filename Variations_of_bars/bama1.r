@@ -37,12 +37,17 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
   
   library(MASS)
   library(forecast)
+  
   full_data = cbind(c(1:length(as.numeric(time))), as.numeric(data)) #combining time and data inputs
+  data.ts = arima(full_data[1,],order=c(0,0,ma)) #fit data using ARIMA
   n = length(full_data[,1]) #number of observations
   k_ends <<- c(min(full_data[,1]), na.omit(k), n) #adding end points to k
   theta_list = full_data$model$theta #draw existing theta prior from data
+  init_sigma2 = data.ts$sigma2
   sigma_mtrx = diag(tao,length(theta_list))
-  epsilon_list = data.ts$residuals #needs to be fixed, ignore for now
+  epsilon_list = rnorm(n,0,init_sigma2) #needs to be fixed, ignore for now
+  
+  
   thetaDraw<-function(){
     
     

@@ -20,7 +20,7 @@ library(forecast)
  theta_new = mvrnorm(n=length(theta_list),theta_list,sigma_mtrx) #generate new theta values
 
 ma = 3
-  epsilon_list = data.ts$residuals #needs to be fixed, ignore for now
+  epsilon_list = rnorm(n,0,data.ts$sigma2) #needs to be fixed, ignore for now
   epsilon_t = function(ma, k_ends, y_values, mu){
      if (ma == 0){
        
