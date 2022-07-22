@@ -7,12 +7,13 @@ library(devtools)
 library(strucchange)
 library(stats)
 library(MASS)
+library(autostsm)
 par(mfrow=c(1,1))
 
 setwd("\\Users\\mellm\\github\\REU2022\\Variations_of_bars")
 source("bama1.R")
 
-test_data_45(){
+test_data_45 = function(){
   mu = 1
   y = rnorm(1,0,1)
   alpha = .5
@@ -33,6 +34,7 @@ test_data_45(){
   data_45=y
   time = c(1:90)
   test_data_45 = data.frame(time, data_45)
+  return(test_data_45)
 }
 
 iterations=1000
@@ -43,12 +45,11 @@ M=NA
 B=NA
 for(i in 1:runs){
   y=test_data_45()
-  current_data = y
-  break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 5, h = 0.1) 
-  starting_breakpoints = break_p$breakpoints
+  y[,1] = as.Date(y[,1])
+  starting_breakpoints = which(!is.na(stsm_detect_breaks(stsm_estimate(data.frame(y)),y)$`10%_break`))
   test1=bama(starting_breakpoints,1:90,y[,2],iterations)
   print(i)
-  L[,i]=test1$NumBkpts
+  L[,i]=test1
   M[i]=length(starting_breakpoints[!is.na(starting_breakpoints)])
   A=c(A,(unlist(test1$Breakpoints))) #Bama location of breakpoints
   B=c(B,(starting_breakpoints)) #B-P
