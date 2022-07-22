@@ -38,7 +38,7 @@ test_data_45 = function(){
 }
 
 iterations=1000
-runs=100
+runs=10
 L=matrix(NA,nrow=iterations,ncol=runs)
 A=NA
 M=NA
@@ -46,9 +46,13 @@ B=NA
 for(i in 1:runs){
   y=test_data_45()
   y[,1] = as.Date(y[,1])
-  starting_breakpoints = which(!is.na(stsm_detect_breaks(stsm_estimate(data.frame(y)),y)$`10%_break`))
-  test1=bama(starting_breakpoints,1:90,y[,2],iterations)
+  bkpt_start = stsm_detect_breaks(stsm_estimate(data.frame(y)),y)[["break_type"]]
+  starting_breakpoints = which(!is.na(bkpt_start))
+  y=as.list(y)
+  test1=bama(starting_breakpoints, 1:length(y[[1]]), y[[2]], iterations)
   print(i)
+  
+  #----------------------------still needs to be fixed----------------------------------
   L[,i]=test1
   M[i]=length(starting_breakpoints[!is.na(starting_breakpoints)])
   A=c(A,(unlist(test1$Breakpoints))) #Bama location of breakpoints
