@@ -19,10 +19,10 @@ suicide_bkpts<-all_breakpoints(suicide$X15.24.years~suicide$Year)
 
 suicide_result<-baar(suicide_bkpts$Breakpoints, suicide$Year, suicide$X15.24.years, 10000, 1500, jump=0.25, ar=3)
 #suicide_result<-bama(suicide_bkpts$Breakpoints, suicide$Year, suicide$X15.24.years, 10000, 1500, jump=0.25)
-#saveRDS(suicide_result, file="casestudy_data3.RData")
+saveRDS(suicide_result, file="casestudy_data3.RData")
 
 #suicide_result<-readRDS("casestudy_data4.RData")
-suicide_result<-readRDS("casestudy_data3.RData")
+suicide_result<-readRDS("test_Cases/casestudy_data3.RData")
 length(which(suicide_result$Breakpoints[,1] == 11)) +
   length(which(suicide_result$Breakpoints[,1] == 12)) +
   length(which(suicide_result$Breakpoints[,1] == 13)) +
@@ -39,10 +39,10 @@ for(i in 1:ncol(suicide_result$Breakpoints)){
   
 }
 
-suicide_finbkpts = suicide_finbkpts+1937
+suicide_finbkpts = suicide_finbkpts #NEEDS TO BE CHANGED
 
 hist(suicide_result$NumBkpts, breaks=c(0.5,1.5,2.5), xlim=c(0.5,2.5), ylim=c(0,10000), right=F, xlab="Number of Breaks", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Number", col="#aa0a3c")
-hist(suicide_finbkpts, breaks=seq(1938.5,2016.5,1), xlim=c(1940,2015), xaxp=c(1940, 2015, 5), ylim=c(0,10000), right=F, xlab="Year", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Locations", col="#aa0a3c")
+hist(suicide_finbkpts, breaks=seq(1977.5,2016.5,1), xlim=c(1979,2015), xaxp=c(1979, 2015, 5), ylim=c(0,10000), right=F, xlab="Year", ylab="Number of Iterations (out of 10,000)", main="Distribution of Breakpoint Locations", col="#aa0a3c")
 
 beta_to_use = suicide_result$Beta[which(suicide_result$Breakpoints[,1] == 11 & suicide_result$NumBkpts == 1)]
 sigma_to_use = suicide_result$Sigma[which(suicide_result$Breakpoints[,1] == 11 & suicide_result$NumBkpts == 1)]
@@ -52,10 +52,10 @@ lower = apply(fits_to_use, 2, quantile, probs = 0.025, na.rm = T)
 upper = apply(fits_to_use, 2, quantile, probs = 0.975, na.rm = T)
 
 par(mfrow=c(1,2))
-plot(suicide$Year, suicide$X15.24.years, ylim=c(-1,2.5), col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="A. Recorded Suicides in American 15-24 year olds between 1979 and 2015: Single AR(3) Fit", xlab="Year", ylab="Count")
+plot(suicide$Year, suicide$X15.24.years, ylim=c(-1,2.5), col="#aa0a3c", xaxp=c(1979, 2015, 5), pch=19, main="A. Recorded Suicides in American 15-24 year olds between 1979 and 2015: Single AR(3) Fit", xlab="Year", ylab="Count")
 lines(suicide$Year, suicide$X15.24.years, col="#aa0a3c")
-points(c(1938:2016), single_fitted, col="#8214a0", pch=15)
-lines(c(1938:2016), single_fitted, col="#8214a0", lty=1)
+points(c(1979:2015), single_fitted, col="#8214a0", pch=15)
+lines(c(1979:2015), single_fitted, col="#8214a0", lty=1)
 
 plot(suicide$X15.24.years~suicide$Year, ylim=c(-1,2.5), col="#aa0a3c", xaxp=c(1940, 2015, 5), pch=19, main="B. Recorded Suicides in American 15-24 year olds between 1979 and 2015: Fit from BAAR", xlab="Year", ylab="Count")
 lines(suicide$Year, suicide$X15.24.years, col="#aa0a3c")
