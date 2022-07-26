@@ -10,8 +10,8 @@ library(stats)
 library(MASS)
 par(mfrow=c(1,1))
 
-setwd("\\Users\\sarah\\OneDrive\\Documents\\REU\\REU2022-master\\Variations_of_bars")
-source("Baar.R") #should be fixedaar updated version
+setwd("\\Users\\mellm\\github\\REU2022\\Variations_of_bars")
+source("fixedbaar1.R") #should be fixedaar updated version
 
 #NOTES: burn-in=100 CHANGE on Fixed BAAR
         #iterations = 1000

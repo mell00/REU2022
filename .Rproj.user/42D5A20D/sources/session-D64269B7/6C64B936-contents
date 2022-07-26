@@ -1,3 +1,9 @@
+library(devtools)
+#install_version("FitAR", version = "1.94", repos = "http://cran.us.r-project.org")
+#library(FitAR)
+library(strucchange)
+library(stats)
+library(MASS)
 par(mar=c(1,1,1,1))
 setwd("/Users/mellm/github/REU2022/test_Cases")
 pelican<-read.csv("pacificBrownPelican.csv")
@@ -15,7 +21,7 @@ single_fitted <- fitted(single_model)
 single_BIC <- BIC(single_model)
 
 pelican_bkpts<-bai_perron.ar(pelican$Count_yr, pelican$NumberByPartyHours, order=3, max_breaks=1)
-pelican_bkpts<-all_breakpoints(pelican$NumberByPartyHours~pelican$Count_yr)
+pelican_bkpts<-breakpoints(pelican$NumberByPartyHours~pelican$Count_yr, breaks = 1, h = 0.1)
 
 pelican_result<-baar(pelican_bkpts$Breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25, ar=3)
 #pelican_result<-balr(pelican_bkpts$breakpoints, pelican$Count_yr, pelican$NumberByPartyHours, 10000, 1500, jump=0.25)
