@@ -1,6 +1,7 @@
 #creating data 
 library("strucchange")
 require(graphics)
+par(mar=c(1,1,1,1))
 time = 1:90
 
 
