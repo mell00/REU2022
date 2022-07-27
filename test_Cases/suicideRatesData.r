@@ -10,12 +10,13 @@ setwd("/Users/mellm/github/REU2022/test_Cases")
 suicide<-read.csv("suicideRatesData.csv")
 attach(suicide)
 
-
-library("forecast")
 setwd("/Users/mellm/github/REU2022/")
 source("ar_bai_perron.r")
 source("data_for_trials.r")
 source("Variations_of_bars/fixedbaar1.r")
+
+single_model <- arima(suicide$X15.24.years, order=c(3,0,0))
+single_fitted <- fitted(single_model)
 
 test_data_45 = function(){
   data_45=suicide$X15.24.years
@@ -47,6 +48,9 @@ mean(L)
 sd(L)
 mean(M)
 sd(M)
+fits_to_use = test1$Fits[which(test1$Breakpoints[,1] == 11 & test1$NumBkpts == 1),]
+
+
 plot(apply(L,1,mean))
 hist(A2, breaks=100, main="Distribution of BAAR Breakpoints", ylab = "Number of Iterations", xlab="Time",xaxt = "n",col="#8EDCE6")#50= 5000(iterations*runs)
 axis(1, at=1:37, labels=1979:2015, tick=T)
@@ -64,5 +68,11 @@ abline(v=45, col="red",lwd = 3)# change v to match breakpoints
 hist(B2, breaks=100, main="Bai-Perron Breakpoints", ylab= "Percentage of time location chosen ", xlab="Time",yaxt="n")
 axis(2, at=c(0,3.5,7,10.5,14),labels=c(0,3.5/100,7/100,10.5/100,14/100))#(frenquency/runs)
 abline(v=45, col="red",lwd = 3)# change v to match breakpoints
+
+plot(Year,X15.24.years,main="Suicide Count Among People Ages 15-24 in the U.S.A.: 1979 to 2015", ylab = "Suicide Count", xlim = c(1979,2015), ylim = c(0,max(X15.24.years) + 4000),  pch=19, cex.main= 0.75, cex.axis=0.75, cex.lab=0.75, col="#8EDCE6")
+lines(c(1979:2015), single_fitted, col="#9EECF7", lty=1)
+points(c(1979:2015), single_fitted, col="#9EECF7", pch=15)
+lines(c(1979:2015), X15.24.years, col="#331832", lty=1)
+points(c(1979:2015), X15.24.years, col="#331832", lty=1, pch=16)
 
 
