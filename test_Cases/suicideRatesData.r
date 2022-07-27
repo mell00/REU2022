@@ -27,7 +27,7 @@ test_data_45 = function(){
 }
 
 iterations=1000
-runs=100
+runs=10
 L=matrix(NA,nrow=iterations,ncol=runs)
 A=NA
 M=NA
@@ -36,7 +36,7 @@ for(i in 1:runs){
   current_data = test_data_45()
   break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 3, h = 0.1) 
   starting_breakpoints = break_p$breakpoints
-  test1=baar(starting_breakpoints,1:37,current_data[,2],iterations)
+  test1=baar(starting_breakpoints,1:37,current_data[,2],iterations, 15, jump=0.25, ar=3)
   print(i)
   L[,i]=test1$NumBkpts
   M[i]=length(starting_breakpoints[!is.na(starting_breakpoints)])
@@ -49,9 +49,9 @@ mean(L)
 sd(L)
 mean(M)
 sd(M)
-fits_to_use = test1$Fits[which(test1$Breakpoints[,1] == 11 & test1$NumBkpts == 1),]
+arima(test1$Breakpoints, order = c(3,0,0))
 
-
+hist(A)
 plot(apply(L,1,mean))
 hist(A2, breaks=100, main="Distribution of BAAR Breakpoints", ylab = "Number of Iterations", xlab="Time",xaxt = "n",col="#8EDCE6")#50= 5000(iterations*runs)
 axis(1, at=1:37, labels=1979:2015, tick=T)
@@ -71,12 +71,21 @@ axis(2, at=c(0,3.5,7,10.5,14),labels=c(0,3.5/100,7/100,10.5/100,14/100))#(frenqu
 abline(v=45, col="red",lwd = 3)# change v to match breakpoints
 
 #plot the data itself
-plot(Year,X15.24.years,main="Suicide Count Among People Ages 15-24 in the U.S.A.: 1979 to 2015", ylab = "Suicide Count", xlim = c(1979,2015), ylim = c(0,max(X15.24.years) + 4000),  pch=19, cex.main= 0.75, cex.axis=0.75, cex.lab=0.75, col="#8EDCE6")
+par(mgp=c(3,1,0),mar=c(5,4,4,2)+0.1)
+plot(Year,X15.24.years,main="Suicide Count Among People Ages 15-24 in the U.S.A.: 1979 to 2015", ylab = "Number of Suicides", xlim = c(1979,2015), ylim = c(0,max(X15.24.years) + 4000), pch=19, cex.main= 0.75, cex.axis=0.75, cex.lab=0.75, col="#8EDCE6")
 #ARIMA fitted data
 lines(c(1979:2015), single_fitted, col="#9EECF7", lty=1)
 points(c(1979:2015), single_fitted, col="#9EECF7", pch=15)
 #original data
 lines(c(1979:2015), X15.24.years, col="#331832", lty=1)
 points(c(1979:2015), X15.24.years, col="#331832", lty=1, pch=16)
+#
 
+
+
+
+
+
+
+legend(c(1979:2015), X15.24.years, list("Original Data","ARIMA AR(3) Fitted Data", "BAAR AR(3) Fitted Data"))
 
