@@ -17,18 +17,24 @@ source("ar_bai_perron.r")
 source("data_for_trials.r")
 source("Variations_of_bars/fixedbaar1.r")
 
+test_data_45 = function(){
+  data_45=suicide$X15.24.years
+  time = c(1:37)
+  test_data_45 = data.frame(time, data_45)
+  return(test_data_45)
+}
 
 iterations=1000
-runs=10
+runs=100
 L=matrix(NA,nrow=iterations,ncol=runs)
 A=NA
 M=NA
 B=NA
 for(i in 1:runs){
-  current_data = suicide
-  break_p = breakpoints(current_data[,3] ~ current_data[,1], breaks = 5, h = 0.1) 
+  current_data = test_data_45()
+  break_p = breakpoints(current_data[,2] ~ current_data[,1], breaks = 3, h = 0.1) 
   starting_breakpoints = break_p$breakpoints
-  test1=baar(starting_breakpoints,1:37,current_data[,3],iterations)
+  test1=baar(starting_breakpoints,1:37,current_data[,2],iterations)
   print(i)
   L[,i]=test1$NumBkpts
   M[i]=length(starting_breakpoints[!is.na(starting_breakpoints)])
@@ -42,8 +48,9 @@ sd(L)
 mean(M)
 sd(M)
 plot(apply(L,1,mean))
-hist(A2, breaks=100, main="BAAR Breakpoints", ylab="Number of iterations (out of interations*runs)", xlab="Time")#50= 5000(iterations*runs)
-abline(v=17, col="red",lwd = 3)# change v to match breakpoints
+hist(A2, breaks=100, main="Distribution of BAAR Breakpoints", ylab = "Number of Iterations", xlab="Time",xaxt = "n",col="#8EDCE6")#50= 5000(iterations*runs)
+axis(1, at=1:37, labels=1979:2015, tick=T)
+abline(v=c(17,25,31), col="red",lwd = 3)# change v to match breakpoints
 hist(B2, breaks=100, main="Bai-Perron Breakpoints", xlab="time") #(frenquency/runs)
 
 #percentage graphs "saved graphs"
