@@ -15,6 +15,7 @@ source("ar_bai_perron.r")
 source("data_for_trials.r")
 source("Variations_of_bars/fixedbaar1.r")
 
+#fit data with ARIMA
 single_model <- arima(suicide$X15.24.years, order=c(3,0,0))
 single_fitted <- fitted(single_model)
 
@@ -69,9 +70,12 @@ hist(B2, breaks=100, main="Bai-Perron Breakpoints", ylab= "Percentage of time lo
 axis(2, at=c(0,3.5,7,10.5,14),labels=c(0,3.5/100,7/100,10.5/100,14/100))#(frenquency/runs)
 abline(v=45, col="red",lwd = 3)# change v to match breakpoints
 
+#plot the data itself
 plot(Year,X15.24.years,main="Suicide Count Among People Ages 15-24 in the U.S.A.: 1979 to 2015", ylab = "Suicide Count", xlim = c(1979,2015), ylim = c(0,max(X15.24.years) + 4000),  pch=19, cex.main= 0.75, cex.axis=0.75, cex.lab=0.75, col="#8EDCE6")
+#ARIMA fitted data
 lines(c(1979:2015), single_fitted, col="#9EECF7", lty=1)
 points(c(1979:2015), single_fitted, col="#9EECF7", pch=15)
+#original data
 lines(c(1979:2015), X15.24.years, col="#331832", lty=1)
 points(c(1979:2015), X15.24.years, col="#331832", lty=1, pch=16)
 
