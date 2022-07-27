@@ -8,6 +8,7 @@ library(strucchange)
 library(stats)
 library(MASS)
 library(autostsm)
+library(data.table)
 par(mfrow=c(1,1))
 
 setwd("\\Users\\mellm\\github\\REU2022\\Variations_of_bars")
@@ -31,9 +32,9 @@ test_data_45 = function(){
     y[i]= mu + epsilon + alpha*epsilon_t(2) # + .............
     
   }
-  data_45=y
-  time = c(1:90)
-  test_data_45 = data.frame(time, data_45)
+  data=y
+  x_values = c(1:90)
+  test_data_45 = data.frame(x_values, data)
   return(test_data_45)
 }
 
@@ -44,12 +45,19 @@ A=NA
 M=NA
 B=NA
 for(i in 1:runs){
-  y=test_data_45()
-  y[,1] = as.Date(y[,1])
-  bkpt_start = stsm_detect_breaks(stsm_estimate(data.frame(y)),y)[["break_type"]]
-  starting_breakpoints = which(!is.na(bkpt_start))
+  y=data.table(test_data_45(), keep.rownames = TRUE)
+  y = y[,rn:=NULL]
+  colnames(y) = c("date","y")
+  y[, "date" := as.Date(date)]
+  y[, "y" := as.numeric(y)]
+  bkpt_start = stsm_detect_breaks(stsm_estimate(y),y)
+  components = c("trend","cycle","seasonal")
+  starting_breakpoints = match
+  y[,1] = as.numeric(y[,1])
   y=as.list(y)
-  test1=bama(starting_breakpoints, 1:length(y[[1]]), y[[2]], iterations)
+  time = as.list(time)
+  data = as.list(data)
+  test1=bama(starting_breakpoints, time, data, iterations)
   print(i)
   
   #----------------------------still needs to be fixed----------------------------------
