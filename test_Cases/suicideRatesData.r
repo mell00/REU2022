@@ -16,7 +16,7 @@ source("data_for_trials.r")
 source("Variations_of_bars/fixedbaar1.r")
 
 #fit data with ARIMA
-single_model <- arima(suicide$X15.24.years, order=c(3,0,0))
+single_model <- arima(suicide$X15.24.years, order=c(2,0,0))
 single_fitted <- fitted(single_model)
 
 test_data_45 = function(){
@@ -26,6 +26,8 @@ test_data_45 = function(){
   return(test_data_45)
 }
 
+tsss <- ts(c(1,2,3,4,5,6,7,8))
+ar.mle(tsss)
 iterations=1000
 runs=10
 L=matrix(NA,nrow=iterations,ncol=runs)
@@ -49,13 +51,50 @@ mean(L)
 sd(L)
 mean(M)
 sd(M)
-arima(test1$Breakpoints, order = c(3,0,0))
+
+#WORK IN PROGRESS ---------------------------------------------------
+fits = new_baar_fit(current_data,A)
+new_baar_fit = function(current_data,breakpoints){
+  new_fits = c() #list of new fitted values
+  spliced_fitted_arima = c() #list of arima'ed time series
+  new_time = c() #list of time vectors for each bkpt (for spliced_data)
+  new_data = c() #list of data_45 vectors for each bkpt (for spliced_data)
+  for (i in breakpoints){
+    spliced_data = function(current_data){
+      for (j in 1:ncol(current_data)){
+        current_data[,j] = current_data[,j][1:i]
+        if (j == 1){ #if j is time
+          append(new_data, c(current_data[,j]))
+        } else if (j == 2){ #if j is data_45
+          append(new_data, c(current_data[,j]))
+        }
+      }
+    }
+    spliced_data(current_data)
+    #append to list of arima'ed time series
+    append(spliced_fitted_arima, arima(ts(new_data[i]),order = c(1,0,0)))
+    append(new_fits, fitted(spliced_fitted_arima[i]))
+  }
+  return(unique(new_fits))
+}
+
+#------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 hist(A)
 plot(apply(L,1,mean))
 hist(A2, breaks=100, main="Distribution of BAAR Breakpoints", ylab = "Number of Iterations", xlab="Time",xaxt = "n",col="#8EDCE6")#50= 5000(iterations*runs)
 axis(1, at=1:37, labels=1979:2015, tick=T)
-abline(v=c(17,25,31), col="red",lwd = 3)# change v to match breakpoints
+abline(v=c(17,23,31), col="red",lwd = 3)# change v to match breakpoints
 hist(B2, breaks=100, main="Bai-Perron Breakpoints", xlab="time") #(frenquency/runs)
 
 #percentage graphs "saved graphs"
@@ -79,7 +118,8 @@ points(c(1979:2015), single_fitted, col="#9EECF7", pch=15)
 #original data
 lines(c(1979:2015), X15.24.years, col="#331832", lty=1)
 points(c(1979:2015), X15.24.years, col="#331832", lty=1, pch=16)
-#
+#BAAR fitted data
+lines(c(1979:2015), fitted_baar)
 
 
 
