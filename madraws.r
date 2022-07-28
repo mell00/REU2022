@@ -246,7 +246,6 @@ if(progress == TRUE){
   setTxtProgressBar(sample_progress, i)
 }
 
-}
 
 if(progress == TRUE){      
   writeLines("\n")
