@@ -90,7 +90,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
       for (i in 1:length(data.ts)){
         if(length(k_ends) < 3 ){
           SEE = sum(na.omit(data.ts$residuals)^2) #?
-          s2 = SEE/n #?
+          sigma = SEE/n #?
           return(sum_loglik())
         } else {
           for(i in 2:length(k_ends)) {
@@ -99,7 +99,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
               y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
               sub_n = length(y_values)
               SEE = sum(na.omit(data.ts$residuals)^2)
-              s2 = SEE/sub_n
+              sigma = SEE/sub_n
               return(sum_loglik())
             }
             else if(i > 2){
@@ -107,7 +107,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
               y_values = full_data[c(min:k_ends[i]),2] #getting the y values in the interval
               sub_n = length(y_values)
               SEE = sum(na.omit(data.ts$residuals)^2)
-              s2 = SEE/sub_n
+              sigma = SEE/sub_n
               return(sum_loglik())
             }
           }
@@ -333,19 +333,19 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     old_new_product_birth = function(k){
       for (j in k){
-        product_runs.append(n-(3*ar-(q1+1)(2*ar + j)))
+        product_runs = append(product_runs,(n-(3*ma-(q1+1)(2*ma + j))))
       }
       return(prod(product_runs))
     }
     product_death = function(k){
       for (j in k){
-        product_runs.append(n-3*ma-q1*2*ma + j)
+        product_runs = append(product_runs,(n-3*ma-q1*2*ma + j))
       }
       return(prod(product_runs))
     }
     old_new_product_death = function(k){
       for (j in k){
-        product_runs.append(n-3*ma-(q1-1)*(2*ma)+j)
+        product_runs = append(product_runs,(n-3*ma-(q1-1)*(2*ma)+j))
       }
       return(prod(product_runs))
     }
@@ -365,7 +365,7 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     
     if(abs(delta_bic) == Inf){ #safe guard against random models creating infinite ratios
       k_ends <<- k_ends #old
-    } else if(ratio > u_ratio) {
+    } else if(ratio >= u_ratio) {
       k_ends <<- k_ends_new #new
     } else {
       k_ends <<- k_ends #old
@@ -510,8 +510,8 @@ bama = function(k, time, data, iterations, burn_in = 50, make_murder_p = 0.5, pe
     names(final_list) = c("AcceptRate", "ProposedSteps", "AcceptedSteps", "BIC", "Breakpoints", "NumBkpts")
   }
   return(final_list)
-}
+}}
 
 #calling the function
 #test_data = test_data_44()
-#current_result = baar(NA, test_data[,1], test_data[,2], 50, 50, jump=0.25, ma=1, progress=T, fit_storage=T)
+#current_result = bama(NA, test_data[,1], test_data[,2], 50, 50, jump=0.25, ma=1, progress=T, fit_storage=T)
