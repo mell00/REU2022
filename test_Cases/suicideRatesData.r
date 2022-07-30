@@ -26,8 +26,6 @@ test_data_45 = function(){
   return(test_data_45)
 }
 
-tsss <- ts(c(1,2,3,4,5,6,7,8))
-ar.mle(tsss)
 iterations=1000
 runs=10
 L=matrix(NA,nrow=iterations,ncol=runs)
@@ -51,33 +49,34 @@ mean(L)
 sd(L)
 mean(M)
 sd(M)
-
+current_data = ts(current_data)
+A3 = sort(unique(A2))
 #WORK IN PROGRESS ---------------------------------------------------
-fits = new_baar_fit(current_data,A)
+fits = new_baar_fit(current_data,A3)
 new_baar_fit = function(current_data,breakpoints){
   new_fits = c() #list of new fitted values
-  spliced_fitted_arima = c() #list of arima'ed time series
-  new_time = c() #list of time vectors for each bkpt (for spliced_data)
-  new_data = c() #list of data_45 vectors for each bkpt (for spliced_data)
+  spliced_fitted_arima =  NA #list of arima'ed time series
+  new_time = c(1) #list of time vectors for each bkpt (for spliced_data)
+  new_data = c(2) #list of data_45 vectors for each bkpt (for spliced_data)
+  new_start = data.frame(new_time,new_data)
   for (i in breakpoints){
-    spliced_data = function(current_data){
+    splice_data = function(current_data){ #Why does this function need to be called for each bkpt?
       for (j in 1:ncol(current_data)){
-        current_data[,j] = current_data[,j][1:i]
         if (j == 1){ #if j is time
-          append(new_data, c(current_data[,j]))
-        } else if (j == 2){ #if j is data_45
-          append(new_data, c(current_data[,j]))
+          append(new_time,c(current_data[,j][1:i]))
+        } else if (j==2) {
+          append(new_data,c(current_data[,j][1:i]))
         }
       }
+      return(new_start)
     }
-    spliced_data(current_data)
+    spliced_data = splice_data(current_data)
     #append to list of arima'ed time series
-    append(spliced_fitted_arima, arima(ts(new_data[i]),order = c(1,0,0)))
+    append(spliced_fitted_arima, arima(new_start$new_data[[i,]],order = c(1,0,0))) #Something wrong here
     append(new_fits, fitted(spliced_fitted_arima[i]))
   }
   return(unique(new_fits))
 }
-
 #------------------------------------------------------------------------
 
 
