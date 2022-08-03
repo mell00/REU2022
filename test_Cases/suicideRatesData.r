@@ -49,34 +49,30 @@ mean(L)
 sd(L)
 mean(M)
 sd(M)
-current_data = ts(current_data)
+current_data = as.list(current_data)
 A3 = sort(unique(A2))
 #WORK IN PROGRESS ---------------------------------------------------
 fits = new_baar_fit(current_data,A3)
 new_baar_fit = function(current_data,breakpoints){
   new_fits = c() #list of new fitted values
-  spliced_fitted_arima =  NA #list of arima'ed time series
-  new_time = c(1) #list of time vectors for each bkpt (for spliced_data)
-  new_data = c(2) #list of data_45 vectors for each bkpt (for spliced_data)
-  new_start = data.frame(new_time,new_data)
+  spliced_fitted_arima =  list() #list
+  new_time = c(1,2,4) #list of time vectors for each bkpt (for spliced_data)
+  new_data = c(1,2,3) #list of data_45 vectors for each bkpt (for spliced_data)
   for (i in breakpoints){
-    splice_data = function(current_data){ #Why does this function need to be called for each bkpt?
-      for (j in 1:ncol(current_data)){
+      for (j in 1:length(current_data)){
         if (j == 1){ #if j is time
-          append(new_time,c(current_data[,j][1:i]))
+          append(new_time,current_data[[j]][1:i])
         } else if (j==2) {
-          append(new_data,c(current_data[,j][1:i]))
+          append(new_data,current_data[[j]][1:i])
         }
       }
-      return(new_start)
-    }
-    spliced_data = splice_data(current_data)
-    #append to list of arima'ed time series
-    append(spliced_fitted_arima, arima(new_start$new_data[[i,]],order = c(1,0,0))) #Something wrong here
-    append(new_fits, fitted(spliced_fitted_arima[i]))
   }
-  return(unique(new_fits))
-}
+    start = list(new_time,new_data) #data frame of time and data_45 vectors for each bkpt
+    new_start = ts(c(as.numeric(new_time)), as.numeric(new_data)) #combining time and data inputs
+    spliced_fitted_arima = arima(new_start$new_data,order = c(2,0,0)) #Something wrong here
+    new_fits = fitted(spliced_fitted_arima)
+    return(new_fits)
+  }
 #------------------------------------------------------------------------
 
 
