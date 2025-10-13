@@ -8,7 +8,9 @@
 #max_breaks = maximum number of breaks to be considered
 #progress = whether or not to show progress bar, TRUE/FALSE
 
-source("/Users/mellm/github/REU2022/data_for_trials.r")
+if(file.exists("data_for_trials.R")){
+        source("data_for_trials.R")
+}
 
 bai_perron.ar<-function(x_values, y_values, order=1, interval=0.15, max_breaks=3, progress=T){
 
@@ -33,149 +35,139 @@ bai_perron.ar<-function(x_values, y_values, order=1, interval=0.15, max_breaks=3
 	null_SSR = sum((null_mod$res[!is.na(null_mod$res)])^2)
 	null_BIC = n + n*log(2*pi) + n*log(as.numeric(null_SSR)/n) + log(n)*(order+2)
 
-	#Initializing data frame to store fit information for each subsection
-	all_SSRs = data.frame()
+        # Pre-compute sum of squared residuals (SSRs) for every admissible segment
+        ssr_matrix = matrix(Inf, nrow = n, ncol = n)
 
-	if(progress == TRUE){
-		writeLines("\nFinding all SSRs.")
-		SSR_progress <- txtProgressBar(min = 0, max = (n-int+1), style = 3)
-	}
+        if(progress == TRUE){
+                writeLines("\nFinding all SSRs.")
+                SSR_progress <- txtProgressBar(min = 0, max = (n-int+1), style = 3)
+        }
 
-	for(i in 1:(n-int+1)){#Select starting observation of each subsection (constrained by interval size)
+        for(i in 1:(n-int+1)){#Select starting observation of each subsection (constrained by interval size)
 
-		for(j in (i+int-1):n){#Select end observation of each subsection (constrained by interval size)
+                for(j in (i+int-1):n){#Select end observation of each subsection (constrained by interval size)
 
-			subsect_x = x_values[i:j]
-			subsect_y = y_values[i:j]
-			subsect_mod = ar(subsect_y, order=order)
-			subsect_SSR = sum((subsect_mod$res[!is.na(subsect_mod$res)])^2)
-			subsect_info = cbind(subsect_x[1], max(subsect_x), subsect_SSR)
-			all_SSRs = rbind(all_SSRs, subsect_info)
+                        subsect_y = y_values[i:j]
+                        subsect_mod = ar(subsect_y, order=order)
+                        subsect_SSR = sum((subsect_mod$res[!is.na(subsect_mod$res)])^2)
+                        ssr_matrix[i, j] = subsect_SSR
 
-		}
+                }
 
-		if(progress == TRUE){
-			setTxtProgressBar(SSR_progress, i)
-		}
+                if(progress == TRUE){
+                        setTxtProgressBar(SSR_progress, i)
+                }
 
-	}
+        }
 
+        if(progress == TRUE){
+                close(SSR_progress)
+        }
 
-	recurseSSR = function(r_int, r_max_breaks, r_n, r_all_SSRs){
+        # Dynamic programming tables for optimal segmentation
+        max_segments = max_breaks + 1
+        dp = matrix(Inf, nrow = max_segments, ncol = n)
+        prev_idx = matrix(NA_integer_, nrow = max_segments, ncol = n)
 
-		SSR <<- list()
+        valid_ends = int:n
+        dp[1, valid_ends] = ssr_matrix[1, valid_ends]
 
-		for(w in 1:r_max_breaks){
+        if(progress == TRUE && max_breaks > 0){
+                writeLines("\nOptimizing break combinations.")
+                combo_progress <- txtProgressBar(min = 2, max = max_segments, style = 3)
+        }
 
-			SSR[[w]] <<- data.frame()
+        if(max_breaks > 0){
+                for(seg in 2:max_segments){
+                        min_end = seg * int
+                        if(min_end > n){
+                                next
+                        }
+                        for(end_idx in min_end:n){
+                                best_value = Inf
+                                best_split = NA_integer_
+                                split_min = (seg - 1) * int
+                                split_max = end_idx - int
+                                if(split_min > split_max){
+                                        next
+                                }
+                                for(split_idx in split_min:split_max){
+                                        if(!is.finite(dp[seg-1, split_idx])){
+                                                next
+                                        }
+                                        candidate = dp[seg-1, split_idx] + ssr_matrix[split_idx + 1, end_idx]
+                                        if(candidate < best_value){
+                                                best_value = candidate
+                                                best_split = split_idx
+                                        }
+                                }
+                                dp[seg, end_idx] = best_value
+                                prev_idx[seg, end_idx] = best_split
+                        }
+                        if(progress == TRUE){
+                                setTxtProgressBar(combo_progress, seg)
+                        }
+                }
+        }
 
-		}
+        if(progress == TRUE && max_breaks > 0){
+                close(combo_progress)
+        }
 
-		subRecurse = function(current_breaks, offset, current_position, previous_subsect){
+        # Extract optimal breakpoints for each number of breaks
+        all_breakpoints = vector("list", max_breaks)
+        SSRs = rep(NA_real_, max_breaks)
 
-			if(offset < (r_n-2*r_int)+1){
+        for(breaks in 1:max_breaks){
+                seg = breaks + 1
+                if(seg <= nrow(dp) && is.finite(dp[seg, n])){
+                        SSRs[breaks] = dp[seg, n]
+                        current_end = n
+                        current_seg = seg
+                        bp = integer(0)
+                        while(current_seg > 1){
+                                split_point = prev_idx[current_seg, current_end]
+                                if(is.na(split_point)){
+                                        bp = integer(0)
+                                        break
+                                }
+                                bp = c(split_point, bp)
+                                current_end = split_point
+                                current_seg = current_seg - 1
+                        }
+                        all_breakpoints[[breaks]] = bp
+                        if(length(bp) > 0){
+                                names(all_breakpoints[[breaks]]) = seq_along(bp)
+                        }
+                }else{
+                        all_breakpoints[[breaks]] = NA
+                }
+        }
 
-				for(y in (offset+r_int):(r_n-r_int)){
+        SSRs = c(null_SSR, SSRs)
+        names(SSRs) = 0:(length(SSRs)-1)
 
-					first_subsect_2 = which(r_all_SSRs[,1] == offset & r_all_SSRs[,2] == y-1)
-					second_subsect_2 = which(r_all_SSRs[,1] == y & r_all_SSRs[,2] == r_n)
+        BICs = rep(NA_real_, length(SSRs))
+        BICs[1] = null_BIC
+        if(length(SSRs) > 1){
+                for(breaks in 1:max_breaks){
+                        if(!is.na(SSRs[breaks + 1])){
+                                BICs[breaks + 1] = n + n*log(2*pi) + n*log(SSRs[breaks + 1]/n) + log(n)*breaks*(order+2)
+                        }
+                }
+        }
+        names(BICs) = 0:(length(BICs)-1)
 
-					starting_subsect = list()
-					starting_score = 0
+        bic_values = BICs
+        bic_values[is.na(bic_values)] = Inf
+        best_index = which.min(bic_values)
+        if(best_index == 1){
+                best_breakpoints = NA
+        }else{
+                best_breakpoints = all_breakpoints[[best_index - 1]]
+        }
 
-					for(w in 1:length(previous_subsect)){
-
-						starting_subsect = cbind(starting_subsect, r_all_SSRs[previous_subsect[w],1], r_all_SSRs[previous_subsect[w],2])
-						starting_score = starting_score+r_all_SSRs[previous_subsect[w],3]
-
-					}
-
-					option_two = cbind(starting_subsect, r_all_SSRs[first_subsect_2,1], r_all_SSRs[first_subsect_2,2], r_all_SSRs[second_subsect_2,1], r_all_SSRs[second_subsect_2,2], starting_score+r_all_SSRs[first_subsect_2,3]+r_all_SSRs[second_subsect_2,3])
-
-					SSR[[current_breaks]] <<- rbind(SSR[[current_breaks]], option_two)
-
-					new_subsect = c(previous_subsect, first_subsect_2)
-
-					new_position = current_position+2
-
-					if(current_breaks + 1 <= r_max_breaks){
-						SSR[[current_breaks+1]] <<- subRecurse(current_breaks+1, option_two[,new_position][[1]], new_position, new_subsect)
-					}
-
-				}
-			}
-
-		return(SSR[[current_breaks]])
-
-		}
-
-			if(progress == TRUE){
-				writeLines("\nTesting all combinations.")
-				combo_progress <- txtProgressBar(min=(r_int-1), max=(r_n-r_int), style = 3)
-			}
-			for(z in r_int:(r_n-r_int)){
-			
-				first_subsect = which(r_all_SSRs[,1] == 1 & r_all_SSRs[,2] == z) #Location of subsect that starts with 1 and goes to s
-				second_subsect = which(r_all_SSRs[,1] == z+1 & r_all_SSRs[,2] == r_n) #Location of subsect that starts with s and goes to end
-				option = cbind(r_all_SSRs[first_subsect,1], r_all_SSRs[first_subsect,2], r_all_SSRs[second_subsect,1], r_all_SSRs[second_subsect,2], r_all_SSRs[first_subsect,3]+r_all_SSRs[second_subsect,3])
-				SSR[[1]] <<- rbind(SSR[[1]], option)
-
-				if(r_max_breaks >= 2){
-					subRecurse(2, option[,3], 3, first_subsect)
-				}
-				if(progress == TRUE){
-					setTxtProgressBar(combo_progress, z)
-				}
-
-			}
-
-	return(SSR)
-
-	}
-
-	SSR_final = recurseSSR(int, max_breaks, n, all_SSRs)
-
-	if(progress == TRUE){      
-		writeLines("\n")
-	}
-
-	for(x in 1:length(SSR_final)){
-
-		SSR_final[[x]] = SSR_final[[x]][which.min(SSR_final[[x]][,3+x*2]),]
-
-	}
-
-	BICs = list()
-
-	for(v in 1:length(SSR_final)){
-
-		BIC = n + n*log(2*pi) + n*log(as.numeric(SSR_final[[v]][,3+v*2])/n) + log(n)*v*(order+2)
-		BICs = c(BICs, BIC)
-
-	}
-
-	all_breakpoints = list()
-	for(i in 1:length(SSR_final)){
-		all_breakpoints[[i]] = c(SSR_final[[i]][seq(2,2*i,2)], recursive=T)
-		names(all_breakpoints[[i]]) = c(1:length(all_breakpoints[[i]]))
-	}
-
-	SSRs = NULL
-	for(i in 1:length(SSR_final)){
-		SSRs = c(SSRs, SSR_final[[i]][length(SSR_final[[i]])], recursive=T)
-	}
-
-	SSRs = c(null_SSR, SSRs, recursive=T)
-	names(SSRs) = c(0:(length(SSRs)-1))
-	BICs = c(null_BIC, BICs, recursive=T)
-	names(BICs) = c(0:(length(BICs)-1))
-	if(which.min(BICs) == 1){
-		best_breakpoints = NA
-	}else{
-		best_breakpoints = c(all_breakpoints[which.min(BICs)-1], recursive=T)
-	}
-
-	final_list = list(best_breakpoints, all_breakpoints, SSRs, BICs)
+        final_list = list(best_breakpoints, all_breakpoints, SSRs, BICs)
 	names(final_list) = c("Breakpoints", "AllBreakpoints", "SSRs", "BICs")
 
 	return(final_list)
@@ -183,6 +175,7 @@ bai_perron.ar<-function(x_values, y_values, order=1, interval=0.15, max_breaks=3
 }
 
 #calling the function
-source("data_for_trials.R")
-test_data = test_data_2()
-bp_test = bai_perron.ar(test_data[,1], test_data[,2])
+if(exists("test_data_2")){
+        test_data = test_data_2()
+        bp_test = bai_perron.ar(test_data[,1], test_data[,2])
+}
